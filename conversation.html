@@ -1435,6 +1435,13 @@
         height: 16px;
       }
 
+      .chat-output-detail-action img {
+        width: 16px;
+        height: 16px;
+        display: block;
+        object-fit: contain;
+      }
+
       .chat-output-detail-body {
         min-height: 0;
         flex: 1 1 auto;
@@ -1508,7 +1515,9 @@
         --object-page: #eff1f3;
         --object-green: #20b970;
         --object-blue: #2087ff;
-        min-width: 0;
+        min-width: 960px;
+        min-height: 100%;
+        box-sizing: border-box;
         margin: -16px -8px -24px;
         padding: 12px;
         background: var(--object-page);
@@ -2187,6 +2196,230 @@
         .embedded-object-quick button
       ) {
         font-weight: 500;
+      }
+
+      .business-object-overlay {
+        position: fixed;
+        inset: 48px 0 0 0;
+        z-index: 70;
+        pointer-events: none;
+      }
+
+      .business-object-overlay:not(.hidden) {
+        display: block;
+      }
+
+      .business-object-drawer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: calc(100vw - 200px);
+        min-width: 780px;
+        height: calc(100vh - 48px);
+        background: #eff1f3;
+        box-shadow: -4px 0 10px rgba(24, 28, 37, 0.035);
+        border-left: 1px solid #e4e7ee;
+        pointer-events: auto;
+        overflow: auto;
+      }
+
+      .business-object-drawer .embedded-object-detail {
+        min-width: 960px;
+        min-height: 100%;
+        margin: 0;
+        padding: 12px;
+      }
+
+      .business-object-titlebar {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+        padding: 12px;
+        background: #eff1f3;
+      }
+
+      .business-object-title-main {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .business-object-title-left {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .business-object-name-row {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .business-object-title-tag {
+        height: 20px;
+        padding: 0 8px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #189dff;
+        color: #fff;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .business-object-name {
+        min-width: 0;
+        margin: 0;
+        color: #181c25;
+        font-size: 18px;
+        line-height: 28px;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .business-object-small-action,
+      .business-object-icon-action {
+        width: 24px;
+        height: 24px;
+        border: 1px solid rgba(24, 28, 37, 0.1);
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #181c25;
+        background: #fff;
+      }
+
+      .business-object-small-action svg,
+      .business-object-icon-action svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .business-object-pager {
+        display: inline-flex;
+        border: 1px solid rgba(24, 28, 37, 0.1);
+        border-radius: 6px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .business-object-pager button {
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .business-object-pager button + button {
+        border-left: 1px solid rgba(24, 28, 37, 0.1);
+      }
+
+      .business-object-meta-line,
+      .business-object-tag-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .business-object-meta-line {
+        color: #181c25;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .business-object-meta-danger {
+        color: #ff522a;
+      }
+
+      .business-object-meta-separator {
+        width: 1px;
+        height: 12px;
+        border-radius: 1px;
+        background: #91959e;
+      }
+
+      .business-object-soft-tag {
+        height: 20px;
+        padding: 0 8px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .business-object-soft-tag.magenta { color: #ff4a66; background: #fff0f0; border: 1px solid #ffc4c7; }
+      .business-object-soft-tag.orange { color: #ff7c19; background: #fff5e6; border: 1px solid #ffcd94; }
+      .business-object-soft-tag.green { color: #87cc3b; background: #fafff0; border: 1px solid #ddf2bb; }
+      .business-object-soft-tag.blue { color: #189dff; background: #e6f9ff; border: 1px solid #91dcff; }
+
+      .business-object-title-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 16px;
+        flex: 0 0 auto;
+      }
+
+      .business-object-primary-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .business-object-text-action {
+        height: 28px;
+        padding: 0 10px;
+        border: 1px solid #c1c5ce;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        background: #fff;
+        color: #181c25;
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .business-object-text-action.primary {
+        border-color: #ff8000;
+        background: #ff8000;
+        color: #fff;
+      }
+
+      .business-object-window-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      @media (max-width: 1180px) {
+        .business-object-drawer {
+          width: min(100vw, 980px);
+          min-width: 0;
+        }
+
+        .business-object-title-main {
+          flex-direction: column;
+        }
+
+        .business-object-title-actions {
+          width: 100%;
+          justify-content: space-between;
+        }
       }
 
       @media (max-width: 1180px) {
@@ -11601,6 +11834,12 @@
               <div class="chat-output-panel" id="chatOutputPanel"></div>
             </aside>
 
+            <div class="business-object-overlay hidden" id="businessObjectOverlay" role="presentation">
+              <section class="business-object-drawer" id="businessObjectDrawer" role="dialog" aria-modal="true" aria-labelledby="businessObjectOverlayTitle">
+                <div id="businessObjectOverlayContent"></div>
+              </section>
+            </div>
+
             <aside class="home-insight-rail hidden" id="homeInsightRail" aria-label="首页洞察侧边栏">
               <div class="home-insight-rail-header">
                 <div class="home-insight-rail-title">
@@ -13069,7 +13308,7 @@
       ];
       const SCHEME_CAPABILITIES = [
         { key: "dynamic-tabs", label: "支持动态页签", desc: "现有方案", runtimeMode: "dynamic-tabs" },
-        { key: "static-tabs", label: "不支持动态页签", desc: "复制现有方案", runtimeMode: "dynamic-tabs" }
+        { key: "static-tabs", label: "不支持动态页签", desc: "复制现有方案", runtimeMode: "static-detail" }
       ];
 
       function createDefaultAiProfile() {
@@ -13268,8 +13507,8 @@
         schemeMenuLevel: "plans",
         schemePlans: DEFAULT_SCHEME_PLANS.map((item) => ({ ...item })),
         activeSchemePlanId: "sidebar-interaction",
-        activeSchemeCapability: "dynamic-tabs",
-        schemeCapabilityByPlan: { "sidebar-interaction": "dynamic-tabs" },
+        activeSchemeCapability: "static-tabs",
+        schemeCapabilityByPlan: { "sidebar-interaction": "static-tabs" },
         menuItems: [],
         menuOpen: false,
         atMenuOpen: false,
@@ -13299,6 +13538,8 @@
         outputPanelResizing: false,
         activeOutputMenuId: "",
         outputAddMenuOpen: false,
+        businessObjectOverlayOpen: false,
+        activeBusinessObjectSourceId: "",
         activeMessengerThread: initialRouteState.activeMessengerThread,
         aiProfile: loadAiProfile(),
         settingsTab: initialRouteState.settingsTab,
@@ -13402,6 +13643,8 @@
       const chatOutputToggleBtn = document.getElementById("chatOutputToggleBtn");
       const chatOutputPanelShell = document.getElementById("chatOutputPanelShell");
       const chatOutputPanel = document.getElementById("chatOutputPanel");
+      const businessObjectOverlay = document.getElementById("businessObjectOverlay");
+      const businessObjectOverlayContent = document.getElementById("businessObjectOverlayContent");
       const chatFeed = document.getElementById("chatFeed");
       const composerStage = document.querySelector(".composer-stage");
       const composerShell = document.querySelector(".composer-shell");
@@ -14810,6 +15053,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function getActiveSchemeRuntimeMode() {
         return getActiveSchemeCapability().runtimeMode || "dynamic-tabs";
+      }
+
+      function usesDynamicOutputTabs() {
+        return getActiveSchemeRuntimeMode() === "dynamic-tabs";
+      }
+
+      function usesStaticOutputDetail() {
+        return getActiveSchemeRuntimeMode() === "static-detail";
       }
 
       function getSchemeCapability(planId) {
@@ -17353,20 +17604,34 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function getOutputDetailWidthBounds() {
         const viewportWidth = window.innerWidth || 1440;
         return {
-          min: Math.min(520, Math.max(420, viewportWidth - 820)),
-          max: Math.min(1120, Math.max(760, viewportWidth - 420))
+          min: Math.min(520, Math.max(420, viewportWidth - 900)),
+          max: Math.min(980, Math.max(620, viewportWidth - 760))
         };
       }
 
-      function getOutputDetailContentKind() {
+      function getActiveOutputDetailContentKind() {
         const record = getOutputTabRecord();
         return record?.tab.type === "business" ? "business" : "doc";
       }
 
-      function getDefaultOutputDetailWidth(kind = getOutputDetailContentKind()) {
+      function getOutputDetailContentKindForTab(tab) {
+        return tab?.type === "business" ? "business" : "doc";
+      }
+
+      function getOutputDetailContentKindForOpenTabs() {
+        if (!state.outputOpenTabs.length) {
+          return getActiveOutputDetailContentKind();
+        }
+
+        return state.outputOpenTabs.some((tab) => getOutputDetailContentKindForTab(tab) === "business")
+          ? "business"
+          : "doc";
+      }
+
+      function getDefaultOutputDetailWidth(kind = getOutputDetailContentKindForOpenTabs()) {
         const viewportWidth = window.innerWidth || 1440;
         const bounds = getOutputDetailWidthBounds();
-        const ratio = kind === "business" ? 0.7 : 0.44;
+        const ratio = kind === "business" ? 0.62 : 0.44;
         const preferred = Math.round(viewportWidth * ratio);
         return Math.min(bounds.max, Math.max(bounds.min, preferred));
       }
@@ -17646,19 +17911,53 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
-      function openOutputPanelTab(type, id) {
+      function openOutputPanelTab(type, id, options = {}) {
+        if (usesStaticOutputDetail() && type === "business") {
+          openBusinessObjectOverlay(id);
+          return;
+        }
+
         const tabId = getOutputTabId(type, id);
-        if (!state.outputOpenTabs.some((item) => item.tabId === tabId)) {
+        if (usesStaticOutputDetail()) {
+          state.outputOpenTabs = [{ tabId, type, id }];
+        } else if (options.replace) {
+          state.outputOpenTabs = [{ tabId, type, id }];
+        } else if (!state.outputOpenTabs.some((item) => item.tabId === tabId)) {
           state.outputOpenTabs.push({ tabId, type, id });
         }
         state.activeOutputTabId = tabId;
         resetOutputDetailAutoWidth();
         state.outputResultsPanelMode = "detail";
         state.outputResultsPanelOpen = true;
+        if (usesStaticOutputDetail()) {
+          state.businessObjectOverlayOpen = false;
+          state.activeBusinessObjectSourceId = "";
+        }
         state.activeOutputMenuId = "";
         state.outputAddMenuOpen = false;
         persistOutputPanelState();
         renderMainPanels();
+      }
+
+      function openBusinessObjectOverlay(sourceId) {
+        if (usesStaticOutputDetail()) {
+          state.outputResultsPanelOpen = false;
+          state.outputResultsPanelMode = "list";
+          state.outputOpenTabs = [];
+          state.activeOutputTabId = "";
+          persistOutputPanelState();
+        }
+        state.businessObjectOverlayOpen = true;
+        state.activeBusinessObjectSourceId = sourceId;
+        state.activeOutputMenuId = "";
+        state.outputAddMenuOpen = false;
+        renderMainPanels();
+      }
+
+      function closeBusinessObjectOverlay() {
+        state.businessObjectOverlayOpen = false;
+        state.activeBusinessObjectSourceId = "";
+        renderBusinessObjectOverlay();
       }
 
       function closeOutputPanelTab(tabId) {
@@ -17806,6 +18105,88 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
+      function renderBusinessObjectTitleBar(source) {
+        const title = source.detailTitle || source.title;
+        return `
+          <header class="business-object-titlebar">
+            <div class="business-object-title-main">
+              <div class="business-object-title-left">
+                <div class="business-object-name-row">
+                  <span class="business-object-title-tag">客户</span>
+                  <h2 class="business-object-name" id="businessObjectOverlayTitle">${escapeHtml(title)}</h2>
+                  <button class="business-object-small-action" type="button" aria-label="锁定">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M4.5 7V5.6a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6h-9z"></path></svg>
+                  </button>
+                  <button class="business-object-small-action" type="button" aria-label="促销">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M2.5 8.5 8.6 2.4h4.9v4.9l-6.1 6.1z"></path><path class="icon-stroke" d="M10.8 4.8h.01"></path></svg>
+                  </button>
+                  <span class="business-object-pager" aria-label="对象切换">
+                    <button type="button" aria-label="上一个客户"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="m9.5 4-4 4 4 4"></path></svg></button>
+                    <button type="button" aria-label="下一个客户"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="m6.5 4 4 4-4 4"></path></svg></button>
+                  </span>
+                </div>
+                <div class="business-object-meta-line">
+                  <span class="business-object-meta-danger">推进中</span>
+                  <span class="business-object-meta-separator" aria-hidden="true"></span>
+                  <span>方案确认</span>
+                  <span class="business-object-meta-separator" aria-hidden="true"></span>
+                  <span>智能制造</span>
+                  <span class="business-object-meta-separator" aria-hidden="true"></span>
+                  <span>年度框架客户</span>
+                </div>
+                <div class="business-object-tag-line">
+                  <span class="business-object-soft-tag orange">重点客户</span>
+                  <span class="business-object-soft-tag green">预算已确认</span>
+                  <span class="business-object-soft-tag blue">管理层关注</span>
+                  <span class="business-object-soft-tag magenta">成交</span>
+                </div>
+              </div>
+              <div class="business-object-title-actions">
+                <div class="business-object-primary-actions">
+                  <button class="business-object-text-action primary" type="button">客群</button>
+                  <button class="business-object-text-action" type="button">客户画像</button>
+                  <button class="business-object-text-action" type="button">发起流程</button>
+                  <button class="business-object-icon-action" type="button" aria-label="更多业务操作">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><circle class="icon-fill" cx="3.5" cy="8" r="1"></circle><circle class="icon-fill" cx="8" cy="8" r="1"></circle><circle class="icon-fill" cx="12.5" cy="8" r="1"></circle></svg>
+                  </button>
+                </div>
+                <div class="business-object-window-actions">
+                  <button class="business-object-icon-action" type="button" aria-label="刷新">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M13 8a5 5 0 1 1-1.5-3.6M13 3.5v3h-3"></path></svg>
+                  </button>
+                  <button class="business-object-icon-action" type="button" aria-label="全屏">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M5.5 2.5h-3v3M10.5 2.5h3v3M5.5 13.5h-3v-3M10.5 13.5h3v-3"></path></svg>
+                  </button>
+                  <button class="business-object-icon-action" type="button" data-business-object-close="true" aria-label="关闭客户详情">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M4.3 4.3 11.7 11.7M11.7 4.3 4.3 11.7"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </header>
+        `;
+      }
+
+      function renderBusinessObjectOverlay() {
+        if (!businessObjectOverlay || !businessObjectOverlayContent) {
+          return;
+        }
+
+        const source = getBusinessSourceById(state.activeBusinessObjectSourceId);
+        const isOpen = state.businessObjectOverlayOpen && Boolean(source) && state.mainPanel === "home" && state.homeView === "chat";
+        businessObjectOverlay.classList.toggle("hidden", !isOpen);
+
+        if (!isOpen) {
+          businessObjectOverlayContent.innerHTML = "";
+          return;
+        }
+
+        businessObjectOverlayContent.innerHTML = `
+          ${renderBusinessObjectTitleBar(source)}
+          ${renderOutputBusinessDetail(source)}
+        `;
+      }
+
       function renderOutputDetailBody(record) {
         if (!record) {
           return `<div class="chat-output-empty">当前内容不存在。</div>`;
@@ -17818,12 +18199,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return renderDocPreviewMarkup(record.item);
       }
 
-      function renderOutputDetailPanel() {
+      function renderOutputDetailPanel(options = {}) {
+        const dynamicTabs = options.dynamicTabs !== false;
         const activeRecord = getOutputTabRecord();
         const detailTitle = getOutputTabDetailTitle(activeRecord);
         return `
           <div class="chat-output-resize-handle" data-output-resize-handle="true" role="separator" aria-orientation="vertical" aria-label="拖拽调整生成结果宽度"></div>
-          <div class="chat-output-panel-header">
+          ${dynamicTabs ? `<div class="chat-output-panel-header">
             <div class="chat-output-detail-tabs">
               <button class="chat-output-detail-title" type="button" data-output-back-to-list="true" aria-label="返回生成结果列表">
                 ${outputArticleIconMarkup()}
@@ -17834,7 +18216,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             <button class="chat-output-panel-close" type="button" data-output-panel-close="true" aria-label="关闭生成结果">
               ${figmaIconImg("close")}
             </button>
-          </div>
+          </div>` : ""}
           <div class="chat-output-detail-head">
             <p class="chat-output-detail-head-title">${escapeHtml(detailTitle)}</p>
             <div class="chat-output-detail-actions">
@@ -17865,6 +18247,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                   </svg>
                 </button>
               ` : ""}
+              ${dynamicTabs ? "" : `
+                <button class="chat-output-detail-action" type="button" data-output-panel-close="true" aria-label="关闭生成结果">
+                  ${figmaIconImg("close")}
+                </button>
+              `}
             </div>
           </div>
           <div class="chat-output-detail-body">
@@ -17881,9 +18268,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const isOpen = showChat && state.outputResultsPanelOpen;
         const currentDocs = getCurrentConversationDocs();
         const visibleResults = getCurrentOutputResults();
-        const usesDynamicTabs = getActiveSchemeRuntimeMode() === "dynamic-tabs";
-        const hasDynamicTabs = usesDynamicTabs && state.outputOpenTabs.length > 0;
-        const showDetail = usesDynamicTabs && state.outputResultsPanelMode === "detail" && state.outputOpenTabs.length > 0;
+        const dynamicTabs = usesDynamicOutputTabs();
+        const activeRecord = getOutputTabRecord();
+        const showDynamicDetail = dynamicTabs && state.outputResultsPanelMode === "detail" && state.outputOpenTabs.length > 0;
+        const showStaticDetail = !dynamicTabs && state.outputResultsPanelMode === "detail" && activeRecord?.tab.type === "doc";
+        const showDetail = showDynamicDetail || showStaticDetail;
 
         chatOutputToggleBtn.classList.toggle("hidden", !showChat || isOpen);
         chatOutputToggleBtn.classList.toggle("active", isOpen);
@@ -17905,7 +18294,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         chatOutputPanel.innerHTML = showDetail
-          ? renderOutputDetailPanel()
+          ? renderOutputDetailPanel({ dynamicTabs })
           : renderOutputListPanel(visibleResults);
       }
 
@@ -19758,6 +20147,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
         updateCustomerCreateComposer();
         renderChatOutputPanel(showChat);
+        renderBusinessObjectOverlay();
       }
 
       function renderMessengerSidebar() {
@@ -21689,7 +22079,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       chatOutputToggleBtn?.addEventListener("click", () => {
         state.outputResultsPanelOpen = !state.outputResultsPanelOpen;
-        if (state.outputResultsPanelOpen && state.outputOpenTabs.length) {
+        if (state.outputResultsPanelOpen && usesStaticOutputDetail()) {
+          state.outputResultsPanelMode = "list";
+        } else if (state.outputResultsPanelOpen && state.outputOpenTabs.length) {
           state.outputResultsPanelMode = "detail";
         }
         state.activeOutputMenuId = "";
@@ -22065,7 +22457,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const closeButton = event.target.closest("[data-output-panel-close]");
         if (closeButton) {
           state.outputResultsPanelOpen = false;
+          if (usesStaticOutputDetail()) {
+            state.outputResultsPanelMode = "list";
+          }
           state.activeOutputMenuId = "";
+          state.outputAddMenuOpen = false;
           persistOutputPanelState();
           renderMainPanels();
           return;
@@ -22092,7 +22488,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           const type = addItem.dataset.outputAddType || "doc";
           const id = addItem.dataset.outputAddId || "";
           state.outputAddMenuOpen = false;
-          openOutputPanelTab(type, id);
+          openOutputPanelTab(type, id, { append: true });
           return;
         }
 
@@ -22183,6 +22579,39 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       chatOutputPanel?.addEventListener("input", (event) => {
+        const searchInput = event.target.closest("[data-object-record-search]");
+        if (!searchInput) {
+          return;
+        }
+
+        const keyword = searchInput.value.trim().toLowerCase();
+        const objectDetail = searchInput.closest(".embedded-object-detail");
+        objectDetail?.querySelectorAll("[data-object-record-row]").forEach((row) => {
+          row.style.display = keyword && !row.textContent.toLowerCase().includes(keyword) ? "none" : "";
+        });
+      });
+
+      businessObjectOverlay?.addEventListener("click", (event) => {
+        const closeButton = event.target.closest("[data-business-object-close]");
+        if (closeButton) {
+          closeBusinessObjectOverlay();
+          return;
+        }
+
+        const objectSideTab = event.target.closest("[data-object-side-tab]");
+        if (objectSideTab) {
+          const objectDetail = objectSideTab.closest(".embedded-object-detail");
+          const nextPanel = objectSideTab.dataset.objectSideTab || "dynamic";
+          objectDetail?.querySelectorAll("[data-object-side-tab]").forEach((item) => {
+            item.classList.toggle("active", item === objectSideTab);
+          });
+          objectDetail?.querySelectorAll("[data-object-panel]").forEach((panel) => {
+            panel.hidden = panel.dataset.objectPanel !== nextPanel;
+          });
+        }
+      });
+
+      businessObjectOverlay?.addEventListener("input", (event) => {
         const searchInput = event.target.closest("[data-object-record-search]");
         if (!searchInput) {
           return;
@@ -22662,6 +23091,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         state.uiScheme = "scheme1";
         state.schemeMenuOpen = false;
         state.schemeMenuLevel = "plans";
+        if (usesDynamicOutputTabs()) {
+          state.businessObjectOverlayOpen = false;
+          state.activeBusinessObjectSourceId = "";
+        }
         closePlusMenu();
         closeExposedMenu();
         renderSchemeSwitch();

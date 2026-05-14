@@ -94,10 +94,10 @@ Primary shared render/navigation functions:
 | 右侧生成结果栏 | mostly `conversation.html` | `#chatOutputPanelShell`, `#chatOutputPanel`, `state.outputResultsPanelOpen` | `renderChatOutputPanel()` |
 | 右侧生成结果列表 | `conversation.html` | `[data-output-doc-id]`, `[data-output-business-id]` | `getCurrentOutputResults()`, `renderOutputListPanel()`; fixed to current conversation outputs, merged document/business rows, sorted newest first |
 | 右侧通用文档操作 | `conversation.html`, `docs.html` | `[data-output-doc-menu-action]`, `[data-output-doc-action]`, `.docs-row-inline-action` | Generic document rows expose download and forward icons like the docs library; remaining actions stay in the more menu. |
-| 右侧业务文档操作 | `conversation.html` | `[data-output-business-id]`, `[data-output-business-menu-action="forward"]` | Business source rows expose only the forward icon; row click still opens business detail. |
+| 右侧业务文档操作 | `conversation.html` | `[data-output-business-id]`, `[data-output-business-menu-action="forward"]` | Business source rows expose only the forward icon. In dynamic-tab mode, row click opens a generated-result detail tab; in static-detail mode, row click opens the detached business object drawer. |
 | 方案切换入口 | `conversation.html` | `#schemeSwitchBtn`, `#schemeSwitchMenu`, `state.activeSchemePlanId`, `state.activeSchemeCapability` | `renderSchemeSwitch()`; first level is scheme list, second level is dynamic-tab capability. |
 | 右侧文档详情 | `conversation.html` | `state.outputOpenTabs`, `state.activeOutputTabId` | `openOutputPanelTab("doc", id)`, `renderOutputDetailPanel()` |
-| 右侧业务详情 / 客户详情 | `conversation.html` | `[data-output-business-id]`, `.embedded-object-detail` | `openOutputPanelTab("business", id)`, `renderOutputBusinessDetail()` |
+| 右侧业务详情 / 客户详情 | `conversation.html` | `[data-output-business-id]`, `.embedded-object-detail`, `#businessObjectOverlay` | Dynamic-tab mode: `openOutputPanelTab("business", id)` renders inside generated results. Static-detail mode: `openBusinessObjectOverlay(id)` renders a detached right-side drawer with `renderBusinessObjectTitleBar()` plus `renderOutputBusinessDetail()`. |
 | 右侧详情宽度拖拽 | `conversation.html` | `[data-output-resize-handle]`, `state.outputDetailPanelWidth` | pointerdown/move/up listeners, `applyOutputDetailPanelWidth()` |
 | 创建客户确认卡片 | `conversation.html` | `#customerCreateComposerCard`, `state.activeChatId`, session `source: "create-customer"` | `beginCreateCustomerConversation()`, `updateCustomerCreateComposer()` |
 | 创建商机确认卡片 | `conversation.html` | `#dealCreateComposerCard`, session `stage: "deal-confirming"` | `beginCreateDealFromCustomer()`, deal composer listeners |
@@ -142,7 +142,10 @@ source outputs are merged into one flat list and sorted by `sortKey` descending;
 there is no separate "业务来源" section title:
 
 - Document card or generated result row -> `openOutputPanelTab("doc", doc.id)`
-- Business/customer source row -> `openOutputPanelTab("business", source.id)`
+- Business/customer source row -> dynamic-tab mode calls
+  `openOutputPanelTab("business", source.id)`; static-detail mode calls
+  `openBusinessObjectOverlay(source.id)` and leaves the generated-results panel
+  outside the business detail scene.
 - Generic document rows expose the same primary operations as the docs library:
   download and forward icons are visible; sync CRM, jump to chat, and copy link
   stay under the more menu.
@@ -152,19 +155,47 @@ there is no separate "业务来源" section title:
   `source.actionLabel`. Examples: query/view-generated cards -> `查询`, field
   update outputs -> `更新`, created-record outputs -> `创建`.
 - Business object detail rendering omits the embedded object header module when
-  shown inside the generated-results panel.
+  shown inside the generated-results panel. Static-detail mode restores a
+  detached object title area through `renderBusinessObjectTitleBar()` in the
+  overlay drawer, based on the Figma title-component structure.
 - Business object detail header actions show only the forward/share icon.
 - Dynamic output tabs are visible only in output detail mode. Returning to the
   list hides the tab strip and removes the wide detail layout so the list panel
   keeps the normal sidebar width.
-- In detail mode, the dynamic tab strip has an add-tab icon after the open
+- In dynamic-tab detail mode, the dynamic tab strip has an add-tab icon after the open
   tabs. It opens a small menu of current-session generated outputs that are not
   already open, and selecting one opens it as a new dynamic tab.
+- In dynamic-tab mode, normal detail opens can add another open generated-result
+  tab; this preserves the existing dynamic tab behavior.
+- In static-detail mode, the dynamic tab header/title strip is not rendered.
+  Generic document outputs use a single right-panel detail page; the close
+  button is placed in the detail title action area. Business object outputs are
+  not rendered as sidebar details and instead use the detached drawer.
+- In static-detail mode, normal detail opens replace the current generated
+  detail. Closing the generated-results panel resets `state.outputResultsPanelMode`
+  to `list`, so reopening from the top-right generated-results icon enters the
+  list rather than the previous detail.
+- In static-detail mode, clicking the top-right generated-results icon always
+  opens the generated-results list, even if an internal detail record still
+  exists in state.
+- In static-detail mode, document details and business object drawers are
+  mutually exclusive. Opening one chat card closes the previous card detail
+  surface instead of stacking a sidebar detail and detached drawer.
+- When a static business object drawer opens, `openBusinessObjectOverlay()`
+  must rerender the main panels after clearing `state.outputOpenTabs` and
+  `state.outputResultsPanelOpen`, so an older document detail is removed from
+  the UI before the drawer is shown.
+- Static business object drawer geometry is controlled by
+  `.business-object-overlay` and `.business-object-drawer`; the overlay starts
+  below the 48px ShareClaw topbar, keeps the drawer left edge 200px from the
+  viewport left edge, and uses a very soft right-drawer shadow.
 - Detail width adapts to the active generated-result type: business/object
   detail uses a wider target width, generic document preview uses a narrower
-  target width, both clamped to viewport bounds. Previously persisted widths do
-  not disable auto sizing; only a drag in the current page session switches to
-  manual-width behavior.
+  target width, and multiple open dynamic tabs use the widest required type so
+  switching tabs does not change panel width. Width is capped to preserve the
+  chat area. If content cannot fit within the capped width, the detail body
+  scrolls horizontally. Previously persisted widths do not disable auto sizing;
+  only a drag in the current page session switches to manual-width behavior.
 - Right panel list/detail state is controlled by `state.outputResultsPanelMode`,
   `state.outputOpenTabs`, and `state.activeOutputTabId`.
 
@@ -194,9 +225,12 @@ In `conversation.html`, the top scheme switcher is now a two-level menu:
   the menu content is replaced in place and shows a "返回方案列表" row.
 - Second level: each scheme owns a dynamic-tab capability choice:
   `支持动态页签` (`dynamic-tabs`, current behavior) or
-  `不支持动态页签` (`static-tabs`). For now, `static-tabs` maps to the same
-  runtime behavior as `dynamic-tabs`; it is a copied branch reserved for the
-  next requested interaction change.
+  `不支持动态页签` (`static-tabs`). `dynamic-tabs` maps to the existing
+  tabbed generated-results runtime; `static-tabs` maps to `static-detail`, a
+  single-detail runtime with no dynamic tab strip and a detached business
+  object drawer.
+- The default capability for the default `侧边栏交互方案` is `static-tabs`
+  (`不支持动态页签`).
 - Capability selection is stored per scheme in `state.schemeCapabilityByPlan`.
 
 ### Market To Conversation
