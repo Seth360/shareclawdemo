@@ -271,6 +271,28 @@
         height: 48px;
       }
 
+      .platform-switch-btn {
+        height: 28px;
+        padding: 6px 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        border-radius: 6px;
+        background: #fff;
+        color: #545861;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+
+      .platform-switch-btn svg {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 auto;
+      }
+
       .top-search {
         width: 290px;
         height: 28px;
@@ -11189,6 +11211,13 @@
         </div>
 
         <div class="topbar-right">
+          <button class="platform-switch-btn" id="platformSwitchBtn" type="button" aria-label="切换到移动端">
+            <svg viewBox="0 0 12 11" fill="none" aria-hidden="true">
+              <path d="M3.53553 0.719749L2.82843 0L0.00553784 2.87336H0V3.88988H12V2.87336H1.41975L3.53553 0.719749Z" fill="currentColor"></path>
+              <path d="M8.46447 9.94692L9.17157 10.6667L11.9945 7.79331H12V6.77679H0V7.79331H10.5802L8.46447 9.94692Z" fill="currentColor"></path>
+            </svg>
+            <span>移动端</span>
+          </button>
           <div class="top-search">
             <div class="search-scope">
               <span>全部</span>
@@ -13541,6 +13570,7 @@
       const schemeSwitchBtn = document.getElementById("schemeSwitchBtn");
       const schemeSwitchLabel = document.getElementById("schemeSwitchLabel");
       const schemeSwitchMenu = document.getElementById("schemeSwitchMenu");
+      const platformSwitchBtn = document.getElementById("platformSwitchBtn");
       const composerSelects = document.getElementById("composerSelects");
       const dialogModeBtn = document.getElementById("dialogModeBtn");
       const planningModeBtn = document.getElementById("planningModeBtn");
@@ -23963,6 +23993,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       schemeSwitchMenu.addEventListener("pointerdown", handleSchemeMenuSelection);
       schemeSwitchMenu.addEventListener("click", (event) => {
         event.stopPropagation();
+      });
+
+      platformSwitchBtn?.addEventListener("click", () => {
+        const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        const mobileUrl = new URL("ShareClaw-Demo.html", window.location.href);
+        mobileUrl.searchParams.set("return", currentPath);
+        window.location.href = mobileUrl.toString();
       });
 
       if (dialogModeBtn) {

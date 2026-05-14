@@ -218,6 +218,28 @@
         height: 48px;
       }
 
+      .platform-switch-btn {
+        height: 28px;
+        padding: 6px 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        border-radius: 6px;
+        background: #fff;
+        color: #545861;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+
+      .platform-switch-btn svg {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 auto;
+      }
+
       .top-search {
         width: 290px;
         height: 28px;
@@ -4155,6 +4177,10 @@
       .market-toolbar .market-search-box {
         width: 240px;
         height: 36px;
+        padding: 0 8px;
+        gap: 4px;
+        border-color: #c1c5ce;
+        flex-direction: row-reverse;
       }
 
       .market-search-box {
@@ -4192,6 +4218,12 @@
         height: 36px;
       }
 
+      .market-toolbar .market-search-box svg {
+        width: 14px;
+        height: 14px;
+        flex: none;
+      }
+
       .market-outline-btn,
       .created-action-btn,
       .share-mini-btn,
@@ -4216,6 +4248,17 @@
 
       .market-outline-btn {
         border-color: #c1c5ce;
+      }
+
+      #openCreatedBtn {
+        width: 96px;
+        height: 36px;
+        padding: 0 16px;
+        border-color: #c1c5ce;
+        border-radius: 8px;
+        font-size: 13px;
+        line-height: 18px;
+        color: #181c25;
       }
 
       .market-use-btn {
@@ -4484,6 +4527,10 @@
         color: #181c25;
       }
 
+      #enterpriseSection .market-chip-row {
+        margin: 0 0 12px;
+      }
+
       .market-card-grid,
       .created-grid {
         display: grid;
@@ -4529,10 +4576,10 @@
 
       .agent-square-card:hover,
       .agent-square-card:focus-within {
-        border-color: rgba(115, 65, 222, 0.26);
+        border-color: #bc97f7;
         box-shadow:
-          0 0 1px rgba(28, 40, 64, 0.14),
-          0 4px 12px rgba(24, 41, 75, 0.06);
+          0 0 2px rgba(28, 40, 64, 0.18),
+          0 1px 3px rgba(24, 41, 75, 0.04);
         transform: translateY(-1px);
       }
 
@@ -4592,18 +4639,20 @@
 
       .card-horizontal-shell {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 12px;
         height: 100%;
       }
 
       .card-horizontal-main {
+        position: relative;
         flex: 1 1 auto;
         min-width: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 8px;
+        gap: 0;
+        padding-right: 44px;
       }
 
       .card-horizontal-head,
@@ -4665,21 +4714,26 @@
 
       .agent-card-top {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
         gap: 12px;
+        width: 100%;
       }
 
       .agent-card-tag-stack {
-        position: relative;
-        flex: 0 0 auto;
-        min-width: 82px;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        flex: 0 0 32px;
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
         display: flex;
-        justify-content: flex-end;
-      }
-
-      .agent-card-tag-stack .market-tag {
-        transition: opacity 0.16s ease;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        aspect-ratio: 1 / 1;
       }
 
       .agent-card-disabled-label {
@@ -4697,25 +4751,11 @@
 
       .agent-card-hover-actions {
         position: absolute;
-        top: 0;
-        right: 0;
+        inset: 0;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.16s ease;
-      }
-
-      .agent-square-card.has-hover-actions:hover .agent-card-hover-actions,
-      .agent-square-card.has-hover-actions:focus-within .agent-card-hover-actions {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .agent-square-card.has-hover-actions:hover .agent-card-tag-stack .market-tag,
-      .agent-square-card.has-hover-actions:focus-within .agent-card-tag-stack .market-tag {
-        opacity: 0;
+        justify-content: center;
+        gap: 8px;
       }
 
       .agent-square-card.has-hover-actions.is-disabled:hover .agent-card-disabled-label,
@@ -4723,22 +4763,39 @@
         opacity: 0;
       }
 
+      .agent-card-static-btn {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 26px;
+        background: transparent;
+        color: #7341de;
+        transition: opacity 0.16s ease;
+      }
+
       .agent-card-hover-btn {
-        width: 22px;
-        height: 22px;
+        width: 32px;
+        height: 32px;
         padding: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 10px;
-        background: #f2f4fb;
-        color: #545861;
+        border-radius: 26px;
+        background: transparent;
+        color: #6f43db;
       }
 
       .agent-card-hover-btn svg {
         width: 16px;
         height: 16px;
         flex: none;
+      }
+
+      .agent-card-hover-btn:hover,
+      .agent-card-hover-btn:focus-visible {
+        background: #fafafa;
       }
 
       .agent-card-hover-btn.enable-btn {
@@ -4753,6 +4810,81 @@
         font-size: 13px;
         line-height: 18px;
         box-shadow: 0 1px 2px rgba(24, 28, 37, 0.04);
+      }
+
+      .agent-card-hover-btn.chat-btn {
+        background: transparent;
+      }
+
+      .agent-card-hover-btn .agent-card-icon-hover {
+        display: none;
+      }
+
+      .agent-card-hover-btn.chat-btn {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .agent-square-card.has-hover-actions:hover .agent-card-static-btn,
+      .agent-square-card.has-hover-actions:focus-within .agent-card-static-btn {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .agent-square-card.has-hover-actions:hover .agent-card-hover-btn.chat-btn,
+      .agent-square-card.has-hover-actions:focus-within .agent-card-hover-btn.chat-btn,
+      .agent-card-hover-btn.chat-btn:focus-visible {
+        background: #f2f4fb;
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .agent-square-card.has-hover-actions:hover .agent-card-hover-btn.chat-btn .agent-card-icon-default,
+      .agent-square-card.has-hover-actions:focus-within .agent-card-hover-btn.chat-btn .agent-card-icon-default,
+      .agent-card-hover-btn.chat-btn:focus-visible .agent-card-icon-default {
+        display: none;
+      }
+
+      .agent-square-card.has-hover-actions:hover .agent-card-hover-btn.chat-btn .agent-card-icon-hover,
+      .agent-square-card.has-hover-actions:focus-within .agent-card-hover-btn.chat-btn .agent-card-icon-hover,
+      .agent-card-hover-btn.chat-btn:focus-visible .agent-card-icon-hover {
+        display: block;
+      }
+
+      .market-agent-add-btn {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 26px;
+        background: #fafafa;
+        color: #7341de;
+        flex: 0 0 32px;
+        aspect-ratio: 1 / 1;
+      }
+
+      .market-agent-add-btn svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+
+      .market-card:hover .market-agent-add-btn,
+      .market-card:focus-within .market-agent-add-btn {
+        background: #976aeb;
+        color: #fff;
+      }
+
+      .market-card:hover .market-agent-add-btn path,
+      .market-card:focus-within .market-agent-add-btn path {
+        fill: currentColor;
       }
 
       .skill-hover-card {
@@ -8963,6 +9095,13 @@
         </div>
 
         <div class="topbar-right">
+          <button class="platform-switch-btn" id="platformSwitchBtn" type="button" aria-label="切换到移动端">
+            <svg viewBox="0 0 12 11" fill="none" aria-hidden="true">
+              <path d="M3.53553 0.719749L2.82843 0L0.00553784 2.87336H0V3.88988H12V2.87336H1.41975L3.53553 0.719749Z" fill="currentColor"></path>
+              <path d="M8.46447 9.94692L9.17157 10.6667L11.9945 7.79331H12V6.77679H0V7.79331H10.5802L8.46447 9.94692Z" fill="currentColor"></path>
+            </svg>
+            <span>移动端</span>
+          </button>
           <div class="top-search">
             <div class="search-scope">
               <span>全部</span>
@@ -10321,10 +10460,9 @@
                 </div>
 
                 <div class="market-library-view" id="marketLibraryView">
-                  <div class="market-chip-row" id="marketFilterChips"></div>
-
                   <section class="market-section" id="enterpriseSection">
                     <h2 class="market-section-title" id="enterpriseSectionTitle">企业预置</h2>
+                    <div class="market-chip-row" id="marketFilterChips"></div>
                     <div class="market-card-grid large" id="enterpriseGrid"></div>
                     <button class="market-more-btn" id="marketMoreBtn" type="button">查看更多</button>
                   </section>
@@ -11195,6 +11333,7 @@
       const schemeSwitchBtn = document.getElementById("schemeSwitchBtn");
       const schemeSwitchLabel = document.getElementById("schemeSwitchLabel");
       const schemeSwitchMenu = document.getElementById("schemeSwitchMenu");
+      const platformSwitchBtn = document.getElementById("platformSwitchBtn");
       const composerSelects = document.getElementById("composerSelects");
       const dialogModeBtn = document.getElementById("dialogModeBtn");
       const planningModeBtn = document.getElementById("planningModeBtn");
@@ -13693,7 +13832,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderAgentSquareCard(card, options = {}) {
         const { allowActions = true } = options;
-        const tag = (card.tags || [])[0] || { label: "企业预置", className: "tag-neutral" };
         const isDisabled = card.enabled === false;
         return `
           <article class="market-card card-horizontal agent-square-card detail-card-trigger ${allowActions ? "has-hover-actions" : ""} ${isDisabled ? "is-disabled" : ""}" tabindex="0" role="button" aria-label="查看 ${escapeHtml(card.title)} 详情" data-detail-card="agent" data-detail-id="${escapeHtml(card.id)}">
@@ -13709,7 +13847,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                     ${
                       isDisabled
                         ? `<span class="agent-card-disabled-label">已禁用</span>`
-                        : `<span class="market-tag tag-neutral">${escapeHtml(tag.label)}</span>`
+                        : `
+                            <span class="agent-card-static-btn" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10" fill="none">
+                                <path d="M14.0809 0.195262C14.3412 0.455612 14.3412 0.877722 14.0809 1.13807L5.60948 9.60948C5.34913 9.86983 4.92702 9.86983 4.66667 9.60948L0.195262 5.13807C-0.0650874 4.87772 -0.0650874 4.45561 0.195262 4.19526C0.455612 3.93491 0.877722 3.93491 1.13807 4.19526L5.13807 8.19526L13.1381 0.195262C13.3984 -0.0650874 13.8205 -0.0650874 14.0809 0.195262Z" fill="#7341DE"></path>
+                              </svg>
+                            </span>
+                          `
                     }
                     ${
                       allowActions
@@ -13719,14 +13863,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                                 isDisabled
                                   ? `<button class="agent-card-hover-btn enable-btn" type="button" data-agent-action="toggle-enabled" data-agent-id="${escapeHtml(card.id)}" aria-label="启用">启用</button>`
                                   : `
-                                      <button class="agent-card-hover-btn" type="button" data-agent-action="toggle-enabled" data-agent-id="${escapeHtml(card.id)}" aria-label="禁用">
+                                      <button class="agent-card-hover-btn chat-btn" type="button" data-agent-action="chat" data-agent-id="${escapeHtml(card.id)}" aria-label="对话">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                          <path d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM13.5 8C13.5 6.93398 13.1967 5.9388 12.6717 5.09603L5.09603 12.6717C5.9388 13.1967 6.93398 13.5 8 13.5C11.0376 13.5 13.5 11.0376 13.5 8ZM3.32826 10.904L10.904 3.32826C10.0612 2.80328 9.06602 2.5 8 2.5C4.96243 2.5 2.5 4.96243 2.5 8C2.5 9.06602 2.80328 10.0612 3.32826 10.904Z" fill="#91959E"></path>
-                                        </svg>
-                                      </button>
-                                      <button class="agent-card-hover-btn" type="button" data-agent-action="chat" data-agent-id="${escapeHtml(card.id)}" aria-label="对话">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                          <path d="M1.921 15.3221C1.5765 15.4071 1.25556 15.1162 1.30639 14.765L1.62898 12.5367C0.606801 11.277 0 9.70491 0 8C0 3.85786 3.58172 0.5 8 0.5C12.4183 0.5 16 3.85786 16 8C16 12.1421 12.4183 15.5 8 15.5C6.71121 15.5 5.4936 15.2143 4.4153 14.7068L1.921 15.3221Z" fill="#91959E"></path>
+                                          <path class="agent-card-icon-default" d="M14.0809 0.195262C14.3412 0.455612 14.3412 0.877722 14.0809 1.13807L5.60948 9.60948C5.34913 9.86983 4.92702 9.86983 4.66667 9.60948L0.195262 5.13807C-0.0650874 4.87772 -0.0650874 4.45561 0.195262 4.19526C0.455612 3.93491 0.877722 3.93491 1.13807 4.19526L5.13807 8.19526L13.1381 0.195262C13.3984 -0.0650874 13.8205 -0.0650874 14.0809 0.195262Z" fill="#7341DE"></path>
+                                          <path class="agent-card-icon-hover" d="M1.921 14.8221C1.5765 14.9071 1.25556 14.6162 1.30639 14.265L1.62898 12.0367C0.606801 10.777 0 9.20491 0 7.5C0 3.35786 3.58172 0 8 0C12.4183 0 16 3.35786 16 7.5C16 11.6421 12.4183 15 8 15C6.71121 15 5.4936 14.7143 4.4153 14.2068L1.921 14.8221Z" fill="#7341DE"></path>
                                         </svg>
                                       </button>
                                     `
@@ -13736,6 +13876,30 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                         : ""
                     }
                   </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderMarketAgentCard(card) {
+        return `
+          <article class="market-card card-horizontal agent-square-card detail-card-trigger" tabindex="0" role="button" aria-label="查看 ${escapeHtml(card.title)} 详情" data-detail-card="agent" data-detail-id="${escapeHtml(card.id)}">
+            <div class="card-horizontal-shell">
+              <span class="market-icon-box ${card.tone}">${escapeHtml(card.glyph)}</span>
+              <div class="card-horizontal-main">
+                <div class="agent-card-top">
+                  <div class="market-card-info">
+                    <h3 class="market-card-name">${escapeHtml(card.title)}</h3>
+                    <p class="market-card-desc">${escapeHtml(card.desc)}</p>
+                  </div>
+                  <button class="market-agent-add-btn" type="button" data-market-agent-add="${escapeHtml(card.id)}" aria-label="添加 ${escapeHtml(card.title)}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M0.670044 8.00326C0.670044 7.63507 0.968521 7.33659 1.33671 7.33659H14.67C15.0382 7.33659 15.3367 7.63507 15.3367 8.00326C15.3367 8.37145 15.0382 8.66992 14.67 8.66992H1.33671C0.968521 8.66992 0.670044 8.37145 0.670044 8.00326Z" fill="#7341DE"></path>
+                      <path d="M7.33671 1.33659C7.33671 0.968399 7.63519 0.669922 8.00338 0.669922C8.37157 0.669922 8.67004 0.968399 8.67004 1.33659V14.6699C8.67004 15.0381 8.37157 15.3366 8.00338 15.3366C7.63519 15.3366 7.33671 15.0381 7.33671 14.6699V1.33659Z" fill="#7341DE"></path>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -14168,8 +14332,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         const enterpriseCards = marketCollections.agent.enterprise.filter((card) => matchesSearch(card, searchText) && matchesCategory(card));
-        const publicCards = marketCollections.agent.public.filter((card) => matchesSearch(card, searchText) && matchesCategory(card));
-        const sharedCards = marketCollections.agent.shared.filter((card) => matchesSearch(card, searchText) && matchesCategory(card));
+        const publicCards = marketCollections.agent.public.filter((card) => matchesSearch(card, searchText));
+        const sharedCards = marketCollections.agent.shared.filter((card) => matchesSearch(card, searchText));
         const marketCards = [...publicCards, ...sharedCards];
         marketToolbar.classList.remove("hidden");
         marketPageTitle.textContent = state.uiScheme === "scheme2" ? "智能体广场" : "智能体";
@@ -14188,7 +14352,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         enterpriseGrid.innerHTML = enterpriseCards.length ? enterpriseCards.map((card) => renderAgentSquareCard(card, { allowActions: true })).join("") : renderManageEmptyState("当前筛选下没有企业预置智能体。");
         marketPublicSection.classList.remove("hidden");
         marketPublicSectionTitle.textContent = "市场";
-        marketPublicGrid.innerHTML = marketCards.length ? marketCards.map((card) => renderAgentSquareCard(card, { allowActions: false })).join("") : renderManageEmptyState("当前筛选下没有市场智能体。");
+        marketPublicGrid.innerHTML = marketCards.length ? marketCards.map((card) => renderMarketAgentCard(card)).join("") : renderManageEmptyState("当前筛选下没有市场智能体。");
         marketSharedSection.classList.add("hidden");
         marketMoreBtn.classList.add("hidden");
         renderConfigSidebar();
@@ -16765,6 +16929,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         applyConversationComposerPreset(conversationSessions[sessionId]);
       }
 
+      function jumpToAgentConversation(label) {
+        navigateToConversation({
+          launch: "market-use",
+          type: "agent",
+          label
+        });
+      }
+
       function findCreatedCard(id) {
         return getCreatedCards().find((card) => card.id === id);
       }
@@ -17781,14 +17953,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (text.trim() === "表单卡演示") {
-          navigateToConversation({
-            launch: "meeting-form-card",
-            prompt: "表单卡演示"
-          });
-          return;
-        }
-
         /* ── Handle @ mention + product matching flow ── */
         if (atChip || state.selectedAtItem) {
           const atRef = atChip ? (atChip.dataset.atRef || "") : (state.selectedAtItem?.label || "");
@@ -18696,6 +18860,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         renderAgentPill();
       });
 
+      platformSwitchBtn?.addEventListener("click", () => {
+        const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        const mobileUrl = new URL("ShareClaw-Demo.html", window.location.href);
+        mobileUrl.searchParams.set("return", currentPath);
+        window.location.href = mobileUrl.toString();
+      });
+
       if (dialogModeBtn) {
         dialogModeBtn.addEventListener("click", () => {
           setComposerMode("dialog");
@@ -18885,6 +19056,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       enterpriseGrid.addEventListener("click", (event) => {
         const agentActionButton = event.target.closest("[data-agent-action]");
         if (agentActionButton) {
+          event.stopPropagation();
           const agentId = agentActionButton.dataset.agentId || "";
           if (agentActionButton.dataset.agentAction === "toggle-enabled") {
             const card = toggleAgentEnabled(agentId);
@@ -18901,7 +19073,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             if (!card) {
               return;
             }
-            openMarketUseConversation("agent", card.title);
+            jumpToAgentConversation(card.title);
             return;
           }
         }
@@ -18918,6 +19090,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       marketPublicGrid.addEventListener("click", (event) => {
         const agentActionButton = event.target.closest("[data-agent-action]");
         if (agentActionButton) {
+          event.stopPropagation();
           const agentId = agentActionButton.dataset.agentId || "";
           const card = findAgentSquareCard(agentId);
           if (!card) {
@@ -18935,9 +19108,19 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           if (agentActionButton.dataset.agentAction === "chat") {
-            openMarketUseConversation("agent", card.title);
+            jumpToAgentConversation(card.title);
             return;
           }
+        }
+
+        const addButton = event.target.closest("[data-market-agent-add]");
+        if (addButton) {
+          event.stopPropagation();
+          const card = findAgentSquareCard(addButton.dataset.marketAgentAdd || "");
+          if (card) {
+            showToast(`已添加 ${card.title}。`);
+          }
+          return;
         }
 
         const useButton = event.target.closest("[data-use-id]");
