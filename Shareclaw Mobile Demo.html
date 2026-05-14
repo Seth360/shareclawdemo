@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>ShareClaw 交互原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            touch-action: manipulation;
+        }
+
+        .screen-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .frame.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 交互热区 */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.15s ease;
+        }
+
+        .hotspot:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hotspot:active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 画板01：底部导航栏彩色机器人按钮 */
+        .frame01 .robot-btn {
+            bottom: 14px;
+            right: 14px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+        }
+
+        /* 画板02/03/04/05/05.1/05.2/06/09/10/11：右上角叉号 */
+        .frame02 .close-btn,
+        .frame03 .close-btn,
+        .frame04 .close-btn,
+        .frame05 .close-btn,
+        .frame051 .close-btn,
+        .frame052 .close-btn,
+        .frame06 .close-btn,
+        .frame09 .close-btn,
+        .frame10 .close-btn,
+        .frame11 .close-btn,
+        .frame13 .close-btn,
+        .frame14 .close-btn,
+        .frame15 .close-btn,
+        .frame16 .close-btn,
+        .frame17 .close-btn,
+        .frame18 .close-btn,
+        .frame19 .close-btn,
+        .frame20 .close-btn,
+        .frame21 .close-btn {
+            top: 48px;
+            right: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+        }
+
+        /* 画板02：中间对话框外区域（失去焦点） */
+        .frame02 .blur-area {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(
+                0 0, 100% 0, 100% 100%, 0 100%,
+                0 58%, 100% 58%, 100% 78%, 0 78%
+            );
+        }
+
+        /* 画板03：唤起键盘区域（底部60px~120px，高60px） */
+        .frame03 .keyboard-area {
+            bottom: 60px;
+            left: 0;
+            width: 100%;
+            height: 60px;
+        }
+
+        /* 画板03：左上角36*100px 热区 → 画板14 */
+        .frame03 .doc-lib-btn {
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 100px;
+        }
+
+        /* 画板03：底部三等分热区 */
+        /* 左1/3: 模式切换 → 09 */
+        .frame03 .voice-btn {
+            bottom: 0;
+            left: 0;
+            width: 33.333%;
+            height: 60px;
+        }
+        /* 中1/3: 附件 → 13 */
+        .frame03 .attach-btn {
+            bottom: 0;
+            left: 33.333%;
+            width: 33.333%;
+            height: 60px;
+        }
+        /* 右1/3: 触发语音 → 04 */
+        .frame03 .function-btn {
+            bottom: 0;
+            right: 0;
+            width: 33.333%;
+            height: 60px;
+        }
+
+        /* 画板04：对话框点击区域 */
+        .frame04 .dialog-area {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 画板05：展开按钮（距底部290px，高度20px） */
+        .frame05 .expand-btn {
+            bottom: 290px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        /* 画板05：触发关闭语音（底部0~60px） */
+        .frame05 .voice-close {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+        }
+
+        /* 画板05.1：关闭语音后的界面 */
+        .frame051 .send-btn {
+            bottom: 16px;
+            right: 16px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        /* 画板05.2：顶部返回热区（左上角44px~90px） */
+        .frame052 .top-area {
+            top: 44px;
+            left: 0;
+            width: calc(100% - 56px);
+            height: 46px;
+        }
+
+        /* 画板06：顶部返回区域（距离顶部120px） */
+        .frame06 .back-area {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+        }
+
+        /* 画板09：底部70px热区 */
+        .frame09 .bottom-area {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+        }
+
+        /* 画板10：BI助手选项（距底部390~460px） */
+        .frame10 .bi-btn {
+            bottom: 390px;
+            left: 0;
+            width: 100%;
+            height: 70px;
+        }
+
+        /* 画板11：底部左1/3 模式切换热区 → 03 */
+        .frame11 .mode-switch {
+            bottom: 0;
+            left: 0;
+            width: 33.333%;
+            height: 70px;
+        }
+
+        /* 画板14：文档库热区（顶部114px~150px，高36px） */
+        .frame14 .doc-lib {
+            top: 114px;
+            left: 0;
+            width: 100%;
+            height: 36px;
+        }
+
+        /* 画板13：底部中间1/3【附件】热区 → 画板03 */
+        .frame13 .attach-back-btn {
+            bottom: 132px;
+            left: 33.333%;
+            width: 33.333%;
+            height: 30px;
+        }
+
+        /* 画板14：顶部中间1/3热区 → 画板03 */
+        .frame14 .top-center-third {
+            top: 0;
+            left: 33.333%;
+            width: 33.333%;
+            height: 94px;
+        }
+
+        /* 画板14：顶部72px~94px热区（高22px） → 画板03 */
+        .frame14 .top-92-114 {
+            top: 72px;
+            left: 0;
+            width: 100%;
+            height: 22px;
+        }
+
+        /* 画板15：左上角40*100px返回 → 画板14 */
+        .frame15 .back14-btn {
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 100px;
+        }
+
+        /* 画板15：选中CRM竞品报告（顶部114px~243px，高129px） */
+        .frame15 .crm-file {
+            top: 114px;
+            left: 0;
+            width: 100%;
+            height: 129px;
+        }
+
+        /* 画板15：触发画板16（顶部335px~445px，高110px） */
+        .frame15 .trigger16 {
+            top: 335px;
+            left: 0;
+            width: 100%;
+            height: 110px;
+        }
+
+        /* 画板16：底部186px~228px热区（高42px） → 画板17 */
+        .frame16 .trigger17 {
+            bottom: 186px;
+            left: 0;
+            width: 100%;
+            height: 42px;
+        }
+
+        /* 画板16：底部140px~184px热区（高44px） → 画板19 */
+        .frame16 .trigger19 {
+            bottom: 140px;
+            left: 0;
+            width: 100%;
+            height: 44px;
+        }
+
+        /* 画板17：底部100px返回 → 画板15 */
+        .frame17 .back15-area {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+        }
+
+        /* 画板18：左上角36*100px返回 → 画板15 */
+        .frame18 .back-btn {
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 100px;
+        }
+
+        /* 画板19：左上角36*100px返回 → 画板03 */
+        .frame19 .back03-btn {
+            top: 0;
+            left: 20px;
+            width: 36px;
+            height: 100px;
+        }
+
+        /* 画板20：选中Gemini-embed（顶部394px~480px，高86px） → 画板21 */
+        .frame20 .gemini-btn {
+            top: 394px;
+            left: 0;
+            width: 100%;
+            height: 86px;
+        }
+
+        /* 响应式：小屏全屏，大屏居中限宽 */
+        @media (min-width: 431px) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .screen-content {
+                height: min(100vh, 932px);
+                border-radius: 12px;
+                box-shadow: 0 0 40px rgba(0,0,0,0.3);
+            }
+        }
+
+        /* 安全区域适配（刘海屏等） */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .screen-content {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-content">
+                <!-- 画板01: 企信主界面 -->
+                <div class="frame frame01 active" id="frame01">
+                    <img src="frame01.png" alt="企信主界面">
+                    <div class="hotspot robot-btn" data-target="frame02" title="打开AI对话"></div>
+                </div>
+
+                <!-- 画板02: AI对话界面（有键盘） -->
+                <div class="frame frame02" id="frame02">
+                    <img src="frame02.png" alt="AI对话界面">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <div class="hotspot blur-area" data-target="frame03" title="点击失去焦点"></div>
+                </div>
+
+                <!-- 画板03: AI对话界面（键盘收起） -->
+                <div class="frame frame03" id="frame03">
+                    <img src="frame03.png" alt="AI对话界面-收起键盘">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <div class="hotspot doc-lib-btn" data-target="frame14" title="文档库"></div>
+                    <div class="hotspot keyboard-area" data-target="frame02" title="唤起键盘"></div>
+                    <div class="hotspot voice-btn" data-target="frame09" title="模式切换"></div>
+                    <div class="hotspot attach-btn" data-target="frame13" title="附件"></div>
+                    <div class="hotspot function-btn" data-target="frame04" title="触发语音"></div>
+                </div>
+
+                <!-- 画板04: AI对话-回复内容 -->
+                <div class="frame frame04" id="frame04">
+                    <img src="frame04.png" alt="AI对话-回复内容">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <div class="hotspot dialog-area" data-target="frame05" title="点击对话框"></div>
+                </div>
+
+                <!-- 画板05: 展开后的长文本 -->
+                <div class="frame frame05" id="frame05">
+                    <img src="frame05.png" alt="AI对话-展开文本">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 展开对话框（距底部320px，高20px） -->
+                    <div class="hotspot expand-btn" data-target="frame06" title="展开对话框"></div>
+                    <!-- 关闭语音（底部0~60px） -->
+                    <div class="hotspot voice-close" data-target="frame051" title="关闭语音"></div>
+                </div>
+
+                <!-- 画板05.1: 关闭语音后的界面 -->
+                <div class="frame frame051" id="frame051">
+                    <img src="frame05_1.png" alt="AI对话-关闭语音">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 右下角发送按钮 -->
+                    <div class="hotspot send-btn" data-target="frame052" title="发送"></div>
+                </div>
+
+                <!-- 画板05.2: 发送后界面 -->
+                <div class="frame frame052" id="frame052">
+                    <img src="frame05_2.png" alt="AI对话-发送后">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 顶部20px热区 → 画板03 -->
+                    <div class="hotspot top-area" data-target="frame03" title="返回对话"></div>
+                </div>
+
+                <!-- 画板06: 完整订单详情 -->
+                <div class="frame frame06" id="frame06">
+                    <img src="frame06.png" alt="订单详情">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 顶部返回区域（收起 → 画板05） -->
+                    <div class="hotspot back-area" data-target="frame05" title="收起"></div>
+                </div>
+
+                <!-- 画板09: 功能面板 -->
+                <div class="frame frame09" id="frame09">
+                    <img src="frame09.png" alt="功能面板">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 底部70px热区 → 画板10 -->
+                    <div class="hotspot bottom-area" data-target="frame10" title="查看更多"></div>
+                </div>
+
+                <!-- 画板10: Agent列表 -->
+                <div class="frame frame10" id="frame10">
+                    <img src="frame10.png" alt="Agent列表">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- BI助手选项（距底部390~460px） -->
+                    <div class="hotspot bi-btn" data-target="frame11" title="选中BI助手"></div>
+                </div>
+
+                <!-- 画板11: BI助手界面 -->
+                <div class="frame frame11" id="frame11">
+                    <img src="frame11.png" alt="BI助手">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 底部左1/3 热区 → 模式切换 → 画板03 -->
+                    <div class="hotspot mode-switch" data-target="frame03" title="模式切换"></div>
+                </div>
+
+                <!-- 画板13: 附件菜单 -->
+                <div class="frame frame13" id="frame13">
+                    <img src="frame13.png" alt="附件">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 底部中间1/3【附件】热区 → 画板03 -->
+                    <div class="hotspot attach-back-btn" data-target="frame03" title="关闭附件"></div>
+                </div>
+
+                <!-- 画板14: 文件列表 -->
+                <div class="frame frame14" id="frame14">
+                    <img src="frame14.png" alt="文件列表">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 顶部中间1/3热区 → 画板03 -->
+                    <div class="hotspot top-center-third" data-target="frame03" title="返回对话"></div>
+                    <!-- 顶部92px~114px热区 → 画板03 -->
+                    <div class="hotspot top-92-114" data-target="frame03" title="返回对话"></div>
+                    <!-- 文档库热区（顶部114px~150px） → 画板15 -->
+                    <div class="hotspot doc-lib" data-target="frame15" title="文档库"></div>
+                </div>
+
+                <!-- 画板15: 文档库-文件列表 -->
+                <div class="frame frame15" id="frame15">
+                    <img src="frame15.png" alt="文档库">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <div class="hotspot back14-btn" data-target="frame14" title="返回"></div>
+                    <!-- 选中CRM竞品报告（顶部114px~243px） → 画板18 -->
+                    <div class="hotspot crm-file" data-target="frame18" title="CRM竞品报告"></div>
+                    <!-- 触发画板16（顶部335px~445px） -->
+                    <div class="hotspot trigger16" data-target="frame16" title="打开文件"></div>
+                </div>
+
+                <!-- 画板16: 文件详情 -->
+                <div class="frame frame16" id="frame16">
+                    <img src="frame16.png" alt="文件详情">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 底部140~184px → 画板19 -->
+                    <div class="hotspot trigger19" data-target="frame19" title="跳转画板19"></div>
+                    <!-- 底部186~228px → 画板17 -->
+                    <div class="hotspot trigger17" data-target="frame17" title="查看更多"></div>
+                </div>
+
+                <!-- 画板17: -->
+                <div class="frame frame17" id="frame17">
+                    <img src="frame17.png" alt="画板17">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 底部100px → 画板15 -->
+                    <div class="hotspot back15-area" data-target="frame15" title="返回文件列表"></div>
+                </div>
+
+                <!-- 画板19: -->
+                <div class="frame frame19" id="frame19">
+                    <img src="frame19.png" alt="画板19">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 左上角返回 → 画板03 -->
+                    <div class="hotspot back03-btn" data-target="frame03" title="返回对话"></div>
+                </div>
+
+                <!-- 画板18: CRM竞品报告详情 -->
+                <div class="frame frame18" id="frame18">
+                    <img src="frame18.png" alt="CRM竞品报告">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 左上角36*100px返回 → 画板15 -->
+                    <div class="hotspot back-btn" data-target="frame15" title="返回文件列表"></div>
+                </div>
+
+                <!-- 画板20: /快捷指令面板 -->
+                <div class="frame frame20" id="frame20">
+                    <img src="frame20.png" alt="快捷指令">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                    <!-- 选中Gemini-embed（顶部394px~480px） → 画板21 -->
+                    <div class="hotspot gemini-btn" data-target="frame21" title="Gemini-embed"></div>
+                </div>
+
+                <!-- 画板21: Gemini-embed界面 -->
+                <div class="frame frame21" id="frame21">
+                    <img src="frame21.png" alt="Gemini-embed">
+                    <div class="hotspot close-btn" data-target="frame01" title="关闭"></div>
+                </div>
+            </div>
+
+    <script>
+        let currentFrame = 'frame01';
+        const hotspots = document.querySelectorAll('.hotspot');
+        const frames = document.querySelectorAll('.frame');
+
+        function switchFrame(targetId) {
+            frames.forEach(frame => frame.classList.remove('active'));
+            const targetFrame = document.getElementById(targetId);
+            if (targetFrame) {
+                targetFrame.classList.add('active');
+                currentFrame = targetId;
+            }
+        }
+
+        // 绑定热区点击事件
+        hotspots.forEach(hotspot => {
+            hotspot.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const target = this.getAttribute('data-target');
+                if (target) {
+                    switchFrame(target);
+                }
+            });
+        });
+
+        // ESC 键回到初始页面
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                switchFrame('frame03');
+            }
+        });
+
+        // "/" 快捷键触发画板20（在画板03时）
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && currentFrame === 'frame03') {
+                e.preventDefault();
+                switchFrame('frame20');
+            }
+        });
+
+        // 触摸反馈
+        hotspots.forEach(hotspot => {
+            hotspot.addEventListener('touchstart', function() {
+                this.style.background = 'rgba(255,255,255,0.1)';
+            });
+            hotspot.addEventListener('touchend', function() {
+                this.style.background = 'transparent';
+            });
+        });
+
+        console.log('ShareClaw 交互原型已加载');
+        console.log('可用快捷键: ESC - 回到初始页面');
+    </script>
+</body>
+</html>
