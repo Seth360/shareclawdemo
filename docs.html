@@ -454,14 +454,19 @@
         align-items: center;
         justify-content: center;
         gap: 4px;
-        border: 0.5px solid #ffb7c9;
+        border: none;
         border-radius: 8px;
         background: linear-gradient(255.62deg, rgba(172, 165, 255, 0.08) 0.54%, rgba(113, 172, 255, 0.08) 98.51%);
         color: #181c25;
+        transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
       }
 
       .sidebar-primary-entry.active {
         background: linear-gradient(255.62deg, rgba(172, 165, 255, 0.08) 0.54%, rgba(113, 172, 255, 0.08) 98.51%);
+      }
+
+      .sidebar-primary-entry:hover {
+        background: linear-gradient(255.62deg, rgba(172, 165, 255, 0.14) 0.54%, rgba(113, 172, 255, 0.14) 98.51%);
       }
 
       .sidebar-primary-entry svg {
@@ -493,6 +498,11 @@
         background: #f2f4fb;
         color: #181c25;
         text-align: center;
+        transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .sidebar-shortcut:hover {
+        background: #e8edf8;
       }
 
       .sidebar-shortcut svg {
@@ -7841,25 +7851,33 @@
       }
 
       .docs-row-action {
-        flex: 0 0 48px;
+        flex: 0 0 120px;
         position: relative;
+        gap: 4px;
         justify-content: flex-end;
       }
 
+      .docs-row-inline-action,
       .docs-row-menu {
         width: 28px;
         height: 28px;
-        border-radius: 50%;
+        border-radius: 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         color: #6f7480;
       }
 
+      .docs-row-inline-action {
+        color: #181c25;
+      }
+
+      .docs-row-inline-action:hover,
       .docs-row-menu:hover {
         background: rgba(24, 28, 37, 0.06);
       }
 
+      .docs-row-inline-action svg,
       .docs-row-menu svg {
         width: 14px;
         height: 14px;
@@ -15164,6 +15182,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             <div class="docs-row-owner" role="cell">${escapeHtml(doc.dialog)}</div>
             <div class="docs-row-time" role="cell">${escapeHtml(doc.createdTimeLabel)}</div>
             <div class="docs-row-action" role="cell">
+              <button class="docs-row-inline-action" type="button" data-doc-inline-action="download" data-doc-id="${escapeHtml(doc.id)}" aria-label="下载 ${escapeHtml(doc.title)}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8.5 1V10.1464L11.6464 7L12.3536 7.70711L8 12.0607L3.64645 7.70711L4.35355 7L7.5 10.1464V1H8.5Z" fill="currentColor"></path>
+                  <path d="M15 8V15H1V8H2V14H14V8H15Z" fill="currentColor"></path>
+                </svg>
+              </button>
+              <button class="docs-row-inline-action" type="button" data-doc-inline-action="forward-qixin" data-doc-id="${escapeHtml(doc.id)}" aria-label="转发 ${escapeHtml(doc.title)}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M7.5 5.31183H6.25C3.07438 5.31183 0.5 7.88574 0.5 11.0609V14.1873L1.41634 12.8094C2.29176 11.493 3.76445 10.686 5.375 10.686H7.5V14.2479L15.8334 7.99893L7.5 1.75V5.31183ZM1.5 11.0609C1.5 8.43807 3.62663 6.31183 6.25 6.31183H8.5V3.74978L14.1666 7.99893L8.5 12.2481V9.68603H5.375C3.91102 9.68603 2.54031 10.2375 1.5 11.1869V11.0609Z" fill="currentColor"></path>
+                </svg>
+              </button>
               <button class="docs-row-menu" type="button" data-doc-action="menu" data-doc-id="${escapeHtml(doc.id)}" aria-label="打开 ${escapeHtml(doc.title)} 的更多操作">
                 <svg viewBox="0 0 14 14" aria-hidden="true">
                   <circle class="icon-fill" cx="3" cy="7" r="1"></circle>
@@ -15173,7 +15202,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               </button>
               ${state.activeDocsMenuId === doc.id ? `
                 <div class="docs-row-menu-panel" role="menu" aria-label="${escapeHtml(doc.title)} 的操作菜单">
-                  ${docsMenuActions.map((item) => `
+                  ${docsMenuActions.filter((item) => item.key !== "forward-qixin" && item.key !== "download").map((item) => `
                     <button class="docs-row-menu-item" type="button" role="menuitem" data-doc-menu-action="${escapeHtml(item.key)}" data-doc-id="${escapeHtml(doc.id)}">
                       ${escapeHtml(item.label)}
                     </button>
@@ -18285,6 +18314,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
           closeDocsMenu();
           await handleDocsMenuAction(menuItem.dataset.docMenuAction, doc);
+          return;
+        }
+
+        const inlineActionButton = event.target.closest("[data-doc-inline-action]");
+        if (inlineActionButton) {
+          const doc = docsDocuments.find((item) => item.id === inlineActionButton.dataset.docId);
+          if (!doc) {
+            return;
+          }
+
+          closeDocsMenu();
+          await handleDocsMenuAction(inlineActionButton.dataset.docInlineAction, doc);
           return;
         }
 

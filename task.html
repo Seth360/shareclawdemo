@@ -454,14 +454,19 @@
         align-items: center;
         justify-content: center;
         gap: 4px;
-        border: 0.5px solid #ffb7c9;
+        border: none;
         border-radius: 8px;
         background: linear-gradient(255.62deg, rgba(172, 165, 255, 0.08) 0.54%, rgba(113, 172, 255, 0.08) 98.51%);
         color: #181c25;
+        transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
       }
 
       .sidebar-primary-entry.active {
         background: linear-gradient(255.62deg, rgba(172, 165, 255, 0.08) 0.54%, rgba(113, 172, 255, 0.08) 98.51%);
+      }
+
+      .sidebar-primary-entry:hover {
+        background: linear-gradient(255.62deg, rgba(172, 165, 255, 0.14) 0.54%, rgba(113, 172, 255, 0.14) 98.51%);
       }
 
       .sidebar-primary-entry svg {
@@ -493,6 +498,11 @@
         background: #f2f4fb;
         color: #181c25;
         text-align: center;
+        transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .sidebar-shortcut:hover {
+        background: #e8edf8;
       }
 
       .sidebar-shortcut svg {
