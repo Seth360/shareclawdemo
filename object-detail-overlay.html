@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRM 客户详情浮层原型</title>
+  <style>
+    :root {
+      --brand: #ff8000;
+      --brand-soft: #fff8ee;
+      --text: #181C25;
+      --muted: #545861;
+      --line: #DEE1E8;
+      --page: #EFF1F3;
+      --panel: #fff;
+      --green: #20b970;
+      --red: #ff5a52;
+      --blue: #2087ff;
+      --topbar: 48px;
+      --primary-nav: 64px;
+      --secondary-menu: 200px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1280px;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--page);
+      color: var(--text);
+      font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      font-size: 13px;
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; background: none; cursor: pointer; color: inherit; padding: 0; }
+    svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.9; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ===== SHELL-BASE-START: 系统壳层 CSS，不需改动，直接复用 ===== */
+    .topbar {
+      position: fixed;
+      z-index: 40;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar);
+      display: grid;
+      grid-template-columns: minmax(330px, 1fr) minmax(260px, 360px) auto;
+      align-items: center;
+      gap: 16px;
+      padding: 0 12px;
+      background: var(--page);
+    }
+
+    .brand { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .brand span { overflow: hidden; text-overflow: ellipsis; }
+    .brand-mark { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 800; transform: rotate(-8deg); flex: 0 0 20px; }
+    .global-search { height: 28px; display: grid; grid-template-columns: 58px 1fr 28px; align-items: center; border-radius: 6px; background: #e4e6e9; overflow: hidden; color: #344054; font-size: 12px; }
+    .global-search .scope { height: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 4px; background: transparent; border-right: 1px solid #d8dee8; font-size: 12px; }
+    .global-search .divider { display: none; }
+    .global-search input { min-width: 0; height: 100%; border: 0; outline: 0; padding: 0 10px; color: var(--text); background: #e4e6e9; font-size: 12px; }
+    .global-search svg { width: 14px; height: 14px; color: #1f2937; }
+    .top-icons { display: flex; justify-content: flex-end; align-items: center; gap: 14px; white-space: nowrap; color: #1f2937; }
+    .top-icons svg { width: 16px; height: 16px; }
+    .avatar { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #1f2937; color: #fff; font-size: 12px; font-weight: 700; flex: 0 0 28px; }
+
+    .primary-nav {
+      position: fixed;
+      z-index: 35;
+      top: var(--topbar);
+      bottom: 0;
+      left: 0;
+      width: var(--primary-nav);
+      padding: 8px 0 12px;
+      background: var(--page);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .nav-item { position: relative; width: 64px; height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #202936; font-size: 12px; }
+    .nav-item.active { color: var(--brand); font-weight: 700; }
+    .nav-item.active::before { content: ""; position: absolute; z-index: 0; inset: 0 -1px 0 4px; background: #fff; border-radius: 8px 0 0 8px; }
+    .nav-item svg, .nav-item span { position: relative; z-index: 1; }
+    .nav-item svg { width: 20px; height: 20px; }
+    .nav-spacer { flex: 1; }
+
+    .secondary-menu {
+      position: fixed;
+      z-index: 10;
+      top: var(--topbar);
+      bottom: 12px;
+      left: var(--primary-nav);
+      width: var(--secondary-menu);
+      padding: 0 12px 12px;
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .menu-title { height: 42px; display: flex; align-items: center; font-size: 15px; font-weight: 800; margin: 0; }
+    .menu-search { height: 28px; display: grid; grid-template-columns: 1fr 28px; gap: 8px; margin-bottom: 10px; }
+    .menu-search input { min-width: 0; height: 28px; border: 1px solid var(--line); border-radius: 6px; padding: 0 8px; outline: 0; font-size: 12px; background: #fff; }
+    .icon-btn, .add-btn { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: #344054; }
+    .icon-btn svg, .add-btn svg { width: 14px; height: 14px; }
+
+    .menu-scroll { height: calc(100% - 80px); overflow: hidden; }
+    .menu-section { margin-top: 8px; }
+    .menu-row { width: 100%; height: 28px; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-radius: 6px; color: #2b3442; font-size: 12px; white-space: nowrap; cursor: default; }
+    .menu-row.active { border-radius: 8px; background: var(--brand-soft); color: #1f2937; font-weight: 700; }
+    .menu-row svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .menu-row[data-tone="orange"] svg { color: var(--brand); }
+    .menu-row[data-tone="blue"] svg { color: #6677ff; }
+    .menu-row[data-tone="red"] svg { color: #ff5a52; }
+    .menu-row[data-tone="green"] svg { color: #20b970; }
+    .menu-row.sub { padding-left: 24px; }
+    .menu-row .twisty {
+      width: 14px;
+      height: 14px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 14px;
+      border-radius: 50%;
+      background: #eef2f8;
+    }
+    .menu-row .twisty svg { display: none; }
+    .menu-row .twisty::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 5px solid #667085;
+      transform: translateX(1px);
+    }
+    .menu-row .twisty.expanded::before {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #667085;
+      border-bottom: 0;
+      transform: translateY(1px);
+    }
+    .menu-row.indent { padding-left: 24px; }
+    .menu-row.indent2 { padding-left: 36px; }
+    .menu-section.is-collapsed .menu-row.indent,
+    .menu-section.is-collapsed .menu-row.indent2 { display: none; }
+    .menu-section-toggle { cursor: pointer; }
+    .tree-caret { width: 12px; height: 12px; color: #98a2b3; flex: 0 0 auto; }
+    .menu-dot { width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 4px; color: var(--brand); flex: 0 0 auto; }
+    .menu-footer { position: absolute; left: 12px; right: 12px; bottom: 10px; display: flex; justify-content: flex-end; gap: 12px; color: #667085; }
+    .menu-footer svg { width: 14px; height: 14px; }
+    /* ===== SHELL-BASE-END ===== */
+
+    .list-page {
+      position: fixed;
+      top: calc(var(--topbar) + 14px);
+      right: 14px;
+      bottom: 14px;
+      left: calc(var(--primary-nav) + var(--secondary-menu) + 28px);
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+      opacity: .36;
+      pointer-events: none;
+    }
+    body.drawer-closed .list-page { opacity: 1; pointer-events: auto; }
+    body.drawer-closed .drawer { display: none; }
+    .opportunity-row { cursor: pointer; }
+
+    .list-head { height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; }
+    .title { font-size: 16px; font-weight: 800; }
+    .actions { display: flex; align-items: center; gap: 8px; }
+    .btn { height: 34px; padding: 0 14px; border: 1px solid var(--line); border-radius: 8px; background: #f7f9fc; font-weight: 700; }
+    .btn.primary { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .detail-header .actions .btn { height: 28px; border-radius: 6px; }
+    .detail-header .actions .btn.primary { border-color: var(--brand); }
+    .detail-header .actions #closeDetail { width: 28px; height: 28px; flex-basis: 28px; border-color: transparent; background: transparent; }
+    .filter { display: flex; gap: 8px; padding: 0 22px 14px; border-bottom: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { height: 36px; padding: 0 10px; border-bottom: 1px solid #edf1f5; text-align: left; white-space: nowrap; }
+    th { font-weight: 800; }
+
+    .drawer {
+      position: fixed;
+      z-index: 60;
+      top: var(--topbar);
+      left: var(--primary-nav);
+      right: 0;
+      bottom: 0;
+      width: auto;
+      min-width: 1120px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--page);
+      border-radius: 8px 0 0 8px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, .15);
+    }
+
+    .detail-header { position: sticky; top: 0; z-index: 20; padding: 18px 28px 12px; border-bottom: 0; background: var(--page); }
+    .detail-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+    .object-title { display: flex; align-items: center; gap: 10px; }
+    .type { height: 20px; padding: 0 8px; display: inline-flex; align-items: center; border-radius: 5px; background: #1f9cf0; color: #fff; font-weight: 800; font-size: 13px; }
+    h1 { margin: 0; font-size: 18px; line-height: 1.35; }
+    .icon-btn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 8px; background: #f7f9fc; }
+    .object-title .icon-btn { width: 24px; height: 24px; flex-basis: 24px; border-color: #d9e0ea; border-radius: 6px; background: transparent; }
+    .object-title .icon-btn svg { width: 14px; height: 14px; }
+    .meta { margin-top: 10px; display: flex; align-items: center; gap: 9px; font-size: 15px; }
+    .red { color: #ff3d34; font-weight: 800; }
+    .tags { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { height: 26px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid currentColor; border-radius: 999px; background: #fff; font-weight: 700; font-size: 13px; }
+    .tag.orange { color: #e87500; background: #fff7ed; }
+    .tag.green { color: #4d9a28; background: #f2ffe9; }
+    .tag.blue { color: #1f8eea; background: #edf7ff; }
+
+    .detail-body { display: grid; grid-template-columns: minmax(700px, 1fr) 430px; gap: 12px; padding: 0 12px 24px; }
+    .left { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .card, .right { background: #fff; border-radius: 12px; }
+    .summary { padding: 0 12px 12px; }
+    .card-title { height: 52px; display: flex; align-items: center; margin: 0; font-size: 15px; line-height: 1.2; font-weight: 600; }
+    .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 54px; }
+    .field { display: grid; grid-template-columns: 112px 1fr; gap: 12px; }
+    .field label { color: var(--muted); }
+    .field strong { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .tabs { height: 54px; display: flex; align-items: flex-end; gap: 24px; padding: 0 12px; border-bottom: 1px solid var(--line); }
+    .tab { height: 54px; display: flex; align-items: center; border-bottom: 3px solid transparent; font-size: 15px; font-weight: 800; }
+    .tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+    .tab-panel { padding: 12px; }
+    .section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 15px; font-weight: 800; }
+    .toggle { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; background: #eef2f7; color: #687385; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .metric { min-height: 58px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfe; }
+    .metric span { color: var(--muted); font-size: 12px; }
+    .metric strong { display: block; margin-top: 6px; font-size: 20px; }
+    .report-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; margin-bottom: 12px; }
+    .chart { min-height: 178px; padding: 14px 16px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 600; }
+    .chart-note { color: var(--muted); font-size: 12px; font-weight: 500; }
+    .chart svg { width: 100%; height: 106px; }
+    .chart-line { fill: none; stroke: var(--brand); stroke-width: 3; }
+    .chart-area { fill: rgba(255, 128, 0, .12); stroke: none; }
+    .bar-chart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: end; height: 118px; padding-top: 8px; }
+    .bar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; color: var(--muted); font-size: 12px; }
+    .bar i { width: 28px; display: block; border-radius: 6px 6px 0 0; background: #ffe2bf; border: 1px solid #ffc67f; }
+    .bar.hot i { background: var(--brand); border-color: var(--brand); }
+    .approval { margin: 12px 0 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; overflow: hidden; }
+    .stage-card { padding: 12px; border-color: transparent; border-radius: 8px; }
+    .stage-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .stage-title { display: flex; align-items: center; gap: 8px; font-size: 15px; line-height: 24px; font-weight: 800; }
+    .stage-title span { color: var(--weak); font-size: 14px; line-height: 20px; font-weight: 400; }
+    .stage-head .btn { height: 24px; padding: 0 8px; border-color: #ffbe85; border-radius: 4px; background: #fff5e6; color: var(--brand); font-size: 12px; font-weight: 400; }
+    .stage-flow { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 0; margin-bottom: 12px; overflow: hidden; }
+    .stage-node { position: relative; height: 22px; display: flex; align-items: center; justify-content: center; gap: 4px; clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%); background: #e6eaf0; color: #545861; font-size: 12px; line-height: 18px; font-weight: 400; }
+    .stage-node:first-child { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%); }
+    .stage-node.done { background: #cdf6df; }
+    .stage-node.current { background: #49cb84; color: #fff; }
+    .stage-node.todo { background: #e6eaf0; color: #545861; }
+    .stage-dot { width: 12px; height: 12px; display: inline-grid; place-items: center; border-radius: 50%; background: #30c776; color: #fff; font-size: 10px; line-height: 1; }
+    .stage-node.current .stage-dot { background: rgba(255,255,255,.18); color: #fff; box-shadow: inset 0 0 0 4px #30c776; }
+    .stage-node.todo .stage-dot { background: #c1c5ce; color: #fff; }
+	    .stage-task-head { display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; gap: 16px; margin-bottom: 8px; }
+	    .stage-task-title { display: flex; align-items: center; gap: 4px; font-size: 14px; line-height: 18px; font-weight: 700; }
+	    .stage-help { width: 14px; height: 14px; display: inline-grid; place-items: center; color: #8c96a5; }
+	    .stage-help svg { width: 14px; height: 14px; stroke-width: 2; }
+	    .stage-tools { display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: #181c25; font-size: 12px; line-height: 18px; white-space: nowrap; }
+	    .stage-tools > span:not(.switch) { white-space: nowrap; }
+    .switch { width: 22px; height: 12px; border-radius: 16px; background: #c1c5ce; position: relative; }
+    .switch::before { content: ""; position: absolute; width: 10px; height: 10px; top: 1px; left: 1px; border-radius: 50%; background: #fff; box-shadow: 0 2px 2px rgba(0,35,11,.2); }
+    .refresh-link { width: 28px; height: 28px; display: grid; place-items: center; color: #737c8c; }
+    .stage-task { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; }
+    .task-state { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 18px; }
+    .clock-dot { width: 12px; height: 12px; display: grid; place-items: center; border-radius: 50%; background: #ff9b29; color: #fff; }
+    .clock-dot svg { width: 10px; height: 10px; }
+    .required { color: #ff3d34; font-weight: 800; }
+    .records-head { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 8px; }
+    .records-head input { width: 230px; height: 32px; border: 1px solid var(--line); border-radius: 6px; padding: 0 10px; outline: 0; }
+    tbody tr:hover { background: var(--brand-soft); }
+    .state { height: 22px; display: inline-flex; align-items: center; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .state.done { background: #e9fbf2; color: #15965b; }
+    .state.todo { background: #fff2dd; color: #d46b00; }
+    .state.risk { background: #fff0f0; color: #e5484d; }
+
+    .right { overflow: hidden; }
+    .quick { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 18px 22px 12px; background: #fff; }
+    .quick button { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 700; }
+    .side-panel > .quick { margin: -10px -18px 12px -52px; }
+    .circle { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; }
+    .timeline { position: relative; padding: 10px 18px 32px 52px; }
+    .timeline::before { content: ""; position: absolute; top: 15px; bottom: 22px; left: 30px; width: 2px; background: #e7ebf2; }
+    .timeline.has-quick::before { top: 126px; }
+    .item { position: relative; margin-bottom: 18px; }
+    .dot { position: absolute; left: -34px; top: 2px; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: #ff7190; color: #fff; font-weight: 800; }
+    .dot svg { width: 14px; height: 14px; }
+    .dot.blue { background: var(--blue); }
+    .dot.green { background: var(--green); }
+    .item h3 { margin: 0 0 8px; font-size: 15px; }
+    .item h3 span { color: #8a93a0; font-weight: 500; }
+    .timeline-card { padding: 13px 14px; border: 1px solid #e7ebf2; border-radius: 8px; line-height: 1.55; }
+    .approval-flow { position: relative; padding: 12px; }
+    .approval-flow::before { display: none; }
+    .approval-card { position: relative; width: 100%; border: 1px solid var(--brand); border-radius: 8px; background: #fff; overflow: hidden; }
+    .approval-card::after { content: "待处理"; position: absolute; top: 0; right: 0; padding: 3px 10px; background: var(--brand); color: #fff; font-size: 12px; line-height: 18px; }
+    .approval-user { display: flex; align-items: center; gap: 8px; padding: 16px 12px 12px; }
+    .approval-avatar { width: 40px; height: 40px; border-radius: 4px; background: linear-gradient(135deg, #1f2937, #748095); }
+    .approval-user strong { display: block; font-size: 14px; line-height: 20px; color: #545861; }
+    .approval-user strong span { display: inline; margin: 0 0 0 4px; color: var(--weak); font-weight: 400; font-size: 12px; }
+    .approval-user span { display: block; margin-top: 0; color: var(--weak); font-size: 12px; line-height: 18px; }
+    .approval-product { margin: 0 12px 14px; padding: 8px 12px; background: #fff8f2; font-size: 14px; line-height: 20px; }
+    .approval-product a { color: #1677ff; text-decoration: none; }
+    .approval-section-title { margin: 0 12px 8px; color: var(--weak); font-size: 14px; line-height: 20px; }
+    .approval-track { position: relative; margin: 0 12px 12px; padding-left: 24px; }
+    .approval-track::before { content: ""; position: absolute; top: 9px; bottom: 18px; left: 9px; width: 2px; background: #e4e8ef; }
+    .approval-node { position: relative; margin-bottom: 12px; }
+    .approval-node::before { content: ""; position: absolute; left: -22px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #368dff; }
+    .approval-node.done::before { background: #58cf8b; border-color: #58cf8b; }
+    .approval-node.pending::before { background: #ff9f2d; border-color: #ff9f2d; }
+    .approval-node h4 { margin: 0 0 4px; font-size: 14px; line-height: 20px; }
+    .approval-node h4 span { margin-left: 8px; color: #19a966; font-weight: 500; }
+    .approval-node.pending h4 span { color: var(--brand); }
+    .approval-reply { float: right; color: #1677ff; font-size: 13px; font-weight: 700; }
+    .approval-note { padding: 8px; border-radius: 2px; background: #f7f8fa; color: #545861; font-size: 12px; line-height: 18px; }
+    .approval-note a { color: #1677ff; text-decoration: none; }
+    .approval-more { display: flex; justify-content: flex-end; margin: 0 12px 10px; color: var(--weak); font-size: 12px; }
+    .approval-actions { min-height: 48px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: #fff; }
+    .approval-actions .muted-action { color: #9aa3af; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.27 21a2 2 0 0 0 3.46 0"></path><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M21.8 10a10 10 0 1 1-3.5-6.2"></path><path d="m9 11 3 3L22 4"></path></symbol>
+    <symbol id="i-pie" viewBox="0 0 24 24"><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9v9z"></path><path d="M12 3a9 9 0 0 1 9 9h-9z"></path></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M10 6V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v1"></path><rect x="3" y="6" width="18" height="14" rx="2"></rect><path d="M3 12h18"></path></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3z"></path><path d="m9 12 2 2 4-5"></path></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"></path><path d="M3 18a2 2 0 0 1 2-2h7V4H5a2 2 0 0 0-2 2z"></path><path d="M21 18a2 2 0 0 0-2-2h-7V4h7a2 2 0 0 1 2 2z"></path></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5z"></path><path d="M19.4 15a1.8 1.8 0 0 0 .36 2l.07.07a2 2 0 0 1-2.83 2.83l-.07-.07a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1 1.63V21a2 2 0 0 1-4 0v-.1a1.8 1.8 0 0 0-1-1.63 1.8 1.8 0 0 0-2 .36l-.07.07a2 2 0 1 1-2.83-2.83l.07-.07a1.8 1.8 0 0 0 .36-2 1.8 1.8 0 0 0-1.63-1H3a2 2 0 0 1 0-4h.1a1.8 1.8 0 0 0 1.63-1 1.8 1.8 0 0 0-.36-2l-.07-.07a2 2 0 1 1 2.83-2.83l.07.07a1.8 1.8 0 0 0 2 .36h0a1.8 1.8 0 0 0 1-1.63V3a2 2 0 0 1 4 0v.1a1.8 1.8 0 0 0 1 1.63h0a1.8 1.8 0 0 0 2-.36l.07-.07a2 2 0 1 1 2.83 2.83l-.07.07a1.8 1.8 0 0 0-.36 2v0a1.8 1.8 0 0 0 1.63 1H21a2 2 0 0 1 0 4h-.1a1.8 1.8 0 0 0-1.5 1z"></path></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="M12 5v14"></path></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h8l-1 8 10-12h-8z"></path></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"></path></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></symbol>
+    <symbol id="i-yen" viewBox="0 0 24 24"><path d="m6 3 6 8 6-8"></path><path d="M12 11v10"></path><path d="M8 15h8"></path><path d="M8 19h8"></path></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">F</div><span>北京易动纷享科技有限公司</span></div>
+    <label class="global-search"><span class="scope">全部</span><input placeholder="搜索"><svg><use href="#i-search"></use></svg></label>
+    <div class="top-icons">
+      <svg><use href="#i-message"></use></svg>
+      <svg><use href="#i-bell"></use></svg>
+      <svg><use href="#i-check"></use></svg>
+      <svg><use href="#i-file"></use></svg>
+      <svg><use href="#i-grid"></use></svg>
+      <div class="avatar">李</div>
+    </div>
+  </header>
+
+  <nav class="primary-nav">
+    <button class="nav-item"><svg><use href="#i-message"></use></svg><span>企信</span></button>
+    <button class="nav-item"><svg><use href="#i-check"></use></svg><span>待办</span></button>
+    <button class="nav-item active"><svg><use href="#i-pie"></use></svg><span>CRM</span></button>
+    <button class="nav-item"><svg><use href="#i-briefcase"></use></svg><span>工作</span></button>
+    <button class="nav-item"><svg><use href="#i-calendar"></use></svg><span>日程</span></button>
+    <button class="nav-item"><svg><use href="#i-shield"></use></svg><span>考勤</span></button>
+    <button class="nav-item"><svg><use href="#i-book"></use></svg><span>培训助手</span></button>
+    <button class="nav-item"><svg><use href="#i-grid"></use></svg><span>更多</span></button>
+    <div class="nav-spacer"></div>
+    <button class="nav-item"><svg><use href="#i-settings"></use></svg><span>设置</span></button>
+  </nav>
+
+  <aside class="secondary-menu">
+    <h2 class="menu-title">CRM</h2>
+    <div class="menu-search"><input placeholder="搜索"><button class="add-btn"><svg><use href="#i-plus"></use></svg></button></div>
+    <button class="menu-row" data-tone="orange"><svg><use href="#i-home"></use></svg><span>首页</span></button>
+    <button class="menu-row" data-tone="blue"><svg><use href="#i-clock"></use></svg><span>最近使用</span></button>
+    <button class="menu-row" data-tone="red"><svg><use href="#i-bell"></use></svg><span>CRM提醒</span></button>
+    <button class="menu-row" data-tone="green"><svg><use href="#i-check"></use></svg><span>CRM待办</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>交付实施项目</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>项目管理</span></button>
+    <button class="menu-row" data-tone="red"><svg><use href="#i-clock"></use></svg><span>CRM信息</span></button>
+    <button class="menu-row" data-tone="blue"><svg><use href="#i-file"></use></svg><span>数据驾驶舱</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>客户及商机管理</span></button>
+    <button class="menu-row active sub" data-tone="blue"><svg><use href="#i-building"></use></svg><span>客户</span></button>
+    <button class="menu-row sub" data-tone="green"><svg><use href="#i-building"></use></svg><span>客户地址</span></button>
+    <button class="menu-row sub" data-tone="orange"><svg><use href="#i-yen"></use></svg><span>客户财务信息</span></button>
+    <button class="menu-row sub" data-tone="red"><svg><use href="#i-users"></use></svg><span>联系人</span></button>
+    <button class="menu-row sub" data-tone="green"><svg><use href="#i-target"></use></svg><span>商机</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>订单及回款管理</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>售前项目管理</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>项目损失管理</span></button>
+    <button class="menu-row" data-tone="blue"><svg><use href="#i-file"></use></svg><span>报价单</span></button>
+  </aside>
+
+  <main class="list-page">
+    <div class="list-head"><div class="title">客户 | 全部客户</div><div class="actions"><button class="btn primary">新建</button><button class="btn">导入</button><button class="btn">更多</button></div></div>
+    <div class="filter"><button class="btn">筛选</button><input placeholder="客户名称 / 所属行业"></div>
+    <table><thead><tr><th>客户名称</th><th>行业</th><th>客户阶段</th><th>年度预计收入</th><th>负责人</th><th>操作</th></tr></thead><tbody><tr class="opportunity-row" id="openDetail"><td>上海云驰智能制造有限公司</td><td>智能制造</td><td>方案确认</td><td>2,860,000.00</td><td>林澈</td><td>查看</td></tr></tbody></table>
+  </main>
+
+  <!-- MODULE:shell START -->
+  <section class="drawer">
+    <header class="detail-header">
+      <div class="detail-top">
+        <div>
+          <div class="object-title"><span class="type">客户</span><h1>上海云驰智能制造有限公司</h1><button class="icon-btn" title="切换详情布局"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg></button><button class="icon-btn" title="标签"><svg viewBox="0 0 24 24"><path d="M12.6 2H4a2 2 0 0 0-2 2v8.6a2 2 0 0 0 .6 1.4l7.4 7.4a2 2 0 0 0 2.8 0l8.6-8.6a2 2 0 0 0 0-2.8L14 2.6A2 2 0 0 0 12.6 2Z"/><path d="M7 7h.01"/></svg></button><button class="icon-btn" title="上一条"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><button class="icon-btn" title="下一条"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+          <div class="meta"><span class="red">推进中</span><span>|</span><span>方案确认</span><span>|</span><span>智能制造</span><span>|</span><span>年度框架客户</span></div>
+          <div class="tags"><span class="tag orange">重点客户</span><span class="tag green">预算已确认</span><span class="tag blue">管理层关注</span></div>
+        </div>
+        <div class="actions"><button class="btn primary">推进阶段</button><button class="btn">生成方案</button><button class="btn">发起流程</button><button class="icon-btn" title="更多操作"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button><button class="icon-btn" id="closeDetail" title="关闭详情"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+      </div>
+    </header>
+
+    <div class="detail-body">
+      <div class="left">
+        <!-- MODULE:key-info START -->
+        <section class="card summary">
+          <h2 class="card-title">关键信息</h2>
+          <div class="fields">
+            <div class="field"><label>年度预计收入</label><strong>2,860,000.00</strong></div>
+            <div class="field"><label>客户全称</label><strong>上海云驰智能制造有限公司</strong></div>
+            <div class="field"><label>当前阶段</label><strong>调研确认</strong></div>
+            <div class="field"><label>成交概率</label><strong>72%</strong></div>
+            <div class="field"><label>最近跟进</label><strong>今天 10:40</strong></div>
+            <div class="field"><label>待处理风险</label><strong>方案、交付、法务</strong></div>
+          </div>
+        </section>
+        <!-- MODULE:key-info END -->
+
+        <section class="card">
+          <!-- MODULE:analysis START -->
+          <nav class="tabs"><button class="tab">AI洞察</button><button class="tab active">客户分析</button><button class="tab">阶段记录</button><button class="tab">相关业务</button></nav>
+          <div class="tab-panel">
+            <div class="section-head"><span class="toggle"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span><span>AI洞察与客户经营分析</span></div>
+            <div class="metrics">
+              <div class="metric"><span>近30天互动</span><strong>12</strong></div>
+              <div class="metric"><span>平均响应</span><strong>2.4h</strong></div>
+              <div class="metric"><span>未关闭商机</span><strong>6</strong></div>
+              <div class="metric"><span>年度预计</span><strong>286万</strong></div>
+            </div>
+            <div class="report-grid">
+              <div class="chart">
+                <div class="chart-head"><span>近 30 天客户互动热度</span><span class="chart-note">跟进、会议、售前协同合并指数</span></div>
+                <svg viewBox="0 0 720 110"><path class="chart-area" d="M0,88 C80,70 90,50 150,58 C220,70 250,26 330,40 C390,52 420,92 490,70 C560,48 590,62 720,24 L720,110 L0,110Z"/><path class="chart-line" d="M0,88 C80,70 90,50 150,58 C220,70 250,26 330,40 C390,52 420,92 490,70 C560,48 590,62 720,24"/></svg>
+              </div>
+              <div class="chart">
+                <div class="chart-head"><span>客户成交概率</span><span class="chart-note">当前 72%</span></div>
+                <div class="bar-chart">
+                  <div class="bar"><i style="height:42px"></i><span>线索</span></div>
+                  <div class="bar hot"><i style="height:86px"></i><span>调研</span></div>
+                  <div class="bar"><i style="height:64px"></i><span>方案</span></div>
+                  <div class="bar"><i style="height:52px"></i><span>商务</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- MODULE:analysis END -->
+            <!-- MODULE:stage START -->
+            <div class="approval stage-card">
+	              <div class="stage-head">
+	                <div class="stage-title">商机阶段推进 <span>创建时间：2025-01-23 13:22</span></div>
+	                <button class="btn">推进至下一个阶段</button>
+	              </div>
+	              <div class="stage-flow">
+	                <div class="stage-node done"><span class="stage-dot">✓</span>验证客户</div>
+	                <div class="stage-node current"><span class="stage-dot">•</span>需求确定</div>
+	                <div class="stage-node todo"><span class="stage-dot">›</span>方案报价</div>
+	                <div class="stage-node todo"><span class="stage-dot">›</span>谈判审核</div>
+	                <div class="stage-node todo"><span class="stage-dot">›</span>结束</div>
+	              </div>
+              <div class="stage-task-head">
+	                <div class="stage-task-title">该阶段任务 · 0/1 <span class="stage-help"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.25" stroke="currentColor"/><path d="M6.55 6.35a1.55 1.55 0 0 1 3.02.5c0 1.23-1.57 1.38-1.57 2.45" stroke="currentColor" stroke-linecap="round"/><path d="M8 11.25h.01" stroke="currentColor" stroke-linecap="round"/></svg></span></div>
+                <div class="stage-tools"><button class="refresh-link"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button><span>仅显示必须完成的任务</span><span class="switch"></span></div>
+              </div>
+              <div class="stage-task">
+	                <div class="task-state"><span class="clock-dot"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"/></svg></span><span>进行中</span><strong><span class="required">*</span> 填写需求清单</strong></div>
+                <div class="actions"><button class="btn primary">填写</button><button class="btn">更换处理人</button></div>
+              </div>
+            </div>
+            <!-- MODULE:stage END -->
+            <!-- MODULE:records START -->
+            <div class="records-head"><div class="section-head" style="margin:0"><span class="toggle"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span><span>客户互动记录</span></div><input id="recordSearch" placeholder="搜索主题或负责人"></div>
+            <table>
+              <thead><tr><th>类型</th><th>主题</th><th>负责人</th><th>时间</th><th>状态</th></tr></thead>
+              <tbody id="recordRows">
+                <tr><td>电话</td><td>确认年度数字化预算和采购委员会成员</td><td>林澈</td><td>04/29 15:20</td><td><span class="state done">已完成</span></td></tr>
+                <tr><td>会议</td><td>同步方案范围和实施里程碑</td><td>周予安</td><td>04/28 10:00</td><td><span class="state todo">待点评</span></td></tr>
+                <tr><td>任务</td><td>跟进节假日响应条款与报价调整</td><td>陈嘉宁</td><td>04/23 09:30</td><td><span class="state risk">临期</span></td></tr>
+                <tr><td>外勤</td><td>拜访客户销售运营负责人</td><td>沈知远</td><td>04/19 14:00</td><td><span class="state done">已完成</span></td></tr>
+              </tbody>
+            </table>
+            <!-- MODULE:records END -->
+          </div>
+        </section>
+      </div>
+
+      <aside class="right">
+        <nav class="tabs right-tabs"><button class="tab active" data-side-tab="dynamic">动态</button><button class="tab" data-side-tab="team">相关团队</button><button class="tab" data-side-tab="approval">审批流</button></nav>
+        <!-- MODULE:timeline START -->
+        <div class="timeline side-panel has-quick" data-panel="dynamic">
+          <div class="quick">
+            <button><span class="circle"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span>写记录</span></button>
+            <button><span class="circle"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg></span><span>建任务</span></button>
+            <button><span class="circle"><svg viewBox="0 0 24 24"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M13.8 16.7a1 1 0 0 0-1.1.2l-1.4 1.4a15.1 15.1 0 0 1-5.6-5.6l1.4-1.4a1 1 0 0 0 .2-1.1L5.9 6.8A1 1 0 0 0 5 6H3a1 1 0 0 0-1 1 15 15 0 0 0 15 15 1 1 0 0 0 1-1v-2a1 1 0 0 0-.8-.9Z"/></svg></span><span>打电话</span></button>
+            <button><span class="circle"><svg viewBox="0 0 24 24"><path d="M18 8c0 4.5-6 10-6 10S6 12.5 6 8a6 6 0 1 1 12 0Z"/><circle cx="12" cy="8" r="2"/></svg></span><span>建外勤</span></button>
+            <button><span class="circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></span><span>更多</span></button>
+          </div>
+          <article class="item"><div class="dot"><svg viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div><h3>日程 来自 林澈 <span>04/29 15:20</span></h3><div class="timeline-card">确认上海云驰智能制造有限公司节奏，客户要求本周输出方案范围和实施排期。</div></article>
+          <article class="item"><div class="dot blue"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></div><h3>会议 来自 周予安 <span>04/28 10:00</span></h3><div class="timeline-card">同步方案范围、服务边界和关键验收口径，下一步补充合同条款。</div></article>
+          <article class="item"><div class="dot green"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></div><h3>任务 来自 陈嘉宁 <span>04/23 09:30</span></h3><div class="timeline-card">待办：跟进节假日响应条款与报价调整，标记为临期。</div></article>
+        </div>
+        <!-- MODULE:timeline END -->
+        <!-- MODULE:team START -->
+        <div class="timeline side-panel" data-panel="team" hidden>
+          <article class="item"><div class="dot blue"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><h3>销售负责人 <span>林澈</span></h3><div class="timeline-card">负责客户高层沟通、阶段推进和方案策略。</div></article>
+          <article class="item"><div class="dot green"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><h3>售前顾问 <span>周予安</span></h3><div class="timeline-card">负责调研范围、实施里程碑和技术澄清。</div></article>
+        </div>
+        <!-- MODULE:team END -->
+        <!-- MODULE:approval START -->
+        <div class="approval-flow side-panel" data-panel="approval" hidden>
+          <div class="approval-card">
+            <div class="approval-user">
+              <div class="approval-avatar"></div>
+              <div><strong>刘亚庆 <span>米奇的部门（勿动）</span></strong><span>03月01日 22:31</span></div>
+            </div>
+            <div class="approval-product"><strong>审核产品</strong><br>新建 销售订单 <a href="#">产品系列3</a></div>
+            <div class="approval-section-title">审批意见</div>
+            <div class="approval-track">
+              <div class="approval-node"><a class="approval-reply">回复</a><h4>刘亚庆</h4><div class="approval-note">由 刘亚庆 提交数据 <span>2023-09-20 15:10</span></div></div>
+              <div class="approval-node done"><a class="approval-reply">回复</a><h4>销售主管 <span>已通过</span></h4><div class="approval-note"><strong>张明梦</strong> 2023-09-20 16:00<br>同意，继续推进</div></div>
+              <div class="approval-node pending"><a class="approval-reply">回复</a><h4>会签审批 <span>审批中</span> <button class="btn primary">催办</button></h4><div class="approval-note">以下人员审批中<br><br>王梦瑶 <a href="#">李坤</a></div></div>
+            </div>
+            <div class="approval-more">查看审批配置 ›</div>
+            <div class="approval-actions"><button class="btn primary">同意</button><button class="btn">驳回</button><span class="muted-action">更换处理人</span><span class="muted-action">回复</span><span class="muted-action">···</span></div>
+          </div>
+        </div>
+        <!-- MODULE:approval END -->
+      </aside>
+    </div>
+  </section>
+  <!-- MODULE:shell END -->
+
+  <script>
+    const input = document.getElementById("recordSearch");
+    const rows = Array.from(document.querySelectorAll("#recordRows tr"));
+    input.addEventListener("input", () => {
+      const keyword = input.value.trim().toLowerCase();
+      rows.forEach((row) => row.style.display = keyword && !row.textContent.toLowerCase().includes(keyword) ? "none" : "");
+    });
+
+    document.querySelectorAll("[data-side-tab]").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll("[data-side-tab]").forEach((item) => item.classList.toggle("active", item === tab));
+        document.querySelectorAll("[data-panel]").forEach((panel) => panel.hidden = panel.dataset.panel !== tab.dataset.sideTab);
+      });
+    });
+
+    document.getElementById("closeDetail").addEventListener("click", () => {
+      window.location.href = "list-page.html";
+    });
+
+    document.getElementById("openDetail").addEventListener("click", () => {
+      document.body.classList.remove("drawer-closed");
+    });
+  </script>
+</body>
+</html>
