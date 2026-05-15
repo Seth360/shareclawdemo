@@ -4229,8 +4229,12 @@
       }
 
       .manage-search-box {
-        width: 328px;
+        width: 240px;
         height: 36px;
+        padding: 0 8px;
+        gap: 4px;
+        border-color: #c1c5ce;
+        flex-direction: row-reverse;
       }
 
       .manage-outline-btn {
@@ -8680,6 +8684,36 @@
         line-height: 36px;
         font-weight: 700;
         color: #181c25;
+      }
+
+      .task-page-redesign .task-page-title,
+      .market-page-title,
+      .docs-page-title,
+      .task-page-title,
+      .automation-page-title,
+      .manage-inline-title,
+      .share-title {
+        color: var(--color-neutrals19, #181c25);
+        font-feature-settings: "liga" off, "clig" off;
+        font-family: "Source Han Sans CN";
+        font-size: var(---20_size, 20px);
+        font-style: normal;
+        font-weight: 700;
+        line-height: var(---20_line-height, 30px);
+      }
+
+      .settings-section-title,
+      .manage-section-title,
+      .market-section-title,
+      .task-section-title,
+      .automation-section-title {
+        color: var(--color-neutrals19, #181c25);
+        font-feature-settings: "liga" off, "clig" off;
+        font-family: var(---family, "Source Han Sans CN");
+        font-size: var(---16_size, 16px);
+        font-style: normal;
+        font-weight: 700;
+        line-height: var(---16_line-height, 24px);
       }
 
       .task-page-redesign .task-primary-btn {
