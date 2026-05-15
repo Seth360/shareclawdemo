@@ -4502,19 +4502,13 @@
         gap: 16px;
       }
 
-      .skill-center-card-grid.created-skill-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 16px;
-        row-gap: 16px;
-        grid-auto-flow: row;
-        align-items: stretch;
-      }
-
-      .skill-center-card-grid.created-skill-grid > .created-card {
-        min-width: 0;
-        width: auto;
-        grid-column: auto / span 1;
+      .skill-center-card-grid .market-card.card-horizontal,
+      .skill-center-card-grid .created-card.card-horizontal,
+      .created-grid.skill-center-composite > .skill-center-section > .created-card.card-horizontal {
+        height: auto;
+        min-height: 0;
+        padding-top: 12px;
+        padding-bottom: 12px;
       }
 
       .skill-center-source-row {
@@ -4602,12 +4596,10 @@
       }
 
       .market-card.card-horizontal {
-        height: 92px;
         min-height: 92px;
       }
 
       .market-card-grid.large .market-card.card-horizontal {
-        height: 92px;
         min-height: 92px;
       }
 
@@ -5025,64 +5017,170 @@
         color: #fff;
       }
 
-      .skill-hover-card {
+      .installed-skill-card,
+      .created-skill-card {
         transition:
           border-color 0.18s ease,
           box-shadow 0.18s ease,
           transform 0.18s ease;
       }
 
-      .skill-hover-card:hover,
-      .skill-hover-card:focus-within {
-        border-color: rgba(115, 65, 222, 0.26);
+      .installed-skill-card:hover,
+      .installed-skill-card:focus-within,
+      .created-skill-card:hover,
+      .created-skill-card:focus-within {
+        z-index: 8;
+        border-color: #976aeb;
         box-shadow:
-          0 0 1px rgba(28, 40, 64, 0.14),
-          0 4px 12px rgba(24, 41, 75, 0.06);
+          0 0 2px rgba(28, 40, 64, 0.18),
+          0 1px 3px rgba(24, 41, 75, 0.04);
         transform: translateY(-1px);
       }
 
-      .skill-hover-card.is-disabled {
+      .installed-skill-card.is-disabled,
+      .created-skill-card.is-disabled {
         border-color: transparent;
-        background: #f2f4fb;
+        background: #fff;
         box-shadow: none;
       }
 
-      .skill-hover-card .skill-card-tag-stack {
+      .installed-skill-card .card-horizontal-shell,
+      .created-skill-card .card-horizontal-shell {
+        align-items: flex-start;
+      }
+
+      .installed-skill-card .card-horizontal-main,
+      .created-skill-card .card-horizontal-main {
+        padding-right: 0;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .installed-skill-card .market-card-info,
+      .created-skill-card .created-card-info {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        min-width: 0;
+      }
+
+      .installed-skill-title-row,
+      .created-skill-title-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        width: 100%;
+      }
+
+      .installed-skill-title-row .market-card-name,
+      .created-skill-title-row .created-card-name {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .installed-skill-actions,
+      .created-skill-actions {
         position: relative;
         flex: 0 0 auto;
-        min-width: 82px;
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .skill-hover-card .market-tag,
-      .skill-hover-card .agent-card-disabled-label {
-        transition: opacity 0.16s ease;
-      }
-
-      .skill-card-hover-actions {
-        position: absolute;
-        top: 0;
-        right: 0;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .installed-skill-extra-actions,
+      .created-skill-extra-actions {
+        position: absolute;
+        top: 50%;
+        right: 36px;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        background: #fff;
         opacity: 0;
         pointer-events: none;
+        transform: translateY(-50%);
         transition: opacity 0.16s ease;
       }
 
-      .skill-hover-card.has-hover-actions:hover .skill-card-hover-actions,
-      .skill-hover-card.has-hover-actions:focus-within .skill-card-hover-actions {
+      .installed-skill-card:hover .installed-skill-extra-actions,
+      .installed-skill-card:focus-within .installed-skill-extra-actions,
+      .installed-skill-extra-actions:focus-within,
+      .created-skill-card:hover .created-skill-extra-actions,
+      .created-skill-card:focus-within .created-skill-extra-actions,
+      .created-skill-extra-actions:focus-within {
         opacity: 1;
         pointer-events: auto;
       }
 
-      .skill-hover-card.has-hover-actions:hover .market-tag,
-      .skill-hover-card.has-hover-actions:focus-within .market-tag,
-      .skill-hover-card.has-hover-actions.is-disabled:hover .agent-card-disabled-label,
-      .skill-hover-card.has-hover-actions.is-disabled:focus-within .agent-card-disabled-label {
-        opacity: 0;
+      .installed-skill-card .market-card-desc,
+      .created-skill-card .created-card-desc {
+        margin: 0;
+        color: rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+      }
+
+      .installed-skill-card:not(.is-disabled) .market-card-desc,
+      .created-skill-card:not(.is-disabled) .created-card-desc {
+        -webkit-line-clamp: 1;
+        white-space: nowrap;
+        display: block;
+      }
+
+      .installed-skill-card.is-disabled .market-icon-box,
+      .installed-skill-card.is-disabled .market-card-name,
+      .installed-skill-card.is-disabled .market-card-desc,
+      .installed-skill-card.is-disabled .installed-skill-card-tag,
+      .created-skill-card.is-disabled .created-icon-box,
+      .created-skill-card.is-disabled .created-card-name,
+      .created-skill-card.is-disabled .created-card-desc,
+      .created-skill-card.is-disabled .created-skill-card-tag {
+        opacity: 0.5;
+      }
+
+      .created-publish-status-tag {
+        height: 20px;
+        padding: 1px 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .created-publish-status-tag.reviewing {
+        background: #fffaf0;
+        color: #d95d0b;
+      }
+
+      .created-publish-status-tag.published {
+        background: #f0fff3;
+        color: #1fa160;
+      }
+
+      .installed-skill-card-tag,
+      .created-skill-card-tag {
+        height: 20px;
+        width: max-content;
+        padding: 0 8px;
+        border-radius: 10px;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 500;
       }
 
       .skill-card-action-btn {
@@ -5143,60 +5241,9 @@
         fill: var(--purple-purple-06, #7341de);
       }
 
-      .created-skill-card {
-        position: relative;
-        z-index: 1;
-        transition:
-          border-color 0.18s ease,
-          box-shadow 0.18s ease,
-          transform 0.18s ease;
-      }
-
-      .created-skill-card:hover,
-      .created-skill-card:focus-within {
-        z-index: 8;
-        border-color: rgba(115, 65, 222, 0.26);
-        box-shadow:
-          0 0 2px rgba(28, 40, 64, 0.18),
-          0 6px 18px rgba(24, 41, 75, 0.08);
-        transform: translateY(-1px);
-      }
-
-      .created-skill-card.is-disabled {
-        border-color: transparent;
-        background: #f2f4fb;
-        box-shadow: none;
-      }
-
-      .created-skill-card .created-skill-actions {
-        position: relative;
-        flex: 0 0 auto;
-        min-width: 82px;
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .created-skill-hover-actions {
-        position: absolute;
-        top: 0;
-        right: 0;
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.16s ease;
-      }
-
-      .created-skill-card:hover .created-skill-hover-actions,
-      .created-skill-card:focus-within .created-skill-hover-actions {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
       .created-skill-icon-btn {
-        width: 16px;
-        height: 16px;
+        width: 22px;
+        height: 22px;
         padding: 0;
         display: inline-flex;
         align-items: center;
@@ -5225,8 +5272,8 @@
       }
 
       .created-skill-more-anchor .created-more-btn {
-        width: 16px;
-        height: 16px;
+        width: 22px;
+        height: 22px;
         border: 0;
         border-radius: 0;
         background: transparent;
@@ -5245,7 +5292,7 @@
       }
 
       .created-skill-more-anchor .created-more-menu {
-        z-index: 80;
+        z-index: 120;
       }
 
       .market-filter-chip-wrap {
@@ -5518,7 +5565,7 @@
       }
 
       .market-back {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         display: inline-flex;
         align-items: center;
         gap: 4px;
@@ -5895,52 +5942,41 @@
       }
 
       .created-grid.skill-center-composite > .skill-center-section {
-        width: 100%;
-      }
-
-      .skill-center-card-grid.created-skill-grid {
+        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
+        width: 100%;
+        margin-bottom: 0;
       }
 
-      .skill-center-card-grid.created-skill-grid > * {
+      .created-grid.skill-center-composite > .skill-center-section > .manage-heading-row,
+      .created-grid.skill-center-composite > .skill-center-section > .skill-center-source-row,
+      .created-grid.skill-center-composite > .skill-center-section > .skill-center-card-grid {
+        grid-column: 1 / -1;
+      }
+
+      .created-grid.skill-center-composite > .skill-center-section > .skill-center-heading,
+      .created-grid.skill-center-composite > .skill-center-section > .skill-center-source-row {
+        margin-bottom: 0;
+      }
+
+      .created-grid.skill-center-composite > .skill-center-section > .created-card {
+        width: 100%;
+        max-width: 100%;
         min-width: 0;
       }
 
-      .skill-center-card-grid.created-skill-grid > .created-card {
-        width: 100%;
-        max-width: 100%;
-      }
-
       .created-skill-card {
+        position: relative;
+        z-index: 1;
         width: 100%;
         max-width: 100%;
-        overflow: hidden;
-      }
-
-      .created-skill-card .card-horizontal-shell {
-        width: 100%;
-        align-items: flex-start;
-      }
-
-      .created-skill-card .card-horizontal-main {
-        width: 100%;
-        padding-right: 0;
-      }
-
-      .created-skill-card .agent-card-top {
-        align-items: flex-start;
+        overflow: visible;
       }
 
       .created-skill-card .created-card-info {
         flex: 1 1 auto;
         min-width: 0;
-      }
-
-      .created-skill-card .created-skill-actions {
-        width: 82px;
-        min-width: 82px;
-        align-self: flex-start;
       }
 
       .created-action-btn,
@@ -7741,6 +7777,239 @@
       .create-task-confirm-btn {
         background: linear-gradient(90deg, #4f68ff 0.12%, #8048ff 100.09%);
         color: #fff;
+      }
+
+      .skill-form-dialog {
+        width: min(640px, calc(100vw - 48px));
+        max-height: calc(100vh - 48px);
+        overflow: hidden;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .skill-form-dialog-head {
+        height: 48px;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #dee1e8;
+      }
+
+      .skill-form-dialog-title {
+        margin: 0;
+        font-size: 15px;
+        line-height: 24px;
+        font-weight: 700;
+        color: #181c25;
+      }
+
+      .skill-form-close-btn {
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #181c25;
+        background: transparent;
+      }
+
+      .skill-form-close-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .skill-form-body {
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-height: calc(100vh - 144px);
+        overflow: auto;
+      }
+
+      .skill-form-panel {
+        padding: 13px;
+        border: 1px solid #dee1e8;
+        border-radius: 8px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .skill-form-panel-title {
+        margin: 0;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 700;
+        color: #181c25;
+      }
+
+      .skill-form-selected-card {
+        padding: 12px;
+        border-radius: 8px;
+        background: #fafafa;
+        box-shadow:
+          0 0 2px rgba(28, 40, 64, 0.18),
+          0 1px 3px rgba(24, 41, 75, 0.04);
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .skill-form-selected-main {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .skill-form-selected-title {
+        margin: 0;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 600;
+        color: #1c1c1e;
+      }
+
+      .skill-form-selected-desc {
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        line-height: 18px;
+        color: #91959e;
+      }
+
+      .skill-form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .skill-form-label {
+        font-size: 14px;
+        line-height: 20px;
+        color: #181c25;
+      }
+
+      .skill-form-picker {
+        min-height: 32px;
+        padding: 3px 8px 3px 4px;
+        border: 1px solid #c1c5ce;
+        border-radius: 8px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .skill-form-picker-tags {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .skill-form-picker-tag {
+        height: 24px;
+        padding: 0 4px;
+        border: 1px solid #dee1e8;
+        border-radius: 4px;
+        background: #f2f4fb;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+        white-space: nowrap;
+      }
+
+      .skill-form-picker-avatar {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f6d365, #fda085);
+        color: #7a3c00;
+        font-size: 10px;
+        line-height: 14px;
+        text-align: center;
+      }
+
+      .skill-form-picker-add {
+        width: 16px;
+        height: 16px;
+        color: #545861;
+      }
+
+      .skill-form-textarea-wrap {
+        position: relative;
+      }
+
+      .skill-form-textarea {
+        width: 100%;
+        height: 60px;
+        padding: 8px 8px 22px;
+        border: 1px solid #c1c5ce;
+        border-radius: 8px;
+        resize: none;
+        outline: none;
+        background: #fff;
+        font-size: 14px;
+        line-height: 20px;
+        color: #181c25;
+      }
+
+      .skill-form-textarea::placeholder {
+        color: #c1c5ce;
+      }
+
+      .skill-form-count {
+        position: absolute;
+        right: 8px;
+        bottom: 5px;
+        font-size: 12px;
+        line-height: 18px;
+        color: #91959e;
+      }
+
+      .skill-form-footer {
+        height: 48px;
+        padding: 0 24px;
+        border-top: 1px solid #dee1e8;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .skill-form-primary,
+      .skill-form-secondary {
+        height: 28px;
+        min-width: 32px;
+        padding: 0 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .skill-form-primary {
+        background: #976aeb;
+        color: #fff;
+      }
+
+      .skill-form-secondary {
+        border: 1px solid #c1c5ce;
+        background: #fff;
+        color: #181c25;
       }
 
       .assistant-dialog {
@@ -11237,6 +11506,23 @@
             </div>
           </section>
         </div>
+        <div class="detail-overlay hidden" id="skillFormOverlay" role="presentation">
+          <section class="skill-form-dialog" id="skillFormDialog" role="dialog" aria-modal="true" aria-labelledby="skillFormDialogHeading">
+            <div class="skill-form-dialog-head">
+              <h2 class="skill-form-dialog-title" id="skillFormDialogHeading">共享应用给其他同事</h2>
+              <button class="skill-form-close-btn" id="skillFormCloseBtn" type="button" aria-label="关闭技能弹窗">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path class="icon-stroke" d="M4.3 4.3 11.7 11.7M11.7 4.3 4.3 11.7"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="skill-form-body" id="skillFormDialogBody"></div>
+            <div class="skill-form-footer">
+              <button class="skill-form-primary" id="skillFormConfirmBtn" type="button">确认共享</button>
+              <button class="skill-form-secondary" id="skillFormCancelBtn" type="button">取消</button>
+            </div>
+          </section>
+        </div>
         <div class="detail-overlay hidden" id="createAssistantOverlay" role="presentation">
           <section class="assistant-dialog" id="createAssistantDialog" role="dialog" aria-modal="true" aria-labelledby="createAssistantDialogHeading">
             <div class="assistant-dialog-head">
@@ -11513,6 +11799,9 @@
         activeHoverCardMenuId: "",
         createTaskDialogOpen: false,
         createAssistantDialogOpen: false,
+        skillFormDialogOpen: false,
+        skillFormDialogMode: "",
+        activeSkillFormCardId: "",
         createTaskForm: {
           name: "客户流失风险",
           prompt: "当我负责的客户健康度下降50%以下时通知我",
@@ -11698,6 +11987,12 @@
       const createTaskCloseBtn = document.getElementById("createTaskCloseBtn");
       const createTaskConfirmBtn = document.getElementById("createTaskConfirmBtn");
       const createTaskCancelBtn = document.getElementById("createTaskCancelBtn");
+      const skillFormOverlay = document.getElementById("skillFormOverlay");
+      const skillFormDialogHeading = document.getElementById("skillFormDialogHeading");
+      const skillFormDialogBody = document.getElementById("skillFormDialogBody");
+      const skillFormCloseBtn = document.getElementById("skillFormCloseBtn");
+      const skillFormConfirmBtn = document.getElementById("skillFormConfirmBtn");
+      const skillFormCancelBtn = document.getElementById("skillFormCancelBtn");
       const createAssistantOverlay = document.getElementById("createAssistantOverlay");
       const createAssistantDialogBody = document.getElementById("createAssistantDialogBody");
       const createAssistantCloseBtn = document.getElementById("createAssistantCloseBtn");
@@ -12746,8 +13041,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       let toastTimer = null;
       let chatReplyTimer = null;
       let exposedSubmenuCloseTimer = null;
+      const publishReviewTimers = new Map();
       const AI_REPLY_THINKING_DELAY = 1500;
       const EXPOSED_SUBMENU_CLOSE_DELAY = 180;
+      const PUBLISH_REVIEW_DELAY = 20000;
 
       function isCurrentPanelDocument(panel) {
         return (PANEL_BY_PAGE_FILE[getCurrentPageFile()] || "home") === panel;
@@ -14091,61 +14388,40 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function renderInstalledCard(card) {
         const tag = getDisplayTags(card, card.sourceKey || "", true)[0] || { label: "企业", className: "tag-neutral" };
         const isDisabled = card.enabled === false;
+        const switchLabel = isDisabled ? `启用 ${escapeHtml(card.title)}` : `禁用 ${escapeHtml(card.title)}`;
+        const switchClass = isDisabled ? "skill-card-action-btn switch-btn is-off" : "skill-card-action-btn switch-btn";
         return `
-          <article class="market-card card-horizontal detail-card-trigger skill-hover-card has-hover-actions ${isDisabled ? "is-disabled" : ""}" tabindex="0" role="button" aria-label="查看 ${escapeHtml(card.title)} 详情" data-detail-card="skill" data-detail-id="${escapeHtml(card.id)}">
+          <article class="market-card card-horizontal detail-card-trigger installed-skill-card ${isDisabled ? "is-disabled" : ""}" tabindex="0" role="button" aria-label="查看 ${escapeHtml(card.title)} 详情" data-detail-card="skill" data-detail-id="${escapeHtml(card.id)}">
             <div class="card-horizontal-shell">
               <span class="market-icon-box ${card.tone}">${escapeHtml(card.glyph)}</span>
               <div class="card-horizontal-main">
-                <div class="agent-card-top">
-                  <div class="market-card-info">
+                <div class="market-card-info">
+                  <div class="installed-skill-title-row">
                     <h3 class="market-card-name">${escapeHtml(card.title)}</h3>
-                    <p class="market-card-desc">${escapeHtml(card.desc)}</p>
-                  </div>
-                  <div class="skill-card-tag-stack">
-                    ${
-                      isDisabled
-                        ? `<span class="agent-card-disabled-label">已禁用</span>`
-                        : `<span class="market-tag tag-neutral">${escapeHtml(tag.label)}</span>`
-                    }
-                    <span class="skill-card-hover-actions">
-                      ${
-                        isDisabled
-                          ? `
-                              ${
-                                card.removable
-                                  ? `
-                                      <button class="skill-card-action-btn" type="button" data-installed-remove="${escapeHtml(card.id)}" aria-label="删除 ${escapeHtml(card.title)}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                          <path d="M10.6666 1.33301C11.0006 1.33301 11.2776 1.58001 11.3266 1.90101L11.3326 2.00001V3.33301H13.9996C14.1765 3.33301 14.3461 3.40328 14.4712 3.52837C14.5963 3.65345 14.6666 3.82311 14.6666 4.00001C14.6666 4.17691 14.5963 4.34656 14.4712 4.47165C14.3461 4.59673 14.1765 4.66701 13.9996 4.66701H13.3316L13.3326 14C13.3327 14.1598 13.2754 14.3144 13.1711 14.4355C13.0669 14.5566 12.9226 14.6363 12.7646 14.66L12.6666 14.667H3.33258C3.17277 14.6671 3.01823 14.6098 2.8971 14.5056C2.77597 14.4013 2.6963 14.257 2.67258 14.099L2.66758 14V4.66601H1.99958C1.82728 4.65933 1.66426 4.58619 1.54472 4.46193C1.42517 4.33767 1.3584 4.17194 1.3584 3.99951C1.3584 3.82708 1.42517 3.66135 1.54472 3.53709C1.66426 3.41282 1.82728 3.33968 1.99958 3.33301H4.66558V2.00001C4.66558 1.66501 4.91258 1.38801 5.23458 1.34001L5.33258 1.33301H10.6666ZM11.9996 4.66701H3.99958V13.333H11.9996V4.66701ZM5.99958 6.66701C6.36758 6.66701 6.66658 6.96501 6.66658 7.33301V10.667C6.66658 10.8439 6.5963 11.0136 6.47122 11.1386C6.34613 11.2637 6.17648 11.334 5.99958 11.334C5.82268 11.334 5.65302 11.2637 5.52794 11.1386C5.40285 11.0136 5.33258 10.8439 5.33258 10.667V7.33301C5.33258 6.96501 5.63158 6.66701 5.99958 6.66701ZM7.99958 6.66701C8.36758 6.66701 8.66658 6.96501 8.66658 7.33301V10.667C8.66658 10.8439 8.5963 11.0136 8.47122 11.1386C8.34613 11.2637 8.17648 11.334 7.99958 11.334C7.82268 11.334 7.65302 11.2637 7.52794 11.1386C7.40285 11.0136 7.33258 10.8439 7.33258 10.667V7.33301C7.33258 6.96501 7.63158 6.66701 7.99958 6.66701ZM9.99958 6.66701C10.3676 6.66701 10.6666 6.96501 10.6666 7.33301V10.667C10.6666 10.8439 10.5963 11.0136 10.4712 11.1386C10.3461 11.2637 10.1765 11.334 9.99958 11.334C9.82268 11.334 9.65302 11.2637 9.52794 11.1386C9.40285 11.0136 9.33258 10.8439 9.33258 10.667V7.33301C9.33258 6.96501 9.63158 6.66701 9.99958 6.66701ZM9.99958 2.66701H5.99958V3.33301H9.99958V2.66701Z" fill="#91959E"></path>
-                                        </svg>
-                                      </button>
-                                    `
-                                  : ""
-                              }
-                              <button class="skill-card-action-btn switch-btn is-off" type="button" data-switch-id="${escapeHtml(card.id)}" aria-label="启用 ${escapeHtml(card.title)}"></button>
-                            `
-                          : `
-                              ${
-                                card.removable
-                                  ? `
-                                      <button class="skill-card-action-btn" type="button" data-installed-remove="${escapeHtml(card.id)}" aria-label="删除 ${escapeHtml(card.title)}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                          <path d="M10.6666 1.33301C11.0006 1.33301 11.2776 1.58001 11.3266 1.90101L11.3326 2.00001V3.33301H13.9996C14.1765 3.33301 14.3461 3.40328 14.4712 3.52837C14.5963 3.65345 14.6666 3.82311 14.6666 4.00001C14.6666 4.17691 14.5963 4.34656 14.4712 4.47165C14.3461 4.59673 14.1765 4.66701 13.9996 4.66701H13.3316L13.3326 14C13.3327 14.1598 13.2754 14.3144 13.1711 14.4355C13.0669 14.5566 12.9226 14.6363 12.7646 14.66L12.6666 14.667H3.33258C3.17277 14.6671 3.01823 14.6098 2.8971 14.5056C2.77597 14.4013 2.6963 14.257 2.67258 14.099L2.66758 14V4.66601H1.99958C1.82728 4.65933 1.66426 4.58619 1.54472 4.46193C1.42517 4.33767 1.3584 4.17194 1.3584 3.99951C1.3584 3.82708 1.42517 3.66135 1.54472 3.53709C1.66426 3.41282 1.82728 3.33968 1.99958 3.33301H4.66558V2.00001C4.66558 1.66501 4.91258 1.38801 5.23458 1.34001L5.33258 1.33301H10.6666ZM11.9996 4.66701H3.99958V13.333H11.9996V4.66701ZM5.99958 6.66701C6.36758 6.66701 6.66658 6.96501 6.66658 7.33301V10.667C6.66658 10.8439 6.5963 11.0136 6.47122 11.1386C6.34613 11.2637 6.17648 11.334 5.99958 11.334C5.82268 11.334 5.65302 11.2637 5.52794 11.1386C5.40285 11.0136 5.33258 10.8439 5.33258 10.667V7.33301C5.33258 6.96501 5.63158 6.66701 5.99958 6.66701ZM7.99958 6.66701C8.36758 6.66701 8.66658 6.96501 8.66658 7.33301V10.667C8.66658 10.8439 8.5963 11.0136 8.47122 11.1386C8.34613 11.2637 8.17648 11.334 7.99958 11.334C7.82268 11.334 7.65302 11.2637 7.52794 11.1386C7.40285 11.0136 7.33258 10.8439 7.33258 10.667V7.33301C7.33258 6.96501 7.63158 6.66701 7.99958 6.66701ZM9.99958 6.66701C10.3676 6.66701 10.6666 6.96501 10.6666 7.33301V10.667C10.6666 10.8439 10.5963 11.0136 10.4712 11.1386C10.3461 11.2637 10.1765 11.334 9.99958 11.334C9.82268 11.334 9.65302 11.2637 9.52794 11.1386C9.40285 11.0136 9.33258 10.8439 9.33258 10.667V7.33301C9.33258 6.96501 9.63158 6.66701 9.99958 6.66701ZM9.99958 2.66701H5.99958V3.33301H9.99958V2.66701Z" fill="#91959E"></path>
-                                        </svg>
-                                      </button>
-                                    `
-                                  : ""
-                              }
-                              <button class="skill-card-action-btn" type="button" data-use-id="${escapeHtml(card.id)}" aria-label="对话 ${escapeHtml(card.title)}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                  <path d="M1.921 15.3221C1.5765 15.4071 1.25556 15.1162 1.30639 14.765L1.62898 12.5367C0.606801 11.277 0 9.70491 0 8C0 3.85786 3.58172 0.5 8 0.5C12.4183 0.5 16 3.85786 16 8C16 12.1421 12.4183 15.5 8 15.5C6.71121 15.5 5.4936 15.2143 4.4153 14.7068L1.921 15.3221Z" fill="#91959E"></path>
-                                </svg>
-                              </button>
-                              <button class="skill-card-action-btn switch-btn" type="button" data-switch-id="${escapeHtml(card.id)}" aria-label="禁用 ${escapeHtml(card.title)}"></button>
-                            `
-                      }
+                    <span class="installed-skill-actions">
+                      <span class="installed-skill-extra-actions">
+                        ${
+                          isDisabled
+                            ? ""
+                            : `
+                                <button class="skill-card-action-btn" type="button" data-use-id="${escapeHtml(card.id)}" aria-label="对话 ${escapeHtml(card.title)}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M1.2 15.5L1.62898 12.5367C0.606801 11.277 0 9.70491 0 8C0 3.85786 3.58172 0.5 8 0.5C12.4183 0.5 16 3.85786 16 8C16 12.1421 12.4183 15.5 8 15.5C6.71121 15.5 5.4936 15.2143 4.4153 14.7068L1.2 15.5ZM4.5202 13.6509L4.84117 13.802C5.81125 14.2586 6.88582 14.5 8 14.5C11.8799 14.5 15 11.5749 15 8C15 4.42509 11.8799 1.5 8 1.5C4.1201 1.5 1 4.42509 1 8C1 9.42888 1.4971 10.7871 2.4055 11.9066L2.68139 12.2466L2.40247 14.1734L4.5202 13.6509Z" fill="#1C1C1E"></path>
+                                  </svg>
+                                </button>
+                              `
+                        }
+                        <button class="skill-card-action-btn" type="button" data-installed-remove="${escapeHtml(card.id)}" aria-label="删除 ${escapeHtml(card.title)}">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M10.6666 1.33301C11.0006 1.33301 11.2776 1.58001 11.3266 1.90101L11.3326 2.00001V3.33301H13.9996C14.1765 3.33301 14.3461 3.40328 14.4712 3.52837C14.5963 3.65345 14.6666 3.82311 14.6666 4.00001C14.6666 4.17691 14.5963 4.34656 14.4712 4.47165C14.3461 4.59673 14.1765 4.66701 13.9996 4.66701H13.3316L13.3326 14C13.3327 14.1598 13.2754 14.3144 13.1711 14.4355C13.0669 14.5566 12.9226 14.6363 12.7646 14.66L12.6666 14.667H3.33258C3.17277 14.6671 3.01823 14.6098 2.8971 14.5056C2.77597 14.4013 2.6963 14.257 2.67258 14.099L2.66758 14V4.66601H1.99958C1.82728 4.65933 1.66426 4.58619 1.54472 4.46193C1.42517 4.33767 1.3584 4.17194 1.3584 3.99951C1.3584 3.82708 1.42517 3.66135 1.54472 3.53709C1.66426 3.41282 1.82728 3.33968 1.99958 3.33301H4.66558V2.00001C4.66558 1.66501 4.91258 1.38801 5.23458 1.34001L5.33258 1.33301H10.6666ZM11.9996 4.66701H3.99958V13.333H11.9996V4.66701ZM5.99958 6.66701C6.36758 6.66701 6.66658 6.96501 6.66658 7.33301V10.667C6.66658 10.8439 6.5963 11.0136 6.47122 11.1386C6.34613 11.2637 6.17648 11.334 5.99958 11.334C5.82268 11.334 5.65302 11.2637 5.52794 11.1386C5.40285 11.0136 5.33258 10.8439 5.33258 10.667V7.33301C5.33258 6.96501 5.63158 6.66701 5.99958 6.66701ZM7.99958 6.66701C8.36758 6.66701 8.66658 6.96501 8.66658 7.33301V10.667C8.66658 10.8439 8.5963 11.0136 8.47122 11.1386C8.34613 11.2637 8.17648 11.334 7.99958 11.334C7.82268 11.334 7.65302 11.2637 7.52794 11.1386C7.40285 11.0136 7.33258 10.8439 7.33258 10.667V7.33301C7.33258 6.96501 7.63158 6.66701 7.99958 6.66701ZM9.99958 6.66701C10.3676 6.66701 10.6666 6.96501 10.6666 7.33301V10.667C10.6666 10.8439 10.5963 11.0136 10.4712 11.1386C10.3461 11.2637 10.1765 11.334 9.99958 11.334C9.82268 11.334 9.65302 11.2637 9.52794 11.1386C9.40285 11.0136 9.33258 10.8439 9.33258 10.667V7.33301C9.33258 6.96501 9.63158 6.66701 9.99958 6.66701ZM9.99958 2.66701H5.99958V3.33301H9.99958V2.66701Z" fill="#91959E"></path>
+                          </svg>
+                        </button>
+                      </span>
+                      <button class="${switchClass}" type="button" data-switch-id="${escapeHtml(card.id)}" aria-label="${switchLabel}"></button>
                     </span>
                   </div>
+                  <p class="market-card-desc">${escapeHtml(card.desc)}</p>
+                  <span class="market-tag tag-neutral installed-skill-card-tag">${escapeHtml(tag.label)}</span>
                 </div>
               </div>
             </div>
@@ -14220,54 +14496,58 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderCreatedCard(card) {
         const isDisabled = card.enabled === false;
-        const publishLabel = card.publishedToEnterprise ? "发布更新" : "发布到企业";
+        const switchLabel = isDisabled ? `启用 ${escapeHtml(card.title)}` : `禁用 ${escapeHtml(card.title)}`;
+        const switchClass = isDisabled ? "skill-card-action-btn switch-btn is-off" : "skill-card-action-btn switch-btn";
+        const publishStatus = card.publishStatus || (card.publishedToEnterprise ? "published" : "");
+        const publishStatusLabel = publishStatus === "reviewing" ? "审核中" : publishStatus === "published" ? "已发布" : "";
+        const publishActionLabel = publishStatus === "published" ? "更新到企业库" : "发布到企业库";
         return `
           <article class="created-card card-horizontal detail-card-trigger created-skill-card ${isDisabled ? "is-disabled" : ""}" tabindex="0" role="button" aria-label="查看 ${escapeHtml(card.title)} 详情" data-created-id="${escapeHtml(card.id)}" data-detail-card="skill" data-detail-id="${escapeHtml(card.id)}">
             <div class="card-horizontal-shell">
               <span class="created-icon-box ${card.tone}">${escapeHtml(card.glyph)}</span>
               <div class="card-horizontal-main">
-                <div class="agent-card-top">
-                  <div class="created-card-info">
+                <div class="created-card-info">
+                  <div class="created-skill-title-row">
                     <h3 class="created-card-name">${escapeHtml(card.title)}</h3>
-                    <p class="created-card-desc">${escapeHtml(card.desc)}</p>
-                  </div>
-                  <div class="created-skill-actions">
-                    <span class="created-skill-hover-actions">
-                      ${
-                        isDisabled
-                          ? `
-                              <button class="created-skill-icon-btn" type="button" data-created-switch-id="${escapeHtml(card.id)}" aria-label="启用 ${escapeHtml(card.title)}">
-                                <span class="market-switch is-off" aria-hidden="true"></span>
-                              </button>
-                            `
-                          : `
-                              <button class="created-skill-icon-btn" type="button" data-use-id="${escapeHtml(card.id)}" aria-label="对话 ${escapeHtml(card.title)}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                  <path d="M1.921 15.3221C1.5765 15.4071 1.25556 15.1162 1.30639 14.765L1.62898 12.5367C0.606801 11.277 0 9.70491 0 8C0 3.85786 3.58172 0.5 8 0.5C12.4183 0.5 16 3.85786 16 8C16 12.1421 12.4183 15.5 8 15.5C6.71121 15.5 5.4936 15.2143 4.4153 14.7068L1.921 15.3221Z" fill="#91959E"></path>
-                                </svg>
-                              </button>
-                              <button class="created-skill-icon-btn" type="button" data-created-switch-id="${escapeHtml(card.id)}" aria-label="禁用 ${escapeHtml(card.title)}">
-                                <span class="market-switch" aria-hidden="true"></span>
-                              </button>
-                            `
-                      }
-                      <div class="created-skill-more-anchor">
-                        <button class="created-more-btn" type="button" aria-label="更多操作" aria-expanded="false" data-created-menu-toggle="${escapeHtml(card.id)}">
-                          <svg viewBox="0 0 12 12" aria-hidden="true">
-                            <circle class="icon-fill" cx="2.5" cy="6" r="1"></circle>
-                            <circle class="icon-fill" cx="6" cy="6" r="1"></circle>
-                            <circle class="icon-fill" cx="9.5" cy="6" r="1"></circle>
-                          </svg>
-                        </button>
-                        <div class="created-more-menu">
-                          <button class="created-more-item" type="button" data-created-action="publish" data-created-id="${escapeHtml(card.id)}">${publishLabel}</button>
-                          <button class="created-more-item" type="button" data-created-action="share" data-created-id="${escapeHtml(card.id)}">共享</button>
-                          <button class="created-more-item" type="button" data-created-action="edit" data-created-id="${escapeHtml(card.id)}">编辑</button>
-                          <button class="created-more-item" type="button" data-created-action="delete" data-created-id="${escapeHtml(card.id)}">删除</button>
+                    <span class="created-skill-actions">
+                      <span class="created-skill-extra-actions">
+                        ${
+                          isDisabled
+                            ? ""
+                            : `
+                                <button class="created-skill-icon-btn" type="button" data-use-id="${escapeHtml(card.id)}" aria-label="对话 ${escapeHtml(card.title)}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M1.2 15.5L1.62898 12.5367C0.606801 11.277 0 9.70491 0 8C0 3.85786 3.58172 0.5 8 0.5C12.4183 0.5 16 3.85786 16 8C16 12.1421 12.4183 15.5 8 15.5C6.71121 15.5 5.4936 15.2143 4.4153 14.7068L1.2 15.5ZM4.5202 13.6509L4.84117 13.802C5.81125 14.2586 6.88582 14.5 8 14.5C11.8799 14.5 15 11.5749 15 8C15 4.42509 11.8799 1.5 8 1.5C4.1201 1.5 1 4.42509 1 8C1 9.42888 1.4971 10.7871 2.4055 11.9066L2.68139 12.2466L2.40247 14.1734L4.5202 13.6509Z" fill="#1C1C1E"></path>
+                                  </svg>
+                                </button>
+                              `
+                        }
+                        <div class="created-skill-more-anchor">
+                          <button class="created-more-btn" type="button" aria-label="更多操作" aria-expanded="false" data-created-menu-toggle="${escapeHtml(card.id)}">
+                            <svg viewBox="0 0 12 12" aria-hidden="true">
+                              <circle class="icon-fill" cx="2.5" cy="6" r="1"></circle>
+                              <circle class="icon-fill" cx="6" cy="6" r="1"></circle>
+                              <circle class="icon-fill" cx="9.5" cy="6" r="1"></circle>
+                            </svg>
+                          </button>
+                          <div class="created-more-menu">
+                            <button class="created-more-item" type="button" data-created-action="edit" data-created-id="${escapeHtml(card.id)}">编辑</button>
+                            <button class="created-more-item" type="button" data-created-action="share" data-created-id="${escapeHtml(card.id)}">共享</button>
+                            <button class="created-more-item" type="button" data-created-action="publish" data-created-id="${escapeHtml(card.id)}">${publishActionLabel}</button>
+                            <button class="created-more-item" type="button" data-created-action="delete" data-created-id="${escapeHtml(card.id)}">删除</button>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </span>
+                      ${
+                        publishStatusLabel
+                          ? `<span class="created-publish-status-tag ${escapeHtml(publishStatus)}">${escapeHtml(publishStatusLabel)}</span>`
+                          : ""
+                      }
+                      <button class="${switchClass}" type="button" data-created-switch-id="${escapeHtml(card.id)}" aria-label="${switchLabel}"></button>
+                    </span>
                   </div>
+                  <p class="created-card-desc">${escapeHtml(card.desc)}</p>
+                  <span class="market-tag tag-neutral created-skill-card-tag">自建</span>
                 </div>
               </div>
             </div>
@@ -14741,6 +15021,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             !crmSyncOverlay.classList.contains("hidden") ||
             !forwardOverlay.classList.contains("hidden") ||
             !createTaskOverlay.classList.contains("hidden") ||
+            !skillFormOverlay.classList.contains("hidden") ||
             !createAssistantOverlay.classList.contains("hidden")
         );
       }
@@ -14832,6 +15113,133 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const { name, frequency, target } = state.createTaskForm;
         closeCreateTaskDialog();
         showToast(`已创建任务：${name} · ${frequency === "daily" ? "每天" : frequency === "interval" ? "按间隔" : "单次"} · ${target === "insight" ? "首页AI洞察卡片" : "对话通知"}`);
+      }
+
+      function renderSkillFormSelectedCard(card) {
+        return `
+          <div class="skill-form-selected-card">
+            <span class="created-icon-box ${card.tone}">${escapeHtml(card.glyph)}</span>
+            <div class="skill-form-selected-main">
+              <h3 class="skill-form-selected-title">${escapeHtml(card.title)}</h3>
+              <p class="skill-form-selected-desc">${escapeHtml(card.desc)}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderSkillFormDialog(card, mode) {
+        const isPublish = mode === "publish";
+        skillFormDialogHeading.textContent = isPublish ? "发布到企业技能广场" : "共享应用给其他同事";
+        skillFormConfirmBtn.textContent = isPublish ? "提交审批" : "确认共享";
+        skillFormDialogBody.innerHTML = `
+          <section class="skill-form-panel">
+            <h3 class="skill-form-panel-title">已选技能</h3>
+            ${renderSkillFormSelectedCard(card)}
+          </section>
+          <section class="skill-form-panel">
+            <h3 class="skill-form-panel-title">配置共享信息</h3>
+            ${
+              isPublish
+                ? `
+                    <label class="skill-form-field">
+                      <span class="skill-form-label">发布理由</span>
+                      <span class="skill-form-textarea-wrap">
+                        <textarea class="skill-form-textarea" id="skillFormReasonInput" maxlength="2000" placeholder="请输入"></textarea>
+                        <span class="skill-form-count">0/2000</span>
+                      </span>
+                    </label>
+                  `
+                : `
+                    <div class="skill-form-field">
+                      <span class="skill-form-label">共享范围</span>
+                      <button class="skill-form-picker" type="button" aria-label="选择共享范围">
+                        <span class="skill-form-picker-tags">
+                          <span class="skill-form-picker-tag">
+                            <span class="skill-form-picker-avatar">王</span>
+                            <span>王某某</span>
+                            <span aria-hidden="true">×</span>
+                          </span>
+                          <span class="skill-form-picker-tag">
+                            <span class="skill-form-picker-avatar">企</span>
+                            <span>体验组</span>
+                            <span aria-hidden="true">×</span>
+                          </span>
+                          <span class="skill-form-picker-tag">+2</span>
+                        </span>
+                        <svg class="skill-form-picker-add" viewBox="0 0 16 16" aria-hidden="true">
+                          <path class="icon-stroke" d="M8 3.2v9.6M3.2 8h9.6"></path>
+                        </svg>
+                      </button>
+                    </div>
+                    <label class="skill-form-field">
+                      <span class="skill-form-label">共享说明</span>
+                      <span class="skill-form-textarea-wrap">
+                        <textarea class="skill-form-textarea" id="skillFormShareInput" maxlength="2000" placeholder="请输入"></textarea>
+                        <span class="skill-form-count">0/2000</span>
+                      </span>
+                    </label>
+                  `
+            }
+          </section>
+        `;
+      }
+
+      function openSkillFormDialog(mode, card) {
+        state.skillFormDialogOpen = true;
+        state.skillFormDialogMode = mode;
+        state.activeSkillFormCardId = card.id;
+        renderSkillFormDialog(card, mode);
+        skillFormOverlay.classList.remove("hidden");
+        syncDialogBodyLock();
+      }
+
+      function closeSkillFormDialog() {
+        state.skillFormDialogOpen = false;
+        state.skillFormDialogMode = "";
+        state.activeSkillFormCardId = "";
+        skillFormDialogBody.innerHTML = "";
+        skillFormOverlay.classList.add("hidden");
+        syncDialogBodyLock();
+      }
+
+      function schedulePublishReviewCompletion(card) {
+        const existingTimer = publishReviewTimers.get(card.id);
+        if (existingTimer) {
+          clearTimeout(existingTimer);
+        }
+
+        const timer = setTimeout(() => {
+          publishReviewTimers.delete(card.id);
+          const latestCard = findCreatedCard(card.id);
+          if (!latestCard || latestCard.publishStatus !== "reviewing") {
+            return;
+          }
+
+          latestCard.publishStatus = "published";
+          latestCard.publishedToEnterprise = true;
+          if (state.marketPage === "created") {
+            renderCreatedView();
+          }
+        }, PUBLISH_REVIEW_DELAY);
+
+        publishReviewTimers.set(card.id, timer);
+      }
+
+      function confirmSkillFormDialog() {
+        const mode = state.skillFormDialogMode;
+        const card = findCreatedCard(state.activeSkillFormCardId);
+        if (mode === "publish" && card) {
+          card.publishStatus = "reviewing";
+          card.publishedToEnterprise = false;
+          schedulePublishReviewCompletion(card);
+          closeSkillFormDialog();
+          renderCreatedView();
+          showToast("已提交审批。");
+          return;
+        }
+
+        closeSkillFormDialog();
+        showToast("已共享给同事。");
       }
 
       function getAssistantTemplateById(templateId) {
@@ -15543,8 +15951,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         state.createdType = "skill";
         state.activeCreatedMenuId = "";
         hydrateInstalledSkillsFromLibrary();
-        const installedCards = getInstalledCards("skill").filter((card) => matchesSearch(card, state.manageSearch));
-        const createdCards = getCreatedCards("skill").filter((card) => matchesSearch(card, state.manageSearch));
+        const installedCards = getInstalledCards("skill")
+          .filter((card) => matchesSearch(card, state.manageSearch))
+          .sort((a, b) => Number(a.enabled === false) - Number(b.enabled === false));
+        const createdCards = getCreatedCards("skill")
+          .filter((card) => matchesSearch(card, state.manageSearch))
+          .sort((a, b) => Number(a.enabled === false) - Number(b.enabled === false));
         const libraryCards = getSkillLibraryCards();
         manageSectionTitle.innerHTML = `我创建的 <span class="manage-title-count">${createdCards.length}</span>`;
         manageSearchInput.value = state.manageSearch;
@@ -15590,15 +16002,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             <div class="manage-heading-row skill-center-heading">
               <h2 class="manage-section-title">我创建的 <span class="manage-title-count">${createdCards.length}</span></h2>
             </div>
-            <div class="skill-center-card-grid created-skill-grid">
-              ${
-                createdCards.length
-                  ? createdCards
-                      .map((card) => renderCreatedCard(card))
-                      .join("")
-                  : renderManageEmptyState("当前筛选下没有我创建的内容。")
-              }
-            </div>
+            ${
+              createdCards.length
+                ? createdCards
+                    .map((card) => renderCreatedCard(card))
+                    .join("")
+                : renderManageEmptyState("当前筛选下没有我创建的内容。")
+            }
           </section>
           <section class="skill-center-section">
             <div class="manage-heading-row skill-center-heading">
@@ -18774,6 +19184,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (event.key === "Escape" && !skillFormOverlay.classList.contains("hidden")) {
+          closeSkillFormDialog();
+          return;
+        }
+
         if (event.key === "Escape" && !createAssistantOverlay.classList.contains("hidden")) {
           closeCreateAssistantDialog();
         }
@@ -18832,6 +19247,24 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       createTaskOverlay.addEventListener("click", (event) => {
         if (event.target === createTaskOverlay) {
           closeCreateTaskDialog();
+        }
+      });
+
+      skillFormCloseBtn.addEventListener("click", () => {
+        closeSkillFormDialog();
+      });
+
+      skillFormCancelBtn.addEventListener("click", () => {
+        closeSkillFormDialog();
+      });
+
+      skillFormConfirmBtn.addEventListener("click", () => {
+        confirmSkillFormDialog();
+      });
+
+      skillFormOverlay.addEventListener("click", (event) => {
+        if (event.target === skillFormOverlay) {
+          closeSkillFormDialog();
         }
       });
 
@@ -18924,6 +19357,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const promptInput = event.target.closest("#createTaskPromptInput");
         if (promptInput) {
           state.createTaskForm.prompt = promptInput.value;
+        }
+      });
+
+      skillFormDialogBody.addEventListener("input", (event) => {
+        const textarea = event.target.closest(".skill-form-textarea");
+        if (!textarea) {
+          return;
+        }
+
+        const count = textarea.closest(".skill-form-textarea-wrap")?.querySelector(".skill-form-count");
+        if (count) {
+          count.textContent = `${textarea.value.length}/2000`;
         }
       });
 
@@ -19476,12 +19921,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         state.activeCreatedMenuId = "";
         const action = actionButton.dataset.createdAction;
         if (action === "share") {
-          state.selectedCreatedIds = [card.id];
-          openMarketPage("share");
+          openSkillFormDialog("share", card);
         } else if (action === "publish") {
-          card.publishedToEnterprise = true;
-          showToast("已提交到企业广场。");
-          renderCreatedView();
+          openSkillFormDialog("publish", card);
         } else if (action === "edit") {
           showToast(`已打开 ${card.title} 的编辑界面。`);
         } else if (action === "delete") {
@@ -19514,7 +19956,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       submitEnterpriseBtn.addEventListener("click", () => {
         marketCollections.skill.created.forEach((card) => {
           if (state.selectedCreatedIds.includes(card.id)) {
-            card.publishedToEnterprise = true;
+            card.publishStatus = "reviewing";
+            card.publishedToEnterprise = false;
+            schedulePublishReviewCompletion(card);
           }
         });
         showToast("已提交至企业广场，请耐心等待审核。");
