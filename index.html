@@ -9025,6 +9025,269 @@
       .icon-fill {
         fill: currentColor;
       }
+
+      /* ── Onboarding Guide Modal ── */
+      .onboarding-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(12px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .onboarding-overlay.visible {
+        opacity: 1;
+      }
+
+      .onboarding-dialog {
+        position: relative;
+        width: 600px;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow:
+          0 32px 80px rgba(15, 23, 42, 0.22),
+          0 8px 24px rgba(15, 23, 42, 0.1);
+        overflow: hidden;
+        transform: translateY(30px) scale(0.96);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .onboarding-overlay.visible .onboarding-dialog {
+        transform: translateY(0) scale(1);
+      }
+
+      .onboarding-hero-img {
+        width: 100%;
+        height: 330px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .onboarding-welcome {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .onboarding-body {
+        padding: 0;
+      }
+
+      .onboarding-welcome-copy {
+        position: absolute;
+        left: 24px;
+        top: 122px;
+        max-width: 250px;
+      }
+
+      .onboarding-welcome-title {
+        margin: 0;
+        font-size: 20px;
+        line-height: 28px;
+        font-weight: 400;
+        color: #7341de;
+        text-align: left;
+      }
+
+      .onboarding-welcome-desc {
+        margin: 12px 0 0;
+        font-size: 16px;
+        line-height: 22px;
+        color: #181c25;
+        text-align: left;
+        white-space: pre-line;
+      }
+
+      .onboarding-actions {
+        min-height: 90px;
+        padding: 18px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 16px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(4px);
+      }
+
+      .onboarding-btn-skip {
+        height: 44px;
+        min-width: 68px;
+        padding: 0 17px;
+        border: 1px solid #e7e9f2;
+        border-radius: 8px;
+        background: #fff;
+        color: #1f2533;
+        font-size: 16px;
+        line-height: 44px;
+        cursor: pointer;
+        transition: background 0.18s ease, border-color 0.18s ease;
+      }
+
+      .onboarding-btn-skip:hover {
+        background: #f7f8fc;
+        border-color: #c1c5ce;
+      }
+
+      .onboarding-btn-start {
+        height: 44px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #4f68ff 0.12%, #8048ff 100.09%);
+        color: #fff;
+        font-size: 16px;
+        line-height: 44px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+      }
+
+      .onboarding-btn-start:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      /* ── Step form ── */
+      .onboarding-step {
+        display: none;
+        flex-direction: column;
+      }
+
+      .onboarding-step.active {
+        display: flex;
+      }
+
+      .onboarding-step-header {
+        padding: 28px 36px 0;
+      }
+
+      .onboarding-step-progress {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .onboarding-step-dot {
+        width: 32px;
+        height: 4px;
+        border-radius: 2px;
+        background: #e5e7eb;
+        transition: background 0.25s ease;
+      }
+
+      .onboarding-step-dot.done {
+        background: linear-gradient(135deg, #6c3ce0 0%, #455eee 100%);
+      }
+
+      .onboarding-step-dot.current {
+        background: linear-gradient(135deg, #6c3ce0 0%, #455eee 100%);
+      }
+
+      .onboarding-step-count {
+        margin: 16px 0 0;
+        font-size: 12px;
+        line-height: 18px;
+        color: #91959e;
+      }
+
+      .onboarding-step-body {
+        padding: 8px 36px 32px;
+      }
+
+      .onboarding-step-question {
+        margin: 0;
+        font-size: 18px;
+        line-height: 28px;
+        font-weight: 700;
+        color: #181c25;
+      }
+
+      .onboarding-step-hint {
+        margin: 8px 0 0;
+        font-size: 13px;
+        line-height: 20px;
+        color: #91959e;
+      }
+
+      .onboarding-step-input {
+        width: 100%;
+        height: 48px;
+        margin-top: 20px;
+        padding: 0 16px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fafbfc;
+        font-size: 14px;
+        line-height: 48px;
+        color: #181c25;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .onboarding-step-input::placeholder {
+        color: #bfc3cc;
+      }
+
+      .onboarding-step-input:focus {
+        border-color: #6c3ce0;
+        box-shadow: 0 0 0 3px rgba(108, 60, 224, 0.1);
+        background: #fff;
+      }
+
+      .onboarding-step-actions {
+        margin-top: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .onboarding-btn-prev {
+        height: 40px;
+        padding: 0 20px;
+        border: 1px solid #dde2eb;
+        border-radius: 8px;
+        background: #fff;
+        color: #545861;
+        font-size: 14px;
+        line-height: 40px;
+        cursor: pointer;
+        transition: background 0.18s ease;
+      }
+
+      .onboarding-btn-prev:hover {
+        background: #f7f8fc;
+      }
+
+      .onboarding-btn-next {
+        height: 40px;
+        padding: 0 24px;
+        border: 0;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #6c3ce0 0%, #455eee 100%);
+        color: #fff;
+        font-size: 14px;
+        line-height: 40px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+      }
+
+      .onboarding-btn-next:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      /* ── Confetti ── */
+      .confetti-canvas {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
@@ -9096,7 +9359,7 @@
                 <path class="icon-stroke" d="M3 6.2h8"></path>
               </svg>
             </button>
-            <button class="topbar-icon-btn" type="button" aria-label="帮助">
+            <button class="topbar-icon-btn" id="openOnboardingBtn" type="button" aria-label="帮助">
               <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
                 <circle class="icon-stroke" cx="7" cy="7" r="5"></circle>
                 <path class="icon-stroke" d="M5.9 5.5a1.3 1.3 0 0 1 2.4.7c0 1-1.3 1.1-1.3 2"></path>
@@ -10955,6 +11218,113 @@
         <div class="market-toast" id="marketToast" role="status" aria-live="polite"></div>
       </div>
     </div>
+
+    <!-- ── Onboarding Guide Modal ── -->
+    <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="初始化引导" style="display:none;">
+      <div class="onboarding-dialog" id="onboardingDialog">
+        <!-- Welcome screen -->
+        <div class="onboarding-welcome" id="onboardingWelcome">
+          <img class="onboarding-hero-img" src="./images/guideimg.png" alt="ShareClaw 引导页" onerror="this.style.background='linear-gradient(135deg,#eef3ff 0%,#ffffff 100%)';this.style.height='330px';" />
+          <div class="onboarding-body">
+            <div class="onboarding-welcome-copy">
+              <h2 class="onboarding-welcome-title">ShareClaw is Coming！</h2>
+              <p class="onboarding-welcome-desc">完成我的身份配置，
+方便后续更好地配合您工作。</p>
+            </div>
+            <div class="onboarding-actions">
+              <button class="onboarding-btn-skip" id="onboardingSkipBtn" type="button">跳过，稍后在对话中补充</button>
+              <button class="onboarding-btn-start" id="onboardingStartBtn" type="button">开始初始化设置</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step screens -->
+        <div class="onboarding-step" id="onboardingStep1" data-step="1">
+          <div class="onboarding-step-header">
+            <div class="onboarding-step-progress">
+              <span class="onboarding-step-dot current"></span>
+              <span class="onboarding-step-dot"></span>
+              <span class="onboarding-step-dot"></span>
+              <span class="onboarding-step-dot"></span>
+            </div>
+            <p class="onboarding-step-count">第 1/4 步</p>
+          </div>
+          <div class="onboarding-step-body">
+            <h3 class="onboarding-step-question">您希望怎么称呼我呢？</h3>
+            <p class="onboarding-step-hint">给我起个名字吧，比如"小助"、"Claw"之类的都可以</p>
+            <input class="onboarding-step-input" id="onboardingInput1" type="text" placeholder="请输入称呼..." autocomplete="off" />
+            <div class="onboarding-step-actions">
+              <button class="onboarding-btn-prev" id="onboardingPrev1" type="button">上一步</button>
+              <button class="onboarding-btn-next" id="onboardingNext1" type="button">下一步</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding-step" id="onboardingStep2" data-step="2">
+          <div class="onboarding-step-header">
+            <div class="onboarding-step-progress">
+              <span class="onboarding-step-dot done"></span>
+              <span class="onboarding-step-dot current"></span>
+              <span class="onboarding-step-dot"></span>
+              <span class="onboarding-step-dot"></span>
+            </div>
+            <p class="onboarding-step-count">第 2/4 步</p>
+          </div>
+          <div class="onboarding-step-body">
+            <h3 class="onboarding-step-question">您希望我的定位是什么？</h3>
+            <p class="onboarding-step-hint">比如助手、搭档、管家、数字分身、影子幕僚都可以</p>
+            <input class="onboarding-step-input" id="onboardingInput2" type="text" placeholder="请输入定位..." autocomplete="off" />
+            <div class="onboarding-step-actions">
+              <button class="onboarding-btn-prev" id="onboardingPrev2" type="button">上一步</button>
+              <button class="onboarding-btn-next" id="onboardingNext2" type="button">下一步</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding-step" id="onboardingStep3" data-step="3">
+          <div class="onboarding-step-header">
+            <div class="onboarding-step-progress">
+              <span class="onboarding-step-dot done"></span>
+              <span class="onboarding-step-dot done"></span>
+              <span class="onboarding-step-dot current"></span>
+              <span class="onboarding-step-dot"></span>
+            </div>
+            <p class="onboarding-step-count">第 3/4 步</p>
+          </div>
+          <div class="onboarding-step-body">
+            <h3 class="onboarding-step-question">您偏好我是什么沟通风格？</h3>
+            <p class="onboarding-step-hint">比如严谨简洁、温暖周到、活泼有趣之类的都可以</p>
+            <input class="onboarding-step-input" id="onboardingInput3" type="text" placeholder="请输入沟通风格..." autocomplete="off" />
+            <div class="onboarding-step-actions">
+              <button class="onboarding-btn-prev" id="onboardingPrev3" type="button">上一步</button>
+              <button class="onboarding-btn-next" id="onboardingNext3" type="button">下一步</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding-step" id="onboardingStep4" data-step="4">
+          <div class="onboarding-step-header">
+            <div class="onboarding-step-progress">
+              <span class="onboarding-step-dot done"></span>
+              <span class="onboarding-step-dot done"></span>
+              <span class="onboarding-step-dot done"></span>
+              <span class="onboarding-step-dot current"></span>
+            </div>
+            <p class="onboarding-step-count">第 4/4 步</p>
+          </div>
+          <div class="onboarding-step-body">
+            <h3 class="onboarding-step-question">我该怎么称呼您比较合适？</h3>
+            <p class="onboarding-step-hint">告诉我您希望被怎么称呼，比如姓名、昵称或职称</p>
+            <input class="onboarding-step-input" id="onboardingInput4" type="text" placeholder="请输入您的称呼..." autocomplete="off" />
+            <div class="onboarding-step-actions">
+              <button class="onboarding-btn-prev" id="onboardingPrev4" type="button">上一步</button>
+              <button class="onboarding-btn-next" id="onboardingFinishBtn" type="button">完成设置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <canvas class="confetti-canvas" id="confettiCanvas" style="display:none;"></canvas>
 
     <script>
       const agentMenuItems = [
@@ -19552,6 +19922,196 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       renderExposedMenus();
       renderTaskPage();
       renderMainPanels();
+
+      /* ── Onboarding Guide Logic ── */
+      (function initOnboarding() {
+        const ONBOARDING_KEY = "shareclaw-onboarding-done-v1";
+        const overlay = document.getElementById("onboardingOverlay");
+        const openOnboardingBtn = document.getElementById("openOnboardingBtn");
+        const welcome = document.getElementById("onboardingWelcome");
+        const skipBtn = document.getElementById("onboardingSkipBtn");
+        const startBtn = document.getElementById("onboardingStartBtn");
+        const finishBtn = document.getElementById("onboardingFinishBtn");
+        const confettiCanvas = document.getElementById("confettiCanvas");
+        const steps = [
+          document.getElementById("onboardingStep1"),
+          document.getElementById("onboardingStep2"),
+          document.getElementById("onboardingStep3"),
+          document.getElementById("onboardingStep4")
+        ];
+        const inputs = [
+          document.getElementById("onboardingInput1"),
+          document.getElementById("onboardingInput2"),
+          document.getElementById("onboardingInput3"),
+          document.getElementById("onboardingInput4")
+        ];
+
+        let currentStep = 0;
+
+        function showWelcome() {
+          welcome.style.display = "";
+          steps.forEach((s) => (s.style.display = "none"));
+          steps.forEach((s) => s.classList.remove("active"));
+          currentStep = 0;
+        }
+
+        function openOnboarding() {
+          showWelcome();
+          overlay.style.display = "flex";
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              overlay.classList.add("visible");
+            });
+          });
+        }
+
+        function showStep(idx) {
+          welcome.style.display = "none";
+          steps.forEach((s, i) => {
+            if (i === idx) {
+              s.style.display = "flex";
+              s.classList.add("active");
+            } else {
+              s.style.display = "none";
+              s.classList.remove("active");
+            }
+          });
+          currentStep = idx;
+          const input = inputs[idx];
+          if (input) {
+            setTimeout(() => input.focus(), 80);
+          }
+        }
+
+        function closeOnboarding(withConfetti) {
+          localStorage.setItem(ONBOARDING_KEY, "1");
+          overlay.classList.remove("visible");
+          if (withConfetti) {
+            launchConfetti();
+          }
+          setTimeout(() => {
+            overlay.style.display = "none";
+          }, 350);
+        }
+
+        if (!localStorage.getItem(ONBOARDING_KEY)) {
+          openOnboarding();
+        }
+
+        openOnboardingBtn?.addEventListener("click", () => {
+          openOnboarding();
+        });
+
+        skipBtn.addEventListener("click", () => closeOnboarding(false));
+
+        startBtn.addEventListener("click", () => showStep(0));
+
+        document.getElementById("onboardingPrev1").addEventListener("click", () => showWelcome());
+        document.getElementById("onboardingNext1").addEventListener("click", () => showStep(1));
+
+        document.getElementById("onboardingPrev2").addEventListener("click", () => showStep(0));
+        document.getElementById("onboardingNext2").addEventListener("click", () => showStep(2));
+
+        document.getElementById("onboardingPrev3").addEventListener("click", () => showStep(1));
+        document.getElementById("onboardingNext3").addEventListener("click", () => showStep(3));
+
+        document.getElementById("onboardingPrev4").addEventListener("click", () => showStep(2));
+
+        finishBtn.addEventListener("click", () => closeOnboarding(true));
+
+        inputs.forEach((input, idx) => {
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              if (idx < 3) {
+                showStep(idx + 1);
+              } else {
+                closeOnboarding(true);
+              }
+            }
+          });
+        });
+
+        /* ── Confetti Animation ── */
+        function launchConfetti() {
+          confettiCanvas.style.display = "block";
+          const ctx = confettiCanvas.getContext("2d");
+          confettiCanvas.width = window.innerWidth;
+          confettiCanvas.height = window.innerHeight;
+
+          const colors = [
+            "#ff6b6b", "#ffd93d", "#6bcb77", "#4d96ff",
+            "#ff8cff", "#ff8000", "#6c3ce0", "#455eee",
+            "#00b7c5", "#ff522a", "#30c776", "#ffb400"
+          ];
+
+          const pieces = [];
+          for (let i = 0; i < 150; i++) {
+            pieces.push({
+              x: Math.random() * confettiCanvas.width,
+              y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+              w: Math.random() * 10 + 5,
+              h: Math.random() * 6 + 3,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              vx: (Math.random() - 0.5) * 4,
+              vy: Math.random() * 3 + 2,
+              rot: Math.random() * 360,
+              rotSpeed: (Math.random() - 0.5) * 10,
+              opacity: 1,
+              shape: Math.random() > 0.5 ? "rect" : "ribbon"
+            });
+          }
+
+          let frame = 0;
+          const maxFrames = 180;
+
+          function animate() {
+            frame++;
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+            if (frame > maxFrames * 0.6) {
+              const fadeRatio = 1 - (frame - maxFrames * 0.6) / (maxFrames * 0.4);
+              pieces.forEach((p) => (p.opacity = Math.max(0, fadeRatio)));
+            }
+
+            pieces.forEach((p) => {
+              p.x += p.vx;
+              p.y += p.vy;
+              p.rot += p.rotSpeed;
+              p.vy += 0.04;
+              p.vx *= 0.99;
+
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate((p.rot * Math.PI) / 180);
+              ctx.globalAlpha = p.opacity;
+
+              if (p.shape === "ribbon") {
+                ctx.beginPath();
+                ctx.moveTo(-p.w / 2, 0);
+                ctx.quadraticCurveTo(0, -p.h, p.w / 2, 0);
+                ctx.quadraticCurveTo(0, p.h, -p.w / 2, 0);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+              } else {
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+              }
+
+              ctx.restore();
+            });
+
+            if (frame < maxFrames) {
+              requestAnimationFrame(animate);
+            } else {
+              ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+              confettiCanvas.style.display = "none";
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }
+      })();
     </script>
   </body>
 </html>

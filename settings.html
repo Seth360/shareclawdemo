@@ -3771,7 +3771,6 @@
 
       .settings-knowledge-card {
         position: relative;
-        min-height: 128px;
         padding: 12px;
         border: 1px solid transparent;
         border-radius: 8px;
@@ -3876,13 +3875,187 @@
         border-top-right-radius: 8px;
       }
 
-      .settings-knowledge-check span {
+      .settings-knowledge-check svg {
         position: relative;
         z-index: 1;
+        top: -1px;
+        left: 1px;
+        width: 16px;
+        height: 16px;
+        display: block;
       }
 
       .settings-knowledge-card.selected .settings-knowledge-check {
         display: inline-flex;
+      }
+
+      .settings-knowledge-tabbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .settings-knowledge-tabs {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 8px;
+        background: #f2f3f5;
+      }
+
+      .settings-knowledge-tab {
+        min-width: 60px;
+        height: 26px;
+        padding: 4px 6px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #545861;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+        transition:
+          background-color 0.18s ease,
+          color 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+
+      .settings-knowledge-tab.active {
+        background: #fff;
+        color: #181c25;
+        box-shadow: 0 0 0 1px rgba(24, 28, 37, 0.04);
+      }
+
+      .settings-knowledge-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #976aeb;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .settings-knowledge-upload svg {
+        width: 16px;
+        height: 16px;
+        display: block;
+      }
+
+      .settings-local-docs {
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .settings-local-docs-header,
+      .settings-local-doc-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 120px 90px 60px;
+        gap: 24px;
+        align-items: center;
+      }
+
+      .settings-local-docs-header {
+        min-height: 36px;
+        padding: 0 12px 0 18px;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .settings-local-docs-header span {
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .settings-local-docs-body {
+        width: 100%;
+      }
+
+      .settings-local-doc-row {
+        min-height: 54px;
+        padding: 0 12px 0 18px;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .settings-local-doc-row:last-child {
+        border-bottom: 0;
+      }
+
+      .settings-local-doc-name {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .settings-local-doc-fileicon {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        flex: 0 0 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        line-height: 1;
+        font-weight: 700;
+        border: 1px solid currentColor;
+        background: #fff;
+      }
+
+      .settings-local-doc-fileicon.doc {
+        color: #6ea8ff;
+      }
+
+      .settings-local-doc-fileicon.ppt {
+        color: #ffb36c;
+      }
+
+      .settings-local-doc-title {
+        min-width: 0;
+        color: #181c25;
+        font-size: 14px;
+        line-height: 22px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .settings-local-doc-time,
+      .settings-local-doc-owner {
+        color: rgba(0, 0, 0, 0.35);
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .settings-local-doc-action {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: #545861;
+        transition:
+          background-color 0.18s ease,
+          color 0.18s ease;
+      }
+
+      .settings-local-doc-action:hover,
+      .settings-local-doc-action:focus-visible {
+        color: #545861;
+      }
+
+      .settings-local-doc-action svg {
+        width: 16px;
+        height: 16px;
+        display: block;
       }
 
       .settings-select,
@@ -10159,6 +10332,20 @@
 
                       <div class="settings-knowledge-divider hidden" id="knowledgeCardsDivider" aria-hidden="true"></div>
 
+                      <div class="settings-knowledge-tabbar hidden" id="knowledgeTabbar">
+                        <div class="settings-knowledge-tabs" role="tablist" aria-label="个人知识空间内容切换">
+                          <button class="settings-knowledge-tab active" id="knowledgeLibraryTab" type="button" role="tab" aria-selected="true" data-knowledge-tab="library">知识库</button>
+                          <button class="settings-knowledge-tab" id="knowledgeLocalTab" type="button" role="tab" aria-selected="false" data-knowledge-tab="local">本地文档</button>
+                        </div>
+                        <button class="settings-knowledge-upload hidden" id="knowledgeUploadBtn" type="button">
+                          <svg viewBox="0 0 16 16" aria-hidden="true">
+                            <path fill="currentColor" d="M8 1.5a.75.75 0 0 1 .75.75v4.5h4.5a.75.75 0 0 1 0 1.5h-4.5v4.5a.75.75 0 0 1-1.5 0v-4.5h-4.5a.75.75 0 0 1 0-1.5h4.5v-4.5A.75.75 0 0 1 8 1.5Z"></path>
+                          </svg>
+                          <span>本地上传</span>
+                        </button>
+                        <input id="knowledgeUploadInput" class="hidden" type="file" accept=".doc,.docx,.pdf,.ppt,.pptx,.txt,.md" multiple />
+                      </div>
+
                       <div class="settings-knowledge-grid hidden" id="personalKnowledgeGrid">
                         <button class="settings-knowledge-card" type="button" data-knowledge-card="personal-1">
                           <span class="settings-knowledge-icon" aria-hidden="true">
@@ -10169,10 +10356,12 @@
                           <span class="settings-knowledge-copy">
                             <h4 class="settings-knowledge-title">我的知识</h4>
                             <p class="settings-knowledge-desc">个人化的知识管理系统，用于沉淀日常项目资料、客户洞察和复盘方法。</p>
-                            <span class="settings-knowledge-meta"><span class="settings-knowledge-meta-label">适用范围</span><span>企业外不可见</span></span>
-                            <span class="settings-knowledge-meta"><span>史文静</span><span style="color:#91959e;">｜</span><span>2026-04-27</span></span>
                           </span>
-                          <span class="settings-knowledge-check" aria-hidden="true"><span>✓</span></span>
+                          <span class="settings-knowledge-check" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.66827 12.4439L3 8.60135L4 7.60135L6.66827 9.44391L12.5693 5L13.5693 6L6.66827 12.4439Z" fill="white"></path>
+                            </svg>
+                          </span>
                         </button>
 
                         <button class="settings-knowledge-card" type="button" data-knowledge-card="personal-2">
@@ -10184,10 +10373,12 @@
                           <span class="settings-knowledge-copy">
                             <h4 class="settings-knowledge-title">销售打法库</h4>
                             <p class="settings-knowledge-desc">汇总行业话术、异议处理脚本和成功案例，帮助快速复用高效销售打法。</p>
-                            <span class="settings-knowledge-meta"><span class="settings-knowledge-meta-label">适用范围</span><span>仅个人可编辑</span></span>
-                            <span class="settings-knowledge-meta"><span>周舟</span><span style="color:#91959e;">｜</span><span>2026-05-06</span></span>
                           </span>
-                          <span class="settings-knowledge-check" aria-hidden="true"><span>✓</span></span>
+                          <span class="settings-knowledge-check" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.66827 12.4439L3 8.60135L4 7.60135L6.66827 9.44391L12.5693 5L13.5693 6L6.66827 12.4439Z" fill="white"></path>
+                            </svg>
+                          </span>
                         </button>
 
                         <button class="settings-knowledge-card" type="button" data-knowledge-card="personal-3">
@@ -10199,11 +10390,23 @@
                           <span class="settings-knowledge-copy">
                             <h4 class="settings-knowledge-title">客户研究备忘</h4>
                             <p class="settings-knowledge-desc">保存重点客户的组织结构、关键人偏好和历史跟进摘要，便于长期追踪。</p>
-                            <span class="settings-knowledge-meta"><span class="settings-knowledge-meta-label">适用范围</span><span>个人与直属主管可见</span></span>
-                            <span class="settings-knowledge-meta"><span>林语</span><span style="color:#91959e;">｜</span><span>2026-05-12</span></span>
                           </span>
-                          <span class="settings-knowledge-check" aria-hidden="true"><span>✓</span></span>
+                          <span class="settings-knowledge-check" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.66827 12.4439L3 8.60135L4 7.60135L6.66827 9.44391L12.5693 5L13.5693 6L6.66827 12.4439Z" fill="white"></path>
+                            </svg>
+                          </span>
                         </button>
+                      </div>
+
+                      <div class="settings-local-docs hidden" id="localDocsPanel">
+                        <div class="settings-local-docs-header">
+                          <span>名称</span>
+                          <span>上传时间</span>
+                          <span>操作人</span>
+                          <span>操作</span>
+                        </div>
+                        <div class="settings-local-docs-body" id="localDocsList"></div>
                       </div>
                     </div>
                   </section>
@@ -11032,7 +11235,15 @@
           roleDefinition: "",
           userProfilePrompt: "",
           personalKnowledgeEnabled: false,
-          personalKnowledgeSelections: []
+          personalKnowledgeSelections: [],
+          personalKnowledgeTab: "library",
+          personalLocalDocs: [
+            { id: "local-doc-1", name: "AI 销售建议 CRM 模型设计方案", uploadedAt: "18:29", owner: "夕宏", type: "doc" },
+            { id: "local-doc-2", name: "CRM平台产品经理本周周报", uploadedAt: "4月17日 16:09", owner: "夕宏", type: "doc" },
+            { id: "local-doc-3", name: "第三代CRM浪潮下的战略对策建议", uploadedAt: "4月17日 15:19", owner: "夕宏", type: "ppt" },
+            { id: "local-doc-4", name: "播客内容解读：AI跳出聊天框与Generative UI变革", uploadedAt: "3月29日 18:39", owner: "夕宏", type: "ppt" },
+            { id: "local-doc-5", name: "Composer 2 训练投入对比PPT", uploadedAt: "3月25日 08:11", owner: "夕宏", type: "ppt" }
+          ]
         };
       }
 
@@ -11277,7 +11488,14 @@
       const userLengthSelect = document.getElementById("userLengthSelect");
       const userTerminologySelect = document.getElementById("userTerminologySelect");
       const personalKnowledgeToggle = document.getElementById("personalKnowledgeToggle");
+      const knowledgeTabbar = document.getElementById("knowledgeTabbar");
+      const knowledgeLibraryTab = document.getElementById("knowledgeLibraryTab");
+      const knowledgeLocalTab = document.getElementById("knowledgeLocalTab");
+      const knowledgeUploadBtn = document.getElementById("knowledgeUploadBtn");
+      const knowledgeUploadInput = document.getElementById("knowledgeUploadInput");
       const personalKnowledgeGrid = document.getElementById("personalKnowledgeGrid");
+      const localDocsPanel = document.getElementById("localDocsPanel");
+      const localDocsList = document.getElementById("localDocsList");
       const knowledgeCardsDivider = document.getElementById("knowledgeCardsDivider");
       const personalKnowledgeCards = Array.from(document.querySelectorAll("[data-knowledge-card]"));
       const messengerShell = document.getElementById("messengerShell");
@@ -13173,6 +13391,37 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return state.aiProfile.avatar || DEFAULT_AI_AVATAR;
       }
 
+      function getPersonalKnowledgeTab() {
+        return state.aiProfile.personalKnowledgeTab === "local" ? "local" : "library";
+      }
+
+      function formatLocalDocIcon(type) {
+        return type === "ppt" ? "P" : "DOC";
+      }
+
+      function renderLocalDocs() {
+        if (!localDocsList) {
+          return;
+        }
+
+        const docs = Array.isArray(state.aiProfile.personalLocalDocs) ? state.aiProfile.personalLocalDocs : [];
+        localDocsList.innerHTML = docs.map((doc) => `
+          <div class="settings-local-doc-row">
+            <div class="settings-local-doc-name">
+              <span class="settings-local-doc-fileicon ${escapeHtml(doc.type || "doc")}">${escapeHtml(formatLocalDocIcon(doc.type || "doc"))}</span>
+              <span class="settings-local-doc-title">${escapeHtml(doc.name || "")}</span>
+            </div>
+            <span class="settings-local-doc-time">${escapeHtml(doc.uploadedAt || "")}</span>
+            <span class="settings-local-doc-owner">${escapeHtml(doc.owner || "")}</span>
+            <button class="settings-local-doc-action" type="button" data-local-doc-delete="${escapeHtml(doc.id || "")}" aria-label="删除 ${escapeHtml(doc.name || "文档")}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10.6666 1.33301C11.0006 1.33301 11.2776 1.58001 11.3266 1.90101L11.3326 2.00001V3.33301H13.9996C14.1765 3.33301 14.3461 3.40328 14.4712 3.52837C14.5963 3.65345 14.6666 3.82311 14.6666 4.00001C14.6666 4.17691 14.5963 4.34656 14.4712 4.47165C14.3461 4.59673 14.1765 4.66701 13.9996 4.66701H13.3316L13.3326 14C13.3327 14.1598 13.2754 14.3144 13.1711 14.4355C13.0669 14.5566 12.9226 14.6363 12.7646 14.66L12.6666 14.667H3.33258C3.17277 14.6671 3.01823 14.6098 2.8971 14.5056C2.77597 14.4013 2.6963 14.257 2.67258 14.099L2.66758 14V4.66601H1.99958C1.82728 4.65933 1.66426 4.58619 1.54472 4.46193C1.42517 4.33767 1.3584 4.17194 1.3584 3.99951C1.3584 3.82708 1.42517 3.66135 1.54472 3.53709C1.66426 3.41282 1.82728 3.33968 1.99958 3.33301H4.66558V2.00001C4.66558 1.66501 4.91258 1.38801 5.23458 1.34001L5.33258 1.33301H10.6666ZM11.9996 4.66701H3.99958V13.333H11.9996V4.66701ZM5.99958 6.66701C6.36758 6.66701 6.66658 6.96501 6.66658 7.33301V10.667C6.66658 10.8439 6.5963 11.0136 6.47122 11.1386C6.34613 11.2637 6.17648 11.334 5.99958 11.334C5.82268 11.334 5.65302 11.2637 5.52794 11.1386C5.40285 11.0136 5.33258 10.8439 5.33258 10.667V7.33301C5.33258 6.96501 5.63158 6.66701 5.99958 6.66701ZM7.99958 6.66701C8.36758 6.66701 8.66658 6.96501 8.66658 7.33301V10.667C8.66658 10.8439 8.5963 11.0136 8.47122 11.1386C8.34613 11.2637 8.17648 11.334 7.99958 11.334C7.82268 11.334 7.65302 11.2637 7.52794 11.1386C7.40285 11.0136 7.33258 10.8439 7.33258 10.667V7.33301C7.33258 6.96501 7.63158 6.66701 7.99958 6.66701ZM9.99958 6.66701C10.3676 6.66701 10.6666 6.96501 10.6666 7.33301V10.667C10.6666 10.8439 10.5963 11.0136 10.4712 11.1386C10.3461 11.2637 10.1765 11.334 9.99958 11.334C9.82268 11.334 9.65302 11.2637 9.52794 11.1386C9.40285 11.0136 9.33258 10.8439 9.33258 10.667V7.33301C9.33258 6.96501 9.63158 6.66701 9.99958 6.66701ZM9.99958 2.66701H5.99958V3.33301H9.99958V2.66701Z" fill="#91959E"></path>
+              </svg>
+            </button>
+          </div>
+        `).join("");
+      }
+
       function syncAiProfileForm() {
         if (!aiRobotNameInput) {
           return;
@@ -13198,12 +13447,24 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function renderPersonalKnowledgeState() {
         const enabled = state.aiProfile.personalKnowledgeEnabled === true;
         personalKnowledgeGrid.classList.toggle("hidden", !enabled);
+        knowledgeTabbar.classList.toggle("hidden", !enabled);
         knowledgeCardsDivider.classList.toggle("hidden", !enabled);
+        localDocsPanel.classList.toggle("hidden", !enabled);
         const selectedIds = Array.isArray(state.aiProfile.personalKnowledgeSelections) ? state.aiProfile.personalKnowledgeSelections : [];
+        const currentTab = getPersonalKnowledgeTab();
 
         personalKnowledgeCards.forEach((card) => {
           card.classList.toggle("selected", selectedIds.includes(card.dataset.knowledgeCard || ""));
         });
+
+        knowledgeLibraryTab.classList.toggle("active", currentTab === "library");
+        knowledgeLibraryTab.setAttribute("aria-selected", currentTab === "library" ? "true" : "false");
+        knowledgeLocalTab.classList.toggle("active", currentTab === "local");
+        knowledgeLocalTab.setAttribute("aria-selected", currentTab === "local" ? "true" : "false");
+        personalKnowledgeGrid.classList.toggle("hidden", !enabled || currentTab !== "library");
+        localDocsPanel.classList.toggle("hidden", !enabled || currentTab !== "local");
+        knowledgeUploadBtn.classList.toggle("hidden", !enabled || currentTab !== "local");
+        renderLocalDocs();
       }
 
       function applyAiProfileChanges(partialProfile = {}, options = {}) {
@@ -18107,6 +18368,47 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         renderPersonalKnowledgeState();
       });
 
+      [knowledgeLibraryTab, knowledgeLocalTab].forEach((tabButton) => {
+        tabButton.addEventListener("click", () => {
+          const nextTab = tabButton.dataset.knowledgeTab === "local" ? "local" : "library";
+          applyAiProfileChanges({ personalKnowledgeTab: nextTab }, { skipSync: true });
+          renderPersonalKnowledgeState();
+        });
+      });
+
+      knowledgeUploadBtn.addEventListener("click", () => {
+        knowledgeUploadInput.click();
+      });
+
+      knowledgeUploadInput.addEventListener("change", () => {
+        const files = Array.from(knowledgeUploadInput.files || []);
+        if (!files.length) {
+          return;
+        }
+
+        const currentDocs = Array.isArray(state.aiProfile.personalLocalDocs) ? state.aiProfile.personalLocalDocs : [];
+        const now = new Date();
+        const stamp = `${now.getMonth() + 1}月${now.getDate()}日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+        const nextDocs = [
+          ...files.map((file, index) => {
+            const ext = (file.name.split(".").pop() || "").toLowerCase();
+            const type = ext === "ppt" || ext === "pptx" ? "ppt" : "doc";
+            return {
+              id: `local-doc-upload-${Date.now()}-${index}`,
+              name: file.name,
+              uploadedAt: stamp,
+              owner: "当前用户",
+              type
+            };
+          }),
+          ...currentDocs
+        ];
+
+        applyAiProfileChanges({ personalLocalDocs: nextDocs }, { skipSync: true });
+        renderPersonalKnowledgeState();
+        knowledgeUploadInput.value = "";
+      });
+
       personalKnowledgeCards.forEach((card) => {
         card.addEventListener("click", () => {
           const cardId = card.dataset.knowledgeCard || "";
@@ -18117,6 +18419,20 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           applyAiProfileChanges({ personalKnowledgeSelections: nextSelections }, { skipSync: true });
           renderPersonalKnowledgeState();
         });
+      });
+
+      localDocsList.addEventListener("click", (event) => {
+        const deleteButton = event.target.closest("[data-local-doc-delete]");
+        if (!deleteButton) {
+          return;
+        }
+
+        const docId = deleteButton.dataset.localDocDelete || "";
+        const currentDocs = Array.isArray(state.aiProfile.personalLocalDocs) ? state.aiProfile.personalLocalDocs : [];
+        applyAiProfileChanges({
+          personalLocalDocs: currentDocs.filter((doc) => doc.id !== docId)
+        }, { skipSync: true });
+        renderPersonalKnowledgeState();
       });
 
       settingsShell.addEventListener("scroll", () => {
