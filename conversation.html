@@ -11870,7 +11870,7 @@
                     <circle class="icon-stroke" cx="8" cy="8" r="5.6"></circle>
                     <path class="icon-stroke" d="m5.4 8.1 1.7 1.7 3.5-3.8"></path>
                   </svg>
-                  <span class="sidebar-row-text">任务</span>
+                  <span class="sidebar-row-text">自动化</span>
                 </button>
 
                 <button class="sidebar-row" id="marketSidebarRow" type="button" data-panel="market">
@@ -13899,7 +13899,8 @@
           launchAction: isConversationEntry ? params.get("launch") || "" : "",
           launchType: isConversationEntry ? params.get("type") || "" : "",
           launchLabel: isConversationEntry ? params.get("label") || "" : "",
-          launchPrompt: isConversationEntry ? params.get("prompt") || "" : ""
+          launchPrompt: isConversationEntry ? params.get("prompt") || "" : "",
+          launchAgent: isConversationEntry ? params.get("type") || "" : ""
         };
       }
 
@@ -20297,6 +20298,52 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }, AI_REPLY_THINKING_DELAY);
       }
 
+      function openTaskRunConversation(promptText, taskTitle = "", agentLabel = "") {
+        if (!isConversationPage()) {
+          navigateToConversation({
+            launch: "mock-ai-task",
+            prompt: promptText,
+            label: taskTitle,
+            type: agentLabel
+          });
+          return;
+        }
+
+        const now = new Date();
+        const profile = pickMockCustomerProfile(promptText);
+        const sessionId = `mock-task-${now.getTime()}`;
+        const historyTitle = taskTitle ? `任务执行 · ${taskTitle}` : `任务执行 · ${deriveConversationTitleFromPrompt(promptText)}`;
+        const session = {
+          id: sessionId,
+          historyTitle,
+          prompt: promptText,
+          time: formatChatTime(now),
+          stage: "thinking",
+          source: "mock-ai-task",
+          customerProfile: profile,
+          generatedDocId: "",
+          taskTitle,
+          agentLabel
+        };
+
+        conversationSessions[sessionId] = session;
+        clearTimeout(chatReplyTimer);
+        state.mainPanel = "home";
+        state.homeView = "chat";
+        state.currentChannel = "claw";
+        state.homeInsightRailEnabled = false;
+        state.activeChatId = sessionId;
+        upsertConversationHistory(sessionId);
+        setSidebarActive(null);
+        renderMainPanels();
+        setEditorText("");
+
+        chatReplyTimer = setTimeout(() => {
+          session.stage = "reply";
+          renderMainPanels();
+        }, AI_REPLY_THINKING_DELAY);
+      }
+
       function renderSkillResultCard(title) {
         const logoText = (title || "技").trim().slice(0, 1).toUpperCase();
         return `
@@ -21118,6 +21165,45 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
+      function renderTaskRunConversation(session) {
+        const profile = session.customerProfile || mockAiCustomerProfiles[0];
+        const taskTitle = session.taskTitle || "自动化任务";
+        const agentLabel = session.agentLabel || "智能体";
+        const ownerName = (profile.owner || "").replace("负责人：", "") || "负责人";
+
+        return `
+          <div class="chat-ai-block">
+            <div class="chat-ai-card">
+              ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+              <p class="chat-ai-title">${escapeHtml(taskTitle)}已执行完成</p>
+              <p class="chat-ai-copy">已按任务提示词自动完成一次执行，本次由 ${escapeHtml(agentLabel)} 输出面向 CRM B 端场景的执行摘要与跟进建议。</p>
+              <div class="chat-ai-section">
+                <p class="chat-ai-section-title">执行摘要</p>
+                ${renderChatBulletList([
+                  `${profile.company} 最近 7 天有效触达频次下降，当前推进节奏低于建议值。`,
+                  `${profile.stage}阶段仍有 1 个关键动作未闭环，建议尽快确认采购或业务侧最新意见。`,
+                  "客户当前异议主要集中在价格说明、交付周期和上线节奏三个方向。"
+                ])}
+              </div>
+              <div class="chat-ai-section">
+                <p class="chat-ai-section-title">建议动作</p>
+                ${renderChatBulletList([
+                  "今天内补发一页价值回顾，强调阶段成果、ROI 和近期推进里程碑。",
+                  `由${ownerName}牵头约 15 分钟同步电话，锁定下一次决策时间点。`,
+                  "把待闭环事项拆成客户动作与内部动作两列，分别标注负责人和完成日期。"
+                ])}
+              </div>
+              ${renderChatToolbar()}
+            </div>
+            <div class="chat-replies">
+              ${renderChatReplyChip("继续补充跟进建议", "mock-follow-up")}
+              ${renderChatReplyChip("重新生成客户简报", "mock-regenerate")}
+              ${renderChatReplyChip("查看 PDF 全文", "mock-open-pdf")}
+            </div>
+          </div>
+        `;
+      }
+
       function renderWeeklyConversation(session) {
         return `
           <div class="chat-ai-block">
@@ -21577,6 +21663,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           content += renderShengquanPocConversation(session);
         } else if (session.id === "haiyue-brief") {
           content += renderHaiyueBriefConversation(session);
+        } else if (session.source === "mock-ai-task") {
+          content += renderTaskRunConversation(session);
         } else if (session.source === "mock-ai") {
           content += renderMockAiConversation(session);
         }
@@ -22425,6 +22513,15 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           openMockAiConversation(initialRouteState.launchPrompt);
+          return;
+        }
+
+        if (initialRouteState.launchAction === "mock-ai-task" && initialRouteState.launchPrompt) {
+          openTaskRunConversation(
+            initialRouteState.launchPrompt,
+            initialRouteState.launchLabel,
+            initialRouteState.launchAgent
+          );
           return;
         }
 
