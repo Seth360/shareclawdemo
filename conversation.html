@@ -870,32 +870,33 @@
         width: 0;
         flex: 0 0 auto;
         margin-right: 0;
-        overflow: hidden;
+        overflow: visible;
         transition:
           width 0.24s ease,
           margin-right 0.24s ease;
       }
 
       .chat-output-panel-shell.open {
-        width: 389px;
-        margin-right: 12px;
+        width: 372px;
+        margin-right: 0;
       }
 
       .chat-output-panel-shell.open.detail {
-        width: var(--chat-output-detail-width, clamp(620px, 56vw, 980px));
+        width: var(--chat-output-detail-width, clamp(560px, 50vw, 860px));
       }
 
       .chat-output-panel {
-        width: 389px;
-        height: 100%;
+        width: 340px;
+        max-height: calc(100% - 32px);
+        margin: 16px;
         padding: 16px 12px;
-        border-left: 1px solid #f2f4fb;
-        border-radius: 0 8px 8px 0;
+        border: 0.5px solid #dee1e8;
+        border-radius: 16px;
         background: #ffffff;
-        box-shadow: 0 0 20px rgba(96, 101, 112, 0.08);
+        box-shadow: 0 0 16px rgba(96, 101, 112, 0.08);
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
         opacity: 0;
         transform: translateX(24px);
         transition:
@@ -909,15 +910,16 @@
       }
 
       .chat-output-panel-shell.open.detail .chat-output-panel {
-        width: 100%;
+        width: calc(100% - 32px);
+        height: calc(100% - 32px);
       }
 
       .chat-output-resize-handle {
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 0;
-        width: 12px;
+        left: -16px;
+        width: 24px;
         z-index: 8;
         cursor: col-resize;
         touch-action: none;
@@ -951,7 +953,7 @@
         align-items: center;
         justify-content: space-between;
         min-height: 35px;
-        padding: 4px;
+        padding: 0 4px;
       }
 
       .chat-output-panel-title {
@@ -1039,6 +1041,10 @@
         min-height: 54px;
         padding: 0 0 0 6px;
         border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .chat-output-section .chat-output-doc-row:last-child {
+        border-bottom: 0;
       }
 
       .chat-output-doc-row.clickable {
@@ -1171,7 +1177,7 @@
       }
 
       .chat-output-section {
-        margin-top: 32px;
+        margin-top: 0;
       }
 
       .chat-output-section:first-child {
@@ -1256,7 +1262,7 @@
         gap: 4px;
         flex: 0 0 auto;
         color: #1f1d1a;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 20px;
         font-weight: 400;
         cursor: pointer;
@@ -1430,7 +1436,7 @@
 
       .chat-output-detail-head {
         min-height: 41px;
-        padding: 6px 4px 6px 8px;
+        padding: 0 4px 6px 8px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -1483,11 +1489,11 @@
         min-height: 0;
         flex: 1 1 auto;
         overflow: auto;
-        padding: 16px 8px 24px;
+        padding: 16px 0 0;
       }
 
       .chat-output-detail-body .doc-preview-shell {
-        max-width: 760px;
+        max-width: 100%;
         margin: 0 auto;
       }
 
@@ -3163,41 +3169,49 @@
       }
 
       .chat-output-entry {
-        position: absolute;
-        top: 18px;
+        position: fixed;
+        top: 66px;
         right: 16px;
-        z-index: 3;
+        z-index: 75;
+        transition: right 0.24s ease;
+      }
+
+      .chat-output-entry.output-open {
+        right: calc(var(--chat-output-entry-offset, 372px) + 8px);
       }
 
       .chat-output-toggle-btn {
         position: relative;
-        width: 16px;
-        height: 16px;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         color: #181c25;
         background: transparent;
-        transition: opacity 0.18s ease;
+        transition:
+          background-color 0.18s ease,
+          opacity 0.18s ease;
       }
 
       .chat-output-toggle-btn:hover,
       .chat-output-toggle-btn:focus-visible,
       .chat-output-toggle-btn.active {
-        opacity: 0.72;
+        background: rgba(24, 28, 37, 0.05);
       }
 
       .chat-output-toggle-btn svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         display: block;
       }
 
       .chat-output-toggle-btn.has-badge::after {
         content: "";
         position: absolute;
-        top: -2px;
-        right: -2px;
+        top: 4px;
+        right: 4px;
         width: 6px;
         height: 6px;
         border-radius: 999px;
@@ -8812,12 +8826,12 @@
 
       .doc-preview-shell {
         display: grid;
-        gap: 20px;
+        gap: 12px;
       }
 
       .doc-preview-hero {
         padding: 24px;
-        border-radius: 24px;
+        border-radius: 16px;
         background:
           radial-gradient(circle at top left, var(--doc-preview-halo, rgba(255, 255, 255, 0.92)), transparent 34%),
           linear-gradient(135deg, var(--doc-preview-tint, #eff5ff), #ffffff 62%);
@@ -8855,8 +8869,8 @@
 
       .doc-preview-title {
         margin: 18px 0 0;
-        font-size: 30px;
-        line-height: 40px;
+        font-size: 26px;
+        line-height: 34px;
         font-weight: 700;
         color: #0f172a;
       }
@@ -8864,18 +8878,18 @@
       .doc-preview-summary {
         margin: 12px 0 0;
         max-width: 760px;
-        font-size: 16px;
-        line-height: 28px;
+        font-size: 14px;
+        line-height: 24px;
         color: #334155;
       }
 
       .doc-preview-page {
         padding: 28px;
-        border-radius: 24px;
+        border-radius: 16px;
         border: 1px solid #eef2f7;
         background: #fff;
         box-shadow:
-          0 18px 42px rgba(15, 23, 42, 0.06),
+          0 12px 28px rgba(15, 23, 42, 0.05),
           0 4px 12px rgba(15, 23, 42, 0.04);
       }
 
@@ -14051,6 +14065,7 @@
       const homeInsightCollapseBtn = document.getElementById("homeInsightCollapseBtn");
       const homeInsightActionButtons = Array.from(document.querySelectorAll("[data-home-insight-session]"));
       const chatFlowShell = document.getElementById("chatFlowShell");
+      const chatOutputEntry = document.querySelector(".chat-output-entry");
       const chatOutputToggleBtn = document.getElementById("chatOutputToggleBtn");
       const chatOutputPanelShell = document.getElementById("chatOutputPanelShell");
       const chatOutputPanel = document.getElementById("chatOutputPanel");
@@ -18319,13 +18334,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           <div class="chat-output-panel-header">
             <div class="chat-output-detail-tabs">
               <div class="chat-output-detail-title static">
-                ${outputArticleIconMarkup()}
                 <span>业务生成结果</span>
               </div>
             </div>
-            <button class="chat-output-panel-close" type="button" data-output-panel-close="true" aria-label="关闭生成结果">
-              ${outputCloseIconMarkup()}
-            </button>
           </div>
           <div class="chat-output-list">
             ${hasAny ? `
@@ -18511,6 +18522,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         state.businessObjectOverlayOpen = false;
         businessObjectOverlay.classList.remove("open");
         businessObjectOverlay.classList.add("closing");
+        renderChatOutputPanel();
         clearTimeout(businessObjectOverlayCloseTimer);
         businessObjectOverlayCloseTimer = setTimeout(() => {
           businessObjectOverlayCloseTimer = null;
@@ -18846,10 +18858,19 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const showStaticDetail = !dynamicTabs && state.outputResultsPanelMode === "detail" && activeRecord?.tab.type === "doc";
         const showDetail = showDynamicDetail || showStaticDetail;
 
-        chatOutputToggleBtn.classList.toggle("hidden", !showChat || isOpen);
+        const showOutputEntry = showChat && !showDetail && !state.businessObjectOverlayOpen;
+        chatOutputToggleBtn.classList.toggle("hidden", !showOutputEntry);
         chatOutputToggleBtn.classList.toggle("active", isOpen);
-        chatOutputToggleBtn.classList.toggle("has-badge", showChat && !isOpen && currentDocs.length > 0);
+        chatOutputToggleBtn.classList.toggle("has-badge", showOutputEntry && !isOpen && currentDocs.length > 0);
         chatOutputToggleBtn.setAttribute("aria-expanded", String(isOpen));
+        chatOutputEntry?.classList.toggle("output-open", showOutputEntry && isOpen);
+        if (chatOutputEntry) {
+          if (showOutputEntry && isOpen) {
+            chatOutputEntry.style.setProperty("--chat-output-entry-offset", "372px");
+          } else {
+            chatOutputEntry.style.removeProperty("--chat-output-entry-offset");
+          }
+        }
         chatOutputPanelShell.classList.toggle("open", isOpen);
         chatOutputPanelShell.classList.toggle("detail", isOpen && showDetail);
         chatOutputPanelShell.classList.toggle("resizing", state.outputPanelResizing);
