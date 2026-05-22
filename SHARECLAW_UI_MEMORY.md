@@ -72,6 +72,7 @@ Primary shared render/navigation functions:
 | --- | --- |
 | `index.html` | Home dashboard and base shared shell. Good starting point for shared layout, topbar, rail, default sidebar, dashboard, composer, and basic output panel behavior. |
 | `conversation.html` | Enhanced independent chat page. Owns advanced chat flows, output detail panel, business source detail, customer/deal creation confirmation, and right-side generated result tab behavior. |
+| `task-conversation.html` | Automation task conversation page. Owns `?task=...` route handling, task-specific CRM report chat content, current automation run state, and the right-side automation output cards. |
 | `task.html` | Task page. Owns task list, task filters, task status tabs, and create-task dialog. |
 | `messenger.html` | Message page. Owns 企信 thread sidebar and message canvas rendering. |
 | `market.html` | Agent/skill/automation area. Owns agent square, skill center, automation view, created/batch/share flows, and skill import flow. |
@@ -88,6 +89,7 @@ Primary shared render/navigation functions:
 | 新建会话按钮 | shared | `.sidebar-primary-entry[data-panel="home"]` | `openSidebarHome()` |
 | 历史会话列表 | shared | `#historyList`, `.history-row` | `renderHistoryList()`, `openConversationSession()` |
 | 中间 chat | `conversation.html`, `index.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
+| Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText`, `.chat-output-entry`, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()`; shown after a chat has produced an AI message. Automation tasks use the task title and do not render a user-message bubble; history sessions keep their normal user message but also get the sticky title area. The titlebar right side owns the generated-results expand/collapse button. |
 | 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button click handler, `openMockAiConversation()` |
 | 模式选择 / 指定智能体 | shared | `#agentPickerBtn`, `#agentPickerMenu`, `state.composerMode`, `state.activeAgent` | `setComposerMode()`, `renderAgentPill()`, `renderExposedPicker()` |
 | 右侧 Daily 洞察 | `index.html`, shared shell | `#homeInsightRail`, `#homeInsightToggle`, `state.homeInsightRailCollapsed` | insight action listeners, `openInsightConversation()` |
@@ -109,6 +111,9 @@ Primary shared render/navigation functions:
 | 任务 tab | `task.html` | `[data-task-tab]`, `taskPageState.tab` | tab click listeners |
 | 任务搜索 / 状态筛选 | `task.html` | `#taskSearchInput`, `#taskStatusFilter`, `taskPageState.query/status` | `getVisibleTaskRecords()`, `renderTaskPage()` |
 | 创建任务弹窗 | `task.html` | `#createTaskOverlay`, `#createTaskDialogBody`, `state.createTaskForm` | `openCreateTaskDialog()`, `renderCreateTaskDialog()`, `confirmCreateTaskDialog()` |
+| 自动化任务对话 | `task-conversation.html` | `?task`, `state.activeAutomationTaskId`, `state.activeAutomationRunId`, `automationTaskCatalog` | `openAutomationTaskConversation()`, `renderAutomationTaskConversation()`; the selected left automation task drives the central CRM execution report. Automation-task sessions intentionally do not render the prompt as a user message. |
+| 自动化任务报告侧栏 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `.automation-output-card`, `[data-automation-run-id]` | `renderAutomationTaskReportCard()`, `renderOutputListPanel()`; the first right-side card lists trigger runs for the active task and clicking a run refreshes chat content plus generated outputs. In automation list mode the output panel wrapper is transparent; the module cards are independent cards, not nested in one outer white card. |
+| 自动化业务生成结果 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `[data-output-doc-id]`, `[data-output-business-id]` | `renderBusinessOutputCard()`, `getAutomationOutputDocs()`, `getAutomationOutputBusinessSources()`; the second independent right-side card shows the selected run's documents and business objects. Document rows reuse output detail cards; business object rows reuse the static no-dynamic-tab detached drawer logic. |
 | 智能体广场 | `market.html` | `#marketShell`, `#appSquarePage`, `state.marketMode` | `openMarketPage("square")`, `renderMarketSquare()` |
 | 智能体卡片 | `market.html` | `#enterpriseGrid`, `#marketPublicGrid`, `[data-agent-action]`, `[data-use-id]` | `renderAgentSquareCard()`, agent grid click handlers |
 | 广场筛选 chip | `market.html` | `#marketFilterChips`, `[data-market-filter]`, `state.marketCategory` | `renderFilterChips()`, `renderMarketSquare()` |
@@ -201,6 +206,42 @@ there is no separate "业务来源" section title:
 
 In `index.html`, the output panel is simpler and mainly shows the generated
 results list.
+
+### Automation Task Conversation To Right Panel
+
+In `task-conversation.html`, the URL parameter `?task=...` selects the active
+automation task from `automationTaskCatalog`. `openAutomationTaskConversation()`
+creates an `automation-task` chat session, sets `state.activeAutomationTaskId`
+and `state.activeAutomationRunId`, opens the generated-results panel, and keeps
+the right panel in list mode. Automation-task sessions do not render a user
+message bubble; the task name is surfaced in `#chatSessionTitlebar`, and the AI
+message starts from the ShareAgent metadata and task report body.
+
+`#chatSessionTitlebar` is sticky above `#chatFeed` after a chat has produced an
+AI message. It displays the active automation task title or history session
+title, and its right side hosts the existing `#chatOutputToggleBtn` generated
+results expand/collapse control.
+
+The right panel uses two floating cards:
+
+- `任务报告` -> `renderAutomationTaskReportCard()` renders trigger runs for the
+  active task. Clicking `[data-automation-run-id]` switches the active run,
+  updates the central CRM report, clears stale output detail state, and refreshes
+  generated outputs.
+- `业务生成结果` -> `renderBusinessOutputCard()` renders documents and business
+  objects for the active run. Document clicks reuse
+  `openOutputPanelTab("doc", id)` and the existing document detail card.
+  Business object clicks reuse the static no-dynamic-tab behavior and open the
+  detached business object drawer.
+
+In automation list mode, `#chatOutputPanelShell` receives `.automation-list`.
+The wrapper panel is transparent with no border, radius, or shadow, so `任务报告`
+and `业务生成结果` appear as two independent white cards.
+
+Left automation task rows use `[data-automation-task]`. On
+`task-conversation.html`, clicking a different task updates the current URL with
+`history.replaceState()` and reruns `openAutomationTaskConversation(taskId)`
+instead of creating a generic mock-AI task session.
 
 ### Chat To Messenger
 

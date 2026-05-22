@@ -1016,6 +1016,15 @@
         width: var(--chat-output-detail-width, clamp(560px, 50vw, 860px));
       }
 
+      .chat-output-panel-shell.automation-list .chat-output-panel {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        gap: 16px;
+      }
+
       .chat-output-panel {
         width: 340px;
         max-height: calc(100% - 32px);
@@ -1157,6 +1166,9 @@
         min-height: 0;
         flex: 1 1 auto;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
         scrollbar-width: thin;
         scrollbar-color: transparent transparent;
       }
@@ -1172,6 +1184,104 @@
         min-height: 54px;
         padding: 0 0 0 6px;
         border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .automation-output-card {
+        width: 100%;
+        padding: 16px 12px;
+        border: 0.5px solid #dee1e8;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 0 8px rgba(96, 101, 112, 0.08);
+      }
+
+      .automation-output-card-head {
+        min-height: 35px;
+        padding: 0 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .automation-output-card-title {
+        margin: 0;
+        color: #181c25;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+      }
+
+      .automation-output-card-toggle {
+        width: 10px;
+        height: 10px;
+        color: #545861;
+        flex: 0 0 auto;
+      }
+
+      .automation-output-card-body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .automation-report-row {
+        width: 100%;
+        min-height: 54px;
+        padding: 0 6px;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: #181c25;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .automation-report-row:last-child {
+        border-bottom: 0;
+      }
+
+      .automation-report-row:hover,
+      .automation-report-row.active {
+        background: #fafbff;
+      }
+
+      .automation-report-main {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .automation-report-time {
+        font-size: 14px;
+        line-height: 20px;
+        color: #181c25;
+        white-space: nowrap;
+      }
+
+      .automation-report-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        line-height: 18px;
+        color: #181c25;
+      }
+
+      .automation-report-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #2f7cf6;
+        opacity: 0;
+        flex: 0 0 auto;
+      }
+
+      .automation-report-row.active .automation-report-dot {
+        opacity: 1;
       }
 
       .chat-output-section .chat-output-doc-row:last-child {
@@ -3293,22 +3403,69 @@
         flex: 1 1 auto;
         min-height: 0;
         margin: 20px auto 0;
+        display: flex;
+        flex-direction: column;
       }
 
       .home-center-shell.chat-mode .chat-flow-shell {
         max-width: none;
       }
 
-      .chat-output-entry {
-        position: fixed;
-        top: 66px;
-        right: 16px;
-        z-index: 75;
-        transition: right 0.24s ease;
+      .chat-session-titlebar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: min(868px, calc(100% - 32px));
+        min-height: 34px;
+        margin: 0 auto;
+        padding: 0 0 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: #fbfcff;
       }
 
-      .chat-output-entry.output-open {
-        right: calc(var(--chat-output-entry-offset, 372px) + 8px);
+      .chat-session-titlebar.hidden {
+        display: none;
+      }
+
+      .chat-session-title-main {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #181c25;
+      }
+
+      .chat-session-title-icon {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 12px;
+      }
+
+      .chat-session-title-text {
+        min-width: 0;
+        max-width: min(460px, 60vw);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .chat-session-title-caret {
+        width: 9px;
+        height: 9px;
+        flex: 0 0 9px;
+        transform: rotate(-90deg);
+      }
+
+      .chat-output-entry {
+        position: static;
+        flex: 0 0 auto;
+        z-index: 75;
       }
 
       .chat-output-toggle-btn {
@@ -3333,8 +3490,8 @@
       }
 
       .chat-output-toggle-btn svg {
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
         display: block;
       }
 
@@ -3351,7 +3508,8 @@
       }
 
       .chat-feed {
-        height: 100%;
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
         padding: 0 4px 0 0;
         scrollbar-width: thin;
@@ -12229,6 +12387,26 @@
                 </div>
 
                 <section class="chat-flow-shell hidden" id="chatFlowShell" aria-label="AI对话内容">
+                  <div class="chat-session-titlebar hidden" id="chatSessionTitlebar">
+                    <div class="chat-session-title-main">
+                      <svg class="chat-session-title-icon" viewBox="0 0 16 16" aria-hidden="true">
+                        <path class="icon-stroke" d="M8 2.3a5.7 5.7 0 1 0 0 11.4A5.7 5.7 0 0 0 8 2.3Z"></path>
+                        <path class="icon-stroke" d="M8 5.1v3.2l2.2 1.3"></path>
+                      </svg>
+                      <span class="chat-session-title-text" id="chatSessionTitleText"></span>
+                      <svg class="chat-session-title-caret" viewBox="0 0 9 9" aria-hidden="true">
+                        <path class="icon-stroke" d="M2.4 1.8 6 4.5 2.4 7.2"></path>
+                      </svg>
+                    </div>
+                    <div class="chat-output-entry">
+                      <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
+                        <svg class="chat-output-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                          <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" stroke-width="1.4"></rect>
+                          <path d="M10.5 4.5V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
                   <div class="chat-feed" id="chatFeed"></div>
                 </section>
 
@@ -12386,14 +12564,6 @@
                   </div>
                 </section>
               </div>
-            </div>
-
-            <div class="chat-output-entry">
-              <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M2 1H9V2H3V13.9976H13V6H14V14.9976H2V1ZM5 4.50037H9V5.50037H5V4.50037ZM5 7.50037H11V8.50037H5V7.50037ZM5 10.5004H11V11.5004H5V10.5004ZM12.1316 1.05448C12.1096 1.03251 12.0825 1.01638 12.0527 1.00756C12.0054 0.993649 11.9544 0.99908 11.9111 1.02266C11.8678 1.04625 11.8355 1.08605 11.8215 1.13336L11.7045 1.52823C11.6217 1.80745 11.4703 2.06152 11.2643 2.2673C11.0582 2.47308 10.8039 2.62405 10.5246 2.70645L10.1339 2.82177C10.0954 2.83298 10.0615 2.85635 10.0374 2.88839C10.0132 2.92044 10.0001 2.95943 10 2.99955C9.99987 3.03966 10.0127 3.07874 10.0366 3.11094C10.0606 3.14315 10.0943 3.16674 10.1327 3.1782L10.5316 3.2976C10.809 3.38065 11.0614 3.5314 11.266 3.73626C11.4706 3.94112 11.6211 4.19366 11.7039 4.47115L11.8215 4.86719C11.833 4.90558 11.8566 4.93923 11.8888 4.96316C11.9209 4.98708 11.9599 5 12 5C12.0401 5 12.0791 4.98708 12.1112 4.96316C12.1434 4.93923 12.167 4.90558 12.1785 4.86719L12.2961 4.47115C12.3789 4.19366 12.5294 3.94112 12.734 3.73626C12.9387 3.5314 13.191 3.38065 13.4684 3.2976L13.8667 3.1782C13.9052 3.16687 13.939 3.14338 13.963 3.11126C13.987 3.07914 14 3.0401 14 2.99998C14 2.95987 13.987 2.92083 13.963 2.88871C13.939 2.85659 13.9052 2.8331 13.8667 2.82177L13.4754 2.70645C13.1961 2.62405 12.9418 2.47308 12.7357 2.2673C12.5297 2.06152 12.3784 1.80745 12.2955 1.52823L12.1785 1.13336C12.1697 1.10357 12.1535 1.07645 12.1316 1.05448Z" fill="#181C25"/>
-                </svg>
-              </button>
             </div>
 
             <aside class="chat-output-panel-shell" id="chatOutputPanelShell" aria-label="生成结果侧滑面板">
@@ -14013,6 +14183,8 @@
       }
 
       const CONVERSATION_PAGE_FILE = "conversation.html";
+      const TASK_CONVERSATION_PAGE_FILE = "task-conversation.html";
+      const CONVERSATION_PAGE_FILES = [CONVERSATION_PAGE_FILE, TASK_CONVERSATION_PAGE_FILE];
 
       const PAGE_FILE_BY_PANEL = {
         home: "index.html",
@@ -14026,6 +14198,7 @@
       const PANEL_BY_PAGE_FILE = {
         "index.html": "home",
         "conversation.html": "home",
+        "task-conversation.html": "home",
         "task.html": "task",
         "docs.html": "docs",
         "settings.html": "settings",
@@ -14043,7 +14216,8 @@
       };
 
       const PAGE_TITLE_BY_PAGE_FILE = {
-        "conversation.html": "ShareAgent - 独立对话"
+        "conversation.html": "ShareAgent - 独立对话",
+        "task-conversation.html": "ShareAgent - 自动化任务"
       };
 
       function getCurrentPageFile() {
@@ -14059,7 +14233,7 @@
         const currentPageFile = getCurrentPageFile();
         const params = new URLSearchParams(window.location.search);
         const mainPanel = PANEL_BY_PAGE_FILE[currentPageFile] || "home";
-        const isConversationEntry = currentPageFile === CONVERSATION_PAGE_FILE;
+        const isConversationEntry = CONVERSATION_PAGE_FILES.includes(currentPageFile);
         const homeView = isConversationEntry ? "chat" : "dashboard";
 
         return {
@@ -14076,7 +14250,8 @@
           launchType: isConversationEntry ? params.get("type") || "" : "",
           launchLabel: isConversationEntry ? params.get("label") || "" : "",
           launchPrompt: isConversationEntry ? params.get("prompt") || "" : "",
-          launchAgent: isConversationEntry ? params.get("type") || "" : ""
+          launchAgent: isConversationEntry ? params.get("type") || "" : "",
+          taskId: currentPageFile === TASK_CONVERSATION_PAGE_FILE ? params.get("task") || "task-morning-check" : ""
         };
       }
 
@@ -14113,6 +14288,8 @@
         currentChannel: initialRouteState.currentChannel,
         activeHistoryId: "",
         activeChatId: initialRouteState.activeChatId,
+        activeAutomationTaskId: initialRouteState.taskId,
+        activeAutomationRunId: "",
         homeInsightRailCollapsed: true,
         homeInsightRailEnabled: initialRouteState.homeInsightRailEnabled,
         sidebarGroups: {
@@ -14234,6 +14411,8 @@
       const homeInsightCollapseBtn = document.getElementById("homeInsightCollapseBtn");
       const homeInsightActionButtons = Array.from(document.querySelectorAll("[data-home-insight-session]"));
       const chatFlowShell = document.getElementById("chatFlowShell");
+      const chatSessionTitlebar = document.getElementById("chatSessionTitlebar");
+      const chatSessionTitleText = document.getElementById("chatSessionTitleText");
       const chatOutputEntry = document.querySelector(".chat-output-entry");
       const chatOutputToggleBtn = document.getElementById("chatOutputToggleBtn");
       const chatOutputPanelShell = document.getElementById("chatOutputPanelShell");
@@ -14518,6 +14697,339 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         { id: "task-weekly-operation", title: "重点客户经营周报", unread: 0 },
         { id: "task-renewal-warning", title: "续费预警复盘提醒", unread: 0 }
       ];
+      const automationTaskCatalog = {
+        "task-morning-check": {
+          id: "task-morning-check",
+          title: "重点客户异动晨检",
+          prompt: "自动检查重点客户近 24 小时异动，输出风险信号与跟进行动。",
+          agentLabel: "客户洞察智能体",
+          crmObject: "客户 / 商机 / 跟进记录",
+          reports: [
+            {
+              id: "morning-check-today-0900",
+              timeLabel: "今天 9:00",
+              displayTitle: "重点客户异动晨检",
+              dateLabel: "2026年5月22日",
+              duration: "已处理 1分30秒",
+              summary: "本次晨检扫描重点客户池、商机阶段和近 7 天互动记录，识别出 3 个推进节奏异常客户，其中 1 个进入高优先级跟进。",
+              findings: [
+                "海岳智能制造集团在“方案确认”阶段停留超过 10 天，近 72 小时没有新增决策人反馈。",
+                "上海宏景装备的报价审批已完成，但客户采购节点仍未确认，存在下周推进空窗。",
+                "深圳拓远电子近 5 次互动平均响应时长升至 18 小时，高于重点客户建议阈值。"
+              ],
+              actions: [
+                "今天内由刘志强补发海岳价值回顾和交付周期说明，锁定下一次采购确认时间。",
+                "将上海宏景装备加入本周高概率商机清单，提醒负责人同步采购侧最新口径。",
+                "对响应时长异常客户生成跟进提醒，优先安排电话触达而非继续等待企信回复。"
+              ],
+              sources: [
+                "CRM 客户健康分",
+                "商机阶段停留时长",
+                "最近跟进记录",
+                "企信互动响应"
+              ],
+              outputs: {
+                docs: [
+                  { id: "auto-morning-check-brief", title: "重点客户异动晨检报告.pdf", type: "pdf", createdTimeLabel: "今天 09:00", sortKey: 202605220900 },
+                  { id: "auto-morning-check-follow", title: "高优先级客户跟进清单", type: "doc", createdTimeLabel: "今天 09:00", sortKey: 202605220859 }
+                ],
+                business: [
+                  { id: "auto-morning-check-haiyue", title: "【客户】海岳智能制造集团有限公司", tabTitle: "海岳智能制造集团", typeLabel: "客户", owner: "负责人：刘志强", stage: "商机阶段：方案确认", health: "健康度：78", lastTouch: "最近触达：今天 10:20", nextAction: "下一步：确认采购节点", actionLabel: "查询", createdTimeLabel: "今天 09:00", sortKey: 202605220858 }
+                ]
+              }
+            },
+            {
+              id: "morning-check-yesterday-0930",
+              timeLabel: "昨天 9:30",
+              displayTitle: "重点客户异动晨检",
+              dateLabel: "2026年5月21日",
+              duration: "已处理 52秒",
+              summary: "昨日晨检主要识别续约客户响应下滑和报价确认滞后，已把 2 条风险提醒同步给对应负责人。",
+              findings: [
+                "北京云启科技续约推进比计划晚 2 天，合同版本仍停留在客户法务侧。",
+                "广州联科制造的报价确认已超过 48 小时未更新，负责人尚未补充竞争对手信息。"
+              ],
+              actions: [
+                "将云启续约风险推送给客户成功负责人，要求补齐法务阻塞原因。",
+                "提醒广州联科负责人在 CRM 中更新竞品价格与下一次拜访时间。"
+              ],
+              sources: ["续约节点", "报价审批", "负责人待办"],
+              outputs: {
+                docs: [
+                  { id: "auto-morning-check-yesterday", title: "昨日重点客户异动摘要.pdf", type: "pdf", createdTimeLabel: "昨天 09:30", sortKey: 202605210930 }
+                ],
+                business: [
+                  { id: "auto-morning-check-yunqi", title: "【客户】北京云启科技有限公司", tabTitle: "北京云启科技", typeLabel: "客户", owner: "负责人：周予安", stage: "续约阶段：合同确认", health: "健康度：64", lastTouch: "最近触达：昨天 16:40", nextAction: "下一步：确认法务意见", actionLabel: "更新", createdTimeLabel: "昨天 09:30", sortKey: 202605210929 }
+                ]
+              }
+            }
+          ]
+        },
+        "task-meeting-crm": {
+          id: "task-meeting-crm",
+          title: "客户会议纪要回填 CRM",
+          prompt: "自动整理客户会议纪要、行动项和字段更新，并回填到 CRM。",
+          agentLabel: "会议纪要智能体",
+          crmObject: "会议 / 客户 / 销售记录",
+          reports: [
+            {
+              id: "meeting-crm-today-1100",
+              timeLabel: "今天 11:00",
+              displayTitle: "客户会议纪要回填 CRM",
+              dateLabel: "2026年5月22日",
+              duration: "已处理 46秒",
+              summary: "已从 3 场客户会议中抽取行动项、异议点和下一步时间，并生成 CRM 回填建议。",
+              findings: [
+                "海岳会议新增“交付周期说明”待办，需产品顾问在 2 个工作日内补充材料。",
+                "神州数码会议确认预算范围，但还缺少采购委员会成员信息。",
+                "帝迈医疗对售后 SLA 关注度升高，需要同步服务团队给出响应承诺。"
+              ],
+              actions: [
+                "将会议行动项写入销售记录，负责人分别设为刘志强、周予安和陈嘉宁。",
+                "把采购委员会成员信息标记为缺失字段，等待销售补录。",
+                "生成服务 SLA 补充说明并转发给售前支持。"
+              ],
+              sources: ["会议纪要", "销售记录", "客户字段", "行动项"],
+              outputs: {
+                docs: [
+                  { id: "auto-meeting-crm-minutes", title: "客户会议纪要回填清单", type: "doc", createdTimeLabel: "今天 11:00", sortKey: 202605221100 }
+                ],
+                business: [
+                  { id: "auto-meeting-crm-record", title: "【销售记录】海岳方案评审会议", tabTitle: "海岳方案评审会议", typeLabel: "销售记录", owner: "负责人：刘志强", stage: "记录类型：会议纪要", health: "字段状态：待补充", lastTouch: "会议时间：今天 10:30", nextAction: "下一步：补交付材料", actionLabel: "创建", createdTimeLabel: "今天 11:00", sortKey: 202605221059 }
+                ]
+              }
+            },
+            {
+              id: "meeting-crm-yesterday-1800",
+              timeLabel: "昨天 18:00",
+              displayTitle: "客户会议纪要回填 CRM",
+              dateLabel: "2026年5月21日",
+              duration: "已处理 38秒",
+              summary: "昨日会议回填任务完成 2 条销售记录创建和 4 个客户字段更新。",
+              findings: [
+                "客户对价格条款提出二次确认，已记录到商机异议字段。",
+                "售后演示被标记为下一阶段关键动作。"
+              ],
+              actions: [
+                "把价格异议同步到商机风险字段。",
+                "创建售后演示待办并关联客户成功团队。"
+              ],
+              sources: ["会议录音", "商机字段", "待办任务"],
+              outputs: {
+                docs: [{ id: "auto-meeting-crm-yesterday", title: "昨日会议回填结果.md", type: "doc", createdTimeLabel: "昨天 18:00", sortKey: 202605211800 }],
+                business: [{ id: "auto-meeting-crm-task", title: "【任务】售后演示准备", tabTitle: "售后演示准备", typeLabel: "任务", owner: "负责人：陈嘉宁", stage: "任务状态：待处理", health: "优先级：高", lastTouch: "截止时间：明天 15:00", nextAction: "下一步：确认演示环境", actionLabel: "创建", createdTimeLabel: "昨天 18:00", sortKey: 202605211759 }]
+              }
+            }
+          ]
+        },
+        "task-lead-cleanup": {
+          id: "task-lead-cleanup",
+          title: "线索池清理与分发",
+          prompt: "自动清洗线索池、识别无效线索，并按行业与区域分发给销售。",
+          agentLabel: "线索运营智能体",
+          crmObject: "线索 / 客户 / 分配规则",
+          reports: [
+            {
+              id: "lead-cleanup-today-1700",
+              timeLabel: "今天 17:00",
+              displayTitle: "线索池清理与分发",
+              dateLabel: "2026年5月22日",
+              duration: "已处理 1分05秒",
+              summary: "本次清理覆盖 86 条待分配线索，识别 12 条重复线索、6 条无效联系方式，并分发 31 条高意向线索。",
+              findings: [
+                "华东制造业线索占比最高，近 7 天新增 24 条，匹配给制造行业销售组。",
+                "6 条线索缺少手机号或企业邮箱，暂缓进入销售池。",
+                "3 条来自展会的线索评分超过 80，建议 24 小时内首次触达。"
+              ],
+              actions: [
+                "将高意向线索分配给对应区域负责人，并生成首触达提醒。",
+                "把重复线索合并到已有客户或历史线索，保留最新来源。",
+                "低质量线索进入待确认池，等待市场运营二次补全。"
+              ],
+              sources: ["线索评分", "区域规则", "行业标签", "重复检测"],
+              outputs: {
+                docs: [{ id: "auto-lead-cleanup-list", title: "线索池清理与分发结果.xlsx", type: "sheet", createdTimeLabel: "今天 17:00", sortKey: 202605221700 }],
+                business: [{ id: "auto-lead-cleanup-pool", title: "【线索池】华东制造业高意向线索", tabTitle: "华东制造业线索", typeLabel: "线索池", owner: "负责人：沈知远", stage: "分发状态：已分配", health: "高意向线索：31", lastTouch: "最近清理：今天 17:00", nextAction: "下一步：24小时内首触达", actionLabel: "更新", createdTimeLabel: "今天 17:00", sortKey: 202605221659 }]
+              }
+            },
+            {
+              id: "lead-cleanup-yesterday-1700",
+              timeLabel: "昨天 17:00",
+              displayTitle: "线索池清理与分发",
+              dateLabel: "2026年5月21日",
+              duration: "已处理 49秒",
+              summary: "昨日清理识别 9 条重复线索，并把 18 条高意向线索分发给华南销售组。",
+              findings: ["华南 SaaS 行业线索转化评分较高。", "外部导入名单中存在 4 条无效企业名称。"],
+              actions: ["同步无效线索给市场运营复核。", "提醒华南负责人完成首次触达。"],
+              sources: ["线索来源", "企业工商信息", "销售区域"],
+              outputs: {
+                docs: [{ id: "auto-lead-cleanup-yesterday", title: "昨日线索清理摘要", type: "doc", createdTimeLabel: "昨天 17:00", sortKey: 202605211700 }],
+                business: [{ id: "auto-lead-cleanup-south", title: "【线索池】华南 SaaS 线索", tabTitle: "华南 SaaS 线索", typeLabel: "线索池", owner: "负责人：赵晨", stage: "分发状态：已分配", health: "高意向线索：18", lastTouch: "最近清理：昨天 17:00", nextAction: "下一步：首次触达", actionLabel: "更新", createdTimeLabel: "昨天 17:00", sortKey: 202605211659 }]
+              }
+            }
+          ]
+        },
+        "task-weekly-operation": {
+          id: "task-weekly-operation",
+          title: "重点客户经营周报",
+          prompt: "汇总重点客户经营数据、风险变化和下周跟进动作。",
+          agentLabel: "经营分析智能体",
+          crmObject: "客户 / 商机 / 订单",
+          reports: [
+            {
+              id: "weekly-operation-friday-0900",
+              timeLabel: "今天 9:00",
+              displayTitle: "重点客户经营周报",
+              dateLabel: "2026年5月22日",
+              duration: "已处理 1分42秒",
+              summary: "本周重点客户整体推进稳定，但制造行业客户在交付周期和采购节奏上出现集中风险。",
+              findings: ["重点客户池本周新增有效跟进 42 次，环比提升 11%。", "高概率商机金额 286 万，其中 3 个项目进入报价确认。", "续费客户中有 2 家健康分下降超过 15 分。"],
+              actions: ["下周优先推进报价确认项目，压缩采购节点不确定性。", "对健康分下降客户生成客户成功协同清单。", "把本周新增异议归类沉淀到行业话术库。"],
+              sources: ["客户健康分", "商机金额", "订单回款", "跟进记录"],
+              outputs: {
+                docs: [{ id: "auto-weekly-operation-report", title: "重点客户经营周报.pdf", type: "pdf", createdTimeLabel: "今天 09:00", sortKey: 202605220900 }],
+                business: [{ id: "auto-weekly-operation-opps", title: "【商机】本周高概率商机清单", tabTitle: "高概率商机清单", typeLabel: "商机", owner: "负责人：销售运营组", stage: "阶段：报价/方案", health: "预计金额：286万", lastTouch: "更新时间：今天 09:00", nextAction: "下一步：推进报价确认", actionLabel: "查询", createdTimeLabel: "今天 09:00", sortKey: 202605220859 }]
+              }
+            },
+            {
+              id: "weekly-operation-lastweek-0900",
+              timeLabel: "上周五 9:00",
+              displayTitle: "重点客户经营周报",
+              dateLabel: "2026年5月15日",
+              duration: "已处理 1分18秒",
+              summary: "上周重点客户主要风险集中在响应速度下降和内部协同动作未闭环。",
+              findings: ["重点客户平均响应时长 2.4 小时。", "4 个行动项超过计划时间未完成。"],
+              actions: ["将超期行动项推送给负责人。", "补齐客户异议和竞品信息。"],
+              sources: ["互动记录", "任务列表", "商机阶段"],
+              outputs: {
+                docs: [{ id: "auto-weekly-operation-lastweek", title: "上周重点客户经营摘要", type: "doc", createdTimeLabel: "上周五 09:00", sortKey: 202605150900 }],
+                business: [{ id: "auto-weekly-operation-actions", title: "【任务】超期行动项清单", tabTitle: "超期行动项清单", typeLabel: "任务", owner: "负责人：销售运营组", stage: "任务状态：跟进中", health: "超期项：4", lastTouch: "更新时间：上周五 09:00", nextAction: "下一步：负责人确认", actionLabel: "查询", createdTimeLabel: "上周五 09:00", sortKey: 202605150859 }]
+              }
+            }
+          ]
+        },
+        "task-renewal-warning": {
+          id: "task-renewal-warning",
+          title: "续费预警复盘提醒",
+          prompt: "监控即将到期客户、健康分变化和工单趋势，生成续费风险提醒。",
+          agentLabel: "续费预警智能体",
+          crmObject: "续约 / 客户 / 工单",
+          reports: [
+            {
+              id: "renewal-warning-today-0930",
+              timeLabel: "今天 9:30",
+              displayTitle: "续费预警复盘提醒",
+              dateLabel: "2026年5月22日",
+              duration: "已处理 58秒",
+              summary: "本次预警发现 2 个 30 天内到期客户健康分下降，其中小米集团需要本周完成续费方案确认。",
+              findings: ["小米集团健康分下降 12 分，售后工单本周新增 3 条。", "远峰软件续费金额未确认，预算审批仍在客户财务侧。", "两家客户最近一次高层互动均超过 14 天。"],
+              actions: ["生成小米集团续费提醒话术并同步客户成功负责人。", "为远峰软件创建预算确认待办。", "安排高层拜访建议，补齐续费价值回顾材料。"],
+              sources: ["续约节点", "健康分", "工单趋势", "高层互动"],
+              outputs: {
+                docs: [{ id: "auto-renewal-warning-brief", title: "续费预警复盘提醒.pdf", type: "pdf", createdTimeLabel: "今天 09:30", sortKey: 202605220930 }],
+                business: [{ id: "auto-renewal-warning-xiaomi", title: "【客户】小米集团", tabTitle: "小米集团续费", typeLabel: "客户", owner: "负责人：沈知远", stage: "续约阶段：方案确认", health: "健康度：66", lastTouch: "最近互动：4天前", nextAction: "下一步：确认续费方案", actionLabel: "更新", createdTimeLabel: "今天 09:30", sortKey: 202605220929 }]
+              }
+            },
+            {
+              id: "renewal-warning-yesterday-0930",
+              timeLabel: "昨天 9:30",
+              displayTitle: "续费预警复盘提醒",
+              dateLabel: "2026年5月21日",
+              duration: "已处理 44秒",
+              summary: "昨日续费预警识别 1 个高风险客户和 3 个需补充价值材料的客户。",
+              findings: ["远峰软件预算审批延期。", "客服工单满意度低于续费客户平均水平。"],
+              actions: ["向负责人推送预算确认提醒。", "生成客户成功复盘清单。"],
+              sources: ["续费金额", "审批节点", "工单满意度"],
+              outputs: {
+                docs: [{ id: "auto-renewal-warning-yesterday", title: "昨日续费风险摘要", type: "doc", createdTimeLabel: "昨天 09:30", sortKey: 202605210930 }],
+                business: [{ id: "auto-renewal-warning-yuanfeng", title: "【客户】远峰软件服务有限公司", tabTitle: "远峰软件续费", typeLabel: "客户", owner: "负责人：陈琳", stage: "续约阶段：预算确认", health: "健康度：61", lastTouch: "最近互动：昨天 15:10", nextAction: "下一步：确认预算审批", actionLabel: "查询", createdTimeLabel: "昨天 09:30", sortKey: 202605210929 }]
+              }
+            }
+          ]
+        }
+      };
+      function getAutomationTaskDefinition(taskId = state.activeAutomationTaskId) {
+        return automationTaskCatalog[taskId] || automationTaskCatalog["task-morning-check"];
+      }
+
+      function getAutomationTaskSessionId(taskId = state.activeAutomationTaskId) {
+        return `automation-${getAutomationTaskDefinition(taskId).id}`;
+      }
+
+      function isAutomationTaskSession(session = conversationSessions[state.activeChatId]) {
+        return session?.source === "automation-task";
+      }
+
+      function getAutomationTaskRun(taskId = state.activeAutomationTaskId, runId = state.activeAutomationRunId) {
+        const task = getAutomationTaskDefinition(taskId);
+        return task.reports.find((item) => item.id === runId) || task.reports[0];
+      }
+
+      function getCurrentAutomationTaskRun() {
+        return getAutomationTaskRun();
+      }
+
+      function getAutomationOutputDocs(taskId = state.activeAutomationTaskId, runId = state.activeAutomationRunId) {
+        const task = getAutomationTaskDefinition(taskId);
+        const run = getAutomationTaskRun(task.id, runId);
+        return (run.outputs?.docs || []).map((doc) => ({
+          ...doc,
+          dialog: `${task.title} · ${run.timeLabel}`,
+          sessionId: getAutomationTaskSessionId(task.id),
+          taskId: task.id,
+          runId: run.id,
+          url: `https://shareclaw.local/automation/${task.id}/${run.id}/${doc.id}`
+        }));
+      }
+
+      function getAutomationOutputBusinessSources(taskId = state.activeAutomationTaskId, runId = state.activeAutomationRunId) {
+        const task = getAutomationTaskDefinition(taskId);
+        const run = getAutomationTaskRun(task.id, runId);
+        return (run.outputs?.business || []).map((source) => ({
+          ...source,
+          detailTitle: source.detailTitle || source.title.replace(/^【[^】]+】/, ""),
+          sessionId: getAutomationTaskSessionId(task.id),
+          taskId: task.id,
+          runId: run.id
+        }));
+      }
+
+      function getAutomationOutputDocById(docId) {
+        for (const task of Object.values(automationTaskCatalog)) {
+          for (const run of task.reports) {
+            const doc = (run.outputs?.docs || []).find((item) => item.id === docId);
+            if (doc) {
+              return {
+                ...doc,
+                dialog: `${task.title} · ${run.timeLabel}`,
+                sessionId: getAutomationTaskSessionId(task.id),
+                taskId: task.id,
+                runId: run.id,
+                url: `https://shareclaw.local/automation/${task.id}/${run.id}/${doc.id}`
+              };
+            }
+          }
+        }
+        return null;
+      }
+
+      function getAutomationBusinessSourceById(sourceId) {
+        for (const task of Object.values(automationTaskCatalog)) {
+          for (const run of task.reports) {
+            const source = (run.outputs?.business || []).find((item) => item.id === sourceId);
+            if (source) {
+              return {
+                ...source,
+                detailTitle: source.detailTitle || source.title.replace(/^【[^】]+】/, ""),
+                sessionId: getAutomationTaskSessionId(task.id),
+                taskId: task.id,
+                runId: run.id
+              };
+            }
+          }
+        }
+        return null;
+      }
       const conversationHistory = loadConversationHistory();
       const messengerThreads = [
         {
@@ -15594,7 +16106,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function isConversationPage() {
-        return getCurrentPageFile() === CONVERSATION_PAGE_FILE;
+        return CONVERSATION_PAGE_FILES.includes(getCurrentPageFile());
       }
 
       function navigateToPanel(panel, params = {}) {
@@ -17484,7 +17996,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getDocById(docId) {
-        return docsDocuments.find((item) => item.id === docId) || null;
+        return docsDocuments.find((item) => item.id === docId) || getAutomationOutputDocById(docId) || null;
       }
 
       function getDocPreviewPalette(doc) {
@@ -18249,10 +18761,16 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getCurrentConversationDocs() {
+        if (isAutomationTaskSession()) {
+          return getAutomationOutputDocs();
+        }
         return getOutputResultsDocuments().filter((doc) => doc.sessionId === state.activeChatId);
       }
 
       function getCurrentBusinessSources() {
+        if (isAutomationTaskSession()) {
+          return getAutomationOutputBusinessSources();
+        }
         return outputBusinessSources.filter((item) => item.sessionId === state.activeChatId);
       }
 
@@ -18264,7 +18782,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getBusinessSourceById(sourceId) {
-        return outputBusinessSources.find((item) => item.id === sourceId) || getComplexQueryCustomerSource(sourceId) || getQueryCustomerSource(sourceId);
+        return outputBusinessSources.find((item) => item.id === sourceId) || getAutomationBusinessSourceById(sourceId) || getComplexQueryCustomerSource(sourceId) || getQueryCustomerSource(sourceId);
       }
 
       function getQueryCustomerSource(sourceId) {
@@ -18507,9 +19025,70 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
+      function outputCardToggleMarkup() {
+        return `
+          <svg class="automation-output-card-toggle" viewBox="0 0 10 10" aria-hidden="true">
+            <path d="M2.2 3.6 5 6.4l2.8-2.8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        `;
+      }
+
+      function renderAutomationTaskReportCard() {
+        const task = getAutomationTaskDefinition();
+        const activeRun = getAutomationTaskRun(task.id, state.activeAutomationRunId);
+        return `
+          <section class="automation-output-card" aria-label="任务报告">
+            <div class="automation-output-card-head">
+              <h3 class="automation-output-card-title">任务报告</h3>
+              ${outputCardToggleMarkup()}
+            </div>
+            <div class="automation-output-card-body">
+              ${task.reports.map((run) => `
+                <button class="automation-report-row ${run.id === activeRun.id ? "active" : ""}" type="button" data-automation-run-id="${escapeHtml(run.id)}" aria-label="查看 ${escapeHtml(run.timeLabel)} ${escapeHtml(run.displayTitle)}">
+                  <span class="automation-report-main">
+                    <span class="automation-report-time">${escapeHtml(run.timeLabel)}</span>
+                    <span class="automation-report-name">${escapeHtml(run.displayTitle)}</span>
+                  </span>
+                  <span class="automation-report-dot" aria-hidden="true"></span>
+                </button>
+              `).join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      function renderBusinessOutputCard(visibleResults) {
+        const emptyCopy = "当前任务还没有沉淀到文档库的产出结果。";
+        const hasAny = visibleResults.length;
+        return `
+          <section class="automation-output-card" aria-label="业务生成结果">
+            <div class="automation-output-card-head">
+              <h3 class="automation-output-card-title">业务生成结果</h3>
+              ${outputCardToggleMarkup()}
+            </div>
+            <div class="automation-output-card-body">
+              ${hasAny ? `
+                <section class="chat-output-section">
+                  ${visibleResults.map(renderOutputResultRow).join("")}
+                </section>
+              ` : `<div class="chat-output-empty">${escapeHtml(emptyCopy)}</div>`}
+            </div>
+          </section>
+        `;
+      }
+
       function renderOutputListPanel(visibleResults) {
         const emptyCopy = "当前任务还没有沉淀到文档库的产出结果。";
         const hasAny = visibleResults.length;
+
+        if (isAutomationTaskSession()) {
+          return `
+            <div class="chat-output-list">
+              ${renderAutomationTaskReportCard()}
+              ${renderBusinessOutputCard(visibleResults)}
+            </div>
+          `;
+        }
 
         return `
           <div class="chat-output-panel-header">
@@ -19038,6 +19617,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const showDynamicDetail = dynamicTabs && state.outputResultsPanelMode === "detail" && state.outputOpenTabs.length > 0;
         const showStaticDetail = !dynamicTabs && state.outputResultsPanelMode === "detail" && activeRecord?.tab.type === "doc";
         const showDetail = showDynamicDetail || showStaticDetail;
+        const showAutomationList = isAutomationTaskSession() && !showDetail;
 
         const showOutputEntry = showChat && !showDetail && !state.businessObjectOverlayOpen;
         chatOutputToggleBtn.classList.toggle("hidden", !showOutputEntry);
@@ -19045,15 +19625,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         chatOutputToggleBtn.classList.toggle("has-badge", showOutputEntry && !isOpen && currentDocs.length > 0);
         chatOutputToggleBtn.setAttribute("aria-expanded", String(isOpen));
         chatOutputEntry?.classList.toggle("output-open", showOutputEntry && isOpen);
-        if (chatOutputEntry) {
-          if (showOutputEntry && isOpen) {
-            chatOutputEntry.style.setProperty("--chat-output-entry-offset", "372px");
-          } else {
-            chatOutputEntry.style.removeProperty("--chat-output-entry-offset");
-          }
-        }
+        chatOutputEntry?.style.removeProperty("--chat-output-entry-offset");
         chatOutputPanelShell.classList.toggle("open", isOpen);
         chatOutputPanelShell.classList.toggle("detail", isOpen && showDetail);
+        chatOutputPanelShell.classList.toggle("automation-list", isOpen && showAutomationList);
         chatOutputPanelShell.classList.toggle("resizing", state.outputPanelResizing);
 
         if (isOpen && showDetail) {
@@ -20644,6 +21219,50 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }, AI_REPLY_THINKING_DELAY);
       }
 
+      function openAutomationTaskConversation(taskId = "task-morning-check", options = {}) {
+        const task = getAutomationTaskDefinition(taskId);
+        const run = getAutomationTaskRun(task.id, options.runId || "");
+        const sessionId = getAutomationTaskSessionId(task.id);
+
+        state.activeAutomationTaskId = task.id;
+        state.activeAutomationRunId = run.id;
+        sidebarHistoryStatus.activeAutomationTaskId = task.id;
+        persistSidebarHistoryStatus();
+
+        conversationSessions[sessionId] = {
+          id: sessionId,
+          historyTitle: task.title,
+          prompt: task.prompt,
+          time: run.timeLabel,
+          stage: "reply",
+          source: "automation-task",
+          taskId: task.id,
+          taskTitle: task.title,
+          runId: run.id,
+          agentLabel: task.agentLabel
+        };
+
+        clearTimeout(chatReplyTimer);
+        state.mainPanel = "home";
+        state.homeView = "chat";
+        state.currentChannel = "claw";
+        state.homeInsightRailEnabled = false;
+        state.activeChatId = sessionId;
+        state.outputResultsPanelOpen = true;
+        state.outputResultsPanelMode = "list";
+        state.outputOpenTabs = [];
+        state.activeOutputTabId = "";
+        state.activeOutputMenuId = "";
+        state.outputAddMenuOpen = false;
+        state.businessObjectOverlayOpen = false;
+        state.activeBusinessObjectSourceId = "";
+        persistConversationState();
+        persistOutputPanelState();
+        setSidebarActive(null);
+        renderMainPanels();
+        setEditorText("");
+      }
+
       function renderSkillResultCard(title) {
         const logoText = (title || "技").trim().slice(0, 1).toUpperCase();
         return `
@@ -21466,6 +22085,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function renderTaskRunConversation(session) {
+        if (session.source === "automation-task") {
+          return renderAutomationTaskConversation(session);
+        }
+
         const profile = session.customerProfile || mockAiCustomerProfiles[0];
         const taskTitle = session.taskTitle || "自动化任务";
         const agentLabel = session.agentLabel || "智能体";
@@ -21499,6 +22122,34 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               ${renderChatReplyChip("继续补充跟进建议", "mock-follow-up")}
               ${renderChatReplyChip("重新生成客户简报", "mock-regenerate")}
               ${renderChatReplyChip("查看 PDF 全文", "mock-open-pdf")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderAutomationTaskConversation(session) {
+        const task = getAutomationTaskDefinition(session.taskId);
+        const run = getAutomationTaskRun(task.id, state.activeAutomationRunId || session.runId);
+        return `
+          <div class="chat-ai-block">
+            <div class="chat-ai-card">
+              ${renderChatAiMeta("ShareAgent", run.duration)}
+              <p class="chat-ai-title">${escapeHtml(run.displayTitle)} - ${escapeHtml(run.dateLabel)}</p>
+              <p class="chat-ai-copy">${escapeHtml(run.summary)}</p>
+              <p class="chat-ai-copy" style="margin-top: 12px;">${escapeHtml(task.crmObject)} ｜ ${escapeHtml(task.agentLabel)}</p>
+              <div class="chat-ai-section">
+                <p class="chat-ai-section-title">关键发现</p>
+                ${renderChatBulletList(run.findings)}
+              </div>
+              <div class="chat-ai-section">
+                <p class="chat-ai-section-title">建议动作</p>
+                ${renderChatBulletList(run.actions)}
+              </div>
+              <div class="chat-ai-section">
+                <p class="chat-ai-section-title">资源</p>
+                ${renderChatBulletList(run.sources.map((source) => `Sources：${source}`))}
+              </div>
+              ${renderChatToolbar()}
             </div>
           </div>
         `;
@@ -21862,12 +22513,45 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
+      function getChatSessionTitle(session) {
+        if (!session) {
+          return "";
+        }
+
+        if (session.source === "automation-task") {
+          return getAutomationTaskDefinition(session.taskId).title;
+        }
+
+        return session.historyTitle || session.taskTitle || session.prompt || "";
+      }
+
+      function hasProducedChatMessage(session) {
+        if (!session) {
+          return false;
+        }
+
+        return !["draft", "thinking"].includes(session.stage || "");
+      }
+
+      function syncChatSessionTitlebar(session) {
+        if (!chatSessionTitlebar || !chatSessionTitleText) {
+          return;
+        }
+
+        const showTitlebar = hasProducedChatMessage(session);
+        chatSessionTitlebar.classList.toggle("hidden", !showTitlebar);
+        chatSessionTitleText.textContent = showTitlebar ? getChatSessionTitle(session) : "";
+      }
+
       function renderChatConversation() {
         const session = conversationSessions[state.activeChatId];
         if (!session) {
           chatFeed.innerHTML = "";
+          syncChatSessionTitlebar(null);
           return;
         }
+
+        syncChatSessionTitlebar(session);
 
         if (session.source === "market-use" && session.stage === "draft") {
           chatFeed.innerHTML = renderMarketUseConversation(session);
@@ -21937,10 +22621,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        const isAutomationSession = session.source === "automation-task";
         let content = `
           <div class="chat-feed-column">
-            <div class="chat-user-row"><div class="chat-user-bubble">${escapeHtml(session.prompt)}</div></div>
-            <div class="chat-time">${escapeHtml(session.time)}</div>
+            ${isAutomationSession ? "" : `
+              <div class="chat-user-row"><div class="chat-user-bubble">${escapeHtml(session.prompt)}</div></div>
+              <div class="chat-time">${escapeHtml(session.time)}</div>
+            `}
         `;
 
         if (session.stage === "thinking") {
@@ -21963,6 +22650,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           content += renderShengquanPocConversation(session);
         } else if (session.id === "haiyue-brief") {
           content += renderHaiyueBriefConversation(session);
+        } else if (session.source === "automation-task") {
+          content += renderAutomationTaskConversation(session);
         } else if (session.source === "mock-ai-task") {
           content += renderTaskRunConversation(session);
         } else if (session.source === "mock-ai") {
@@ -22788,6 +23477,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function applyInitialRouteLaunch() {
+        if (getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE) {
+          openAutomationTaskConversation(initialRouteState.taskId || "task-morning-check");
+          return;
+        }
+
         if (!isCurrentPanelDocument("home")) {
           return;
         }
@@ -24566,6 +25260,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           sidebarHistoryStatus.activeAutomationTaskId = taskId;
           persistSidebarHistoryStatus();
           renderHistoryList();
+          if (getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("task", taskId);
+            window.history.replaceState(null, "", url.toString());
+            openAutomationTaskConversation(taskId);
+            return;
+          }
+
           window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
         }
       });
@@ -24773,6 +25475,30 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       chatOutputPanel?.addEventListener("click", async (event) => {
         if (event.target.closest("[data-output-resize-handle]")) {
+          return;
+        }
+
+        const automationRunRow = event.target.closest("[data-automation-run-id]");
+        if (automationRunRow) {
+          const run = getAutomationTaskRun(state.activeAutomationTaskId, automationRunRow.dataset.automationRunId || "");
+          const session = conversationSessions[state.activeChatId];
+
+          state.activeAutomationRunId = run.id;
+          if (isAutomationTaskSession(session)) {
+            session.runId = run.id;
+            session.time = run.timeLabel;
+          }
+
+          state.outputResultsPanelMode = "list";
+          state.outputOpenTabs = [];
+          state.activeOutputTabId = "";
+          state.activeOutputMenuId = "";
+          state.outputAddMenuOpen = false;
+          state.businessObjectOverlayOpen = false;
+          state.activeBusinessObjectSourceId = "";
+          persistConversationState();
+          persistOutputPanelState();
+          renderMainPanels();
           return;
         }
 
