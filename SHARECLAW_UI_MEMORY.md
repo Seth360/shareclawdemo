@@ -112,7 +112,7 @@ Primary shared render/navigation functions:
 | 任务搜索 / 状态筛选 | `task.html` | `#taskSearchInput`, `#taskStatusFilter`, `taskPageState.query/status` | `getVisibleTaskRecords()`, `renderTaskPage()` |
 | 创建任务弹窗 | `task.html` | `#createTaskOverlay`, `#createTaskDialogBody`, `state.createTaskForm` | `openCreateTaskDialog()`, `renderCreateTaskDialog()`, `confirmCreateTaskDialog()` |
 | 自动化任务对话 | `task-conversation.html` | `?task`, `state.activeAutomationTaskId`, `state.activeAutomationRunId`, `automationTaskCatalog` | `openAutomationTaskConversation()`, `renderAutomationTaskConversation()`; the selected left automation task drives the central CRM execution report. Automation-task sessions intentionally do not render the prompt as a user message. |
-| 自动化任务报告侧栏 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `.automation-output-card`, `[data-automation-run-id]` | `renderAutomationTaskReportCard()`, `renderOutputListPanel()`; the first right-side card lists trigger runs for the active task and clicking a run refreshes chat content plus generated outputs. In automation list mode the output panel wrapper is transparent; the module cards are independent cards, not nested in one outer white card. |
+| 自动化任务报告侧栏 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `.automation-output-card`, `.automation-report-row.unread`, `[data-automation-run-id]`, `sidebarHistoryStatus.automationReadRunKeys` | `renderAutomationTaskReportCard()`, `renderOutputListPanel()`; the first right-side card lists trigger runs for the active task and clicking a run refreshes chat content plus generated outputs. The blue report dot maps to unread state, not active selection. It stays visible when a task is merely opened, and disappears only after a specific report row is clicked and `markAutomationRunRead()` records that run as read. In automation list mode the output panel wrapper is transparent; the module cards are independent cards, not nested in one outer white card. |
 | 自动化业务生成结果 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `[data-output-doc-id]`, `[data-output-business-id]` | `renderBusinessOutputCard()`, `getAutomationOutputDocs()`, `getAutomationOutputBusinessSources()`; the second independent right-side card shows the selected run's documents and business objects. Document rows reuse output detail cards; business object rows reuse the static no-dynamic-tab detached drawer logic. |
 | 智能体广场 | `market.html` | `#marketShell`, `#appSquarePage`, `state.marketMode` | `openMarketPage("square")`, `renderMarketSquare()` |
 | 智能体卡片 | `market.html` | `#enterpriseGrid`, `#marketPublicGrid`, `[data-agent-action]`, `[data-use-id]` | `renderAgentSquareCard()`, agent grid click handlers |
@@ -227,7 +227,13 @@ The right panel uses two floating cards:
 - `任务报告` -> `renderAutomationTaskReportCard()` renders trigger runs for the
   active task. Clicking `[data-automation-run-id]` switches the active run,
   updates the central CRM report, clears stale output detail state, and refreshes
-  generated outputs.
+  generated outputs. `.automation-report-row.active` marks the selected run;
+  `.automation-report-row.unread` controls the blue dot and represents unread
+  report state only. `markAutomationRunRead(taskId, runId)` stores read runs in
+  `sidebarHistoryStatus.automationReadRunKeys`, but it is triggered by clicking a
+  concrete report row, not by merely opening the automation task. This keeps the
+  left automation task unread marker consistent with unread blue dots inside the
+  report list.
 - `业务生成结果` -> `renderBusinessOutputCard()` renders documents and business
   objects for the active run. Document clicks reuse
   `openOutputPanelTab("doc", id)` and the existing document detail card.

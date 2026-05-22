@@ -1280,7 +1280,7 @@
         flex: 0 0 auto;
       }
 
-      .automation-report-row.active .automation-report-dot {
+      .automation-report-row.unread .automation-report-dot {
         opacity: 1;
       }
 
@@ -14965,6 +14965,41 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return task.reports.find((item) => item.id === runId) || task.reports[0];
       }
 
+      function getAutomationReadRunKeys() {
+        if (!Array.isArray(sidebarHistoryStatus.automationReadRunKeys)) {
+          sidebarHistoryStatus.automationReadRunKeys = [];
+        }
+        return sidebarHistoryStatus.automationReadRunKeys;
+      }
+
+      function getAutomationRunReadKey(taskId, runId) {
+        return `${taskId}:${runId}`;
+      }
+
+      function isAutomationRunUnread(taskId, runId) {
+        const task = getAutomationTaskDefinition(taskId);
+        const unreadCount = automationTaskHistoryItems.find((item) => item.id === task.id)?.unread || 0;
+        const unreadRunIds = task.reports.slice(0, unreadCount).map((run) => run.id);
+        if (!unreadRunIds.includes(runId)) {
+          return false;
+        }
+        return !getAutomationReadRunKeys().includes(getAutomationRunReadKey(task.id, runId));
+      }
+
+      function getAutomationTaskUnreadCount(taskId) {
+        const task = getAutomationTaskDefinition(taskId);
+        return task.reports.filter((run) => isAutomationRunUnread(task.id, run.id)).length;
+      }
+
+      function markAutomationRunRead(taskId, runId) {
+        if (!isAutomationRunUnread(taskId, runId)) {
+          return false;
+        }
+        getAutomationReadRunKeys().push(getAutomationRunReadKey(taskId, runId));
+        persistSidebarHistoryStatus();
+        return true;
+      }
+
       function getCurrentAutomationTaskRun() {
         return getAutomationTaskRun();
       }
@@ -19043,15 +19078,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               ${outputCardToggleMarkup()}
             </div>
             <div class="automation-output-card-body">
-              ${task.reports.map((run) => `
-                <button class="automation-report-row ${run.id === activeRun.id ? "active" : ""}" type="button" data-automation-run-id="${escapeHtml(run.id)}" aria-label="查看 ${escapeHtml(run.timeLabel)} ${escapeHtml(run.displayTitle)}">
+              ${task.reports.map((run) => {
+                const isUnread = isAutomationRunUnread(task.id, run.id);
+                return `
+                <button class="automation-report-row ${run.id === activeRun.id ? "active" : ""} ${isUnread ? "unread" : ""}" type="button" data-automation-run-id="${escapeHtml(run.id)}" aria-label="查看 ${escapeHtml(run.timeLabel)} ${escapeHtml(run.displayTitle)}${isUnread ? " 未读" : ""}">
                   <span class="automation-report-main">
                     <span class="automation-report-time">${escapeHtml(run.timeLabel)}</span>
                     <span class="automation-report-name">${escapeHtml(run.displayTitle)}</span>
                   </span>
                   <span class="automation-report-dot" aria-hidden="true"></span>
                 </button>
-              `).join("")}
+              `;
+              }).join("")}
             </div>
           </section>
         `;
@@ -20167,17 +20205,20 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
         automationTaskList.innerHTML = automationTaskHistoryItems
           .map(
-            (item) => `
+            (item) => {
+              const unreadCount = getAutomationTaskUnreadCount(item.id);
+              return `
               <button
-                class="automation-task-row ${item.unread ? "has-unread" : ""} ${sidebarHistoryStatus.activeAutomationTaskId === item.id ? "active" : ""}"
+                class="automation-task-row ${unreadCount ? "has-unread" : ""} ${sidebarHistoryStatus.activeAutomationTaskId === item.id ? "active" : ""}"
                 type="button"
                 data-automation-task="${escapeHtml(item.id)}"
               >
                 <span class="automation-task-icon" aria-hidden="true"></span>
                 <span class="automation-task-text">${escapeHtml(item.title)}</span>
-                ${item.unread ? `<span class="automation-task-count">${escapeHtml(String(item.unread))}</span>` : ""}
+                ${unreadCount ? `<span class="automation-task-count">${escapeHtml(String(unreadCount))}</span>` : ""}
               </button>
-            `
+            `;
+            }
           )
           .join("");
       }
@@ -25484,6 +25525,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           const session = conversationSessions[state.activeChatId];
 
           state.activeAutomationRunId = run.id;
+          markAutomationRunRead(state.activeAutomationTaskId, run.id);
           if (isAutomationTaskSession(session)) {
             session.runId = run.id;
             session.time = run.timeLabel;
