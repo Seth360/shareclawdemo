@@ -648,6 +648,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
       }
 
       .history-title {
@@ -656,18 +660,58 @@
         color: var(--text-soft);
       }
 
+      .history-header-main {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .history-collapse-icon {
+        width: 9px;
+        height: 9px;
+        flex: 0 0 auto;
+        color: #91959e;
+        opacity: 0;
+        transform: rotate(90deg);
+        transition: opacity 0.16s ease, transform 0.16s ease;
+      }
+
+      .history-header:hover .history-collapse-icon,
+      .history-header:focus-visible .history-collapse-icon,
+      .history-header.is-collapsed .history-collapse-icon {
+        opacity: 1;
+      }
+
+      .history-header.is-collapsed .history-collapse-icon {
+        transform: rotate(0deg);
+      }
+
+      .history-header.is-collapsed + .history-list,
+      .history-header.is-collapsed + .automation-task-list {
+        display: none;
+      }
+
       .history-search {
         width: 14px;
         height: 14px;
         color: #c1c5ce;
       }
 
-      .history-list {
+      .history-list,
+      .automation-task-list {
         display: flex;
         flex-direction: column;
       }
 
-      .history-row {
+      .history-block .history-list,
+      .history-block .automation-task-list {
+        margin-top: 0;
+        gap: 0;
+      }
+
+      .history-row,
+      .automation-task-row {
         width: 240px;
         height: 42px;
         padding: 12px;
@@ -675,27 +719,114 @@
         align-items: center;
         gap: 4px;
         border-radius: 8px;
+        text-align: left;
       }
 
-      .history-row.active {
+      .history-row:hover,
+      .automation-task-row:hover,
+      .history-row.active,
+      .automation-task-row.active {
         background: #f7f8fc;
       }
 
-      .history-row-icon {
+      .history-row-icon,
+      .automation-task-icon {
         width: 14px;
         height: 14px;
         color: #181c25;
         flex: 0 0 auto;
       }
 
-      .history-row-text {
+      .automation-task-icon {
+        position: relative;
+        width: 14px;
+        height: 14px;
+        border: 0;
+        border-radius: 999px;
+      }
+
+      .automation-task-icon::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 6px;
+        height: 6px;
+        border: 1px solid #dee1e8;
+        border-radius: 999px;
+        background: #fff;
+      }
+
+      .automation-task-row.has-unread .automation-task-icon::after {
+        border-color: #0c6cff;
+        background: #0c6cff;
+      }
+
+      .history-row-dot {
+        position: relative;
+        border: 0;
+        border-radius: 999px;
+      }
+
+      .history-row-dot::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 6px;
+        height: 6px;
+        border: 1px solid #181c25;
+        border-radius: 999px;
+        background: #fff;
+      }
+
+      .history-row-dot.is-unread::after {
+        border-color: #0c6cff;
+        background: #0c6cff;
+      }
+
+      .history-row-dot.is-pending::after {
+        border-color: #ff8000;
+        background: #ff8000;
+      }
+
+      .history-status-label {
+        flex: 0 0 auto;
+        height: 18px;
+        padding: 0 6px;
+        border-radius: 6px;
+        background: #fff3e8;
+        color: #ff7a00;
+        font-size: 10px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .history-row-text,
+      .automation-task-text {
         font-size: 13px;
         line-height: 18px;
         color: var(--text-strong);
         min-width: 0;
+        flex: 1 1 auto;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .automation-task-count {
+        min-width: 18px;
+        height: 18px;
+        padding: 0 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background: #f2f4fb;
+        color: #545861;
+        font-size: 10px;
+        line-height: 18px;
+        font-weight: 500;
       }
 
       .main-shell {
@@ -9279,14 +9410,26 @@
               </div>
 
               <div class="history-block">
-                <div class="history-header">
-                  <span class="history-title">历史会话</span>
-                  <svg class="history-search" viewBox="0 0 14 14" aria-hidden="true">
-                    <circle class="icon-stroke" cx="6.2" cy="6.2" r="4.5"></circle>
-                    <path class="icon-stroke" d="m9.8 9.8 2.5 2.5"></path>
-                  </svg>
-                </div>
+                <button class="history-header" id="automationTaskGroupHeader" type="button" data-sidebar-group-toggle="automation" aria-expanded="true">
+                  <span class="history-header-main">
+                    <span class="history-title">自动化任务</span>
+                    <svg class="history-collapse-icon" viewBox="0 0 9 9" aria-hidden="true">
+                      <path class="icon-stroke" d="M3.1 1.8 5.8 4.5 3.1 7.2"></path>
+                    </svg>
+                  </span>
+                </button>
+                <div class="automation-task-list" id="automationTaskList"></div>
+              </div>
 
+              <div class="history-block">
+                <button class="history-header" id="historyGroupHeader" type="button" data-sidebar-group-toggle="history" aria-expanded="true">
+                  <span class="history-header-main">
+                    <span class="history-title">历史会话</span>
+                    <svg class="history-collapse-icon" viewBox="0 0 9 9" aria-hidden="true">
+                      <path class="icon-stroke" d="M3.1 1.8 5.8 4.5 3.1 7.2"></path>
+                    </svg>
+                  </span>
+                </button>
                 <div class="history-list" id="historyList"></div>
               </div>
             </div>
@@ -11082,6 +11225,7 @@
       ];
 
       const AI_PROFILE_STORAGE_KEY = "shareclaw-ai-profile-v1";
+      const SIDEBAR_HISTORY_STATUS_STORAGE_KEY = "shareclaw-sidebar-history-status-v1";
       const DEFAULT_AI_AVATAR = "./images/Image_byccxbyccxbyccxb.png";
 
       function createDefaultAiProfile() {
@@ -11118,6 +11262,24 @@
         }
       }
 
+
+      function loadSidebarHistoryStatus() {
+        try {
+          const raw = window.localStorage.getItem(SIDEBAR_HISTORY_STATUS_STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function persistSidebarHistoryStatus() {
+        try {
+          window.localStorage.setItem(SIDEBAR_HISTORY_STATUS_STORAGE_KEY, JSON.stringify(sidebarHistoryStatus));
+        } catch (error) {
+          // Ignore persistence failures in local preview mode.
+        }
+      }
       const CONVERSATION_PAGE_FILE = "conversation.html";
 
       const PAGE_FILE_BY_PANEL = {
@@ -11214,6 +11376,10 @@
         activeChatId: initialRouteState.activeChatId,
         homeInsightRailCollapsed: true,
         homeInsightRailEnabled: initialRouteState.homeInsightRailEnabled,
+        sidebarGroups: {
+          automation: true,
+          history: true
+        },
         outputResultsPanelOpen: false,
         outputResultsTab: "current",
         activeOutputMenuId: "",
@@ -11307,6 +11473,9 @@
       const openRailSettingsBtn = document.getElementById("openRailSettingsBtn");
       const settingsBackBtn = document.getElementById("settingsBackBtn");
       const configBackBtn = document.getElementById("configBackBtn");
+      const automationTaskGroupHeader = document.getElementById("automationTaskGroupHeader");
+      const historyGroupHeader = document.getElementById("historyGroupHeader");
+      const automationTaskList = document.getElementById("automationTaskList");
       const historyList = document.getElementById("historyList");
       const sidebarPrimaryHomeBtn = document.querySelector(".sidebar-primary-entry[data-panel='home']");
       const homeDashboardShell = document.getElementById("homeDashboardShell");
@@ -11498,12 +11667,24 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
 每个模板都应附带参数示例和失败兜底说明。`
       };
+      const pinnedHistoryItems = [
+        { id: "pinned-haiyue-brief", title: "海岳智能制造集团客户近况", type: "session", sessionId: "haiyue-brief", url: "conversation.html?launch=haiyue-brief&prompt=%E5%B8%AE%E6%88%91%E6%9F%A5%E7%9C%8B%E6%B5%B7%E5%B2%B3%E6%99%BA%E8%83%BD%E5%88%B6%E9%80%A0%E9%9B%86%E5%9B%A2%E8%BF%91%E5%86%B5%E5%92%8C%E5%90%8E%E7%BB%AD%E6%80%8E%E4%B9%88%E5%81%9A" },
+        { id: "pinned-create-baiziwan", title: "创建客户 · 百子湾", type: "launch", url: "conversation.html?launch=create-customer&prompt=%E5%88%9B%E5%BB%BA%E5%AE%A2%E6%88%B7%EF%BC%9A%E7%99%BE%E5%AD%90%E6%B9%BE" }
+      ];
       const baseHistoryItems = [
         { id: "history-sales-report", title: "帮我总结这个月的销售报表", type: "static" },
         { id: "history-chat-30", title: "帮我查找过去30天的总聊天对话", type: "static" },
         { id: "history-response-trend", title: "给我平均响应时间的趋势", type: "static" },
         { id: "history-chat-chart", title: "显示过去30天的对话趋势条形图", type: "static" }
       ];
+      const automationTaskHistoryItems = [
+        { id: "task-morning-check", title: "重点客户异动晨检", unread: 1 },
+        { id: "task-meeting-crm", title: "客户会议纪要回填 CRM", unread: 0 },
+        { id: "task-lead-cleanup", title: "线索池清理与分发", unread: 0 },
+        { id: "task-weekly-operation", title: "重点客户经营周报", unread: 0 },
+        { id: "task-renewal-warning", title: "续费预警复盘提醒", unread: 0 }
+      ];
+      const sidebarHistoryStatus = loadSidebarHistoryStatus();
       const conversationHistory = [];
       const messengerThreads = [
         {
@@ -15504,12 +15685,66 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         saveSkillImportBtn.disabled = !state.skillImportName.trim() || !state.skillImportApiName.trim() || state.skillImportStatus !== "preview";
       }
 
-      function historyIconMarkup() {
-        return `
-          <svg class="history-row-icon" viewBox="0 0 14 14" aria-hidden="true">
-            <path d="M1.05 13.5625L1.42536 10.9696C0.530951 9.86733 0 8.4918 0 7C0 3.37563 3.13401 0.4375 7 0.4375C10.866 0.4375 14 3.37563 14 7C14 10.6244 10.866 13.5625 7 13.5625C5.87231 13.5625 4.8069 13.3125 3.86339 12.8684L1.05 13.5625ZM3.95517 11.9445L4.23602 12.0767C5.08484 12.4763 6.0251 12.6875 7 12.6875C10.3949 12.6875 13.125 10.128 13.125 7C13.125 3.87195 10.3949 1.3125 7 1.3125C3.60508 1.3125 0.875 3.87195 0.875 7C0.875 8.25027 1.30996 9.43869 2.10481 10.4182L2.34622 10.7158L2.10216 12.4017L3.95517 11.9445Z" fill="#181C25"></path>
-          </svg>
-        `;
+      function isBaiziwanCreateSessionDone() {
+        return Object.values(conversationSessions).some((session) => (
+          session &&
+          session.source === "create-customer" &&
+          session.customerName === "百子湾" &&
+          ["created", "canceled"].includes(session.stage)
+        ));
+      }
+
+      function isBaiziwanCreatePending() {
+        if (sidebarHistoryStatus.baiziwanPending === false || isBaiziwanCreateSessionDone()) {
+          return false;
+        }
+        return true;
+      }
+
+      function getHistoryItemStatus(item) {
+        if (item.id === "pinned-haiyue-brief") {
+          return sidebarHistoryStatus.haiyueUnread === false ? "" : "unread";
+        }
+        if (item.id === "pinned-create-baiziwan") {
+          return isBaiziwanCreatePending() ? "pending" : "";
+        }
+        return "";
+      }
+
+      function historyIconMarkup(item) {
+        const status = getHistoryItemStatus(item);
+        return '<span class="history-row-icon history-row-dot ' + (status ? 'is-' + status : '') + '" aria-hidden="true"></span>';
+      }
+
+      function historyStatusLabelMarkup(item) {
+        return getHistoryItemStatus(item) === "pending" ? '<span class="history-status-label">待回复</span>' : "";
+      }
+
+      function isHistoryItemActive(item) {
+        if (state.activeHistoryId === item.id) {
+          return true;
+        }
+        if (item.sessionId && state.activeChatId === item.sessionId) {
+          return true;
+        }
+        const activeSession = conversationSessions[state.activeChatId];
+        return item.id === "pinned-create-baiziwan" && activeSession?.source === "create-customer" && activeSession.customerName === "百子湾";
+      }
+
+      function markHaiyueHistoryRead() {
+        sidebarHistoryStatus.haiyueUnread = false;
+        persistSidebarHistoryStatus();
+      }
+
+      function markBaiziwanPending(isPending) {
+        sidebarHistoryStatus.baiziwanPending = Boolean(isPending);
+        persistSidebarHistoryStatus();
+      }
+
+      function syncBaiziwanPendingFromSession(session) {
+        if (session?.source === "create-customer" && session.customerName === "百子湾" && ["created", "canceled"].includes(session.stage)) {
+          markBaiziwanPending(false);
+        }
       }
 
       function messengerAvatarMarkup(thread) {
@@ -15529,20 +15764,61 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       }
 
+      function renderSidebarGroupHeaders() {
+        [
+          { key: "automation", element: automationTaskGroupHeader },
+          { key: "history", element: historyGroupHeader }
+        ].forEach(({ key, element }) => {
+          if (!element) {
+            return;
+          }
+          const expanded = state.sidebarGroups[key] !== false;
+          element.classList.toggle("is-collapsed", !expanded);
+          element.setAttribute("aria-expanded", String(expanded));
+        });
+      }
+
+      function renderAutomationTaskList() {
+        if (!automationTaskList) {
+          return;
+        }
+        automationTaskList.innerHTML = automationTaskHistoryItems
+          .map(
+            (item) => `
+              <button
+                class="automation-task-row ${item.unread ? "has-unread" : ""} ${sidebarHistoryStatus.activeAutomationTaskId === item.id ? "active" : ""}"
+                type="button"
+                data-automation-task="${escapeHtml(item.id)}"
+              >
+                <span class="automation-task-icon" aria-hidden="true"></span>
+                <span class="automation-task-text">${escapeHtml(item.title)}</span>
+                ${item.unread ? `<span class="automation-task-count">${escapeHtml(String(item.unread))}</span>` : ""}
+              </button>
+            `
+          )
+          .join("");
+      }
+
       function renderHistoryList() {
-        const items = [...conversationHistory, ...baseHistoryItems];
+        renderSidebarGroupHeaders();
+        renderAutomationTaskList();
+        const pinnedKeys = new Set(pinnedHistoryItems.flatMap((item) => [item.sessionId, item.title]).filter(Boolean));
+        const dynamicItems = conversationHistory.filter((item) => !pinnedKeys.has(item.sessionId) && !pinnedKeys.has(item.title));
+        const items = [...pinnedHistoryItems, ...dynamicItems, ...baseHistoryItems];
         historyList.innerHTML = items
           .map(
             (item) => `
               <button
-                class="history-row ${state.activeHistoryId === item.id ? "active" : ""}"
+                class="history-row ${isHistoryItemActive(item) ? "active" : ""}"
                 type="button"
                 data-history-id="${escapeHtml(item.id)}"
                 data-history-type="${escapeHtml(item.type)}"
                 ${item.sessionId ? `data-session-id="${escapeHtml(item.sessionId)}"` : ""}
+                ${item.url ? `data-history-url="${escapeHtml(item.url)}"` : ""}
               >
-                ${historyIconMarkup()}
+                ${historyIconMarkup(item)}
                 <span class="history-row-text">${escapeHtml(item.title)}</span>
+                ${historyStatusLabelMarkup(item)}
               </button>
             `
           )
@@ -18184,6 +18460,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (button.dataset.historyId === "pinned-haiyue-brief") {
+          markHaiyueHistoryRead();
+        }
+
+        if (button.dataset.historyUrl) {
+          if (button.dataset.historyId === "pinned-create-baiziwan") {
+            markBaiziwanPending(true);
+          }
+          window.location.href = button.dataset.historyUrl;
+          return;
+        }
+
         if (button.dataset.sessionId) {
           openConversationSession(button.dataset.sessionId);
           return;
@@ -18201,6 +18489,27 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         state.homeInsightRailEnabled = false;
         setSidebarActive(null);
         renderMainPanels();
+      });
+
+      defaultSidebarView.addEventListener("click", (event) => {
+        const groupToggle = event.target.closest("[data-sidebar-group-toggle]");
+        if (groupToggle) {
+          const groupKey = groupToggle.dataset.sidebarGroupToggle || "";
+          if (groupKey in state.sidebarGroups) {
+            state.sidebarGroups[groupKey] = !state.sidebarGroups[groupKey];
+            renderHistoryList();
+          }
+          return;
+        }
+
+        const automationTaskButton = event.target.closest("[data-automation-task]");
+        if (automationTaskButton) {
+          const taskId = automationTaskButton.dataset.automationTask || "task-morning-check";
+          sidebarHistoryStatus.activeAutomationTaskId = taskId;
+          persistSidebarHistoryStatus();
+          renderHistoryList();
+          window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
+        }
       });
 
       chatFeed.addEventListener("click", async (event) => {

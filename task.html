@@ -626,6 +626,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
       }
 
       .history-title {
@@ -634,18 +638,58 @@
         color: var(--text-soft);
       }
 
+      .history-header-main {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .history-collapse-icon {
+        width: 9px;
+        height: 9px;
+        flex: 0 0 auto;
+        color: #91959e;
+        opacity: 0;
+        transform: rotate(90deg);
+        transition: opacity 0.16s ease, transform 0.16s ease;
+      }
+
+      .history-header:hover .history-collapse-icon,
+      .history-header:focus-visible .history-collapse-icon,
+      .history-header.is-collapsed .history-collapse-icon {
+        opacity: 1;
+      }
+
+      .history-header.is-collapsed .history-collapse-icon {
+        transform: rotate(0deg);
+      }
+
+      .history-header.is-collapsed + .history-list,
+      .history-header.is-collapsed + .automation-task-list {
+        display: none;
+      }
+
       .history-search {
         width: 14px;
         height: 14px;
         color: #c1c5ce;
       }
 
-      .history-list {
+      .history-list,
+      .automation-task-list {
         display: flex;
         flex-direction: column;
       }
 
-      .history-row {
+      .history-block .history-list,
+      .history-block .automation-task-list {
+        margin-top: 0;
+        gap: 0;
+      }
+
+      .history-row,
+      .automation-task-row {
         width: 240px;
         height: 42px;
         padding: 12px;
@@ -653,27 +697,114 @@
         align-items: center;
         gap: 4px;
         border-radius: 8px;
+        text-align: left;
       }
 
-      .history-row.active {
+      .history-row:hover,
+      .automation-task-row:hover,
+      .history-row.active,
+      .automation-task-row.active {
         background: #f7f8fc;
       }
 
-      .history-row-icon {
+      .history-row-icon,
+      .automation-task-icon {
         width: 14px;
         height: 14px;
         color: #181c25;
         flex: 0 0 auto;
       }
 
-      .history-row-text {
+      .automation-task-icon {
+        position: relative;
+        width: 14px;
+        height: 14px;
+        border: 0;
+        border-radius: 999px;
+      }
+
+      .automation-task-icon::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 6px;
+        height: 6px;
+        border: 1px solid #dee1e8;
+        border-radius: 999px;
+        background: #fff;
+      }
+
+      .automation-task-row.has-unread .automation-task-icon::after {
+        border-color: #0c6cff;
+        background: #0c6cff;
+      }
+
+      .history-row-dot {
+        position: relative;
+        border: 0;
+        border-radius: 999px;
+      }
+
+      .history-row-dot::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 6px;
+        height: 6px;
+        border: 1px solid #181c25;
+        border-radius: 999px;
+        background: #fff;
+      }
+
+      .history-row-dot.is-unread::after {
+        border-color: #0c6cff;
+        background: #0c6cff;
+      }
+
+      .history-row-dot.is-pending::after {
+        border-color: #ff8000;
+        background: #ff8000;
+      }
+
+      .history-status-label {
+        flex: 0 0 auto;
+        height: 18px;
+        padding: 0 6px;
+        border-radius: 6px;
+        background: #fff3e8;
+        color: #ff7a00;
+        font-size: 10px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .history-row-text,
+      .automation-task-text {
         font-size: 13px;
         line-height: 18px;
         color: var(--text-strong);
         min-width: 0;
+        flex: 1 1 auto;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .automation-task-count {
+        min-width: 18px;
+        height: 18px;
+        padding: 0 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background: #f2f4fb;
+        color: #545861;
+        font-size: 10px;
+        line-height: 18px;
+        font-weight: 500;
       }
 
       .main-shell {
@@ -9407,14 +9538,14 @@
 
       .task-card-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
         gap: 16px;
       }
 
       .task-card {
         position: relative;
         z-index: 0;
-        min-height: 122px;
+        min-height: 110px;
         padding: 12px;
         border-radius: 8px;
         border: 0;
@@ -9430,11 +9561,8 @@
       .task-card:hover,
       .task-card:focus-within {
         z-index: 4;
-        border-color: rgba(115, 65, 222, 0.26);
-        box-shadow:
-          0 0 2px rgba(28, 40, 64, 0.18),
-          0 6px 18px rgba(24, 41, 75, 0.08);
-        transform: translateY(-1px);
+        box-shadow: none;
+        transform: none;
       }
 
       .task-card.menu-open {
@@ -9443,15 +9571,18 @@
 
       .task-card.is-disabled {
         background: #fff;
+      }
+
+      .task-card.is-disabled .task-card-icon,
+      .task-card.is-disabled .task-card-main-copy,
+      .task-card.is-disabled .task-card-meta {
         opacity: 0.52;
       }
 
       .task-card-top {
-        padding-bottom: 12px;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 12px;
-        border-bottom: 1px solid #eaebee;
       }
 
       .task-card-icon {
@@ -9476,12 +9607,19 @@
         flex: 1;
         display: flex;
         flex-direction: column;
+        gap: 12px;
+      }
+
+      .task-card-main-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
         gap: 6px;
       }
 
       .task-card-title-row {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
         gap: 12px;
       }
@@ -9500,6 +9638,7 @@
 
       .task-card-prompt {
         margin: 0;
+        height: 18px;
         color: rgba(0, 0, 0, 0.6);
         font-size: 13px;
         line-height: 18px;
@@ -9509,11 +9648,11 @@
       }
 
       .task-card-bottom {
-        margin-top: 12px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
+        width: 100%;
       }
 
       .task-card-meta {
@@ -9521,7 +9660,7 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
 
       .task-card-chip {
@@ -9555,18 +9694,18 @@
       }
 
       .task-card-more-btn {
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
+        border-radius: 4px;
         color: #545861;
       }
 
       .task-card-more-btn:hover,
       .task-card-more-btn[aria-expanded="true"] {
-        background: #f5f7fb;
+        background: transparent;
       }
 
       .task-card-more-btn svg {
@@ -9814,15 +9953,7 @@
       }
 
       .task-log-card::before {
-        content: "";
-        position: absolute;
-        left: -22px;
-        top: 22px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #fff;
-        border: 2px solid #ff9f1a;
+        content: none;
       }
 
       .task-log-card-body {
@@ -10263,14 +10394,26 @@
               </div>
 
               <div class="history-block">
-                <div class="history-header">
-                  <span class="history-title">历史会话</span>
-                  <svg class="history-search" viewBox="0 0 14 14" aria-hidden="true">
-                    <circle class="icon-stroke" cx="6.2" cy="6.2" r="4.5"></circle>
-                    <path class="icon-stroke" d="m9.8 9.8 2.5 2.5"></path>
-                  </svg>
-                </div>
+                <button class="history-header" id="automationTaskGroupHeader" type="button" data-sidebar-group-toggle="automation" aria-expanded="true">
+                  <span class="history-header-main">
+                    <span class="history-title">自动化任务</span>
+                    <svg class="history-collapse-icon" viewBox="0 0 9 9" aria-hidden="true">
+                      <path class="icon-stroke" d="M3.1 1.8 5.8 4.5 3.1 7.2"></path>
+                    </svg>
+                  </span>
+                </button>
+                <div class="automation-task-list" id="automationTaskList"></div>
+              </div>
 
+              <div class="history-block">
+                <button class="history-header" id="historyGroupHeader" type="button" data-sidebar-group-toggle="history" aria-expanded="true">
+                  <span class="history-header-main">
+                    <span class="history-title">历史会话</span>
+                    <svg class="history-collapse-icon" viewBox="0 0 9 9" aria-hidden="true">
+                      <path class="icon-stroke" d="M3.1 1.8 5.8 4.5 3.1 7.2"></path>
+                    </svg>
+                  </span>
+                </button>
                 <div class="history-list" id="historyList"></div>
               </div>
             </div>
@@ -11995,12 +12138,14 @@
       const createTaskCycleOptions = [
         { value: "daily", label: "每天", mode: "time" },
         { value: "weekly", label: "每周", mode: "days-time" },
-        { value: "biweekly-days", label: "每双周", mode: "days-time", menuMeta: "按星期" },
-        { value: "biweekly-date", label: "每双周", mode: "date-time", menuMeta: "按日期" }
+        { value: "biweekly", label: "每双周", mode: "days-time" },
+        { value: "monthly", label: "每月", mode: "date-time" },
+        { value: "yearly", label: "每年", mode: "month-date-time" }
       ];
 
       const createTaskWeekdayOptions = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
       const createTaskTimeOptions = ["09:00", "10:30", "14:00", "18:00"];
+      const createTaskMonthOptions = ["", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
       const createTaskDateOptions = ["", "2026/05/20", "2026/05/27", "2026/06/15"];
       const createTaskIntervalUnitOptions = ["分钟", "小时"];
       const createTaskAgentOptions = ["客户洞察", "销售推进", "商机巡检", "续约助手"];
@@ -12025,6 +12170,7 @@
           cycleType: "daily",
           cycleDays: ["周一", "周二", "周三", "周四"],
           cycleTime: "09:00",
+          cycleMonth: "",
           cycleDate: "",
           intervalValue: "1",
           intervalUnit: "分钟",
@@ -12106,6 +12252,7 @@
       ];
 
       const AI_PROFILE_STORAGE_KEY = "shareclaw-ai-profile-v1";
+      const SIDEBAR_HISTORY_STATUS_STORAGE_KEY = "shareclaw-sidebar-history-status-v1";
       const DEFAULT_AI_AVATAR = "./images/Image_byccxbyccxbyccxb.png";
 
       function createDefaultAiProfile() {
@@ -12142,6 +12289,24 @@
         }
       }
 
+
+      function loadSidebarHistoryStatus() {
+        try {
+          const raw = window.localStorage.getItem(SIDEBAR_HISTORY_STATUS_STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function persistSidebarHistoryStatus() {
+        try {
+          window.localStorage.setItem(SIDEBAR_HISTORY_STATUS_STORAGE_KEY, JSON.stringify(sidebarHistoryStatus));
+        } catch (error) {
+          // Ignore persistence failures in local preview mode.
+        }
+      }
       const CONVERSATION_PAGE_FILE = "conversation.html";
 
       const PAGE_FILE_BY_PANEL = {
@@ -12238,6 +12403,10 @@
         activeChatId: initialRouteState.activeChatId,
         homeInsightRailCollapsed: true,
         homeInsightRailEnabled: initialRouteState.homeInsightRailEnabled,
+        sidebarGroups: {
+          automation: true,
+          history: true
+        },
         outputResultsPanelOpen: false,
         outputResultsTab: "current",
         activeOutputMenuId: "",
@@ -12326,6 +12495,9 @@
       const openRailSettingsBtn = document.getElementById("openRailSettingsBtn");
       const settingsBackBtn = document.getElementById("settingsBackBtn");
       const configBackBtn = document.getElementById("configBackBtn");
+      const automationTaskGroupHeader = document.getElementById("automationTaskGroupHeader");
+      const historyGroupHeader = document.getElementById("historyGroupHeader");
+      const automationTaskList = document.getElementById("automationTaskList");
       const historyList = document.getElementById("historyList");
       const sidebarPrimaryHomeBtn = document.querySelector(".sidebar-primary-entry[data-panel='home']");
       const homeDashboardShell = document.getElementById("homeDashboardShell");
@@ -12516,12 +12688,24 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
 每个模板都应附带参数示例和失败兜底说明。`
       };
+      const pinnedHistoryItems = [
+        { id: "pinned-haiyue-brief", title: "海岳智能制造集团客户近况", type: "session", sessionId: "haiyue-brief", url: "conversation.html?launch=haiyue-brief&prompt=%E5%B8%AE%E6%88%91%E6%9F%A5%E7%9C%8B%E6%B5%B7%E5%B2%B3%E6%99%BA%E8%83%BD%E5%88%B6%E9%80%A0%E9%9B%86%E5%9B%A2%E8%BF%91%E5%86%B5%E5%92%8C%E5%90%8E%E7%BB%AD%E6%80%8E%E4%B9%88%E5%81%9A" },
+        { id: "pinned-create-baiziwan", title: "创建客户 · 百子湾", type: "launch", url: "conversation.html?launch=create-customer&prompt=%E5%88%9B%E5%BB%BA%E5%AE%A2%E6%88%B7%EF%BC%9A%E7%99%BE%E5%AD%90%E6%B9%BE" }
+      ];
       const baseHistoryItems = [
         { id: "history-sales-report", title: "帮我总结这个月的销售报表", type: "static" },
         { id: "history-chat-30", title: "帮我查找过去30天的总聊天对话", type: "static" },
         { id: "history-response-trend", title: "给我平均响应时间的趋势", type: "static" },
         { id: "history-chat-chart", title: "显示过去30天的对话趋势条形图", type: "static" }
       ];
+      const automationTaskHistoryItems = [
+        { id: "task-morning-check", title: "重点客户异动晨检", unread: 1 },
+        { id: "task-meeting-crm", title: "客户会议纪要回填 CRM", unread: 0 },
+        { id: "task-lead-cleanup", title: "线索池清理与分发", unread: 0 },
+        { id: "task-weekly-operation", title: "重点客户经营周报", unread: 0 },
+        { id: "task-renewal-warning", title: "续费预警复盘提醒", unread: 0 }
+      ];
+      const sidebarHistoryStatus = loadSidebarHistoryStatus();
       const conversationHistory = [];
       const messengerThreads = [
         {
@@ -13953,49 +14137,51 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                 </svg>
               </span>
               <div class="task-card-copy">
-                <div class="task-card-title-row">
-                  <h3 class="task-card-title">${escapeHtml(record.title)}</h3>
-                  <button
-                    class="task-switch ${record.enabled ? "" : "is-off"}"
-                    type="button"
-                    aria-label="${record.enabled ? "关闭" : "开启"} ${escapeHtml(record.title)}"
-                    aria-pressed="${String(record.enabled)}"
-                    data-task-toggle="${escapeHtml(record.id)}"
-                  ></button>
+                <div class="task-card-main-copy">
+                  <div class="task-card-title-row">
+                    <h3 class="task-card-title">${escapeHtml(record.title)}</h3>
+                    <button
+                      class="task-switch ${record.enabled ? "" : "is-off"}"
+                      type="button"
+                      aria-label="${record.enabled ? "关闭" : "开启"} ${escapeHtml(record.title)}"
+                      aria-pressed="${String(record.enabled)}"
+                      data-task-toggle="${escapeHtml(record.id)}"
+                    ></button>
+                  </div>
+                  <p class="task-card-prompt">${escapeHtml(record.prompt)}</p>
                 </div>
-                <p class="task-card-prompt">${escapeHtml(record.prompt)}</p>
-              </div>
-            </div>
-            <div class="task-card-bottom">
-              <div class="task-card-meta">
-                <span class="task-card-chip agent">${escapeHtml(record.agent)}</span>
-                <span class="task-card-chip">
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <circle class="icon-stroke" cx="8" cy="8" r="6"></circle>
-                    <path class="icon-stroke" d="M8 4.5v3.7l2.3 1.6"></path>
-                  </svg>
-                  ${escapeHtml(record.schedule)}
-                </span>
-              </div>
-              <div class="task-card-actions">
-                <button
-                  class="task-card-more-btn"
-                  type="button"
-                  aria-label="${escapeHtml(record.title)} 更多操作"
-                  aria-expanded="${String(menuOpen)}"
-                  data-task-menu-trigger="${escapeHtml(record.id)}"
-                >
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <circle class="icon-fill" cx="3.5" cy="8" r="1"></circle>
-                    <circle class="icon-fill" cx="8" cy="8" r="1"></circle>
-                    <circle class="icon-fill" cx="12.5" cy="8" r="1"></circle>
-                  </svg>
-                </button>
-                <div class="task-card-menu ${menuOpen ? "open" : ""}" role="menu">
-                  <button class="task-card-menu-item" type="button" data-task-action="run-now" data-task-id="${escapeHtml(record.id)}">立即执行</button>
-                  <button class="task-card-menu-item" type="button" data-task-action="edit" data-task-id="${escapeHtml(record.id)}">编辑</button>
-                  <button class="task-card-menu-item" type="button" data-task-action="records" data-task-id="${escapeHtml(record.id)}">查看已执行记录</button>
-                  <button class="task-card-menu-item danger" type="button" data-task-action="delete" data-task-id="${escapeHtml(record.id)}">删除</button>
+                <div class="task-card-bottom">
+                  <div class="task-card-meta">
+                    <span class="task-card-chip agent">${escapeHtml(record.agent)}</span>
+                    <span class="task-card-chip">
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <circle class="icon-stroke" cx="8" cy="8" r="6"></circle>
+                        <path class="icon-stroke" d="M8 4.5v3.7l2.3 1.6"></path>
+                      </svg>
+                      ${escapeHtml(record.schedule)}
+                    </span>
+                  </div>
+                  <div class="task-card-actions">
+                    <button
+                      class="task-card-more-btn"
+                      type="button"
+                      aria-label="${escapeHtml(record.title)} 更多操作"
+                      aria-expanded="${String(menuOpen)}"
+                      data-task-menu-trigger="${escapeHtml(record.id)}"
+                    >
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <circle class="icon-fill" cx="3.5" cy="8" r="1"></circle>
+                        <circle class="icon-fill" cx="8" cy="8" r="1"></circle>
+                        <circle class="icon-fill" cx="12.5" cy="8" r="1"></circle>
+                      </svg>
+                    </button>
+                    <div class="task-card-menu ${menuOpen ? "open" : ""}" role="menu">
+                      <button class="task-card-menu-item" type="button" data-task-action="run-now" data-task-id="${escapeHtml(record.id)}">立即执行</button>
+                      <button class="task-card-menu-item" type="button" data-task-action="edit" data-task-id="${escapeHtml(record.id)}">编辑</button>
+                      <button class="task-card-menu-item" type="button" data-task-action="records" data-task-id="${escapeHtml(record.id)}">查看已执行记录</button>
+                      <button class="task-card-menu-item danger" type="button" data-task-action="delete" data-task-id="${escapeHtml(record.id)}">删除</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -16040,7 +16226,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getCreateTaskCycleMeta(cycleType) {
-        return createTaskCycleOptions.find((item) => item.value === cycleType) || createTaskCycleOptions[0];
+        const legacyTypeMap = {
+          "biweekly-days": "biweekly",
+          "biweekly-date": "monthly"
+        };
+        const normalizedType = legacyTypeMap[cycleType] || cycleType;
+        return createTaskCycleOptions.find((item) => item.value === normalizedType) || createTaskCycleOptions[0];
       }
 
       function getCreateTaskRecipientById(recipientId) {
@@ -16368,8 +16559,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         if (form.frequencyTab === "once") {
           return `
             <div class="create-task-frequency-row">
-              ${renderCreateTaskSelectControl(form.onceTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="onceTime"', true)}
               ${renderCreateTaskDateControl(form.onceDate, "选择日期", "create-task-control--204", 'data-create-task-cycle-field="onceDate"')}
+              ${renderCreateTaskSelectControl(form.onceTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="onceTime"', true)}
             </div>
           `;
         }
@@ -16380,7 +16571,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             <div class="create-task-frequency-row">
               ${renderCreateTaskDropdownWrap(
                 cycleTypeTrigger,
-                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, form.cycleType, "cycle") : "",
+                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
                 "cycle-type"
               )}
               ${renderCreateTaskChipSelector("cycleDays", form.cycleDays, "create-task-control--204", "选择星期", (day) => renderCreateTaskDayChip("cycleDays", day))}
@@ -16395,9 +16586,25 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             <div class="create-task-frequency-row">
               ${renderCreateTaskDropdownWrap(
                 cycleTypeTrigger,
-                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, form.cycleType, "cycle") : "",
+                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
                 "cycle-type"
               )}
+              ${renderCreateTaskDateControl(form.cycleDate, "选择日期", "create-task-control--204", 'data-create-task-cycle-field="cycleDate"')}
+              ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="cycleTime"', true)}
+            </div>
+          `;
+        }
+
+        if (cycleMeta.mode === "month-date-time") {
+          const cycleTypeTrigger = renderCreateTaskSelectControl(cycleMeta.label, "每天", "create-task-control--82", 'data-create-task-open-menu="cycleType"', false);
+          return `
+            <div class="create-task-frequency-row">
+              ${renderCreateTaskDropdownWrap(
+                cycleTypeTrigger,
+                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
+                "cycle-type"
+              )}
+              ${renderCreateTaskSelectControl(form.cycleMonth, "选择月份", "create-task-control--120", 'data-create-task-cycle-field="cycleMonth"', false)}
               ${renderCreateTaskDateControl(form.cycleDate, "选择日期", "create-task-control--204", 'data-create-task-cycle-field="cycleDate"')}
               ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="cycleTime"', true)}
             </div>
@@ -16409,7 +16616,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           <div class="create-task-frequency-row">
             ${renderCreateTaskDropdownWrap(
               cycleTypeTrigger,
-              state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, form.cycleType, "cycle") : "",
+              state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
               "cycle-type"
             )}
             ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--120", 'data-create-task-cycle-field="cycleTime"', true)}
@@ -16423,13 +16630,16 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return `每 ${form.intervalValue || "1"} ${form.intervalUnit}${form.intervalDays.length ? ` · ${form.intervalDays.join("、")}` : ""}`;
         }
         if (form.frequencyTab === "once") {
-          return `单次 ${form.onceTime}${form.onceDate ? ` · ${form.onceDate}` : ""}`;
+          return `单次 ${form.onceDate || "选择日期"} · ${form.onceTime}`;
         }
         if (cycleMeta.mode === "days-time") {
           return `${cycleMeta.label} ${form.cycleDays.join("、")} · ${form.cycleTime}`;
         }
         if (cycleMeta.mode === "date-time") {
           return `${cycleMeta.label} ${form.cycleDate || "选择日期"} · ${form.cycleTime}`;
+        }
+        if (cycleMeta.mode === "month-date-time") {
+          return `${cycleMeta.label} ${form.cycleMonth || "选择月份"} ${form.cycleDate || "选择日期"} · ${form.cycleTime}`;
         }
         return `${cycleMeta.label} · ${form.cycleTime}`;
       }
@@ -17494,12 +17704,66 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         saveSkillImportBtn.disabled = !state.skillImportName.trim() || !state.skillImportApiName.trim() || state.skillImportStatus !== "preview";
       }
 
-      function historyIconMarkup() {
-        return `
-          <svg class="history-row-icon" viewBox="0 0 14 14" aria-hidden="true">
-            <path d="M1.05 13.5625L1.42536 10.9696C0.530951 9.86733 0 8.4918 0 7C0 3.37563 3.13401 0.4375 7 0.4375C10.866 0.4375 14 3.37563 14 7C14 10.6244 10.866 13.5625 7 13.5625C5.87231 13.5625 4.8069 13.3125 3.86339 12.8684L1.05 13.5625ZM3.95517 11.9445L4.23602 12.0767C5.08484 12.4763 6.0251 12.6875 7 12.6875C10.3949 12.6875 13.125 10.128 13.125 7C13.125 3.87195 10.3949 1.3125 7 1.3125C3.60508 1.3125 0.875 3.87195 0.875 7C0.875 8.25027 1.30996 9.43869 2.10481 10.4182L2.34622 10.7158L2.10216 12.4017L3.95517 11.9445Z" fill="#181C25"></path>
-          </svg>
-        `;
+      function isBaiziwanCreateSessionDone() {
+        return Object.values(conversationSessions).some((session) => (
+          session &&
+          session.source === "create-customer" &&
+          session.customerName === "百子湾" &&
+          ["created", "canceled"].includes(session.stage)
+        ));
+      }
+
+      function isBaiziwanCreatePending() {
+        if (sidebarHistoryStatus.baiziwanPending === false || isBaiziwanCreateSessionDone()) {
+          return false;
+        }
+        return true;
+      }
+
+      function getHistoryItemStatus(item) {
+        if (item.id === "pinned-haiyue-brief") {
+          return sidebarHistoryStatus.haiyueUnread === false ? "" : "unread";
+        }
+        if (item.id === "pinned-create-baiziwan") {
+          return isBaiziwanCreatePending() ? "pending" : "";
+        }
+        return "";
+      }
+
+      function historyIconMarkup(item) {
+        const status = getHistoryItemStatus(item);
+        return '<span class="history-row-icon history-row-dot ' + (status ? 'is-' + status : '') + '" aria-hidden="true"></span>';
+      }
+
+      function historyStatusLabelMarkup(item) {
+        return getHistoryItemStatus(item) === "pending" ? '<span class="history-status-label">待回复</span>' : "";
+      }
+
+      function isHistoryItemActive(item) {
+        if (state.activeHistoryId === item.id) {
+          return true;
+        }
+        if (item.sessionId && state.activeChatId === item.sessionId) {
+          return true;
+        }
+        const activeSession = conversationSessions[state.activeChatId];
+        return item.id === "pinned-create-baiziwan" && activeSession?.source === "create-customer" && activeSession.customerName === "百子湾";
+      }
+
+      function markHaiyueHistoryRead() {
+        sidebarHistoryStatus.haiyueUnread = false;
+        persistSidebarHistoryStatus();
+      }
+
+      function markBaiziwanPending(isPending) {
+        sidebarHistoryStatus.baiziwanPending = Boolean(isPending);
+        persistSidebarHistoryStatus();
+      }
+
+      function syncBaiziwanPendingFromSession(session) {
+        if (session?.source === "create-customer" && session.customerName === "百子湾" && ["created", "canceled"].includes(session.stage)) {
+          markBaiziwanPending(false);
+        }
       }
 
       function messengerAvatarMarkup(thread) {
@@ -17519,20 +17783,61 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       }
 
+      function renderSidebarGroupHeaders() {
+        [
+          { key: "automation", element: automationTaskGroupHeader },
+          { key: "history", element: historyGroupHeader }
+        ].forEach(({ key, element }) => {
+          if (!element) {
+            return;
+          }
+          const expanded = state.sidebarGroups[key] !== false;
+          element.classList.toggle("is-collapsed", !expanded);
+          element.setAttribute("aria-expanded", String(expanded));
+        });
+      }
+
+      function renderAutomationTaskList() {
+        if (!automationTaskList) {
+          return;
+        }
+        automationTaskList.innerHTML = automationTaskHistoryItems
+          .map(
+            (item) => `
+              <button
+                class="automation-task-row ${item.unread ? "has-unread" : ""} ${sidebarHistoryStatus.activeAutomationTaskId === item.id ? "active" : ""}"
+                type="button"
+                data-automation-task="${escapeHtml(item.id)}"
+              >
+                <span class="automation-task-icon" aria-hidden="true"></span>
+                <span class="automation-task-text">${escapeHtml(item.title)}</span>
+                ${item.unread ? `<span class="automation-task-count">${escapeHtml(String(item.unread))}</span>` : ""}
+              </button>
+            `
+          )
+          .join("");
+      }
+
       function renderHistoryList() {
-        const items = [...conversationHistory, ...baseHistoryItems];
+        renderSidebarGroupHeaders();
+        renderAutomationTaskList();
+        const pinnedKeys = new Set(pinnedHistoryItems.flatMap((item) => [item.sessionId, item.title]).filter(Boolean));
+        const dynamicItems = conversationHistory.filter((item) => !pinnedKeys.has(item.sessionId) && !pinnedKeys.has(item.title));
+        const items = [...pinnedHistoryItems, ...dynamicItems, ...baseHistoryItems];
         historyList.innerHTML = items
           .map(
             (item) => `
               <button
-                class="history-row ${state.activeHistoryId === item.id ? "active" : ""}"
+                class="history-row ${isHistoryItemActive(item) ? "active" : ""}"
                 type="button"
                 data-history-id="${escapeHtml(item.id)}"
                 data-history-type="${escapeHtml(item.type)}"
                 ${item.sessionId ? `data-session-id="${escapeHtml(item.sessionId)}"` : ""}
+                ${item.url ? `data-history-url="${escapeHtml(item.url)}"` : ""}
               >
-                ${historyIconMarkup()}
+                ${historyIconMarkup(item)}
                 <span class="history-row-text">${escapeHtml(item.title)}</span>
+                ${historyStatusLabelMarkup(item)}
               </button>
             `
           )
@@ -20174,6 +20479,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (button.dataset.historyId === "pinned-haiyue-brief") {
+          markHaiyueHistoryRead();
+        }
+
+        if (button.dataset.historyUrl) {
+          if (button.dataset.historyId === "pinned-create-baiziwan") {
+            markBaiziwanPending(true);
+          }
+          window.location.href = button.dataset.historyUrl;
+          return;
+        }
+
         if (button.dataset.sessionId) {
           openConversationSession(button.dataset.sessionId);
           return;
@@ -20191,6 +20508,27 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         state.homeInsightRailEnabled = false;
         setSidebarActive(null);
         renderMainPanels();
+      });
+
+      defaultSidebarView.addEventListener("click", (event) => {
+        const groupToggle = event.target.closest("[data-sidebar-group-toggle]");
+        if (groupToggle) {
+          const groupKey = groupToggle.dataset.sidebarGroupToggle || "";
+          if (groupKey in state.sidebarGroups) {
+            state.sidebarGroups[groupKey] = !state.sidebarGroups[groupKey];
+            renderHistoryList();
+          }
+          return;
+        }
+
+        const automationTaskButton = event.target.closest("[data-automation-task]");
+        if (automationTaskButton) {
+          const taskId = automationTaskButton.dataset.automationTask || "task-morning-check";
+          sidebarHistoryStatus.activeAutomationTaskId = taskId;
+          persistSidebarHistoryStatus();
+          renderHistoryList();
+          window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
+        }
       });
 
       chatFeed.addEventListener("click", async (event) => {
@@ -20744,6 +21082,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           const field = cycleFieldButton.dataset.createTaskCycleField || "";
           if (field === "cycleTime" || field === "onceTime") {
             state.createTaskForm[field] = getNextCycledValue(createTaskTimeOptions, state.createTaskForm[field]);
+          } else if (field === "cycleMonth") {
+            state.createTaskForm[field] = getNextCycledValue(createTaskMonthOptions, state.createTaskForm[field]);
           } else if (field === "cycleDate" || field === "onceDate") {
             state.createTaskForm[field] = getNextCycledValue(createTaskDateOptions, state.createTaskForm[field]);
           }
