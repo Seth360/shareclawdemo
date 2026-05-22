@@ -14039,6 +14039,8 @@
       const CONVERSATION_SESSIONS_STORAGE_KEY = "shareclaw-conversation-sessions-v1";
       const SIDEBAR_HISTORY_STATUS_STORAGE_KEY = "shareclaw-sidebar-history-status-v1";
       const OUTPUT_TABS_STORAGE_KEY = "shareclaw-output-tabs-v1";
+      const TASK_RUNTIME_LOGS_STORAGE_KEY = "shareclaw-task-runtime-logs-v1";
+      const TASK_CONVERSATION_HANDOFF_STORAGE_KEY = "shareclaw-task-conversation-handoff-v1";
       const DEFAULT_AI_AVATAR = "./images/Image_byccxbyccxbyccxb.png";
       const DEFAULT_SCHEME_PLANS = [
         { id: "sidebar-interaction", label: "侧边栏交互方案" }
@@ -14251,7 +14253,8 @@
           launchLabel: isConversationEntry ? params.get("label") || "" : "",
           launchPrompt: isConversationEntry ? params.get("prompt") || "" : "",
           launchAgent: isConversationEntry ? params.get("type") || "" : "",
-          taskId: currentPageFile === TASK_CONVERSATION_PAGE_FILE ? params.get("task") || "task-morning-check" : ""
+          taskId: currentPageFile === TASK_CONVERSATION_PAGE_FILE ? params.get("task") || "task-morning-check" : "",
+          taskRunId: currentPageFile === TASK_CONVERSATION_PAGE_FILE ? params.get("run") || "" : ""
         };
       }
 
@@ -14289,7 +14292,7 @@
         activeHistoryId: "",
         activeChatId: initialRouteState.activeChatId,
         activeAutomationTaskId: initialRouteState.taskId,
-        activeAutomationRunId: "",
+        activeAutomationRunId: initialRouteState.taskRunId,
         homeInsightRailCollapsed: true,
         homeInsightRailEnabled: initialRouteState.homeInsightRailEnabled,
         sidebarGroups: {
@@ -14952,6 +14955,134 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return automationTaskCatalog[taskId] || automationTaskCatalog["task-morning-check"];
       }
 
+      function loadTaskRuntimeLogs() {
+        try {
+          const raw = window.localStorage.getItem(TASK_RUNTIME_LOGS_STORAGE_KEY);
+          if (!raw) {
+            return [];
+          }
+
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) {
+            return [];
+          }
+
+          return parsed.filter((item) => item && typeof item === "object" && item.id && item.taskId);
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function loadTaskConversationHandoffs() {
+        try {
+          const raw = window.localStorage.getItem(TASK_CONVERSATION_HANDOFF_STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function buildRuntimeAutomationRun(runtimeLog) {
+        const task = getAutomationTaskDefinition(runtimeLog.taskId);
+        return {
+          id: runtimeLog.id,
+          timeLabel: "刚刚",
+          displayTitle: runtimeLog.title || task.title,
+          dateLabel: runtimeLog.executedDate ? runtimeLog.executedDate.replaceAll("/", "年").replace(/年(\d{2})$/, "月$1日") : "刚刚执行",
+          duration: "已处理 32秒",
+          summary: runtimeLog.prompt || `${task.title} 已按当前时间完成一次手动执行。`,
+          findings: [
+            `本次执行方式：${runtimeLog.triggerType || "手动"}。`,
+            `执行智能体：${runtimeLog.agent || task.agentLabel}。`,
+            "已根据当前任务提示生成一轮新的任务执行摘要。"
+          ],
+          actions: [
+            "查看本次执行生成的摘要与建议动作。",
+            "如需继续推进，可在当前对话中补充跟进要求。",
+            "回到任务列表可继续查看其他执行记录。"
+          ],
+          sources: ["任务提示词", "CRM任务配置", "本次手动执行"],
+          outputs: {
+            docs: [
+              {
+                id: `${runtimeLog.id}-summary`,
+                title: `${runtimeLog.title || task.title}执行摘要`,
+                type: "doc",
+                createdTimeLabel: runtimeLog.executedAt || "刚刚",
+                sortKey: Number(String(Date.now()).slice(0, 12))
+              }
+            ],
+            business: [
+              {
+                id: `${runtimeLog.id}-business`,
+                title: `【任务】${runtimeLog.title || task.title}`,
+                tabTitle: runtimeLog.title || task.title,
+                typeLabel: "任务",
+                owner: `负责人：${runtimeLog.agent || task.agentLabel}`,
+                stage: `执行方式：${runtimeLog.triggerType || "手动"}`,
+                health: "状态：成功",
+                lastTouch: `执行时间：${runtimeLog.executedAt || "刚刚"}`,
+                nextAction: "下一步：查看执行摘要",
+                actionLabel: "查看",
+                createdTimeLabel: runtimeLog.executedAt || "刚刚",
+                sortKey: Number(String(Date.now()).slice(0, 12))
+              }
+            ]
+          }
+        };
+      }
+
+      function buildHandoffAutomationRun(handoff) {
+        const task = getAutomationTaskDefinition(handoff.conversationTaskId || handoff.taskId);
+        return {
+          id: handoff.id,
+          timeLabel: handoff.timeLabel || handoff.executedAt || "历史记录",
+          displayTitle: handoff.title || task.title,
+          dateLabel: handoff.executedDate ? handoff.executedDate.replace(/\//g, "年").replace(/年(\d{2})$/, "月$1日") : "历史执行记录",
+          duration: handoff.statusValue === "失败" ? "执行失败，待复核" : "已处理 48秒",
+          summary: handoff.prompt || `${handoff.title || task.title} 的历史执行记录。`,
+          findings: [
+            `本次执行方式：${handoff.triggerType || "定时"}。`,
+            `执行状态：${handoff.statusLabel || handoff.statusValue || "成功"}。`,
+            `执行智能体：${handoff.agent || task.agentLabel}。`
+          ],
+          actions: [
+            "查看本次执行的历史摘要。",
+            "如需复盘，可回到执行日志查看相邻记录。",
+            "如需再次执行，可返回任务列表手动触发。"
+          ],
+          sources: ["历史执行记录", "任务配置", "执行日志"],
+          outputs: {
+            docs: [
+              {
+                id: `${handoff.id}-summary`,
+                title: `${handoff.title || task.title}历史执行摘要`,
+                type: "doc",
+                createdTimeLabel: handoff.executedAt || "历史记录",
+                sortKey: Number(String(Date.now()).slice(0, 12))
+              }
+            ],
+            business: [
+              {
+                id: `${handoff.id}-business`,
+                title: `【任务】${handoff.title || task.title}`,
+                tabTitle: handoff.title || task.title,
+                typeLabel: "任务",
+                owner: `负责人：${handoff.agent || task.agentLabel}`,
+                stage: `执行方式：${handoff.triggerType || "定时"}`,
+                health: `状态：${handoff.statusLabel || handoff.statusValue || "成功"}`,
+                lastTouch: `执行时间：${handoff.executedAt || "历史记录"}`,
+                nextAction: "下一步：查看执行详情",
+                actionLabel: "查看",
+                createdTimeLabel: handoff.executedAt || "历史记录",
+                sortKey: Number(String(Date.now()).slice(0, 12))
+              }
+            ]
+          }
+        };
+      }
+
       function getAutomationTaskSessionId(taskId = state.activeAutomationTaskId) {
         return `automation-${getAutomationTaskDefinition(taskId).id}`;
       }
@@ -14962,6 +15093,16 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function getAutomationTaskRun(taskId = state.activeAutomationTaskId, runId = state.activeAutomationRunId) {
         const task = getAutomationTaskDefinition(taskId);
+        const handoffRun = loadTaskConversationHandoffs()[runId];
+        if (handoffRun && (handoffRun.conversationTaskId || handoffRun.taskId) === task.id) {
+          return buildHandoffAutomationRun(handoffRun);
+        }
+        const runtimeRun = loadTaskRuntimeLogs()
+          .filter((item) => item.taskId === task.id)
+          .find((item) => item.id === runId);
+        if (runtimeRun) {
+          return buildRuntimeAutomationRun(runtimeRun);
+        }
         return task.reports.find((item) => item.id === runId) || task.reports[0];
       }
 
@@ -19071,6 +19212,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function renderAutomationTaskReportCard() {
         const task = getAutomationTaskDefinition();
         const activeRun = getAutomationTaskRun(task.id, state.activeAutomationRunId);
+        const handoffRuns = Object.values(loadTaskConversationHandoffs())
+          .filter((item) => item && (item.conversationTaskId || item.taskId) === task.id)
+          .map((item) => buildHandoffAutomationRun(item));
+        const runtimeRuns = loadTaskRuntimeLogs()
+          .filter((item) => item.taskId === task.id)
+          .map((item) => buildRuntimeAutomationRun(item));
+        const allRuns = [...handoffRuns, ...runtimeRuns, ...task.reports];
         return `
           <section class="automation-output-card" aria-label="任务报告">
             <div class="automation-output-card-head">
@@ -19078,8 +19226,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               ${outputCardToggleMarkup()}
             </div>
             <div class="automation-output-card-body">
-              ${task.reports.map((run) => {
-                const isUnread = isAutomationRunUnread(task.id, run.id);
+              ${allRuns.map((run) => {
+                const isSyntheticRun = handoffRuns.some((item) => item.id === run.id) || runtimeRuns.some((item) => item.id === run.id);
+                const isUnread = isSyntheticRun ? false : isAutomationRunUnread(task.id, run.id);
                 return `
                 <button class="automation-report-row ${run.id === activeRun.id ? "active" : ""} ${isUnread ? "unread" : ""}" type="button" data-automation-run-id="${escapeHtml(run.id)}" aria-label="查看 ${escapeHtml(run.timeLabel)} ${escapeHtml(run.displayTitle)}${isUnread ? " 未读" : ""}">
                   <span class="automation-report-main">
@@ -23519,7 +23668,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function applyInitialRouteLaunch() {
         if (getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE) {
-          openAutomationTaskConversation(initialRouteState.taskId || "task-morning-check");
+          openAutomationTaskConversation(initialRouteState.taskId || "task-morning-check", { runId: initialRouteState.taskRunId || "" });
           return;
         }
 

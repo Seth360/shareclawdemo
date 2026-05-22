@@ -9561,7 +9561,10 @@
       .task-card:hover,
       .task-card:focus-within {
         z-index: 4;
-        box-shadow: none;
+        border-color: rgba(115, 65, 222, 0.22);
+        box-shadow:
+          0 10px 24px rgba(24, 28, 37, 0.06),
+          0 2px 8px rgba(115, 65, 222, 0.08);
         transform: none;
       }
 
@@ -9950,6 +9953,19 @@
         border: 0;
         background: #fff;
         box-shadow: none;
+        transition:
+          border-color 0.18s ease,
+          box-shadow 0.18s ease,
+          transform 0.18s ease;
+      }
+
+      .task-log-card:hover,
+      .task-log-card:focus-within {
+        border-color: rgba(115, 65, 222, 0.18);
+        box-shadow:
+          0 10px 24px rgba(24, 28, 37, 0.06),
+          0 2px 8px rgba(115, 65, 222, 0.08);
+        transform: none;
       }
 
       .task-log-card::before {
@@ -10047,6 +10063,7 @@
         flex: 0 0 auto;
         justify-content: flex-start;
         align-self: flex-start;
+        flex-wrap: nowrap;
       }
 
       .task-log-meta-item {
@@ -10074,14 +10091,21 @@
       }
 
       .task-log-action {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         color: #8f95a2;
-        align-self: center;
         flex: 0 0 auto;
+        border-radius: 999px;
+        transition: background-color 0.18s ease, color 0.18s ease;
+      }
+
+      .task-log-action:hover,
+      .task-log-action:focus-visible {
+        background: rgba(115, 65, 222, 0.08);
+        color: #7341de;
       }
 
       .task-log-action svg {
@@ -12308,6 +12332,8 @@
           // Ignore persistence failures in local preview mode.
         }
       }
+      const TASK_RUNTIME_LOGS_STORAGE_KEY = "shareclaw-task-runtime-logs-v1";
+      const TASK_CONVERSATION_HANDOFF_STORAGE_KEY = "shareclaw-task-conversation-handoff-v1";
       const CONVERSATION_PAGE_FILE = "conversation.html";
 
       const PAGE_FILE_BY_PANEL = {
@@ -13190,6 +13216,143 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
       ];
 
+      function loadTaskRuntimeLogs() {
+        try {
+          const raw = window.localStorage.getItem(TASK_RUNTIME_LOGS_STORAGE_KEY);
+          if (!raw) {
+            return [];
+          }
+
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) {
+            return [];
+          }
+
+          return parsed.filter((item) => item && typeof item === "object" && item.id && item.taskId);
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function loadTaskConversationHandoffs() {
+        try {
+          const raw = window.localStorage.getItem(TASK_CONVERSATION_HANDOFF_STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function persistTaskConversationHandoffs(handoffs) {
+        try {
+          window.localStorage.setItem(TASK_CONVERSATION_HANDOFF_STORAGE_KEY, JSON.stringify(handoffs));
+        } catch (error) {
+          // Ignore persistence failures in local preview mode.
+        }
+      }
+
+      function getConversationTaskId(taskId) {
+        const taskIdMap = {
+          "task-morning-check": "task-morning-check",
+          "task-meeting-summary": "task-meeting-crm",
+          "task-lead-cleanup": "task-lead-cleanup",
+          "task-weekly-report": "task-weekly-operation",
+          "task-renew-risk": "task-renewal-warning"
+        };
+        return taskIdMap[taskId] || taskId || "task-morning-check";
+      }
+
+      function persistTaskRuntimeLogs(runtimeLogs) {
+        try {
+          window.localStorage.setItem(TASK_RUNTIME_LOGS_STORAGE_KEY, JSON.stringify(runtimeLogs));
+        } catch (error) {
+          // Ignore persistence failures in local preview mode.
+        }
+      }
+
+      function getAllTaskLogRecords() {
+        return [...loadTaskRuntimeLogs(), ...taskLogRecords];
+      }
+
+      function getTaskLogRecordById(logId) {
+        return getAllTaskLogRecords().find((item) => item.id === logId) || null;
+      }
+
+      function formatTaskLogDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}/${month}/${day}`;
+      }
+
+      function formatTaskLogTimestamp(date) {
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const seconds = String(date.getSeconds()).padStart(2, "0");
+        return `${month}/${day} ${hours}:${minutes}:${seconds}`;
+      }
+
+      function createTaskRuntimeLog(record) {
+        const now = new Date();
+        const runtimeLog = {
+          id: `runtime-${record.id}-${now.getTime()}`,
+          taskId: record.id,
+          conversationTaskId: getConversationTaskId(record.id),
+          title: record.title,
+          prompt: record.prompt?.trim() || `已按当前时间手动执行 ${record.title}，生成本次任务摘要与跟进建议。`,
+          status: "success",
+          statusLabel: "成功",
+          statusValue: "成功",
+          triggerType: "手动",
+          agent: record.agent || "智能体",
+          executedAt: formatTaskLogTimestamp(now),
+          executedDate: formatTaskLogDate(now)
+        };
+
+        const runtimeLogs = loadTaskRuntimeLogs();
+        runtimeLogs.unshift(runtimeLog);
+        persistTaskRuntimeLogs(runtimeLogs);
+        return runtimeLog;
+      }
+
+      function createTaskLogConversationHandoff(logRecord) {
+        const handoffId = `handoff-${logRecord.id}`;
+        const handoffs = loadTaskConversationHandoffs();
+        handoffs[handoffId] = {
+          id: handoffId,
+          sourceLogId: logRecord.id,
+          taskId: logRecord.taskId,
+          conversationTaskId: getConversationTaskId(logRecord.taskId),
+          title: logRecord.title,
+          prompt: logRecord.prompt,
+          status: logRecord.status,
+          statusLabel: logRecord.statusLabel,
+          statusValue: logRecord.statusValue,
+          triggerType: logRecord.triggerType,
+          agent: logRecord.agent,
+          executedAt: logRecord.executedAt,
+          executedDate: logRecord.executedDate,
+          timeLabel: logRecord.executedAt
+        };
+        persistTaskConversationHandoffs(handoffs);
+        return handoffs[handoffId];
+      }
+
+      function openTaskConversationPage(taskId, runId) {
+        const url = new URL("task-conversation.html", window.location.href);
+        const conversationTaskId = getConversationTaskId(taskId);
+        if (conversationTaskId) {
+          url.searchParams.set("task", String(conversationTaskId));
+        }
+        if (runId) {
+          url.searchParams.set("run", String(runId));
+        }
+        window.location.href = url.toString();
+      }
+
       const docsDocuments = [
         { id: "doc-crm-model", title: "AI 销售建议 CRM 模型设计方案", dialog: conversationSessions["baidu-risk"].historyTitle, createdTimeLabel: "4月21日 18:29", sortKey: 202604211829, type: "doc", sessionId: "baidu-risk", url: "https://shareclaw.local/docs/doc-crm-model" },
         { id: "doc-weekly-report", title: "CRM平台产品经理本周周报", dialog: conversationSessions["weekly-report"].historyTitle, createdTimeLabel: "4月17日 16:09", sortKey: 202604171609, type: "doc", sessionId: "weekly-report", url: "https://shareclaw.local/docs/doc-weekly-report" },
@@ -14062,7 +14225,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getFilteredTaskLogRecords() {
-        return taskLogRecords.filter((record) => {
+        return getAllTaskLogRecords().filter((record) => {
           if (taskPageState.logFilters.taskId !== "all" && record.taskId !== taskPageState.logFilters.taskId) {
             return false;
           }
@@ -14114,13 +14277,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                       ${renderTaskLogClockIcon()}
                       上次执行 ${escapeHtml(record.executedAt)} ｜ ${escapeHtml(record.triggerType)}
                     </span>
+                    <button class="task-log-action" type="button" aria-label="打开企信" data-task-log-chat="${escapeHtml(record.id)}">
+                      ${renderTaskLogChatIcon()}
+                    </button>
                   </div>
                 </div>
                 <p class="task-log-prompt">${escapeHtml(record.prompt)}</p>
               </div>
-              <button class="task-log-action" type="button" aria-label="打开企信">
-                ${renderTaskLogChatIcon()}
-              </button>
             </div>
           </article>
         `;
@@ -14128,6 +14291,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderTaskCard(record) {
         const menuOpen = taskPageState.activeMenuId === record.id;
+        const canRunNow = record.enabled && !record.expired;
         return `
           <article class="task-card ${record.enabled ? "" : "is-disabled"} ${menuOpen ? "menu-open" : ""}" data-task-card="${escapeHtml(record.id)}">
             <div class="task-card-top">
@@ -14177,7 +14341,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                       </svg>
                     </button>
                     <div class="task-card-menu ${menuOpen ? "open" : ""}" role="menu">
-                      <button class="task-card-menu-item" type="button" data-task-action="run-now" data-task-id="${escapeHtml(record.id)}">立即执行</button>
+                      ${
+                        canRunNow
+                          ? `<button class="task-card-menu-item" type="button" data-task-action="run-now" data-task-id="${escapeHtml(record.id)}">立即执行</button>`
+                          : ""
+                      }
                       <button class="task-card-menu-item" type="button" data-task-action="edit" data-task-id="${escapeHtml(record.id)}">编辑</button>
                       <button class="task-card-menu-item" type="button" data-task-action="records" data-task-id="${escapeHtml(record.id)}">查看已执行记录</button>
                       <button class="task-card-menu-item danger" type="button" data-task-action="delete" data-task-id="${escapeHtml(record.id)}">删除</button>
@@ -14241,13 +14409,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        const promptText = record.prompt?.trim() || `请立即执行任务：${record.title}`;
-        navigateToConversation({
-          launch: "mock-ai-task",
-          prompt: promptText,
-          label: record.title,
-          type: record.agent || ""
-        });
+        const runtimeLog = createTaskRuntimeLog(record);
+        openTaskConversationPage(record.id, runtimeLog.id);
+      }
+
+      function openTaskLogConversation(logRecord) {
+        if (!logRecord) {
+          return;
+        }
+
+        const handoff = createTaskLogConversationHandoff(logRecord);
+        openTaskConversationPage(logRecord.taskId, handoff.id);
       }
 
       function openTaskLogRecords(record) {
@@ -21328,6 +21500,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           const recordId = menuTrigger.dataset.taskMenuTrigger || "";
           taskPageState.activeMenuId = taskPageState.activeMenuId === recordId ? "" : recordId;
           renderTaskPage();
+          return;
+        }
+
+        const logChatButton = event.target.closest("[data-task-log-chat]");
+        if (logChatButton) {
+          const logRecord = getTaskLogRecordById(logChatButton.dataset.taskLogChat || "");
+          if (!logRecord) {
+            return;
+          }
+
+          openTaskLogConversation(logRecord);
           return;
         }
 
