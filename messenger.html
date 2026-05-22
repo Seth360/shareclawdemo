@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShareClaw</title>
+    <title>ShareAgent</title>
     <style>
       :root {
         --page-bg: #f1f3f8;
@@ -9194,7 +9194,7 @@
                   <circle cx="11.4" cy="9.6" r="0.9" fill="currentColor"></circle>
                   <path class="icon-stroke" d="M6 2.8v1.6M12 2.8v1.6"></path>
                 </svg>
-                <span class="channel-label">Claw</span>
+                <span class="channel-label">Agent</span>
               </span>
             </button>
 
@@ -9290,7 +9290,7 @@
         <aside class="sidebar" aria-label="二级导航">
           <div class="sidebar-view" id="defaultSidebarView">
             <div class="sidebar-header">
-              <div class="sidebar-title">ShareClaw</div>
+              <div class="sidebar-title">ShareAgent</div>
               <div class="sidebar-header-actions">
                 <button class="sidebar-header-action" id="openSettingsBtn" type="button" aria-label="打开设置">
                   <svg class="sidebar-header-icon" viewBox="0 0 16 16" aria-hidden="true">
@@ -9391,9 +9391,9 @@
             </div>
 
             <div class="sidebar-footer">
-              <button class="sidebar-footer-entry hidden" id="openConfigBtn" type="button" aria-label="打开 ShareClaw 配置">
+              <button class="sidebar-footer-entry hidden" id="openConfigBtn" type="button" aria-label="打开 ShareAgent 配置">
                 <span class="sidebar-footer-entry-main">
-                  <span>ShareClaw配置</span>
+                  <span>ShareAgent配置</span>
                 </span>
                 <svg viewBox="0 0 16 16" aria-hidden="true">
                   <path class="icon-stroke" d="m6.2 3.2 4.1 4.8-4.1 4.8"></path>
@@ -9408,7 +9408,7 @@
                 <svg viewBox="0 0 16 16" aria-hidden="true">
                   <path class="icon-stroke" d="M10.5 3.2 5.4 8l5.1 4.8"></path>
                 </svg>
-                <span>返回ShareClaw</span>
+                <span>返回ShareAgent</span>
               </button>
             </div>
 
@@ -9506,7 +9506,7 @@
                     <div class="hero-content">
                       <div class="hero-title-row">
                         <div class="hero-badge">
-                          <img class="hero-face" src="./images/shareclawlogo.png" alt="ShareClaw" />
+                          <img class="hero-face" src="./images/shareclawlogo.png" alt="ShareAgent" />
                         </div>
                         <h1 class="hero-title">你好Scott，告诉我今天想搞定什么，我来拆解和执行</h1>
                       </div>
@@ -9870,7 +9870,7 @@
                 </section>
               </div>
 
-              <div class="home-insight-rail-foot">由 ShareClaw · 今日 09:00 自动生成</div>
+              <div class="home-insight-rail-foot">由 ShareAgent · 今日 09:00 自动生成</div>
             </aside>
 
             <button class="home-insight-toggle hidden" id="homeInsightToggle" type="button" aria-label="展开洞察侧边栏">
@@ -9887,7 +9887,7 @@
               <div class="settings-page-body">
                 <div class="settings-section-head">
                   <h2 class="settings-section-title">个性化设置</h2>
-                  <p class="settings-section-desc">设置你的 ShareClaw 个性化信息</p>
+                  <p class="settings-section-desc">设置你的 ShareAgent 个性化信息</p>
                 </div>
 
                 <div class="settings-stack">
@@ -9900,7 +9900,7 @@
                     <div class="settings-personality-box">
                       <div class="settings-avatar-stage">
                         <button class="settings-avatar-trigger" id="aiAvatarTrigger" type="button" aria-label="更换AI头像">
-                          <img class="settings-avatar-preview" id="aiAvatarPreview" src="./images/Image_byccxbyccxbyccxb.png" alt="ShareClaw" />
+                          <img class="settings-avatar-preview" id="aiAvatarPreview" src="./images/Image_byccxbyccxbyccxb.png" alt="ShareAgent" />
                           <span class="settings-avatar-badge" aria-hidden="true">+</span>
                         </button>
                         <input id="aiAvatarInput" type="file" accept="image/*" class="hidden" />
@@ -9910,7 +9910,7 @@
                         <div class="settings-inline-row">
                           <span class="settings-inline-label">如何称呼你的AI机器人</span>
                           <div class="settings-inline-control">
-                            <input class="settings-profile-input" id="aiRobotNameInput" type="text" value="ShareClaw" />
+                            <input class="settings-profile-input" id="aiRobotNameInput" type="text" value="ShareAgent" />
                           </div>
                         </div>
 
@@ -11186,7 +11186,7 @@
 
       function createDefaultAiProfile() {
         return {
-          name: "ShareClaw",
+          name: "ShareAgent",
           avatar: DEFAULT_AI_AVATAR,
           showIdentity: true,
           specialty: "CRM产品",
@@ -11258,16 +11258,16 @@
       };
 
       const PAGE_TITLE_BY_PANEL = {
-        home: "ShareClaw",
-        task: "ShareClaw - 任务",
-        docs: "ShareClaw - 文档库",
-        settings: "ShareClaw - 设置",
-        messenger: "ShareClaw - 企信",
-        market: "ShareClaw - 智能体"
+        home: "ShareAgent",
+        task: "ShareAgent - 任务",
+        docs: "ShareAgent - 文档库",
+        settings: "ShareAgent - 设置",
+        messenger: "ShareAgent - 企信",
+        market: "ShareAgent - 智能体"
       };
 
       const PAGE_TITLE_BY_PAGE_FILE = {
-        "conversation.html": "ShareClaw - 独立对话"
+        "conversation.html": "ShareAgent - 独立对话"
       };
 
       function getCurrentPageFile() {
@@ -11304,7 +11304,7 @@
       }
 
       const initialRouteState = getInitialRouteState();
-      document.title = PAGE_TITLE_BY_PAGE_FILE[getCurrentPageFile()] || PAGE_TITLE_BY_PANEL[initialRouteState.mainPanel] || "ShareClaw";
+      document.title = PAGE_TITLE_BY_PAGE_FILE[getCurrentPageFile()] || PAGE_TITLE_BY_PANEL[initialRouteState.mainPanel] || "ShareAgent";
 
       const state = {
         selectedSkills: [],
@@ -13361,7 +13361,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getAiProfileName() {
-        return (state.aiProfile.name || "ShareClaw").trim() || "ShareClaw";
+        return (state.aiProfile.name || "ShareAgent").trim() || "ShareAgent";
       }
 
       function getAiProfileAvatar() {
@@ -13507,7 +13507,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               return "钉钉官方团队";
             }
             if (meta.sourceLabel === "市场") {
-              return "ShareClaw 社区";
+              return "ShareAgent 社区";
             }
             if (meta.sourceLabel === "自建") {
               return "我";
@@ -13520,7 +13520,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           if (record.sourceKey === "public") {
-            return "ShareClaw 社区";
+            return "ShareAgent 社区";
           }
 
           return getSkillSourceTag(record.card, "shared").sourceLabel;
@@ -13531,7 +13531,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         if (record.sourceKey === "public") {
-          return "ShareClaw 社区";
+          return "ShareAgent 社区";
         }
 
         if (record.sourceKey === "shared") {
@@ -13547,7 +13547,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function getDetailIntro(record) {
         const title = getDetailDisplayTitle(record.card);
-        return `${record.card.desc} ${record.kind === "skill" ? "适合直接挂载到对话、文档处理和团队协作流程中。" : "适合在业务对话中承担稳定角色，并连续执行复杂任务。"} 当前版本可直接在 ShareClaw 中体验。`;
+        return `${record.card.desc} ${record.kind === "skill" ? "适合直接挂载到对话、文档处理和团队协作流程中。" : "适合在业务对话中承担稳定角色，并连续执行复杂任务。"} 当前版本可直接在 ShareAgent 中体验。`;
       }
 
       function getDetailActionConfig(record) {
@@ -14362,7 +14362,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                   </button>
                   ${
                     isLegacy
-                      ? `<span class="market-chip-tooltip">旧版智能体不会参与 ShareClaw Agent的推理流程，如果需要使用旧版请直接和智能体对话即可。</span>`
+                      ? `<span class="market-chip-tooltip">旧版智能体不会参与 ShareAgent 的推理流程，如果需要使用旧版请直接和智能体对话即可。</span>`
                       : ""
                   }
                 </span>
@@ -14485,7 +14485,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return {
           kicker: `${typeLabel} Preview`,
           pageLabel: "全文预览",
-          summary: `这里展示 ${doc.title} 的模拟全文内容，方便在 ShareClaw 中先完成浏览、确认和后续协作动作。`,
+          summary: `这里展示 ${doc.title} 的模拟全文内容，方便在 ShareAgent 中先完成浏览、确认和后续协作动作。`,
           sections: [
             {
               title: "一、文档概览",
@@ -16153,7 +16153,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime(session))}
               <p class="chat-ai-title">已进入 AI 模拟对话</p>
               <p class="chat-ai-copy">基于你发送的内容，我已经整理出客户数据卡片，并生成了一份可继续查看和转发的 PDF 卡片。</p>
               ${renderCustomerDetailCard(profile.company)}
@@ -16189,7 +16189,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", "已处理 1分30秒")}
+              ${renderChatAiMeta("ShareAgent", "已处理 1分30秒")}
               <p class="chat-ai-title">纷享销客最近跟进情况分析</p>
               ${renderCustomerDetailCard("北京纷享销客科技有限公司")}
               <p class="chat-ai-copy">我已结合最近 14 天跟进记录、商机阶段变化和客户互动频次，先帮你梳理了当前最值得关注的推进信号。</p>
@@ -16224,7 +16224,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime(session))}
               <p class="chat-ai-title">可能延迟回款订单预警</p>
               <p class="chat-ai-copy">我先筛出近期最有延迟风险的订单，并按风险原因和建议动作做了优先级整理。</p>
               <div class="chat-ai-section">
@@ -16257,7 +16257,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime())}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime())}
               <p class="chat-ai-title">本周销售跟进计划</p>
               <p class="chat-ai-copy">我按“高潜优先、短周期先推进、风险单独跟踪”的思路，先给你整理了一个可直接执行的本周计划。</p>
               <div class="chat-ai-section">
@@ -16304,7 +16304,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime())}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime())}
               <p class="chat-ai-title">百度集团客户流失警告</p>
               <p class="chat-ai-copy">企业健康度下降 70%，下面是我整理的可能原因和优先跟进行动。</p>
               <div class="chat-ai-section">
@@ -16337,7 +16337,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime())}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime())}
               <p class="chat-ai-title">本季度绩效未达成风险</p>
               <p class="chat-ai-copy">预计完成 780 万，距离目标 1000 万还差 220 万，建议按下面 4 个方向补齐差额。</p>
               <div class="chat-ai-section">
@@ -16369,7 +16369,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const baseBlock = `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime(session))}
               <p class="chat-ai-title">小米集团续费即将到期</p>
               <p class="chat-ai-copy">距离续费到期还有 35 天，建议尽快启动续费推进并同步准备客户沟通内容。</p>
               <div class="chat-ai-section">
@@ -16399,7 +16399,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           <div class="chat-user-row"><div class="chat-user-bubble">自动创建销售记录</div></div>
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", "已处理 36秒")}
+              ${renderChatAiMeta("ShareAgent", "已处理 36秒")}
               <p class="chat-ai-title">已自动创建销售记录</p>
               ${renderChatInfoCard({ title: "销售记录（小米集团续费跟进）", sub: "创建时间：04-17 10:20", icon: "sheet" })}
               <p class="chat-ai-copy" style="margin-top: 12px;">我已经把续费风险、下一步动作和客户跟进内容写入销售记录，方便你继续推进。</p>
@@ -16413,7 +16413,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime(session))}
               <p class="chat-ai-title">已为你创建技能${escapeHtml(session.generatedSkillName || "智能技能")}</p>
               ${renderSkillResultCard(session.generatedSkillName || "智能技能")}
               <p class="chat-ai-copy" style="margin-top: 14px;">技能能力已按你的描述生成完成，可以继续使用、共享或发布。</p>
@@ -16435,7 +16435,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           <div class="chat-feed-column">
             <div class="chat-ai-block">
               <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+                ${renderChatAiMeta("ShareAgent", getChatProcessingTime(session))}
                 <p class="chat-ai-title">新对话已创建</p>
                 <p class="chat-ai-copy">${escapeHtml(typeLabel)}：${escapeHtml(session.presetLabel)}</p>
                 <p class="chat-ai-copy" style="margin-top:8px;">${escapeHtml(helperText)}</p>
@@ -16453,7 +16453,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareClaw", getChatProcessingTime(session))}
+              ${renderChatAiMeta("ShareAgent", getChatProcessingTime(session))}
               <p class="chat-ai-title">已完成产品匹配分析</p>
               <p class="chat-ai-copy">基于圣泉集团7个POC场景需求，已从ShareAI产品矩阵中匹配出14款推荐产品，覆盖市场营销→客户管理→销售赋能→过程管理→订单管理→报表分析全链路。</p>
               <div class="chat-ai-section">
@@ -16513,7 +16513,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             <div class="chat-feed-column">
               <div class="chat-ai-block">
                 <div class="chat-ai-card">
-                  ${renderChatAiMeta("ShareClaw", "已处理 12秒")}
+                  ${renderChatAiMeta("ShareAgent", "已处理 12秒")}
                   <p class="chat-ai-title">AI创建技能</p>
                   <p class="chat-ai-copy">描述你希望技能实现的能力，发送后我会直接为你生成技能卡片。</p>
                 </div>
@@ -18304,7 +18304,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       aiRobotNameInput.addEventListener("input", () => {
-        applyAiProfileChanges({ name: aiRobotNameInput.value.trim() || "ShareClaw" }, { skipSync: true });
+        applyAiProfileChanges({ name: aiRobotNameInput.value.trim() || "ShareAgent" }, { skipSync: true });
         aiAvatarPreview.alt = getAiProfileName();
       });
 
