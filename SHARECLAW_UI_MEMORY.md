@@ -1,40 +1,36 @@
-# ShareClaw UI Memory
+# ShareClaw UI Semantic Memory
 
-This file is the project-level memory for the ShareClaw demo HTML framework.
-Update it in the same task whenever layout structure, selector names, state
-fields, navigation flow, or major interactions change.
+This file is the semantic memory for the ShareClaw static HTML demo. It records
+the current UI architecture, semantic module map, selectors, state fields, and
+stable interaction contracts. It should describe what the system is now, not the
+history of how it became that way. Decision history belongs in
+`SHARECLAW_DECISION_LOG.md`.
 
-Before starting work on this project, read `SHARECLAW_PROJECT_GUIDELINES.md`.
-
-## Purpose
-
-ShareClaw is currently a static multi-page HTML demo. The main pages inline
-their CSS, markup, and JavaScript in each HTML file. Several files duplicate
-the same shell, so UI changes often need to be applied to more than one file.
-
-Use this document as the first reference when a request describes UI by
-business language, for example "右侧生成结果栏", "企信线程列表", "技能中心已添加区域",
-or "创建客户确认卡片".
+Before project work, read `SHARECLAW_PROJECT_GUIDELINES.md`.
 
 ## Shared Shell
+
+ShareClaw is a static multi-page HTML demo. The main pages inline CSS, markup,
+and JavaScript. Several files duplicate the same shell, so shared UI changes may
+need to be synchronized across multiple HTML files.
 
 | Semantic area | Selector / state | Role |
 | --- | --- | --- |
 | Top bar | `.topbar` | Company name, search, top-right icons, scheme switch. |
-| Left primary rail | `.channel-rail`, `.channel-item[data-channel]` | First-level product navigation such as Claw, 企信, 待办, CRM, 工作, 日程. |
-| Left secondary sidebar | `.sidebar` | Second-level navigation. Changes between ShareClaw menu, settings menu, config menu, and messenger thread list. |
-| Default sidebar view | `#defaultSidebarView` | ShareClaw menu with new conversation, shortcuts, task, market, docs, and history. |
-| Settings sidebar view | `#settingsSidebarView` | Settings tabs: onboarding, runtime, basic. |
-| Config sidebar view | `#configSidebarView` | Scheme 2 market config tabs: market, skill, automation. |
-| Messenger sidebar view | `#messengerSidebarView`, `#messengerThreadList` | Thread list for 企信. |
-| Main page shell | `.main-shell` | Center content container for home/chat/task/docs/settings/messenger/market pages. |
-| Home/chat shell | `#homeDashboardShell`, `.home-center-shell` | Hosts dashboard hero, chat feed, composer, and optional right panels. |
+| Left primary rail | `.channel-rail`, `.channel-item[data-channel]` | First-level navigation: Claw, 企信, 待办, CRM, 工作, 日程. |
+| Left secondary sidebar | `.sidebar` | Second-level navigation. Switches between default, settings, config, and messenger thread views. |
+| Default sidebar | `#defaultSidebarView` | ShareClaw menu, shortcuts, automation tasks, and history. |
+| Settings sidebar | `#settingsSidebarView` | Settings tabs. |
+| Config sidebar | `#configSidebarView` | Scheme/config tabs. |
+| Messenger sidebar | `#messengerSidebarView`, `#messengerThreadList` | 企信 thread list. |
+| Main shell | `.main-shell` | Center content container for home/chat/task/docs/settings/messenger/market pages. |
+| Home/chat shell | `#homeDashboardShell`, `.home-center-shell` | Dashboard, chat feed, composer, and right panels. |
 | Chat feed | `#chatFlowShell`, `#chatFeed` | Main conversation display area. |
 | Composer | `.composer-stage`, `.composer-card`, `#composerEditor`, `#sendBtn` | Chat input, mode picker, skill/agent selection, send action. |
-| Home insight rail | `#homeInsightRail`, `#homeInsightToggle` | Right-side Daily insight panel on the dashboard. |
-| Chat output panel | `#chatOutputPanelShell`, `#chatOutputPanel`, `#chatOutputToggleBtn` | Right-side generated results panel in chat mode. |
+| Home insight rail | `#homeInsightRail`, `#homeInsightToggle` | Dashboard right insight panel. |
+| Generated result panel | `#chatOutputPanelShell`, `#chatOutputPanel`, `#chatOutputToggleBtn` | Right-side generated output list/detail surface. |
 
-Important shared state fields:
+Core shared state:
 
 | State field | Meaning |
 | --- | --- |
@@ -44,41 +40,42 @@ Important shared state fields:
 | `state.activeChatId` | Current conversation session id. |
 | `state.activeHistoryId` | Active sidebar history row. |
 | `state.activeMessengerThread` | Current 企信 thread id. |
-| `state.outputResultsPanelOpen` | Whether the chat output panel is open. |
-| `state.activeSchemePlanId` | Active first-level interaction scheme in the top scheme switcher. Default is `sidebar-interaction`. |
-| `state.activeSchemeCapability` | Active second-level capability for the selected scheme: `dynamic-tabs` or `static-tabs`. |
-| `state.schemeCapabilityByPlan` | Per-scheme capability map so every first-level scheme owns its own dynamic-tab mode. |
-| `state.marketMode` | Market mode: `agent`, `skill`, `automation`. |
-| `state.marketPage` | Market subpage: `square`, `created`, `batch`, `share`, `skill-import`. |
+| `state.outputResultsPanelOpen` | Whether the generated results panel is open. |
+| `state.outputResultsPanelMode` | Generated results mode: `list` or `detail`. |
+| `state.outputOpenTabs`, `state.activeOutputTabId` | Dynamic generated-result detail tabs. |
+| `state.activeSchemePlanId` | Active first-level interaction scheme. Default: `sidebar-interaction`. |
+| `state.activeSchemeCapability` | Active second-level capability: `dynamic-tabs` or `static-tabs`. |
+| `state.schemeCapabilityByPlan` | Per-scheme capability selection. |
+| `state.marketMode`, `state.marketPage` | Market module mode and subpage. |
 
-Primary shared render/navigation functions:
+Core shared render/navigation functions:
 
 | Function | Role |
 | --- | --- |
 | `renderMainPanels()` | Central refresh function for panel visibility, sidebar state, history, channel rail, and active page rendering. |
-| `renderHomePanels()` | Toggles dashboard vs chat, insight rail, chat feed, composer state, and output panel. |
-| `renderSidebarMode()` | Switches secondary sidebar view between default, settings, config, and messenger. |
+| `renderHomePanels()` | Toggles dashboard/chat, insight rail, chat feed, composer, and output panel. |
+| `renderSidebarMode()` | Switches secondary sidebar view. |
 | `renderChannelRail()` | Syncs active first-level channel. |
-| `renderHistoryList()` | Renders chat history rows in the default sidebar. |
-| `navigateToPanel(panel, params)` | Cross-page navigation for main modules. |
+| `renderHistoryList()` | Renders default sidebar history and automation task rows. |
+| `navigateToPanel(panel, params)` | Cross-page module navigation. |
 | `navigateToConversation(params)` | Cross-page navigation into `conversation.html`. |
 | `openSidebarHome()` | Returns to home dashboard. |
-| `openConversationSession(sessionId)` | Opens an existing conversation and switches to chat mode. |
-| `openMessengerConversation(threadId)` | Opens a 企信 thread and switches sidebar/main content accordingly. |
+| `openConversationSession(sessionId)` | Opens a conversation and switches to chat mode. |
+| `openMessengerConversation(threadId)` | Opens a 企信 thread and switches sidebar/main content. |
 
 ## Page Ownership
 
 | File | Primary ownership |
 | --- | --- |
-| `index.html` | Home dashboard and base shared shell. Good starting point for shared layout, topbar, rail, default sidebar, dashboard, composer, and basic output panel behavior. |
-| `conversation.html` | Enhanced independent chat page. Owns advanced chat flows, output detail panel, business source detail, customer/deal creation confirmation, and right-side generated result tab behavior. |
-| `task-conversation.html` | Automation task conversation page. Owns `?task=...` route handling, task-specific CRM report chat content, current automation run state, and the right-side automation output cards. |
-| `task.html` | Task page. Owns task list, task filters, task status tabs, and create-task dialog. |
-| `messenger.html` | Message page. Owns 企信 thread sidebar and message canvas rendering. |
-| `market.html` | Agent/skill/automation area. Owns agent square, skill center, automation view, created/batch/share flows, and skill import flow. |
-| `docs.html` | Shared shell plus docs library. Not deeply mapped yet except through shared navigation. |
-| `settings.html` | Shared shell plus settings pages. Not deeply mapped yet except through shared navigation. |
-| `object-detail-overlay.html` | Separate CRM-style object detail overlay reference. Not part of the main ShareClaw three-column shell. |
+| `index.html` | Home dashboard, base shared shell, dashboard composer, and simple generated-results panel. |
+| `conversation.html` | Advanced independent chat page: Haiyue flow, generated-result list/detail, dynamic tabs, static detail mode, business object drawer, customer/deal confirmation flows. |
+| `task-conversation.html` | Automation task chat page: `?task=...` route, CRM task report content, current automation run, and automation generated-output cards. |
+| `task.html` | Task list, filters, task status tabs, create-task dialog. |
+| `messenger.html` | 企信 thread sidebar and message canvas. |
+| `market.html` | Agent square, skill center, automation view, created/batch/share flows, skill import flow. |
+| `docs.html` | Shared shell plus document library. Shallow semantic mapping only. |
+| `settings.html` | Shared shell plus settings pages. Shallow semantic mapping only. |
+| `object-detail-overlay.html` | Separate CRM-style object detail overlay reference, outside the main three-column shell. |
 
 ## Semantic Lookup
 
@@ -88,287 +85,186 @@ Primary shared render/navigation functions:
 | 左侧二级菜单 | shared | `.sidebar`, `#defaultSidebarView` | `renderSidebarMode()`, `syncSidebarSelection()` |
 | 新建会话按钮 | shared | `.sidebar-primary-entry[data-panel="home"]` | `openSidebarHome()` |
 | 历史会话列表 | shared | `#historyList`, `.history-row` | `renderHistoryList()`, `openConversationSession()` |
-| 中间 chat | `conversation.html`, `index.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
-| Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText`, `.chat-output-entry`, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()`; shown after a chat has produced an AI message. Automation tasks use the task title and do not render a user-message bubble; history sessions keep their normal user message but also get the sticky title area. The titlebar right side owns the generated-results expand/collapse button. |
-| 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button click handler, `openMockAiConversation()` |
+| 中间 chat | `index.html`, `conversation.html`, `task-conversation.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
+| Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText`, `.chat-output-entry`, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()` |
+| 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button listener, `openMockAiConversation()` |
 | 模式选择 / 指定智能体 | shared | `#agentPickerBtn`, `#agentPickerMenu`, `state.composerMode`, `state.activeAgent` | `setComposerMode()`, `renderAgentPill()`, `renderExposedPicker()` |
-| 右侧 Daily 洞察 | `index.html`, shared shell | `#homeInsightRail`, `#homeInsightToggle`, `state.homeInsightRailCollapsed` | insight action listeners, `openInsightConversation()` |
-| 右侧生成结果栏 | mostly `conversation.html` | `#chatOutputPanelShell`, `#chatOutputPanel`, `.chat-output-entry`, `#chatOutputToggleBtn`, `state.outputResultsPanelOpen`, `state.businessObjectOverlayOpen` | `renderChatOutputPanel()`; visually this is now a right-side floating card, not a full-height flush rail. The shell still owns layout width, but the panel itself has 16px margin, 16px radius, border, and soft shadow. In list mode the card header is text-only (`业务生成结果`), with no title icon and no internal close button; collapse is controlled by the external toggle button. The external toggle is fixed to the viewport, appears only in list mode, hides during document details and detached business-object details, and offsets by the current panel width while open so it does not shift with chat flex resizing. |
-| 右侧生成结果列表 | `conversation.html` | `[data-output-doc-id]`, `[data-output-business-id]` | `getCurrentOutputResults()`, `renderOutputListPanel()`; fixed to current conversation outputs, merged document/business rows, sorted newest first, rendered inside the floating card. |
-| 右侧通用文档操作 | `conversation.html`, `docs.html` | `[data-output-doc-menu-action]`, `[data-output-doc-action]`, `.docs-row-inline-action` | Generic document rows expose download and forward icons like the docs library; remaining actions stay in the more menu. |
-| 右侧业务文档操作 | `conversation.html` | `[data-output-business-id]`, `[data-output-business-menu-action="forward"]` | Business source rows expose only the forward icon. In dynamic-tab mode, row click opens a generated-result detail tab; in static-detail mode, row click opens the detached business object drawer. |
-| 方案切换入口 | `conversation.html` | `#schemeSwitchBtn`, `#schemeSwitchMenu`, `state.activeSchemePlanId`, `state.activeSchemeCapability` | `renderSchemeSwitch()`; first level is scheme list, second level is dynamic-tab capability. |
-| 右侧文档详情 | `conversation.html` | `state.outputOpenTabs`, `state.activeOutputTabId` | `openOutputPanelTab("doc", id)`, `renderOutputDetailPanel()`; generic outputs such as PDF details remain inside the floating card and scroll within the card, instead of expanding as a full-height flush rail. |
-| 右侧业务详情 / 客户详情 | `conversation.html` | `[data-output-business-id]`, `.embedded-object-detail`, `#businessObjectOverlay` | Dynamic-tab mode: `openOutputPanelTab("business", id)` renders inside generated results. Static-detail mode: `openBusinessObjectOverlay(id)` renders a detached right-side drawer with `renderBusinessObjectTitleBar()` plus `renderOutputBusinessDetail()`; the drawer mounts first, then slides in from the right, and close uses a slide-out transition before clearing content. |
-| 右侧详情宽度拖拽 | `conversation.html` | `[data-output-resize-handle]`, `state.outputDetailPanelWidth` | pointerdown/move/up listeners, `applyOutputDetailPanelWidth()` |
-| 创建客户确认卡片 | `conversation.html` | `#customerCreateComposerCard`, `state.activeChatId`, session `source: "create-customer"` | `beginCreateCustomerConversation()`, `updateCustomerCreateComposer()` |
-| 创建商机确认卡片 | `conversation.html` | `#dealCreateComposerCard`, session `stage: "deal-confirming"` | `beginCreateDealFromCustomer()`, deal composer listeners |
+| 右侧 Daily 洞察 | `index.html` | `#homeInsightRail`, `#homeInsightToggle`, `state.homeInsightRailCollapsed` | insight listeners, `openInsightConversation()` |
+| 右侧生成结果栏 / 产出物侧边栏 | mostly `conversation.html` | `#chatOutputPanelShell`, `#chatOutputPanel`, `.chat-output-entry`, `#chatOutputToggleBtn`, `state.outputResultsPanelOpen`, `state.businessObjectOverlayOpen` | `renderChatOutputPanel()` |
+| 右侧生成结果列表 | `conversation.html` | `[data-output-doc-id]`, `[data-output-business-id]` | `getCurrentOutputResults()`, `renderOutputListPanel()` |
+| 右侧通用文档操作 | `conversation.html`, `docs.html` | `[data-output-doc-action]`, `[data-output-doc-menu-action]`, `.docs-row-inline-action` | Document row actions expose download and forward; remaining actions stay in more menu. |
+| 右侧业务文档操作 | `conversation.html` | `[data-output-business-id]`, `[data-output-business-menu-action="forward"]` | Business source rows expose only forward icon in list. |
+| 方案切换入口 | `conversation.html` | `#schemeSwitchBtn`, `#schemeSwitchMenu`, `state.activeSchemePlanId`, `state.activeSchemeCapability` | `renderSchemeSwitch()` |
+| 右侧文档详情 | `conversation.html` | `state.outputOpenTabs`, `state.activeOutputTabId` | `openOutputPanelTab("doc", id)`, `renderOutputDetailPanel()` |
+| 右侧业务详情 / 客户详情 | `conversation.html` | `[data-output-business-id]`, `.embedded-object-detail`, `#businessObjectOverlay` | `openOutputPanelTab("business", id)` or `openBusinessObjectOverlay(id)` |
+| 右侧详情宽度拖拽 | `conversation.html` | `[data-output-resize-handle]`, `state.outputDetailPanelWidth` | pointer listeners, `applyOutputDetailPanelWidth()` |
+| 创建客户确认卡片 | `conversation.html` | `#customerCreateComposerCard`, session `source: "create-customer"` | `beginCreateCustomerConversation()`, `updateCustomerCreateComposer()` |
+| 创建商机确认卡片 | `conversation.html` | `#dealCreateComposerCard`, session `stage: "deal-confirming"` | `beginCreateDealFromCustomer()` |
 | 客户卡片 / 商机卡片 | `conversation.html` | `[data-chat-card]`, `.chat-customer-card` | chat feed click handler |
-| 海岳客户简报 | `index.html`, `conversation.html` | session id `haiyue-brief`, doc id `doc-haiyue-brief` | `shouldUseHaiyueBriefFlow()` routes prompts containing `复盘`, `客户简报`, `侧边栏`, or `产出物` into the Haiyue flow. This guard runs both before generic mock-AI navigation and when `conversation.html` receives `launch=mock-ai`, then redirects into `openHaiyueBriefConversation()`; `renderHaiyueBriefConversation()` renders the chat. |
+| 海岳客户简报 | `index.html`, `conversation.html` | session `haiyue-brief`, doc `doc-haiyue-brief` | `shouldUseHaiyueBriefFlow()`, `openHaiyueBriefConversation()` |
 | 企信线程列表 | `messenger.html` | `#messengerThreadList`, `[data-thread-id]`, `state.activeMessengerThread` | `renderMessengerSidebar()`, `openMessengerConversation()` |
 | 企信消息内容 | `messenger.html` | `#messengerHeader`, `#messengerCanvas` | `renderMessengerShell()`, `renderMessengerCanvasContent()` |
 | 任务页 | `task.html` | `#taskShell` | `openTaskPage()`, `renderTaskPage()` |
-| 任务 tab | `task.html` | `[data-task-tab]`, `taskPageState.tab` | tab click listeners |
+| 任务 tab | `task.html` | `[data-task-tab]`, `taskPageState.tab` | tab listeners |
 | 任务搜索 / 状态筛选 | `task.html` | `#taskSearchInput`, `#taskStatusFilter`, `taskPageState.query/status` | `getVisibleTaskRecords()`, `renderTaskPage()` |
 | 创建任务弹窗 | `task.html` | `#createTaskOverlay`, `#createTaskDialogBody`, `state.createTaskForm` | `openCreateTaskDialog()`, `renderCreateTaskDialog()`, `confirmCreateTaskDialog()` |
-| 自动化任务对话 | `task-conversation.html` | `?task`, `state.activeAutomationTaskId`, `state.activeAutomationRunId`, `automationTaskCatalog` | `openAutomationTaskConversation()`, `renderAutomationTaskConversation()`; the selected left automation task drives the central CRM execution report. Automation-task sessions intentionally do not render the prompt as a user message. |
-| 自动化任务报告侧栏 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `.automation-output-card`, `.automation-report-row.unread`, `[data-automation-run-id]`, `sidebarHistoryStatus.automationReadRunKeys` | `renderAutomationTaskReportCard()`, `renderOutputListPanel()`; the first right-side card lists trigger runs for the active task and clicking a run refreshes chat content plus generated outputs. The blue report dot maps to unread state, not active selection. It stays visible when a task is merely opened, and disappears only after a specific report row is clicked and `markAutomationRunRead()` records that run as read. In automation list mode the output panel wrapper is transparent; the module cards are independent cards, not nested in one outer white card. |
-| 自动化业务生成结果 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `[data-output-doc-id]`, `[data-output-business-id]` | `renderBusinessOutputCard()`, `getAutomationOutputDocs()`, `getAutomationOutputBusinessSources()`; the second independent right-side card shows the selected run's documents and business objects. Document rows reuse output detail cards; business object rows reuse the static no-dynamic-tab detached drawer logic. |
+| 自动化任务对话 | `task-conversation.html` | `?task`, `state.activeAutomationTaskId`, `state.activeAutomationRunId`, `automationTaskCatalog` | `openAutomationTaskConversation()`, `renderAutomationTaskConversation()` |
+| 自动化任务报告侧栏 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `.automation-output-card`, `.automation-report-row.unread`, `[data-automation-run-id]`, `sidebarHistoryStatus.automationReadRunKeys` | `renderAutomationTaskReportCard()`, `renderOutputListPanel()`, `markAutomationRunRead()` |
+| 自动化业务生成结果 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `[data-output-doc-id]`, `[data-output-business-id]` | `renderBusinessOutputCard()`, `getAutomationOutputDocs()`, `getAutomationOutputBusinessSources()` |
 | 智能体广场 | `market.html` | `#marketShell`, `#appSquarePage`, `state.marketMode` | `openMarketPage("square")`, `renderMarketSquare()` |
-| 智能体卡片 | `market.html` | `#enterpriseGrid`, `#marketPublicGrid`, `[data-agent-action]`, `[data-use-id]` | `renderAgentSquareCard()`, agent grid click handlers |
-| 广场筛选 chip | `market.html` | `#marketFilterChips`, `[data-market-filter]`, `state.marketCategory` | `renderFilterChips()`, `renderMarketSquare()` |
 | 技能中心 / 已添加 | `market.html` | `#createdPage`, `#manageInstalledTab`, `#createdGrid`, `state.manageSource = "installed"` | `renderCreatedView()` |
 | 我创建的技能 | `market.html` | `#manageCreatedTab`, `state.manageSource = "created"` | `renderCreatedView()` |
-| 批量操作 | `market.html` | `#bulkEditBtn`, `[data-batch-id]`, `state.selectedCreatedIds`, `state.manageBatchMode` | created grid click handler, batch action handlers |
-| 共享给同事 | `market.html` | `#sharePage`, `#selectedShareList` | `renderShareView()`, `confirmShareBtn` listener |
-| 导入技能 | `market.html` | `#skillImportPage`, `#skillImportTableBody`, `state.skillImportStatus` | `renderSkillImportView()`, skill import click/input handlers |
+| 批量操作 | `market.html` | `#bulkEditBtn`, `[data-batch-id]`, `state.selectedCreatedIds`, `state.manageBatchMode` | created grid click handler |
+| 共享给同事 | `market.html` | `#sharePage`, `#selectedShareList` | `renderShareView()`, share confirmation listener |
+| 导入技能 | `market.html` | `#skillImportPage`, `#skillImportTableBody`, `state.skillImportStatus` | `renderSkillImportView()`, skill import listeners |
 | 自动化任务页 | `market.html` | `#marketAutomationView`, `state.marketMode = "automation"` | `switchMarketMode("automation")`, `renderMarketSquare()` |
 
-## Interaction Flows
+## Interaction Contracts
 
-### Left Sidebar To Center
+### Generated Results Panel
 
-Default sidebar rows use `data-panel`:
-
-- `data-panel="task"` -> `openTaskPage()` -> `task.html`
-- `data-panel="market"` -> `openMarketPage(...)` -> `market.html`
-- `data-panel="docs"` -> `openDocsPage()` -> `docs.html`
-- home/new conversation -> `openSidebarHome()` -> `index.html`
-
-History rows with `data-session-id` open `conversation.html?session=...` through
-`openConversationSession(sessionId)`.
-
-### Center Chat To Right Panel
-
-In `conversation.html`, generated documents and business sources are opened
-inside the right panel. The list view no longer has "当前 / 所有文档" tabs and
-is fixed to outputs from the active conversation. Document outputs and business
-source outputs are merged into one flat list and sorted by `sortKey` descending;
-there is no separate "业务来源" section title:
-
-- Document card or generated result row -> `openOutputPanelTab("doc", doc.id)`
-- Business/customer source row -> dynamic-tab mode calls
-  `openOutputPanelTab("business", source.id)`; static-detail mode calls
-  `openBusinessObjectOverlay(source.id)` and leaves the generated-results panel
-  outside the business detail scene.
-- Generic document rows expose the same primary operations as the docs library:
-  download and forward icons are visible; sync CRM, jump to chat, and copy link
-  stay under the more menu.
-- Business source rows expose only the forward icon in the list. Copy/open
-  actions remain available from detail or row click behavior.
-- Business source rows can show an action tag after the title through
-  `source.actionLabel`. Examples: query/view-generated cards -> `查询`, field
-  update outputs -> `更新`, created-record outputs -> `创建`.
-- Business object detail rendering omits the embedded object header module when
-  shown inside the generated-results panel. Static-detail mode restores a
-  detached object title area through `renderBusinessObjectTitleBar()` in the
-  overlay drawer, based on the Figma title-component structure.
-- Business object detail header actions show only the forward/share icon.
-- Dynamic output tabs are visible only in output detail mode. Returning to the
-  list hides the tab strip and removes the wide detail layout so the list panel
-  keeps the normal sidebar width.
-- In dynamic-tab detail mode, the dynamic tab strip has an add-tab icon after the open
-  tabs. It opens a small menu of current-session generated outputs that are not
-  already open, and selecting one opens it as a new dynamic tab.
-- In dynamic-tab mode, normal detail opens can add another open generated-result
-  tab; this preserves the existing dynamic tab behavior.
-- In static-detail mode, the dynamic tab header/title strip is not rendered.
-  Generic document outputs use a single right-panel detail page; the close
-  button is placed in the detail title action area. Business object outputs are
-  not rendered as sidebar details and instead use the detached drawer.
-- In static-detail mode, normal detail opens replace the current generated
-  detail. Closing the generated-results panel resets `state.outputResultsPanelMode`
-  to `list`, so reopening from the top-right generated-results icon enters the
-  list rather than the previous detail.
-- In static-detail mode, clicking the top-right generated-results icon always
-  opens the generated-results list, even if an internal detail record still
-  exists in state.
+- In `conversation.html`, generated documents and business sources are merged
+  into one current-session list sorted by `sortKey` descending.
+- The generated-results list has no "当前 / 所有文档" tabs and no separate
+  business-source section title.
+- The list surface is a floating card. In list mode its title is
+  `业务生成结果`, with no title icon and no internal close button; collapse is
+  controlled by the external `#chatOutputToggleBtn`.
+- Generic document rows expose download and forward. Business source rows expose
+  only forward in the list.
+- `source.actionLabel` may render row action tags such as `查询`, `更新`, or
+  `创建`.
+- In dynamic-tab mode, output details use `state.outputOpenTabs` and
+  `state.activeOutputTabId`; the tab strip is visible only in detail mode and
+  includes an add-tab menu for unopened current-session outputs.
+- In static-detail mode, the dynamic tab strip is not rendered. Document details
+  use a single right-panel detail page. Business object outputs open the
+  detached drawer through `openBusinessObjectOverlay(id)`.
 - In static-detail mode, document details and business object drawers are
-  mutually exclusive. Opening one chat card closes the previous card detail
-  surface instead of stacking a sidebar detail and detached drawer.
-- When a static business object drawer opens, `openBusinessObjectOverlay()`
-  must rerender the main panels after clearing `state.outputOpenTabs` and
-  `state.outputResultsPanelOpen`, so an older document detail is removed from
-  the UI before the drawer is shown.
-- Static business object drawer geometry is controlled by
-  `.business-object-overlay` and `.business-object-drawer`; the overlay starts
-  below the 48px ShareClaw topbar, keeps the drawer left edge 200px from the
-  viewport left edge, and uses a very soft right-drawer shadow.
-- Detail width adapts to the active generated-result type: business/object
-  detail uses a wider target width, generic document preview uses a narrower
-  target width, and multiple open dynamic tabs use the widest required type so
-  switching tabs does not change panel width. Width is capped to preserve the
-  chat area. If content cannot fit within the capped width, the detail body
-  scrolls horizontally. Previously persisted widths do not disable auto sizing;
-  only a drag in the current page session switches to manual-width behavior.
-- Right panel list/detail state is controlled by `state.outputResultsPanelMode`,
-  `state.outputOpenTabs`, and `state.activeOutputTabId`.
+  mutually exclusive. Opening one surface clears the previous surface instead of
+  stacking details.
+- Reopening generated results from the external icon in static-detail mode opens
+  the list, not a stale detail.
+- Detail width adapts to active output type and is capped to preserve chat area.
+  Current-session drag switches to manual-width behavior.
 
-In `index.html`, the output panel is simpler and mainly shows the generated
-results list.
+### Business Object Drawer
 
-### Automation Task Conversation To Right Panel
-
-In `task-conversation.html`, the URL parameter `?task=...` selects the active
-automation task from `automationTaskCatalog`. `openAutomationTaskConversation()`
-creates an `automation-task` chat session, sets `state.activeAutomationTaskId`
-and `state.activeAutomationRunId`, opens the generated-results panel, and keeps
-the right panel in list mode. Automation-task sessions do not render a user
-message bubble; the task name is surfaced in `#chatSessionTitlebar`, and the AI
-message starts from the ShareAgent metadata and task report body.
-
-`#chatSessionTitlebar` is sticky above `#chatFeed` after a chat has produced an
-AI message. It displays the active automation task title or history session
-title, and its right side hosts the existing `#chatOutputToggleBtn` generated
-results expand/collapse control.
-
-The right panel uses two floating cards:
-
-- `任务报告` -> `renderAutomationTaskReportCard()` renders trigger runs for the
-  active task. Clicking `[data-automation-run-id]` switches the active run,
-  updates the central CRM report, clears stale output detail state, and refreshes
-  generated outputs. `.automation-report-row.active` marks the selected run;
-  `.automation-report-row.unread` controls the blue dot and represents unread
-  report state only. `markAutomationRunRead(taskId, runId)` stores read runs in
-  `sidebarHistoryStatus.automationReadRunKeys`, but it is triggered by clicking a
-  concrete report row, not by merely opening the automation task. This keeps the
-  left automation task unread marker consistent with unread blue dots inside the
-  report list.
-- `业务生成结果` -> `renderBusinessOutputCard()` renders documents and business
-  objects for the active run. Document clicks reuse
-  `openOutputPanelTab("doc", id)` and the existing document detail card.
-  Business object clicks reuse the static no-dynamic-tab behavior and open the
-  detached business object drawer.
-
-In automation list mode, `#chatOutputPanelShell` receives `.automation-list`.
-The wrapper panel is transparent with no border, radius, or shadow, so `任务报告`
-and `业务生成结果` appear as two independent white cards.
-
-Left automation task rows use `[data-automation-task]`. On
-`task-conversation.html`, clicking a different task updates the current URL with
-`history.replaceState()` and reruns `openAutomationTaskConversation(taskId)`
-instead of creating a generic mock-AI task session.
-
-### Chat To Messenger
-
-Chat cards with `data-chat-card` may route to messenger:
-
-- `open-linsong` -> `openMessengerConversation("linsong")`
-- `open-tencent-group` -> `openMessengerConversation("tencent-group")`
-- `open-east-ops` -> `openMessengerConversation("east-ops")`
-
-Opening messenger switches `state.mainPanel = "messenger"` and
-`state.currentChannel = "messenger"`.
+- Static business object details are outside the generated-results sidebar.
+- `#businessObjectOverlay` / `.business-object-drawer` start below the 48px top
+  bar and keep the drawer left edge 200px from the viewport left edge.
+- The drawer uses a soft right-drawer shadow and slide-in/slide-out transition.
+- The drawer title area is rendered through `renderBusinessObjectTitleBar()`.
+- Business object detail header actions show only the forward/share icon.
 
 ### Scheme Switcher
 
-In `conversation.html`, the top scheme switcher is now a two-level menu:
-
-- First level: interaction schemes. The default scheme is
-  `侧边栏交互方案` (`sidebar-interaction`). The old visible "方案2" option was
-  removed from the switcher.
+- `conversation.html` scheme switcher is a two-level menu.
+- First level lists interaction schemes. Default scheme:
+  `侧边栏交互方案` (`sidebar-interaction`).
 - First-level schemes can be added through the "新增方案" row.
-- Clicking a first-level scheme drills into the second-level capability menu;
-  the menu content is replaced in place and shows a "返回方案列表" row.
-- Second level: each scheme owns a dynamic-tab capability choice:
-  `支持动态页签` (`dynamic-tabs`, current behavior) or
-  `不支持动态页签` (`static-tabs`). `dynamic-tabs` maps to the existing
-  tabbed generated-results runtime; `static-tabs` maps to `static-detail`, a
-  single-detail runtime with no dynamic tab strip and a detached business
-  object drawer.
-- The default capability for the default `侧边栏交互方案` is `static-tabs`
-  (`不支持动态页签`).
+- Clicking a first-level scheme drills into second-level capability selection.
+- Second-level capabilities are `支持动态页签` (`dynamic-tabs`) and
+  `不支持动态页签` (`static-tabs`).
+- Default capability for `侧边栏交互方案` is `static-tabs`.
 - Capability selection is stored per scheme in `state.schemeCapabilityByPlan`.
 
-### Market To Conversation
+### Automation Task Conversation
 
-Agent/skill use buttons call `openMarketUseConversation(type, title)`.
-If not already on `conversation.html`, this navigates with:
+- `task-conversation.html?task=...` selects an item from
+  `automationTaskCatalog`.
+- Automation sessions use `source: "automation-task"` and intentionally do not
+  render a user message bubble.
+- `#chatSessionTitlebar` is sticky above `#chatFeed` after an AI message exists.
+  It shows the task/session title and hosts the generated-results toggle.
+- `openAutomationTaskConversation()` sets `state.activeAutomationTaskId`,
+  `state.activeAutomationRunId`, opens generated results, and keeps the right
+  panel in list mode.
+- The automation right panel has two independent cards:
+  `任务报告` and `业务生成结果`. The wrapper is transparent in
+  `#chatOutputPanelShell.automation-list`.
+- `任务报告` rows use `.automation-report-row.active` for selected run and
+  `.automation-report-row.unread` for unread blue dot.
+- Blue dot semantics: left automation task unread marker means at least one
+  unread report exists inside; right report blue dot marks the specific unread
+  report. Merely opening a task does not clear unread. Clicking a concrete
+  `[data-automation-run-id]` calls `markAutomationRunRead(taskId, runId)`,
+  clears that report dot, and recomputes the left unread count.
+- Clicking an automation report switches the active run, refreshes the central
+  CRM report, clears stale output detail state, and refreshes generated outputs.
+- Automation business output rows reuse the static no-dynamic-tab behavior and
+  open the detached business object drawer.
 
-```text
-conversation.html?launch=market-use&type=...&label=...
-```
+### Chat And Routing
 
-The conversation page then creates a draft session and presets the composer
-with the selected skill or agent.
+- Default sidebar rows use `data-panel` to route to task, market, docs, or home.
+- History rows with `data-session-id` open `conversation.html?session=...`.
+- Haiyue brief prompts containing `复盘`, `客户简报`, `侧边栏`, or `产出物` route
+  into the Haiyue brief flow.
+- Chat cards with supported `data-chat-card` values may route to messenger and
+  set `state.mainPanel = "messenger"` plus `state.currentChannel = "messenger"`.
+- Agent/skill use buttons route through `openMarketUseConversation(type, title)`
+  and may navigate to `conversation.html?launch=market-use&type=...&label=...`.
 
-### Create Customer / Deal Flow
+### Customer / Deal Flow
 
-In `conversation.html`, message text that matches customer creation patterns
-is handled by `extractCustomerCreationName(text)` and
-`beginCreateCustomerConversation(promptText, customerName)`.
-
-Flow:
-
-1. Create dynamic session id `create-customer-{timestamp}`.
-2. Set session `source = "create-customer"` and `stage = "thinking"`.
-3. After timeout, stage becomes `confirming`.
-4. `updateCustomerCreateComposer()` hides the normal composer and shows
-   `#customerCreateComposerCard`.
-5. Confirm changes stage to `created`; cancel changes stage to `canceled`.
-6. The reply chip `create-deal` calls `beginCreateDealFromCustomer(session)`.
-7. Deal flow progresses through `deal-thinking`, `deal-loading`,
-   `deal-confirming`, then `deal-created` or `deal-canceled`.
+- Customer creation prompts are handled by `extractCustomerCreationName(text)`
+  and `beginCreateCustomerConversation(promptText, customerName)`.
+- Customer confirmation uses `#customerCreateComposerCard`.
+- Confirm changes session stage to `created`; cancel changes stage to
+  `canceled`.
+- The reply chip `create-deal` calls `beginCreateDealFromCustomer(session)`.
+- Deal flow progresses through `deal-thinking`, `deal-loading`,
+  `deal-confirming`, then `deal-created` or `deal-canceled`.
 
 ## Page Notes
 
 ### `index.html`
 
-Use for shared shell and dashboard-level behavior. It has the same general
-three-column layout, but its right output panel is less capable than
-`conversation.html`.
+Use for shared shell and dashboard-level behavior. Its right output panel is
+simpler than `conversation.html`.
 
 ### `conversation.html`
 
-Use for all independent chat and advanced chat-side interactions. It includes:
+Use for independent chat and advanced chat-side interactions: dynamic output
+tabs, output details, static business object drawer, customer/deal confirmation,
+Haiyue brief flow, and mock PDF generation.
 
-- dynamic output panel tabs,
-- output detail mode,
-- business source detail,
-- embedded CRM object detail,
-- customer/deal creation confirmation cards,
-- Haiyue brief flow,
-- mock PDF generation flow.
+### `task-conversation.html`
+
+Use for automation task chat and sidebar behavior. It owns task-specific CRM
+report content, automation run selection, automation unread report semantics,
+and the two-card automation generated-results panel.
 
 ### `task.html`
 
-Task page records are front-end static data in `taskPageRecords`.
-Filtering is front-end only through `taskPageState`.
-Creating or editing tasks currently shows toast feedback and does not persist
-or append records.
+Task records are static front-end data in `taskPageRecords`. Filtering is
+front-end only through `taskPageState`. Create/edit task interactions show
+toast feedback and do not persist records.
 
 ### `messenger.html`
 
 Messenger is driven by `messengerThreads` and `state.activeMessengerThread`.
-`renderMessengerShell()` hard-codes the visible content for each supported
-thread. The send button is static.
+`renderMessengerShell()` hard-codes visible content for supported threads.
 
 ### `market.html`
 
-Market data comes from `marketCollections`. Important caveats:
+Market data comes from `marketCollections`. `renderCreatedView()`,
+`renderBatchView()`, and `renderShareView()` are skill-centered in current
+behavior. Skill import is simulated with a predefined Skill file preview.
 
-- `renderMarketSquare()` currently routes non-automation square behavior back
-  to agent mode.
-- `renderCreatedView()`, `renderBatchView()`, and `renderShareView()` force
-  `state.createdType = "skill"`, so created-agent/created-automation controls
-  are partly present but not fully active in current behavior.
-- Skill import is simulated: click the dropzone, show loading, then render a
-  predefined Skill file preview.
+## Update Policy
 
-## Maintenance Rule
+Update this semantic memory in the same task when current system facts change:
 
-When changing this UI, update this file in the same task if any of the
-following changes:
-
-- HTML ownership or page responsibility,
+- page ownership or canonical file responsibility,
 - core layout selectors,
-- state fields that control navigation, active page, or active session,
-- render functions,
-- event delegation selectors,
-- right-panel behavior,
+- state fields controlling navigation, active session, generated results, or
+  unread/read behavior,
+- render functions or event delegation selectors,
+- right-panel interaction contracts,
 - cross-page navigation,
-- customer/deal creation flow,
-- task/messenger/market semantic mappings.
+- customer/deal/task/messenger/market semantic mappings.
 
-If the implementation duplicates changes across multiple HTML files, document
-which files are now canonical or whether all copies must remain synchronized.
+If a change is mainly about why a decision exists, a user correction, or a
+do-not-regress warning, update `SHARECLAW_DECISION_LOG.md` instead.
