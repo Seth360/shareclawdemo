@@ -3261,28 +3261,18 @@
 
       .composer-stage.has-intake-card {
         z-index: 20;
-        padding-top: 340px;
-      }
-
-      .composer-stage.has-intake-card.is-meeting-form-card {
-        padding-top: 288px;
       }
 
       .composer-stage.has-intake-card.is-intake-collapsed {
-        padding-top: 54px;
+        padding-top: 0;
       }
 
       .composer-stage.has-intake-card.is-confirming-create {
-        padding-top: 154px;
+        padding-top: 0;
       }
 
       .composer-stage.has-intake-card.is-delete-confirm {
-        padding-top: 154px;
-      }
-
-      .composer-stage.has-intake-card .ask-user-question-card {
-        top: 0;
-        bottom: auto;
+        padding-top: 0;
       }
 
       .chat-flow-shell {
@@ -3473,6 +3463,10 @@
         gap: 8px;
       }
 
+      .delete-customer-ai-block .chat-ai-meta-main {
+        display: none;
+      }
+
       .chat-ai-avatar {
         width: 28px;
         height: 28px;
@@ -3522,6 +3516,14 @@
         line-height: 18px;
         font-weight: 700;
         color: #181c25;
+      }
+
+      .create-customer-summary-title {
+        margin-bottom: 8px;
+      }
+
+      .chat-ai-inline-section-title {
+        margin-left: 8px;
       }
 
       .chat-ai-copy {
@@ -3603,6 +3605,15 @@
         left: 0;
         top: 0;
         color: inherit;
+      }
+
+      .create-customer-summary-list {
+        gap: 2px;
+        line-height: 18px;
+      }
+
+      .create-customer-intake-copy {
+        margin-top: 10px;
       }
 
       .md-info-missing-list {
@@ -3740,6 +3751,107 @@
         color: #181c25;
         font-weight: 500;
         text-align: left;
+        overflow-wrap: anywhere;
+      }
+
+      .created-customer-success-title {
+        margin-bottom: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .created-customer-detail-card {
+        width: 380px;
+        max-width: 100%;
+        margin-top: 4px;
+        padding: 16px 16px 28px;
+        border: 0.5px solid #dee1e8;
+        border-radius: 16px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        text-align: left;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .created-customer-detail-card:hover {
+        border-color: #cfd4df;
+      }
+
+      .created-customer-detail-card + .chat-ai-footer {
+        margin-top: 16px;
+      }
+
+      .created-customer-card-tag {
+        width: fit-content;
+        height: 20px;
+        padding: 1px 6px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f0ff;
+        color: #7341de;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 700;
+      }
+
+      .created-customer-card-title-block {
+        display: grid;
+        gap: 0;
+      }
+
+      .created-customer-card-title {
+        margin: 0;
+        color: #181c25;
+        font-size: 14px;
+        line-height: 24px;
+        font-weight: 500;
+      }
+
+      .created-customer-card-sub {
+        margin: 0;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 400;
+      }
+
+      .created-customer-card-divider {
+        height: 1px;
+        background: #eaebee;
+      }
+
+      .created-customer-card-fields {
+        display: grid;
+        gap: 4px;
+      }
+
+      .created-customer-card-field {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .created-customer-card-label {
+        width: 88px;
+        flex: 0 0 88px;
+        color: #545861;
+        font-weight: 400;
+      }
+
+      .created-customer-card-value {
+        min-width: 0;
+        flex: 1;
+        color: #181c25;
+        font-weight: 500;
         overflow-wrap: anywhere;
       }
 
@@ -5029,15 +5141,15 @@
       .ask-user-question-card {
         position: absolute;
         left: 0;
-        right: 0;
+        right: auto;
         bottom: calc(100% + 12px);
         z-index: 20;
-        width: 100%;
-        height: 328px;
-        border: 0.5px solid #C1C5CE;
+        width: 400px;
+        height: 580px;
+        border: 0.5px solid #c1c5ce;
         border-radius: 16px;
         background: #fff;
-        box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+        box-shadow: none;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -5047,138 +5159,26 @@
         height: 142px;
       }
 
-      .ask-user-question-card.meeting-form-card {
-        height: 280px;
-      }
-
-      .ask-user-question-card.meeting-form-card .ask-user-question-progress {
-        display: none;
-      }
-
-      .ask-user-question-card.meeting-form-card .ask-user-question-body {
-        padding: 12px 16px;
-      }
-
-      .meeting-form-fields {
-        width: 100%;
-        display: grid;
-        gap: 12px;
-      }
-
-      .meeting-form-field {
-        display: grid;
-        gap: 8px;
-      }
-
-      .meeting-form-label {
-        margin: 0;
-        font-size: 13px;
-        line-height: 18px;
-        color: #181c25;
-      }
-
-      .meeting-form-input,
-      .meeting-form-select {
-        width: 100%;
-        height: 28px;
-        border: 1px solid #eaebee;
-        border-radius: 6px;
-        padding: 0 8px;
-        outline: none;
-        background: #fafafa;
-        color: #181c25;
-        font-size: 14px;
-        line-height: 20px;
-      }
-
-      .meeting-form-select {
-        appearance: none;
-        -webkit-appearance: none;
-        padding-right: 28px;
-        background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%2391959e' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 8px center;
-        background-size: 12px 12px;
-        font-size: 13px;
-      }
-
-      .meeting-form-input:focus,
-      .meeting-form-select:focus {
-        border-color: #7341de;
-        box-shadow: 0 0 0 2px rgba(115, 65, 222, 0.12);
-      }
-
-      .meeting-form-radio-field {
-        margin: 0;
-        padding: 0;
-        border: 0;
-      }
-
-      .meeting-form-radio-options {
-        display: grid;
-        gap: 8px;
-      }
-
-      .meeting-form-radio-option {
-        position: relative;
-        width: 100%;
-        height: 28px;
-        border: 1px solid #c1c5ce;
-        border-radius: 8px;
-        padding: 0 8px;
-        background: #fff;
-        color: #181c25;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-      }
-
-      .meeting-form-radio-option:has(.meeting-form-radio-input:checked) {
-        border-color: #b88cff;
-        background: #f6efff;
-      }
-
-      .meeting-form-radio-input {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        cursor: pointer;
-      }
-
-      .meeting-form-radio-control {
-        position: relative;
-        width: 14px;
-        height: 14px;
-        border: 2px solid #c1c5ce;
-        border-radius: 50%;
-        flex: 0 0 auto;
-      }
-
-      .meeting-form-radio-control::after {
-        content: "";
-        position: absolute;
-        inset: 2px;
-        border-radius: 50%;
-        background: transparent;
-      }
-
-      .meeting-form-radio-input:checked + .meeting-form-radio-control {
-        border-color: #7341de;
-      }
-
-      .meeting-form-radio-input:checked + .meeting-form-radio-control::after {
-        background: #7341de;
-      }
-
-      .meeting-form-radio-label {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 20px;
-      }
-
       .ask-user-question-card.collapsed {
-        height: 42px;
+        width: min(812px, 100%);
+        height: 43px;
+      }
+
+      .customer-intake-inline-mount {
+        margin-top: 8px;
+      }
+
+      .customer-intake-inline-mount .ask-user-question-card {
+        position: static;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        width: 400px;
+        max-width: 100%;
+      }
+
+      .customer-intake-inline-mount + .chat-waiting-answer-card {
+        margin-top: 12px;
       }
 
       .ask-user-question-card.confirm .ask-user-question-header {
@@ -5197,7 +5197,7 @@
       .ask-user-question-header {
         position: relative;
         z-index: 1;
-        height: 42px;
+        height: 48px;
         padding: 0 16px;
         border-bottom: 0;
         background: #fff;
@@ -5205,7 +5205,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex: 0 0 42px;
+        flex: 0 0 48px;
         transition: box-shadow 0.16s ease;
       }
 
@@ -5216,20 +5216,20 @@
       .ask-user-question-title {
         margin: 0;
         font-size: 14px;
-        line-height: 20px;
-        font-weight: 600;
-        color: #242529;
+        line-height: 24px;
+        font-weight: 500;
+        color: #181c25;
       }
 
       .ask-user-question-progress {
-        height: 28px;
-        padding: 0 6px 0 10px;
+        height: 18px;
+        padding: 0;
         border-radius: 8px;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        color: #545861;
-        font-size: 13px;
+        gap: 4px;
+        color: #91959e;
+        font-size: 12px;
         line-height: 18px;
       }
 
@@ -5238,12 +5238,13 @@
       }
 
       .ask-user-question-progress svg {
-        width: 12px;
-        height: 12px;
+        display: none;
+        width: 11px;
+        height: 11px;
       }
 
       .ask-user-question-card.collapsed .ask-user-question-progress svg {
-        transform: rotate(180deg);
+        display: block;
       }
 
       .ask-user-question-body {
@@ -5253,7 +5254,7 @@
         padding: 12px 16px;
         display: grid;
         align-content: start;
-        gap: 0;
+        gap: 12px;
       }
 
       .ask-user-question-body::-webkit-scrollbar {
@@ -5265,14 +5266,19 @@
         background: #d6dae3;
       }
 
+      #customerIntakeQuestionList {
+        padding-top: 4px;
+        padding-bottom: 4px;
+      }
+
       .ask-user-question-item {
         display: grid;
-        gap: 6px;
-        padding: 0 0 12px;
+        gap: 8px;
+        padding: 0;
       }
 
       .ask-user-question-item + .ask-user-question-item {
-        padding-top: 12px;
+        padding-top: 0;
       }
 
       .ask-user-question-item:last-child {
@@ -5281,38 +5287,38 @@
 
       .ask-user-question-label {
         margin: 0;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 600;
-        color: #242529;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+        color: #181c25;
       }
 
       .ask-user-question-options {
         display: grid;
-        gap: 4px;
+        gap: 6px;
       }
 
       .ask-user-question-option {
         width: 100%;
-        min-height: 32px;
-        padding: 6px 8px;
-        border: 1px solid #dee1e8;
-        border-radius: 8px;
+        min-height: 28px;
+        padding: 4px 8px;
+        border: 1px solid #eaebee;
+        border-radius: 6px;
         display: inline-flex;
         align-items: center;
         gap: 8px;
         background: #fff;
-        color: #242529;
-        font-size: 14px;
-        line-height: 20px;
+        color: #181c25;
+        font-size: 13px;
+        line-height: 18px;
         text-align: left;
         cursor: pointer;
       }
 
       .ask-user-question-option:hover,
       .ask-user-question-option.is-selected {
-        border-color: #b88cff;
-        background: #f6efff;
+        border-color: #bc97f7;
+        background: #f8f0ff;
       }
 
       .ask-user-question-option.is-muted {
@@ -5320,20 +5326,20 @@
       }
 
       .ask-user-question-option-check {
-        width: 16px;
-        height: 16px;
-        border: 1px solid #cbd1dc;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #c1c5ce;
         border-radius: 50%;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        flex: 0 0 16px;
+        flex: 0 0 14px;
       }
 
       .ask-user-question-option.is-single .ask-user-question-option-check {
         position: relative;
-        border-width: 2px;
-        border-color: #cbd1dc;
+        border: 1px solid #c1c5ce;
+        background: #fff;
       }
 
       .ask-user-question-option.is-single:hover .ask-user-question-option-check {
@@ -5341,19 +5347,22 @@
       }
 
       .ask-user-question-option.is-single.is-selected .ask-user-question-option-check {
-        border-color: #7341de;
+        border: 4px solid #7341de;
+        background: #fff;
       }
 
       .ask-user-question-option.is-single.is-selected .ask-user-question-option-check::after {
-        content: "";
-        position: absolute;
-        inset: 3px;
-        border-radius: 50%;
-        background: #7341de;
+        content: none;
       }
 
       .ask-user-question-option.is-multi .ask-user-question-option-check {
+        position: relative;
+        width: 14px;
+        height: 14px;
+        flex-basis: 14px;
+        border: 1px solid #c1c5ce;
         border-radius: 4px;
+        background: #fff;
       }
 
       .ask-user-question-option.is-selected .ask-user-question-option-check {
@@ -5361,23 +5370,90 @@
       }
 
       .ask-user-question-option.is-multi.is-selected .ask-user-question-option-check {
+        border-color: #7341de;
         background: #7341de;
         color: #fff;
       }
 
       .ask-user-question-option.is-multi.is-selected .ask-user-question-option-check::after {
-        content: "✓";
-        font-size: 11px;
-        line-height: 1;
-        font-weight: 700;
+        content: "";
+        width: 7px;
+        height: 4px;
+        border-left: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+        transform: rotate(-45deg) translate(1px, -1px);
       }
 
       .ask-user-question-option-label {
         min-width: 0;
-        flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .ask-user-question-option-info {
+        position: relative;
+        width: 12px;
+        height: 12px;
+        border: 1px solid #545861;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 12px;
+        color: #545861;
+        font-size: 9px;
+        line-height: 1;
+        font-weight: 500;
+      }
+
+      .ask-user-question-option-info::before,
+      .ask-user-question-option-info::after {
+        position: absolute;
+        left: 50%;
+        z-index: 30;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-50%) translateY(-4px);
+        transition: opacity 0.12s ease, transform 0.12s ease;
+      }
+
+      .ask-user-question-option-info::before {
+        content: attr(data-tooltip);
+        bottom: calc(100% + 9px);
+        height: 36px;
+        padding: 0 14px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #2f333d;
+        color: #fff;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 400;
+        white-space: nowrap;
+        box-shadow: 0 8px 24px rgba(24, 28, 37, 0.16);
+      }
+
+      .ask-user-question-option-info::after {
+        content: "";
+        bottom: calc(100% + 5px);
+        width: 8px;
+        height: 8px;
+        border-radius: 1px;
+        background: #2f333d;
+        transform: translateX(-50%) translateY(-4px) rotate(45deg);
+      }
+
+      .ask-user-question-option-info:hover::before,
+      .ask-user-question-option-info:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .ask-user-question-option-info:hover::after {
+        transform: translateX(-50%) translateY(0) rotate(45deg);
       }
 
       .ask-user-question-option-label.is-editing-custom {
@@ -5407,54 +5483,62 @@
 
       .ask-user-question-input {
         width: 100%;
-        height: 36px;
-        border: 0;
-        border-radius: 8px;
-        padding: 0 12px;
+        height: 28px;
+        border: 1px solid #eaebee;
+        border-radius: 6px;
+        padding: 0 8px;
         outline: none;
-        background: #f7f8fa;
-        color: #242529;
-        font-size: 14px;
-        line-height: 20px;
+        background: #fff;
+        color: #181c25;
+        font-size: 13px;
+        line-height: 18px;
       }
 
       .ask-user-question-input:focus {
-        box-shadow: 0 0 0 2px rgba(126, 136, 255, 0.14);
+        border-color: #bc97f7;
+        background: #fff;
+        box-shadow: none;
+      }
+
+      .ask-user-question-input::placeholder {
+        color: #91959e;
       }
 
       .ask-user-question-footer {
-        height: 48px;
-        padding: 10px 16px;
-        border-top: 1px solid #eaebee;
+        height: 56px;
+        padding: 12px 16px;
+        border-top: 0;
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        gap: 8px;
-        flex: 0 0 48px;
+        gap: 12px;
+        flex: 0 0 56px;
       }
 
       .ask-user-question-btn {
-        height: 28px;
-        min-width: 66px;
-        padding: 4px 12px;
+        height: 32px;
+        min-width: 52px;
+        padding: 0 12px;
+        border: 1px solid #c1c5ce;
         border-radius: 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
-        line-height: 20px;
-        color: rgba(0, 0, 0, 0.55);
+        font-size: 13px;
+        line-height: 18px;
+        color: #181c25;
       }
 
       .ask-user-question-btn.primary {
+        border-color: transparent;
         color: #fff;
         background: #7341de;
       }
 
       .ask-user-question-btn.primary:disabled {
         color: rgba(255, 255, 255, 0.72);
-        background: #ddc4ff;
-        opacity: 0.55;
+        background: rgba(24, 28, 37, 0.3);
+        opacity: 1;
         cursor: not-allowed;
       }
 
@@ -5478,60 +5562,88 @@
         display: none;
       }
 
+      .ask-user-question-card.delete-confirm .ask-user-question-header,
       .ask-user-question-card.delete-confirm .ask-user-question-footer,
       .ask-user-question-card.delete-confirm .ask-user-question-progress {
         display: none;
       }
 
       .ask-user-question-card.delete-confirm {
-        height: 142px;
-        border: 1px solid #dee1e8;
+        width: 400px;
+        height: 105px;
+        border: 0.5px solid #dee1e8;
         border-radius: 16px;
         background: #fff;
         box-shadow: 0 14px 36px rgba(24, 41, 75, 0.1);
+        overflow: hidden;
       }
 
       .ask-user-question-card.delete-confirm .ask-user-question-body {
-        padding: 16px 20px 14px;
-        gap: 10px;
+        padding: 12px 16px;
+        gap: 24px;
       }
 
       .ask-user-question-card.delete-confirm .ask-user-question-label {
         font-size: 14px;
-        line-height: 20px;
-        font-weight: 700;
-        color: #181c25;
+        line-height: 24px;
+        font-weight: 500;
+        color: #18181b;
       }
 
-      .ask-user-question-card.delete-confirm .ask-user-question-option {
-        min-height: 32px;
-        padding: 4px 12px;
+      .ask-user-question-card.delete-confirm .delete-confirm-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .ask-user-question-card.delete-confirm .delete-confirm-action {
+        height: 32px;
+        min-width: 52px;
+        padding: 0 12px;
+        border: 1px solid #c1c5ce;
         border-radius: 8px;
-        background: transparent;
+        background: #fff;
         color: #181c25;
         font-size: 14px;
         line-height: 20px;
         cursor: pointer;
+        transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
       }
 
-      .ask-user-question-card.delete-confirm .ask-user-question-option:focus {
+      .ask-user-question-card.delete-confirm .delete-confirm-action:focus {
         outline: none;
       }
 
-      .ask-user-question-card.delete-confirm .ask-user-question-option:hover,
-      .ask-user-question-card.delete-confirm .ask-user-question-option.is-selected {
-        background: #f6efff;
+      .ask-user-question-card.delete-confirm .delete-confirm-action:focus-visible {
+        box-shadow: 0 0 0 3px rgba(222, 49, 35, 0.16);
       }
 
-      .ask-user-question-card.delete-confirm .ask-user-question-option.is-muted {
-        color: #545861;
+      .ask-user-question-card.delete-confirm .delete-confirm-action:hover {
+        background: #f8f9fb;
+        border-color: #c9ced8;
       }
 
-      .ask-user-question-card.delete-confirm .ask-user-question-option-label {
-        color: inherit;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 400;
+      .ask-user-question-card.delete-confirm .delete-confirm-action.primary {
+        min-width: 80px;
+        border-color: transparent;
+        background: #d93518;
+        color: #fff;
+      }
+
+      .ask-user-question-card.delete-confirm .delete-confirm-action.primary:hover {
+        border-color: transparent;
+        background: #c92a1d;
+      }
+
+      .ask-user-question-card.delete-confirm.inline-delete-confirm-card {
+        position: static;
+        margin-top: 16px;
+        box-shadow: none;
+      }
+
+      .chat-ai-copy + .ask-user-question-card.delete-confirm.inline-delete-confirm-card {
+        margin-top: 16px;
       }
 
       .skill-chip {
@@ -6127,6 +6239,11 @@
         width: 32px;
         height: 32px;
         display: block;
+      }
+
+      .send-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
       }
 
       .hidden {
@@ -12380,8 +12497,8 @@
                     </div>
                     <div class="ask-user-question-body" id="customerIntakeQuestionList"></div>
                     <div class="ask-user-question-footer">
-                      <button class="ask-user-question-btn" id="customerIntakeSkipBtn" type="button">跳过</button>
                       <button class="ask-user-question-btn primary" id="customerIntakeSubmitBtn" type="button" disabled>提交</button>
+                      <button class="ask-user-question-btn" id="customerIntakeSkipBtn" type="button">取消</button>
                     </div>
                   </div>
                 </section>
@@ -14426,7 +14543,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
 每个模板都应附带参数示例和失败兜底说明。`
       };
-      const ASK_USER_QUESTION_TRIGGERS = ["AskUserQuestion", "问询"];
+      const ASK_USER_QUESTION_TRIGGERS = ["信息收集"];
       const ASK_USER_QUESTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
       const DEFAULT_CREATE_CUSTOMER_NAME = "新客户";
       const DEFAULT_CREATE_CUSTOMER_PROMPT = `请按规划模式继续整理 新建客户：${DEFAULT_CREATE_CUSTOMER_NAME}`;
@@ -14444,62 +14561,39 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       };
       const DELETE_CUSTOMER_DEMO_TRIGGER = "删除客户";
       const DELETE_CUSTOMER_DEMO_SESSION_ID = "delete-customer-demo";
-      const DELETE_CUSTOMER_DEMO_DISPLAY_PROMPT = "删除橘子科技的客户信息";
+      const DELETE_CUSTOMER_DEMO_DISPLAY_PROMPT = "删除橘子科技";
       const QUERY_CUSTOMER_DEMO_SESSION_ID = "query-customer-demo";
       const COMPLEX_QUERY_TRIGGER = "复杂查询";
       const COMPLEX_QUERY_SESSION_ID = "complex-query-demo";
       const COMPLEX_QUERY_DISPLAY_PROMPT = "帮我查一下本季度名下有进行中商机的客户，并列出每个客户关联的商机和订单。";
-      const MEETING_FORM_CARD_TRIGGER = "表单卡演示";
-      const MEETING_FORM_CARD_SESSION_ID = "meeting-form-card";
-      const MEETING_FORM_CARD_DISPLAY_PROMPT = "帮我把刚才开线上会议的客户录进去";
-      const MEETING_FORM_CARD_DEFAULT_FIELDS = {
-        customerName: "橘子科技",
-        phone: "13500000000",
-        industry: "互联网",
-        firstContact: "是"
-      };
       const CUSTOMER_INTAKE_FIELDS = [
-        {
-          key: "customerName",
-          label: "客户名称",
-          question: "这个客户的名称是什么？",
-          type: "text",
-          placeholder: "请输入客户名称"
-        },
         {
           key: "customerLevel",
           label: "客户等级",
-          question: "这个客户等级你想先怎么标？",
+          question: "这个客户等级你想先怎么标？是直接上 VIP，还是先标重点客户观望？",
           type: "single",
-          options: ["重点客户", "VIP客户", "普通客户"]
+          options: ["重点客户（推荐）", "VIP客户", "普通用户"]
         },
         {
-          key: "contactName",
-          label: "联系人",
-          question: "当前接触的联系人是谁？",
-          type: "text",
-          placeholder: "请输入联系人姓名"
+          key: "industry",
+          label: "所属行业",
+          question: "橘子科技是哪个行业的？",
+          type: "single",
+          options: ["互联网", "制造业", "消费品"]
         },
         {
           key: "contactRole",
           label: "联系人职位",
-          question: "当前接触的联系人，他的职位或角色是？",
+          question: "当前接触的联系人李明，他的角色是？（可多选）",
           type: "multi",
-          options: ["CEO / 老板", "IT负责人", "采购", "业务部门Leader", "其它"]
+          options: ["CEO / 老板", "IT 负责人", "采购", "业务部门Leader"]
         },
         {
-          key: "intent",
-          label: "意向",
-          question: "这个客户当前的意向怎么判断？",
-          type: "single",
-          options: ["大单意向", "普通意向", "暂不明确", "其它"]
-        },
-        {
-          key: "followUp",
-          label: "是否设置跟进提醒",
-          question: "要不要现在就设置一个跟进提醒？",
-          type: "single",
-          options: ["明天跟进", "3天内跟进", "暂不设置"]
+          key: "phone",
+          label: "联系电话",
+          question: "他的联系电话你知道吗？",
+          type: "text",
+          placeholder: "请输入联系电话"
         }
       ];
       const pinnedHistoryItems = [
@@ -15587,6 +15681,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       let exposedSubmenuCloseTimer = null;
       let businessObjectOverlayCloseTimer = null;
       const AI_REPLY_THINKING_DELAY = 1500;
+      const DELETE_CUSTOMER_THINKING_DELAY = 1000;
       const EXPOSED_SUBMENU_CLOSE_DELAY = 180;
       const BUSINESS_OBJECT_DRAWER_TRANSITION_MS = 220;
 
@@ -18265,7 +18360,50 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getBusinessSourceById(sourceId) {
-        return outputBusinessSources.find((item) => item.id === sourceId) || getComplexQueryCustomerSource(sourceId) || getQueryCustomerSource(sourceId);
+        return outputBusinessSources.find((item) => item.id === sourceId) || getCreatedCustomerSource(sourceId) || getComplexQueryCustomerSource(sourceId) || getQueryCustomerSource(sourceId);
+      }
+
+      function getCreatedCustomerBusinessId(session) {
+        return `business-created-customer-${session?.id || state.activeChatId || "current"}`;
+      }
+
+      function getCreatedCustomerSource(sourceId) {
+        const match = String(sourceId || "").match(/^business-created-customer-(.+)$/);
+        if (!match) {
+          return null;
+        }
+
+        const session = conversationSessions[match[1]];
+        if (!session || session.source !== "create-customer") {
+          return null;
+        }
+
+        const fields = getMergedCustomerIntakeFields(session);
+        const customerName = normalizeCustomerName(fields.customerName) || session.customerName || DEFAULT_CREATE_CUSTOMER_NAME;
+        const industry = Array.isArray(fields.industry) ? fields.industry.filter(Boolean).join("、") : (fields.industry || "");
+        const level = Array.isArray(fields.customerLevel) ? fields.customerLevel.filter(Boolean).join("、") : (fields.customerLevel || "");
+        const role = Array.isArray(fields.contactRole) ? fields.contactRole.filter(Boolean).join("、") : (fields.contactRole || "");
+        const contactName = fields.contactName || "暂无";
+        const phone = fields.phone || "暂无";
+
+        return {
+          id: sourceId,
+          title: customerName,
+          tabTitle: customerName.slice(0, 12),
+          detailTitle: customerName,
+          sessionId: session.id,
+          typeLabel: "客户",
+          owner: `联系人：${contactName}`,
+          stage: "客户阶段：新客户",
+          health: `客户级别：${level || "未填写"}`,
+          lastTouch: `联系电话：${phone}`,
+          nextAction: `所属行业：${industry || "未填写"}${role ? ` · 联系人职位：${role}` : ""}`,
+          actionLabel: "创建",
+          createdTimeLabel: session.customerTime || session.time || "刚刚",
+          sortKey: Date.now(),
+          opportunityAmount: "--",
+          customerLevel: level || "新客户"
+        };
       }
 
       function getQueryCustomerSource(sourceId) {
@@ -19946,6 +20084,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           customerLevel: "",
           contactName: "",
           contactRole: "",
+          industry: "",
+          phone: "",
           intent: "",
           followUp: ""
         };
@@ -19975,9 +20115,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         if (/VIP客户|VIP|大客户/.test(normalized)) {
           extracted.customerLevel = "VIP客户";
         } else if (/重点客户|重点/.test(normalized)) {
-          extracted.customerLevel = "重点客户";
+          extracted.customerLevel = "重点客户（推荐）";
         } else if (/普通客户|普通用户/.test(normalized)) {
-          extracted.customerLevel = "普通客户";
+          extracted.customerLevel = "普通用户";
         }
 
         extracted.contactName = extractLeadLabelValue(normalized, ["联系人", "当前联系人", "接触人"]);
@@ -19987,12 +20127,25 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         if (/CEO|老板|总经理|负责人/.test(normalized)) {
           extracted.contactRole = "CEO / 老板";
-        } else if (/IT负责人|IT/.test(normalized)) {
-          extracted.contactRole = "IT负责人";
+        } else if (/IT负责人|IT\s*负责人|IT/.test(normalized)) {
+          extracted.contactRole = "IT 负责人";
         } else if (/采购/.test(normalized)) {
           extracted.contactRole = "采购";
         } else if (/业务部门Leader|业务负责人|业务部门/.test(normalized)) {
           extracted.contactRole = "业务部门Leader";
+        }
+
+        if (/互联网/.test(normalized)) {
+          extracted.industry = "互联网";
+        } else if (/制造业/.test(normalized)) {
+          extracted.industry = "制造业";
+        } else if (/消费品/.test(normalized)) {
+          extracted.industry = "消费品";
+        }
+
+        const phoneMatch = normalized.match(/1[3-9]\d{9}/);
+        if (phoneMatch) {
+          extracted.phone = phoneMatch[0];
         }
 
         if (/大单/.test(normalized)) {
@@ -20045,6 +20198,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             customerLevel: "",
             contactName: "",
             contactRole: "",
+            industry: "",
+            phone: "",
             intent: "",
             followUp: ""
           };
@@ -20111,45 +20266,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return ASK_USER_QUESTION_TRIGGERS.includes((text || "").trim());
       }
 
-      function isMeetingFormCardTrigger(text) {
-        return (text || "").trim() === MEETING_FORM_CARD_TRIGGER;
-      }
-
-      function startMeetingFormCardConversation() {
-        if (!isConversationPage()) {
-          navigateToConversation({
-            launch: "meeting-form-card",
-            prompt: MEETING_FORM_CARD_TRIGGER
-          });
-          return;
-        }
-
-        const now = new Date();
-        const session = {
-          id: MEETING_FORM_CARD_SESSION_ID,
-          historyTitle: "创建客户 · 橘子科技",
-          prompt: MEETING_FORM_CARD_DISPLAY_PROMPT,
-          time: formatChatTime(now),
-          stage: "form",
-          source: "meeting-form-card",
-          fields: { ...MEETING_FORM_CARD_DEFAULT_FIELDS }
-        };
-
-        conversationSessions[MEETING_FORM_CARD_SESSION_ID] = session;
-        clearTimeout(chatReplyTimer);
-        state.mainPanel = "home";
-        state.homeView = "chat";
-        state.currentChannel = "claw";
-        state.homeInsightRailEnabled = false;
-        state.activeChatId = MEETING_FORM_CARD_SESSION_ID;
-        state.outputResultsTab = "current";
-        state.outputResultsPanelOpen = false;
-        state.activeOutputMenuId = "";
-        persistOutputPanelState();
-        upsertConversationHistory(MEETING_FORM_CARD_SESSION_ID);
-        setSidebarActive(null);
-        renderMainPanels();
-        setEditorText("");
+      function startAskUserQuestionConversation() {
+        beginCreateCustomerConversation(ASK_USER_QUESTION_PROMPT, extractCustomerCreationName(ASK_USER_QUESTION_PROMPT));
       }
 
       function isMdInfoDemoTrigger(text) {
@@ -20423,7 +20541,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           historyTitle: "删除客户 · 橘子科技",
           prompt: DELETE_CUSTOMER_DEMO_DISPLAY_PROMPT,
           time: formatChatTime(now),
-          stage: "confirming-delete",
+          stage: "thinking",
           source: "delete-customer-demo",
           confirmationAnswer: ""
         };
@@ -20442,6 +20560,15 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         setSidebarActive(null);
         renderMainPanels();
         setEditorText("");
+
+        chatReplyTimer = setTimeout(() => {
+          const session = conversationSessions[DELETE_CUSTOMER_DEMO_SESSION_ID];
+          if (!session || session.source !== "delete-customer-demo" || session.stage !== "thinking") {
+            return;
+          }
+          session.stage = "confirming-delete";
+          renderMainPanels();
+        }, DELETE_CUSTOMER_THINKING_DELAY);
       }
 
       function shouldUseHaiyueBriefFlow(text) {
@@ -20691,6 +20818,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               <img class="chat-ai-avatar" src="${escapeHtml(avatar)}" alt="${escapeHtml(displayName)}" />
               <p class="chat-ai-name">${escapeHtml(displayName)}</p>
             </div>` : ""}
+            <div class="chat-ai-meta-sub">
+              <p class="chat-ai-meta-time">${escapeHtml(duration)}</p>
+              <svg class="chat-ai-meta-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderChatAiStatus(duration) {
+        return `
+          <div class="chat-ai-meta compact">
             <div class="chat-ai-meta-sub">
               <p class="chat-ai-meta-time">${escapeHtml(duration)}</p>
               <svg class="chat-ai-meta-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>
@@ -21038,26 +21176,44 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
-      function renderMeetingFormCreatedBlock(session) {
-        const fields = {
-          ...MEETING_FORM_CARD_DEFAULT_FIELDS,
-          ...(session.fields || {})
-        };
-        const customerName = fields.customerName || MEETING_FORM_CARD_DEFAULT_FIELDS.customerName;
+      function formatCustomerIndustrySubtitle(industry) {
+        const value = Array.isArray(industry) ? industry.filter(Boolean).join("、") : (industry || "").trim();
+        if (!value) {
+          return "新客户";
+        }
+        return `新客户 · ${value.endsWith("行业") ? value : `${value}行业`}`;
+      }
+
+      function renderCreatedCustomerDetailCard(session) {
+        const fields = getMergedCustomerIntakeFields(session);
+        const customerName = normalizeCustomerName(fields.customerName) || session.customerName || DEFAULT_CREATE_CUSTOMER_NAME;
+        const rows = [
+          ["联系人", fields.contactName],
+          ["联系电话", fields.phone],
+          ["客户等级", fields.customerLevel],
+          ["所属行业", fields.industry],
+          ["联系人职位", fields.contactRole]
+        ]
+          .map(([label, value]) => [label, Array.isArray(value) ? value.filter(Boolean).join("、") : value])
+          .filter(([, value]) => value);
+
         return `
-          <div class="chat-ai-block">
-            <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareAgent", "已处理3个步骤")}
-              <p class="chat-ai-title">✅ 已创建客户「${escapeHtml(customerName)}」</p>
-              ${renderCustomerDetailCard(customerName, "open-meeting-form-customer")}
-              ${renderChatToolbar(true)}
-            </div>
-            <div class="chat-replies">
-              ${renderChatReplyChip("创建商机", "meeting-form-create-deal")}
-              ${renderChatReplyChip("补充详细信息", "meeting-form-enrich-detail")}
-              ${renderChatReplyChip("添加相关联系人", "meeting-form-add-contact")}
-            </div>
-          </div>
+          <button class="created-customer-detail-card" type="button" data-chat-card="open-created-customer" data-business-id="${escapeHtml(getCreatedCustomerBusinessId(session))}">
+            <span class="created-customer-card-tag">客户</span>
+            <span class="created-customer-card-title-block">
+              <span class="created-customer-card-title">${escapeHtml(customerName)}</span>
+              <span class="created-customer-card-sub">${escapeHtml(formatCustomerIndustrySubtitle(fields.industry))}</span>
+            </span>
+            <span class="created-customer-card-divider" aria-hidden="true"></span>
+            <span class="created-customer-card-fields">
+              ${rows.map(([label, value]) => `
+                <span class="created-customer-card-field">
+                  <span class="created-customer-card-label">${escapeHtml(label)}</span>
+                  <span class="created-customer-card-value">${escapeHtml(value)}</span>
+                </span>
+              `).join("")}
+            </span>
+          </button>
         `;
       }
 
@@ -21199,80 +21355,25 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function renderDeleteCustomerDemoConversation(session) {
+        const isDeleted = session.stage === "deleted";
+        const isCanceled = session.stage === "canceled";
+        const isFinished = isDeleted || isCanceled;
         let content = `
           <div class="chat-feed-column">
             <div class="chat-user-row"><div class="chat-user-bubble">${escapeHtml(DELETE_CUSTOMER_DEMO_DISPLAY_PROMPT)}</div></div>
             <div class="chat-time">${escapeHtml(session.time || "")}</div>
-            <div class="chat-ai-block">
+            ${session.stage === "thinking" ? renderThinkingChip() : `
+            <div class="chat-ai-block delete-customer-ai-block">
               <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareAgent", "已处理3个步骤")}
-                <p class="chat-ai-title">⚠️ 您想要删除“橘子科技”这个客户，此操作不可恢复。</p>
-                ${renderChatBulletList([
-                  "客户名称：橘子科技",
-                  "联系人：李明",
-                  "创建时间：2024-03-01"
-                ])}
-                ${session.stage === "confirming-delete" ? renderWaitingAnswerCard() : renderChatToolbar()}
+                ${renderChatAiStatus(isFinished ? "已处理 1秒" : "已处理3个步骤")}
+                ${isDeleted ? `<p class="chat-ai-title">已删除客户“橘子科技”。</p>` : ""}
+                ${isCanceled ? `<p class="chat-ai-title">已取消删除客户“橘子科技”。</p>` : ""}
+                ${!isFinished ? `<p class="chat-ai-copy">当前客户关联3条商机和5位联系人，本操作将会删除该客户及其全部关联数据</p>` : ""}
+                ${session.stage === "confirming-delete" ? `${renderDeleteCustomerConfirmationCardMarkup()}${renderWaitingAnswerCard()}` : renderChatToolbar()}
               </div>
             </div>
+            `}
         `;
-
-        if (session.stage === "deleted") {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareAgent", "已处理 1秒")}
-                <p class="chat-ai-title">已删除客户“橘子科技”。</p>
-                ${renderChatToolbar()}
-              </div>
-            </div>
-          `;
-        } else if (session.stage === "canceled") {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareAgent", "已处理 1秒")}
-                <p class="chat-ai-title">已取消删除客户“橘子科技”。</p>
-                ${renderChatToolbar()}
-              </div>
-            </div>
-          `;
-        }
-
-        content += "</div>";
-        return content;
-      }
-
-      function renderMeetingFormCardConversation(session) {
-        let content = `
-          <div class="chat-feed-column">
-            <div class="chat-user-row"><div class="chat-user-bubble">${escapeHtml(MEETING_FORM_CARD_DISPLAY_PROMPT)}</div></div>
-            <div class="chat-time">${escapeHtml(session.time || "")}</div>
-        `;
-
-        if (session.stage === "canceled") {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareAgent", "已处理 1秒")}
-                <p class="chat-ai-title">已取消创建客户「${escapeHtml(MEETING_FORM_CARD_DEFAULT_FIELDS.customerName)}」</p>
-                ${renderChatToolbar()}
-              </div>
-            </div>
-          `;
-        } else if (session.stage === "created") {
-          content += renderMeetingFormCreatedBlock(session);
-        } else {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareAgent", "已处理3个步骤")}
-                <p class="chat-ai-title">我从会议中里识别到以下信息，帮你预填好了，请核对</p>
-                ${renderWaitingAnswerCard()}
-              </div>
-            </div>
-          `;
-        }
 
         content += "</div>";
         return content;
@@ -21290,12 +21391,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
 
         content += renderCreateCustomerConversation(session);
-        if (session.stage === "confirming-create" || session.stage === "created") {
-          content += renderCustomerReviewBlock(session);
-        }
-        if (session.stage === "created") {
-          content += renderCreatedCustomerBlock(session, customerName, true);
-        }
 
         content += "</div>";
         return content;
@@ -21368,8 +21463,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderExtractedCustomerSummary(session) {
         const fields = session.extractedFields || {};
-        const rows = CUSTOMER_INTAKE_FIELDS
-          .map((field) => [field.label, fields[field.key]])
+        const rows = [
+          ["客户名称", fields.customerName],
+          ["联系人", fields.contactName],
+          ["初步判断", fields.intent],
+          ...CUSTOMER_INTAKE_FIELDS.map((field) => [field.label, fields[field.key]])
+        ]
           .filter(([, value]) => value);
 
         if (!rows.length) {
@@ -21377,28 +21476,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         return `
-          <div class="chat-ai-section">
-            <p class="chat-ai-section-title">已识别信息</p>
-            ${renderChatBulletList(rows.map(([label, value]) => `${label}：${Array.isArray(value) ? value.join("、") : value}`))}
-          </div>
-        `;
-      }
-
-      function renderCustomerReviewBlock(session) {
-        const fields = getMergedCustomerIntakeFields(session);
-        const rows = CUSTOMER_INTAKE_FIELDS
-          .map((field) => [field.label, fields[field.key]])
-          .filter(([, value]) => value);
-
-        return `
-          <div class="chat-ai-block">
-            <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareAgent", "已处理3个步骤")}
-              <p class="chat-ai-title">好的，信息已更新，请确认：</p>
-              ${renderChatBulletList(rows.map(([label, value]) => `${label}：${Array.isArray(value) ? value.join("、") : value}`))}
-              ${session.stage === "confirming-create" ? renderWaitingAnswerCard() : renderChatToolbar()}
-            </div>
-          </div>
+          <ul class="chat-ai-list create-customer-summary-list">
+            ${rows.map(([label, value]) => `<li>${escapeHtml(`${label}：${Array.isArray(value) ? value.join("、") : value}`)}</li>`).join("")}
+          </ul>
         `;
       }
 
@@ -21407,16 +21487,38 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         if (session.stage === "canceled") {
           const cancelText = session.canceledBySkip
-            ? "您跳过了此问题"
+            ? "操作已经取消"
             : session.customerName && session.customerName !== DEFAULT_CREATE_CUSTOMER_NAME
             ? `已经取消创建客户“${session.customerName}”`
             : "已经取消创建客户";
           return `
             <div class="chat-ai-block">
               <div class="chat-ai-card">
-                ${renderChatAiMeta("ShareAgent", "已处理 1秒")}
+                ${renderChatAiStatus("已处理 1秒")}
                 <p class="chat-ai-title">${escapeHtml(cancelText)}</p>
                 ${renderChatToolbar()}
+              </div>
+            </div>
+          `;
+        }
+
+        if (session.stage === "creating" || session.stage === "confirming-create") {
+          return renderThinkingChip();
+        }
+
+        if (session.stage === "created") {
+          return `
+            <div class="chat-ai-block">
+              <div class="chat-ai-card">
+                ${renderChatAiStatus("已处理3个步骤")}
+                <p class="chat-ai-title created-customer-success-title"><span aria-hidden="true">✅</span><span>客户创建完成</span></p>
+                ${renderCreatedCustomerDetailCard(session)}
+                ${renderChatToolbar()}
+              </div>
+              <div class="chat-replies">
+                ${renderChatReplyChip("创建商机", "create-deal")}
+                ${renderChatReplyChip("补充详细信息", "enrich-created-customer")}
+                ${renderChatReplyChip("添加相关联系人", "add-created-contact")}
               </div>
             </div>
           `;
@@ -21425,10 +21527,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
-              ${renderChatAiMeta("ShareAgent", "已处理 1秒")}
-              <p class="chat-ai-title">我已先抽取客户线索里的关键信息</p>
+              ${renderChatAiStatus("已处理 1秒")}
+              <p class="chat-ai-title create-customer-summary-title">我已先抽取客户线索里的关键信息<span class="chat-ai-inline-section-title">已识别信息</span></p>
               ${renderExtractedCustomerSummary(session)}
-              ${session.stage === "intake" ? `<p class="chat-ai-copy emphasis">还缺少 ${session.intakeQuestions.length} 项信息，请在底部卡片里补充。</p>${renderWaitingAnswerCard()}` : renderChatToolbar()}
+              ${session.stage === "intake" ? `
+                ${session.stage === "intake" ? `<p class="chat-ai-copy emphasis create-customer-intake-copy">还缺少 ${session.intakeQuestions.length} 项信息，请在对话卡片里补充。</p>` : ""}
+                <div class="customer-intake-inline-mount" id="customerIntakeInlineMount"></div>
+                ${session.stage === "intake" ? renderWaitingAnswerCard() : ""}
+              ` : renderChatToolbar()}
             </div>
           </div>
         `;
@@ -21939,14 +22045,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (session.source === "meeting-form-card") {
-          chatFeed.innerHTML = renderMeetingFormCardConversation(session);
-          requestAnimationFrame(() => {
-            chatFeed.scrollTop = chatFeed.scrollHeight;
-          });
-          return;
-        }
-
         let content = `
           <div class="chat-feed-column">
             <div class="chat-user-row"><div class="chat-user-bubble">${escapeHtml(session.prompt)}</div></div>
@@ -22006,6 +22104,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               const isCustom = isCustomCustomerIntakeOption(option);
               const isSelected = selectedValues.includes(option) || customOption === option;
               const labelText = isCustom && isSelected ? customValue : option;
+              const showInfo = field.key === "customerLevel";
               const editableAttrs = isCustom && isSelected
                 ? `contenteditable="true" data-intake-custom-edit="${escapeHtml(field.key)}" data-placeholder="${escapeHtml(option)}" spellcheck="false"`
                 : "";
@@ -22013,6 +22112,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               <div class="ask-user-question-option is-${escapeHtml(field.type)} ${isSelected ? "is-selected" : ""} ${isMutedCustomerIntakeOption(option) ? "is-muted" : ""}" role="button" tabindex="0" data-intake-option="${escapeHtml(field.key)}" data-value="${escapeHtml(option)}">
                 <span class="ask-user-question-option-check" aria-hidden="true"></span>
                 <span class="ask-user-question-option-label ${isCustom && isSelected ? "is-editing-custom" : ""}" ${editableAttrs}>${escapeHtml(labelText)}</span>
+                ${showInfo ? `<span class="ask-user-question-option-info" aria-hidden="true" data-tooltip="提示文字">i</span>` : ""}
                 <svg class="ask-user-question-option-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>
               </div>
             `;
@@ -22027,6 +22127,20 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function isCustomCustomerIntakeOption(option) {
         return /^(其它|都不是)/.test(option || "");
+      }
+
+      function getCustomerIntakeQuestionText(field, session) {
+        const customerName = session.customerName || session.extractedFields?.customerName || "这个客户";
+        const contactName = session.extractedFields?.contactName || "";
+        if (field.key === "industry") {
+          return `${customerName}是哪个行业的？`;
+        }
+        if (field.key === "contactRole") {
+          return contactName
+            ? `当前接触的联系人${contactName}，他的角色是？（可多选）`
+            : "当前接触的联系人，他的角色是？（可多选）";
+        }
+        return field.question;
       }
 
       function renderCustomerConfirmationCard(session) {
@@ -22072,7 +22186,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
           return `
             <div class="ask-user-question-item ${hasCustomerIntakeAnswerForKey(session, key) ? "" : "is-missing"}" data-intake-question="${escapeHtml(key)}">
-              <p class="ask-user-question-label">${index + 1}. ${escapeHtml(field.question)}</p>
+              <p class="ask-user-question-label">${index + 1}. ${escapeHtml(getCustomerIntakeQuestionText(field, session))}</p>
               ${renderCustomerIntakeInput(field, answers[key] || "", session)}
             </div>
           `;
@@ -22113,105 +22227,38 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       }
 
-      function renderMeetingFormCardComposer(session) {
-        if (!customerIntakeQuestionList) {
-          return;
-        }
-
-        const fields = {
-          ...MEETING_FORM_CARD_DEFAULT_FIELDS,
-          ...(session.fields || {})
-        };
-        const titleNode = customerIntakeComposerCard?.querySelector(".ask-user-question-title");
-        if (titleNode) {
-          titleNode.textContent = "收集创建客户所需信息";
-        }
-        if (customerIntakeProgress) {
-          customerIntakeProgress.textContent = "";
-        }
-        if (customerIntakeSubmitBtn) {
-          customerIntakeSubmitBtn.disabled = false;
-        }
-
-        customerIntakeQuestionList.innerHTML = `
-          <div class="meeting-form-fields">
-            <label class="meeting-form-field">
-              <span class="meeting-form-label">客户名称</span>
-              <input class="meeting-form-input" type="text" data-meeting-form-field="customerName" value="${escapeHtml(fields.customerName)}" />
-            </label>
-            <label class="meeting-form-field">
-              <span class="meeting-form-label">联系电话</span>
-              <input class="meeting-form-input" type="text" data-meeting-form-field="phone" value="${escapeHtml(fields.phone)}" />
-            </label>
-            <label class="meeting-form-field">
-              <span class="meeting-form-label">所属行业</span>
-              <select class="meeting-form-select" data-meeting-form-field="industry">
-                ${["互联网", "制造业", "零售", "医疗", "金融"].map((industry) => `
-                  <option value="${escapeHtml(industry)}" ${fields.industry === industry ? "selected" : ""}>${escapeHtml(industry)}</option>
-                `).join("")}
-              </select>
-            </label>
-            <fieldset class="meeting-form-field meeting-form-radio-field">
-              <legend class="meeting-form-label">是否首次接触</legend>
-              <div class="meeting-form-radio-options">
-                ${["是", "否"].map((option) => `
-                  <label class="meeting-form-radio-option">
-                    <input class="meeting-form-radio-input" type="radio" name="meeting-form-first-contact" data-meeting-form-field="firstContact" value="${escapeHtml(option)}" ${fields.firstContact === option ? "checked" : ""} />
-                    <span class="meeting-form-radio-control"></span>
-                    <span class="meeting-form-radio-label">${escapeHtml(option)}</span>
-                  </label>
-                `).join("")}
+      function renderDeleteCustomerConfirmationCardMarkup() {
+        return `
+          <div class="ask-user-question-card delete-confirm inline-delete-confirm-card">
+            <div class="ask-user-question-body">
+              <p class="ask-user-question-label">确定要删除「橘子科技」吗？此操作不可撤销。</p>
+              <div class="delete-confirm-actions">
+                <button class="delete-confirm-action primary" type="button" data-delete-confirm-action="delete">确认删除</button>
+                <button class="delete-confirm-action" type="button" data-delete-confirm-action="cancel">取消</button>
               </div>
-            </fieldset>
+            </div>
           </div>
         `;
-      }
-
-      function renderDeleteCustomerConfirmationCard(session) {
-        if (!customerIntakeQuestionList) {
-          return;
-        }
-
-        const value = session.confirmationAnswer || "";
-        const options = ["是", "否"];
-        customerIntakeQuestionList.innerHTML = `
-          <p class="ask-user-question-label">⚠️ 是否确认删除「橘子科技」？</p>
-          <div class="ask-user-question-options">
-            ${options.map((option) => `
-              <div class="ask-user-question-option is-single ${value === option ? "is-selected" : ""} ${option === "否" ? "is-muted" : ""}" role="button" tabindex="0" data-delete-confirm-option="${escapeHtml(option)}">
-                <span class="ask-user-question-option-check" aria-hidden="true"></span>
-                <span class="ask-user-question-option-label">${escapeHtml(option)}</span>
-                <svg class="ask-user-question-option-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>
-              </div>
-            `).join("")}
-          </div>
-        `;
-        if (customerIntakeProgress) {
-          customerIntakeProgress.textContent = "";
-        }
-        if (customerIntakeSubmitBtn) {
-          customerIntakeSubmitBtn.disabled = false;
-        }
       }
 
       function updateCustomerIntakeComposer() {
         const session = conversationSessions[state.activeChatId];
-        const showIntakeCard = state.mainPanel === "home" && state.homeView === "chat" && session?.source === "create-customer" && (session.stage === "intake" || session.stage === "confirming-create");
-        const showMeetingFormCard = state.mainPanel === "home" && state.homeView === "chat" && session?.source === "meeting-form-card" && session.stage === "form";
-        const showDeleteCustomerCard = state.mainPanel === "home" && state.homeView === "chat" && session?.source === "delete-customer-demo" && session.stage === "confirming-delete";
-        const showQuestionCard = showIntakeCard || showMeetingFormCard || showDeleteCustomerCard;
+        const showIntakeCard = state.mainPanel === "home" && state.homeView === "chat" && session?.source === "create-customer" && session.stage === "intake";
+        const showQuestionCard = showIntakeCard;
         const titleNode = customerIntakeComposerCard?.querySelector(".ask-user-question-title");
+        const inlineMount = document.getElementById("customerIntakeInlineMount");
 
-        composerStage?.classList.toggle("has-intake-card", showQuestionCard);
-        composerStage?.classList.toggle("is-meeting-form-card", showMeetingFormCard);
-        composerStage?.classList.toggle("is-confirming-create", (showIntakeCard && session?.stage === "confirming-create") || showDeleteCustomerCard);
-        composerStage?.classList.toggle("is-delete-confirm", showDeleteCustomerCard);
-        composerStage?.classList.toggle("is-intake-collapsed", showIntakeCard && session?.stage === "intake" && session?.intakeCollapsed === true);
+        composerStage?.classList.toggle("has-intake-card", false);
+        composerStage?.classList.toggle("is-confirming-create", false);
+        composerStage?.classList.toggle("is-delete-confirm", false);
+        composerStage?.classList.toggle("is-intake-collapsed", false);
         composerCard?.classList.remove("hidden");
-        customerIntakeComposerCard?.classList.toggle("hidden", !showQuestionCard);
-        customerIntakeComposerCard?.classList.toggle("confirm", session?.stage === "confirming-create" || showDeleteCustomerCard);
-        customerIntakeComposerCard?.classList.toggle("delete-confirm", showDeleteCustomerCard);
-        customerIntakeComposerCard?.classList.toggle("meeting-form-card", showMeetingFormCard);
+        if (showQuestionCard && inlineMount && customerIntakeComposerCard?.parentElement !== inlineMount) {
+          inlineMount.appendChild(customerIntakeComposerCard);
+        }
+        customerIntakeComposerCard?.classList.toggle("hidden", !showQuestionCard || !inlineMount);
+        customerIntakeComposerCard?.classList.toggle("confirm", false);
+        customerIntakeComposerCard?.classList.toggle("delete-confirm", false);
         customerIntakeComposerCard?.classList.toggle("collapsed", showIntakeCard && session?.stage === "intake" && session?.intakeCollapsed === true);
 
         if (showIntakeCard) {
@@ -22220,15 +22267,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
           customerIntakeComposerCard?.setAttribute("aria-label", "补充关键信息");
           renderCustomerIntakeCard(session);
-        } else if (showMeetingFormCard) {
-          customerIntakeComposerCard?.setAttribute("aria-label", "收集创建客户所需信息");
-          renderMeetingFormCardComposer(session);
-        } else if (showDeleteCustomerCard) {
-          if (titleNode) {
-            titleNode.textContent = "确认删除客户";
-          }
-          customerIntakeComposerCard?.setAttribute("aria-label", "确认删除客户");
-          renderDeleteCustomerConfirmationCard(session);
         } else {
           if (titleNode) {
             titleNode.textContent = "补充关键信息";
@@ -22239,6 +22277,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
         }
         updateCustomerIntakeHeaderShadow();
+        updateSendButtonState();
       }
 
       function renderHomePanels() {
@@ -22802,6 +22841,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (
+          isAskUserQuestionTrigger(initialRouteState.launchAction) ||
+          isAskUserQuestionTrigger(initialRouteState.launchPrompt)
+        ) {
+          startAskUserQuestionConversation();
+          return;
+        }
+
         if (initialRouteState.launchAction === "ai-create-skill") {
           openAiCreateSkillConversation();
           return;
@@ -22838,11 +22885,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         if (initialRouteState.launchAction === "create-customer") {
           const customerName = extractCustomerCreationName(initialRouteState.launchPrompt) || DEFAULT_CREATE_CUSTOMER_NAME;
           beginCreateCustomerConversation(initialRouteState.launchPrompt || DEFAULT_CREATE_CUSTOMER_PROMPT, customerName);
-          return;
-        }
-
-        if (initialRouteState.launchAction === "meeting-form-card") {
-          startMeetingFormCardConversation();
           return;
         }
 
@@ -23313,9 +23355,20 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         composerEditor.dataset.empty = hasComposerContent() ? "false" : "true";
       }
 
+      function isCustomerIntakeBlockingSend() {
+        const session = conversationSessions[state.activeChatId];
+        return state.mainPanel === "home"
+          && state.homeView === "chat"
+          && session?.source === "create-customer"
+          && (session.stage === "intake" || session.stage === "creating");
+      }
+
       function updateSendButtonState() {
         const hasContent = hasComposerContent();
-        sendBtn.classList.toggle("is-empty", !hasContent);
+        const isBlocked = isCustomerIntakeBlockingSend();
+        sendBtn.disabled = isBlocked;
+        sendBtn.setAttribute("aria-disabled", isBlocked ? "true" : "false");
+        sendBtn.classList.toggle("is-empty", !hasContent || isBlocked);
         composerEditor.dataset.empty = hasContent ? "false" : "true";
       }
 
@@ -23610,6 +23663,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         if (!state.menuOpen) {
           if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
+            if (isCustomerIntakeBlockingSend()) {
+              return;
+            }
             sendBtn.click();
           } else if (event.key === "Escape") {
             closeMenu();
@@ -23916,6 +23972,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       sendBtn.addEventListener("click", () => {
+        if (isCustomerIntakeBlockingSend()) {
+          return;
+        }
         syncSelectedSkills();
         const text = getEditorText();
         const atChip = composerEditor.querySelector(".at-chip");
@@ -23939,22 +23998,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (isAskUserQuestionTrigger(text)) {
+          startAskUserQuestionConversation();
+          return;
+        }
+
         if (handleMdInfoDemoMessage(text)) {
           return;
         }
 
         if (isDeleteCustomerDemoTrigger(text)) {
           startDeleteCustomerDemoConversation();
-          return;
-        }
-
-        if (isMeetingFormCardTrigger(text)) {
-          startMeetingFormCardConversation();
-          return;
-        }
-
-        if (isAskUserQuestionTrigger(text)) {
-          beginCreateCustomerConversation(ASK_USER_QUESTION_PROMPT, extractCustomerCreationName(ASK_USER_QUESTION_PROMPT));
           return;
         }
 
@@ -24049,23 +24103,26 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       customerIntakeQuestionList?.addEventListener("scroll", updateCustomerIntakeHeaderShadow);
 
+      customerIntakeQuestionList?.addEventListener("wheel", (event) => {
+        const list = customerIntakeQuestionList;
+        if (!list || list.scrollHeight <= list.clientHeight) {
+          return;
+        }
+
+        const isAtTop = list.scrollTop <= 0;
+        const isAtBottom = Math.ceil(list.scrollTop + list.clientHeight) >= list.scrollHeight;
+        const isScrollingPastTop = event.deltaY < 0 && isAtTop;
+        const isScrollingPastBottom = event.deltaY > 0 && isAtBottom;
+
+        event.stopPropagation();
+        if (isScrollingPastTop || isScrollingPastBottom) {
+          event.preventDefault();
+        }
+      }, { passive: false });
+
       customerIntakeQuestionList?.addEventListener("input", (event) => {
         const session = conversationSessions[state.activeChatId];
-        const meetingFormInput = event.target.closest("[data-meeting-form-field]");
-        if (session?.source === "meeting-form-card" && session.stage === "form" && meetingFormInput) {
-          session.fields = {
-            ...MEETING_FORM_CARD_DEFAULT_FIELDS,
-            ...(session.fields || {}),
-            [meetingFormInput.dataset.meetingFormField]: meetingFormInput.value.trim()
-          };
-          return;
-        }
-
-        if (!session || session.source !== "create-customer" || !["intake", "confirming-create"].includes(session.stage)) {
-          return;
-        }
-
-        if (session.stage !== "intake") {
+        if (!session || session.source !== "create-customer" || session.stage !== "intake") {
           return;
         }
 
@@ -24097,35 +24154,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         updateCustomerIntakeCompleteness(session);
       });
 
-      customerIntakeQuestionList?.addEventListener("change", (event) => {
-        const session = conversationSessions[state.activeChatId];
-        const meetingFormInput = event.target.closest("[data-meeting-form-field]");
-        if (session?.source !== "meeting-form-card" || session.stage !== "form" || !meetingFormInput) {
-          return;
-        }
-
-        session.fields = {
-          ...MEETING_FORM_CARD_DEFAULT_FIELDS,
-          ...(session.fields || {}),
-          [meetingFormInput.dataset.meetingFormField]: meetingFormInput.value.trim()
-        };
-      });
-
       customerIntakeQuestionList?.addEventListener("click", (event) => {
         const session = conversationSessions[state.activeChatId];
-        if (session?.source === "delete-customer-demo" && session.stage === "confirming-delete") {
-          const deleteOption = event.target.closest("[data-delete-confirm-option]");
-          if (!deleteOption) {
-            return;
-          }
-          session.confirmationAnswer = deleteOption.dataset.deleteConfirmOption || "是";
-          session.stage = session.confirmationAnswer === "否" ? "canceled" : "deleted";
-          upsertConversationHistory(session.id);
-          renderMainPanels();
-          return;
-        }
-
-        if (!session || session.source !== "create-customer" || !["intake", "confirming-create"].includes(session.stage)) {
+        if (!session || session.source !== "create-customer" || session.stage !== "intake") {
           return;
         }
 
@@ -24135,23 +24166,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         const option = event.target.closest("[data-intake-option]");
         if (!option) {
-          const confirmOption = event.target.closest("[data-create-confirm-option]");
-          if (confirmOption && session.stage === "confirming-create") {
-            const value = confirmOption.dataset.createConfirmOption || "";
-            session.confirmationAnswer = value;
-            if (value === "取消") {
-              session.stage = "canceled";
-              session.canceledBySkip = false;
-              syncBaiziwanPendingFromSession(session);
-              renderMainPanels();
-              return;
-            }
-
-            session.stage = "created";
-            syncBaiziwanPendingFromSession(session);
-            upsertConversationHistory(session.id);
-            renderMainPanels();
-          }
           return;
         }
 
@@ -24237,42 +24251,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       customerIntakeSubmitBtn?.addEventListener("click", () => {
         const session = conversationSessions[state.activeChatId];
-        if (session?.source === "delete-customer-demo" && session.stage === "confirming-delete") {
-          session.stage = session.confirmationAnswer === "否" ? "canceled" : "deleted";
-          upsertConversationHistory(session.id);
-          renderMainPanels();
-          return;
-        }
-
-        if (session?.source === "meeting-form-card" && session.stage === "form") {
-          session.fields = {
-            ...MEETING_FORM_CARD_DEFAULT_FIELDS,
-            ...(session.fields || {})
-          };
-          session.stage = "created";
-          session.historyTitle = `创建客户 · ${session.fields.customerName || MEETING_FORM_CARD_DEFAULT_FIELDS.customerName}`;
-          upsertConversationHistory(session.id);
-          renderMainPanels();
-          return;
-        }
-
         if (!session || session.source !== "create-customer" || customerIntakeSubmitBtn.disabled) {
-          return;
-        }
-
-        if (session.stage === "confirming-create") {
-          if ((session.confirmationAnswer || "确认创建") === "取消") {
-            session.stage = "canceled";
-            session.canceledBySkip = false;
-            syncBaiziwanPendingFromSession(session);
-            renderMainPanels();
-            return;
-          }
-
-          session.stage = "created";
-          syncBaiziwanPendingFromSession(session);
-          upsertConversationHistory(session.id);
-          renderMainPanels();
           return;
         }
 
@@ -24281,7 +24260,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         clearTimeout(chatReplyTimer);
-        session.stage = "confirming-create";
+        session.stage = "creating";
         session.confirmationAnswer = "";
         const mergedFields = getMergedCustomerIntakeFields(session);
         session.finalFields = mergedFields;
@@ -24289,6 +24268,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         session.historyTitle = `创建客户 · ${session.customerName}`;
         upsertConversationHistory(session.id);
         renderMainPanels();
+
+        chatReplyTimer = setTimeout(() => {
+          const latestSession = conversationSessions[session.id];
+          if (!latestSession || latestSession.source !== "create-customer" || latestSession.stage !== "creating") {
+            return;
+          }
+
+          latestSession.stage = "created";
+          syncBaiziwanPendingFromSession(latestSession);
+          upsertConversationHistory(latestSession.id);
+          renderMainPanels();
+        }, 1500);
       });
 
       customerIntakeSkipBtn?.addEventListener("click", () => {
@@ -24300,14 +24291,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (session?.source === "meeting-form-card" && session.stage === "form") {
-          clearTimeout(chatReplyTimer);
-          session.stage = "canceled";
-          renderMainPanels();
-          return;
-        }
-
-        if (!session || session.source !== "create-customer" || !["intake", "confirming-create"].includes(session.stage)) {
+        if (!session || session.source !== "create-customer" || session.stage !== "intake") {
           return;
         }
 
@@ -24581,23 +24565,22 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       chatFeed.addEventListener("click", async (event) => {
+        const deleteAction = event.target.closest("[data-delete-confirm-action]");
+        if (deleteAction) {
+          const session = conversationSessions[state.activeChatId];
+          if (session?.source !== "delete-customer-demo" || session.stage !== "confirming-delete") {
+            return;
+          }
+          const action = deleteAction.dataset.deleteConfirmAction || "delete";
+          session.confirmationAnswer = action === "cancel" ? "取消" : "确认删除";
+          session.stage = action === "cancel" ? "canceled" : "deleted";
+          upsertConversationHistory(session.id);
+          renderMainPanels();
+          return;
+        }
+
         const actionButton = event.target.closest("[data-chat-action]");
         if (actionButton) {
-          if (actionButton.dataset.chatAction === "meeting-form-create-deal") {
-            showToast("创建商机流程已等待新设计接入。");
-            return;
-          }
-
-          if (actionButton.dataset.chatAction === "meeting-form-enrich-detail") {
-            showToast("已进入补充详细信息流程。");
-            return;
-          }
-
-          if (actionButton.dataset.chatAction === "meeting-form-add-contact") {
-            showToast("已进入添加相关联系人流程。");
-            return;
-          }
-
           if (actionButton.dataset.chatAction === "create-deal") {
             showToast("创建商机流程已等待新设计接入。");
             return;
@@ -24714,9 +24697,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         } else if (cardButton.dataset.chatCard === "open-haiyue-customer") {
           openOutputPanelTab("business", "business-haiyue-customer");
         } else if (cardButton.dataset.chatCard === "open-created-customer") {
-          showToast("已打开客户详情页。");
-        } else if (cardButton.dataset.chatCard === "open-meeting-form-customer") {
-          showToast("已打开客户详情页。");
+          const businessId = cardButton.dataset.businessId || getCreatedCustomerBusinessId(conversationSessions[state.activeChatId]);
+          if (getBusinessSourceById(businessId)) {
+            openOutputPanelTab("business", businessId);
+          }
         } else if (cardButton.dataset.chatCard === "open-query-customer") {
           const businessId = cardButton.dataset.businessId || "business-query-customer";
           if (getBusinessSourceById(businessId)) {
