@@ -125,6 +125,11 @@ Core shared render/navigation functions:
 
 - In `conversation.html`, generated documents and business sources are merged
   into one current-session list sorted by `sortKey` descending.
+- Generated output list rows use the compact list rhythm: 46px minimum row
+  height, 10px internal item gap, and 4px left inset. The same rhythm applies to
+  business generated-result rows and automation output-card rows.
+- Generated output list areas show at most five rows before scrolling. With the
+  compact row rhythm this is `max-height: calc(46px * 5)`.
 - The generated-results list has no "当前 / 所有文档" tabs and no separate
   business-source section title.
 - The list surface is a floating card. In list mode its title is
@@ -183,6 +188,10 @@ Core shared render/navigation functions:
 - The automation right panel has two independent cards:
   `任务报告` and `业务生成结果`. The wrapper is transparent in
   `#chatOutputPanelShell.automation-list`.
+- Both automation cards use the same compact generated-output row rhythm:
+  46px minimum row height, 10px internal item gap, and 4px left inset.
+- Each automation card body scrolls independently after five rows; do not put
+  the two-card list behind one shared five-row height cap.
 - `任务报告` rows use `.automation-report-row.active` for selected run and
   `.automation-report-row.unread` for unread blue dot.
 - Blue dot semantics: left automation task unread marker means at least one
