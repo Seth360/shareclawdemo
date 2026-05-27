@@ -12865,6 +12865,29 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         window.location.href = url.toString();
       }
 
+      const agentActionRouteMap = {
+        "新建对象": "create-object",
+        "编辑对象": "edit-object",
+        "更新对象": "update-object",
+        "复杂查询": "complex-query",
+        "新建定时任务": "create-scheduled-task"
+      };
+
+      function routeAgentActionTrigger(text) {
+        const prompt = (text || "").trim();
+        const actionType = agentActionRouteMap[prompt];
+        if (!actionType) {
+          return false;
+        }
+
+        navigateToConversation({
+          launch: "agent-action",
+          type: actionType,
+          prompt
+        });
+        return true;
+      }
+
       function escapeHtml(text) {
         return text
           .replaceAll("&", "&amp;")
@@ -18377,10 +18400,30 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (text.trim() === "表单卡演示") {
+        if (routeAgentActionTrigger(text)) {
+          return;
+        }
+
+        if (text.trim() === "信息补全") {
           navigateToConversation({
-            launch: "meeting-form-card",
-            prompt: "表单卡演示"
+            launch: "md-info-demo",
+            prompt: "信息补全"
+          });
+          return;
+        }
+
+        if (text.trim() === "删除客户") {
+          navigateToConversation({
+            launch: "delete-customer-demo",
+            prompt: "删除客户"
+          });
+          return;
+        }
+
+        if (text.trim() === "信息收集") {
+          navigateToConversation({
+            launch: "create-customer",
+            prompt: "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！"
           });
           return;
         }

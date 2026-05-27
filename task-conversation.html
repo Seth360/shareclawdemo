@@ -14621,9 +14621,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       };
       const ASK_USER_QUESTION_TRIGGERS = ["AskUserQuestion", "问询"];
       const ASK_USER_QUESTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
+      const INFO_COLLECTION_TRIGGERS = ["信息收集"];
+      const INFO_COLLECTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
       const DEFAULT_CREATE_CUSTOMER_NAME = "新客户";
       const DEFAULT_CREATE_CUSTOMER_PROMPT = `请按规划模式继续整理 新建客户：${DEFAULT_CREATE_CUSTOMER_NAME}`;
-      const MD_INFO_DEMO_TRIGGER = "创建客户";
+      const MD_INFO_DEMO_TRIGGER = "信息补全";
       const MD_INFO_DEMO_SESSION_ID = "md-info-demo";
       const MD_INFO_DEMO_DISPLAY_PROMPT = "帮我把刚才开会的客户录进去";
       const MD_INFO_DEMO_BASE_FIELDS = {
@@ -16318,6 +16320,38 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           url.searchParams.set(key, String(value));
         });
         window.location.href = url.toString();
+      }
+
+      const agentActionRouteMap = {
+        "新建对象": "create-object",
+        "编辑对象": "edit-object",
+        "更新对象": "update-object",
+        "复杂查询": "complex-query",
+        "新建定时任务": "create-scheduled-task"
+      };
+
+      function routeAgentActionTrigger(text) {
+        const prompt = (text || "").trim();
+        const actionType = agentActionRouteMap[prompt];
+        if (!actionType) {
+          return false;
+        }
+
+        navigateToConversation({
+          launch: "agent-action",
+          type: actionType,
+          prompt
+        });
+        return true;
+      }
+
+      function routeTaskLaunchToConversation(launch, prompt = "") {
+        if (getCurrentPageFile() !== TASK_CONVERSATION_PAGE_FILE) {
+          return false;
+        }
+
+        navigateToConversation({ launch, prompt });
+        return true;
       }
 
       function escapeHtml(text) {
@@ -20805,6 +20839,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function beginCreateCustomerConversation(promptText, customerName) {
+        if (routeTaskLaunchToConversation("create-customer", promptText)) {
+          return;
+        }
+
         if (!isConversationPage()) {
           navigateToConversation({
             launch: "create-customer",
@@ -20891,6 +20929,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return (text || "").trim() === MEETING_FORM_CARD_TRIGGER;
       }
 
+      function isInfoCollectionTrigger(text) {
+        return INFO_COLLECTION_TRIGGERS.includes((text || "").trim());
+      }
+
       function startMeetingFormCardConversation() {
         if (!isConversationPage()) {
           navigateToConversation({
@@ -20962,6 +21004,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function startMdInfoDemoConversation() {
+        if (routeTaskLaunchToConversation("md-info-demo", MD_INFO_DEMO_TRIGGER)) {
+          return;
+        }
+
         if (!isConversationPage()) {
           navigateToConversation({
             launch: "md-info-demo",
@@ -21185,6 +21231,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function startDeleteCustomerDemoConversation() {
+        if (routeTaskLaunchToConversation("delete-customer-demo", DELETE_CUSTOMER_DEMO_TRIGGER)) {
+          return;
+        }
+
         if (!isConversationPage()) {
           navigateToConversation({
             launch: "delete-customer-demo",
@@ -23679,6 +23729,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function applyInitialRouteLaunch() {
+        if (
+          getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE &&
+          ["create-customer", "md-info-demo", "delete-customer-demo"].includes(initialRouteState.launchAction)
+        ) {
+          navigateToConversation({
+            launch: initialRouteState.launchAction,
+            prompt: initialRouteState.launchPrompt
+          });
+          return;
+        }
+
         if (getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE) {
           openAutomationTaskConversation(initialRouteState.taskId || "task-morning-check", { runId: initialRouteState.taskRunId || "" });
           return;
@@ -24810,8 +24871,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (routeAgentActionTrigger(text)) {
+          return;
+        }
+
         if (isMdInfoDemoTrigger(text)) {
           startMdInfoDemoConversation();
+          return;
+        }
+
+        if (isInfoCollectionTrigger(text)) {
+          beginCreateCustomerConversation(INFO_COLLECTION_PROMPT, extractCustomerCreationName(INFO_COLLECTION_PROMPT));
           return;
         }
 
