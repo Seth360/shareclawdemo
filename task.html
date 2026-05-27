@@ -586,8 +586,8 @@
 
       .sidebar-row {
         width: 100%;
-        height: 42px;
-        padding: 12px;
+        height: 34px;
+        padding: 8px 12px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
@@ -614,7 +614,7 @@
       }
 
       .history-block {
-        margin-top: 16px;
+        margin-top: 12px;
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -685,14 +685,14 @@
       .history-block .history-list,
       .history-block .automation-task-list {
         margin-top: 0;
-        gap: 0;
+        gap: 2px;
       }
 
       .history-row,
       .automation-task-row {
         width: 240px;
-        height: 42px;
-        padding: 12px;
+        height: 34px;
+        padding: 8px 12px;
         display: flex;
         align-items: center;
         gap: 4px;
@@ -9551,6 +9551,7 @@
         border: 0;
         background: #fff;
         box-shadow: none;
+        cursor: pointer;
         transition:
           border-color 0.18s ease,
           box-shadow 0.18s ease,
@@ -9953,6 +9954,7 @@
         border: 0;
         background: #fff;
         box-shadow: none;
+        cursor: pointer;
         transition:
           border-color 0.18s ease,
           box-shadow 0.18s ease,
@@ -11445,7 +11447,7 @@
             <div class="task-page task-page-redesign">
               <div class="task-toolbar">
                 <div class="task-tabbar" role="tablist" aria-label="任务页签">
-                  <button class="task-tab-btn active" type="button" role="tab" aria-selected="true" data-task-tab="tasks">所有自动化任务</button>
+                  <button class="task-tab-btn active" type="button" role="tab" aria-selected="true" data-task-tab="tasks">所有任务</button>
                   <button class="task-tab-btn" type="button" role="tab" aria-selected="false" data-task-tab="logs">执行日志</button>
                 </div>
                 <button class="task-primary-btn" id="openCreateTaskBtn" type="button">创建</button>
@@ -12164,8 +12166,7 @@
         { value: "daily", label: "每天", mode: "time" },
         { value: "weekly", label: "每周", mode: "days-time" },
         { value: "biweekly", label: "每双周", mode: "days-time" },
-        { value: "monthly", label: "每月", mode: "date-time" },
-        { value: "yearly", label: "每年", mode: "month-date-time" }
+        { value: "monthly", label: "每月", mode: "date-time" }
       ];
 
       const createTaskWeekdayOptions = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
@@ -12173,6 +12174,7 @@
       const createTaskMonthOptions = ["", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
       const createTaskDateOptions = ["", "2026/05/20", "2026/05/27", "2026/06/15"];
       const createTaskIntervalUnitOptions = ["分钟", "小时"];
+      const createTaskMinuteIntervalMin = 30;
       const createTaskAgentOptions = ["客户洞察", "销售推进", "商机巡检", "续约助手"];
       const createTaskQixinRecipients = [
         { id: "chenxu", label: "陈旭", glyph: "陈", tone: "person" },
@@ -12197,7 +12199,7 @@
           cycleTime: "09:00",
           cycleMonth: "",
           cycleDate: "",
-          intervalValue: "1",
+          intervalValue: "30",
           intervalUnit: "分钟",
           intervalDays: ["周一", "周二", "周三", "周四"],
           onceTime: "09:00",
@@ -12212,12 +12214,13 @@
 
       function cloneTaskForm(form) {
         const base = form || createDefaultTaskForm();
-        return {
+        const clonedForm = {
           ...base,
           cycleDays: [...(base.cycleDays || [])],
           intervalDays: [...(base.intervalDays || [])],
           qixinRecipients: [...(base.qixinRecipients || [])]
         };
+        return normalizeCreateTaskIntervalForm(clonedForm);
       }
 
       function createTaskFormPreset(overrides = {}) {
@@ -14257,7 +14260,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const linkedTask = getTaskRecordById(record.taskId);
         const displayTitle = linkedTask?.title || record.title;
         return `
-          <article class="task-log-card">
+          <article
+            class="task-log-card"
+            data-task-log-card="${escapeHtml(record.id)}"
+            role="button"
+            tabindex="0"
+            aria-label="打开 ${escapeHtml(displayTitle)} 的任务对话"
+          >
             <div class="task-log-card-body">
               <span class="task-log-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -14277,7 +14286,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                       ${renderTaskLogClockIcon()}
                       上次执行 ${escapeHtml(record.executedAt)} ｜ ${escapeHtml(record.triggerType)}
                     </span>
-                    <button class="task-log-action" type="button" aria-label="打开企信" data-task-log-chat="${escapeHtml(record.id)}">
+                    <button class="task-log-action" type="button" aria-label="打开任务对话" data-task-log-chat="${escapeHtml(record.id)}">
                       ${renderTaskLogChatIcon()}
                     </button>
                   </div>
@@ -14293,7 +14302,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const menuOpen = taskPageState.activeMenuId === record.id;
         const canRunNow = record.enabled && !record.expired;
         return `
-          <article class="task-card ${record.enabled ? "" : "is-disabled"} ${menuOpen ? "menu-open" : ""}" data-task-card="${escapeHtml(record.id)}">
+          <article
+            class="task-card ${record.enabled ? "" : "is-disabled"} ${menuOpen ? "menu-open" : ""}"
+            data-task-card="${escapeHtml(record.id)}"
+            role="button"
+            tabindex="0"
+            aria-label="编辑 ${escapeHtml(record.title)}"
+          >
             <div class="task-card-top">
               <span class="task-card-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -16401,10 +16416,30 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function getCreateTaskCycleMeta(cycleType) {
         const legacyTypeMap = {
           "biweekly-days": "biweekly",
-          "biweekly-date": "monthly"
+          "biweekly-date": "monthly",
+          yearly: "daily"
         };
         const normalizedType = legacyTypeMap[cycleType] || cycleType;
         return createTaskCycleOptions.find((item) => item.value === normalizedType) || createTaskCycleOptions[0];
+      }
+
+      function getCreateTaskIntervalMin(unit) {
+        return unit === "分钟" ? createTaskMinuteIntervalMin : 1;
+      }
+
+      function normalizeCreateTaskIntervalValue(value, unit) {
+        const minValue = getCreateTaskIntervalMin(unit);
+        const digitsOnly = String(value || "").replace(/[^\d]/g, "");
+        const numericValue = digitsOnly ? Number(digitsOnly) : minValue;
+        return String(Math.max(minValue, numericValue));
+      }
+
+      function normalizeCreateTaskIntervalForm(form) {
+        if (!form) {
+          return form;
+        }
+        form.intervalValue = normalizeCreateTaskIntervalValue(form.intervalValue, form.intervalUnit);
+        return form;
       }
 
       function getCreateTaskRecipientById(recipientId) {
@@ -16705,12 +16740,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const cycleMeta = getCreateTaskCycleMeta(form.cycleType);
 
         if (form.frequencyTab === "interval") {
+          const intervalMin = getCreateTaskIntervalMin(form.intervalUnit);
+          const intervalValue = normalizeCreateTaskIntervalValue(form.intervalValue, form.intervalUnit);
           const intervalUnitTrigger = renderCreateTaskSelectControl(form.intervalUnit, "分钟", "create-task-control--82", 'data-create-task-open-menu="intervalUnit"', false);
           return `
             <div class="create-task-frequency-row">
               <span class="create-task-frequency-prefix">每</span>
               <label class="create-task-control create-task-control--56">
-                <input class="create-task-number-input" id="createTaskIntervalValueInput" type="number" min="1" value="${escapeHtml(form.intervalValue)}" />
+                <input class="create-task-number-input" id="createTaskIntervalValueInput" type="number" min="${intervalMin}" value="${escapeHtml(intervalValue)}" />
               </label>
               ${renderCreateTaskDropdownWrap(
                 intervalUnitTrigger,
@@ -16800,7 +16837,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function renderCreateTaskFrequencySummary(form) {
         const cycleMeta = getCreateTaskCycleMeta(form.cycleType);
         if (form.frequencyTab === "interval") {
-          return `每 ${form.intervalValue || "1"} ${form.intervalUnit}${form.intervalDays.length ? ` · ${form.intervalDays.join("、")}` : ""}`;
+          const intervalValue = normalizeCreateTaskIntervalValue(form.intervalValue, form.intervalUnit);
+          return `每 ${intervalValue} ${form.intervalUnit}${form.intervalDays.length ? ` · ${form.intervalDays.join("、")}` : ""}`;
         }
         if (form.frequencyTab === "once") {
           return `单次 ${form.onceDate || "选择日期"} · ${form.onceTime}`;
@@ -21187,8 +21225,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         const intervalValueInput = event.target.closest("#createTaskIntervalValueInput");
         if (intervalValueInput) {
-          const digitsOnly = intervalValueInput.value.replace(/[^\d]/g, "");
-          state.createTaskForm.intervalValue = digitsOnly ? String(Math.max(1, Number(digitsOnly))) : "1";
+          state.createTaskForm.intervalValue = normalizeCreateTaskIntervalValue(intervalValueInput.value, state.createTaskForm.intervalUnit);
           intervalValueInput.value = state.createTaskForm.intervalValue;
         }
       });
@@ -21211,6 +21248,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const tabButton = event.target.closest("[data-create-task-tab]");
         if (tabButton) {
           state.createTaskForm.frequencyTab = tabButton.dataset.createTaskTab || "cycle";
+          if (state.createTaskForm.frequencyTab === "interval") {
+            normalizeCreateTaskIntervalForm(state.createTaskForm);
+          }
           state.createTaskMenuOpen = "";
           renderCreateTaskDialog();
           return;
@@ -21234,6 +21274,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             state.createTaskForm.cycleType = optionValue;
           } else if (menuType === "interval-unit") {
             state.createTaskForm.intervalUnit = optionValue;
+            normalizeCreateTaskIntervalForm(state.createTaskForm);
           }
           state.createTaskMenuOpen = "";
           renderCreateTaskDialog();
@@ -21514,8 +21555,32 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        const logCard = event.target.closest("[data-task-log-card]");
+        if (logCard && !event.target.closest(".task-log-filter")) {
+          const logRecord = getTaskLogRecordById(logCard.dataset.taskLogCard || "");
+          if (!logRecord) {
+            return;
+          }
+
+          openTaskLogConversation(logRecord);
+          return;
+        }
+
         const actionButton = event.target.closest("[data-task-action]");
         if (!actionButton) {
+          const taskCard = event.target.closest("[data-task-card]");
+          if (
+            taskCard &&
+            !event.target.closest(".task-card-actions") &&
+            !event.target.closest(".task-log-filter")
+          ) {
+            taskPageState.activeMenuId = "";
+            taskPageState.logFilterMenuOpen = "";
+            renderTaskPage();
+            openEditTaskDialog(taskCard.dataset.taskCard || "");
+            return;
+          }
+
           if (
             !event.target.closest(".task-card-actions") &&
             !event.target.closest(".task-log-filter")
@@ -21551,6 +21616,33 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           showToast(`已删除 ${record.title}`);
           renderTaskPage();
         }
+      });
+
+      taskSections?.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+        const logCard = event.target.closest("[data-task-log-card]");
+        if (logCard && !event.target.closest("button, a, input, textarea, select")) {
+          const logRecord = getTaskLogRecordById(logCard.dataset.taskLogCard || "");
+          if (!logRecord) {
+            return;
+          }
+
+          event.preventDefault();
+          openTaskLogConversation(logRecord);
+          return;
+        }
+
+        const taskCard = event.target.closest("[data-task-card]");
+        if (!taskCard || event.target.closest("button, a, input, textarea, select")) {
+          return;
+        }
+        event.preventDefault();
+        taskPageState.activeMenuId = "";
+        taskPageState.logFilterMenuOpen = "";
+        renderTaskPage();
+        openEditTaskDialog(taskCard.dataset.taskCard || "");
       });
 
       agentPickerBtn.addEventListener("click", () => {
