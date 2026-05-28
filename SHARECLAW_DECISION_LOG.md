@@ -63,6 +63,20 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
 - Do not regress: opening an automation task must not clear unread. Clicking
   `[data-automation-run-id]` is the read action.
 
+### 2026-05-28 - Checkpoints Are A Project Capability
+
+- Decision: add `scripts/checkpoint.sh` as the standard way to create a local
+  restore point.
+- Reason: memory records product knowledge but cannot restore file snapshots.
+  Local Git commits provide a reliable rollback node for the current machine or
+  any collaborator's clone.
+- Do not regress: checkpoint must remain local-only and must not push to GitHub.
+  If a collaborator has no Git repository or no Git identity configured, the
+  script should fail with instructions rather than invent configuration.
+- Trigger words: user requests containing "checkpoint commit" or "保存" should
+  also create a local checkpoint commit through the script, unless the user
+  explicitly asks for a different save behavior.
+
 ## Correction Log
 
 | Topic | Correction |

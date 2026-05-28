@@ -18,6 +18,28 @@ current task context in the active conversation. Create a temporary
 `SHARECLAW_CURRENT_HANDOFF.md` only when a long or interrupted task must be
 handed off across sessions; delete or archive it after the handoff is resolved.
 
+## Local Checkpoints
+
+When the user asks to "checkpoint", "做 checkpoint", "checkpoint commit",
+"保存", or "记录一个节点", create a local Git checkpoint commit. Prefer the
+project script:
+
+```bash
+./scripts/checkpoint.sh "short description"
+```
+
+Checkpoint rules:
+
+- A checkpoint is a local Git commit only; it must not push to GitHub.
+- The trigger words "checkpoint commit" and "保存" mean the same local
+  checkpoint behavior unless the user explicitly asks to push or publish.
+- The script commits all current worktree changes with `git add -A`.
+- If the worktree is clean, the script creates an empty commit.
+- If Git identity is missing, ask the user to configure `user.name` and
+  `user.email`; do not invent identity values.
+- Before checkpointing, inspect `git status --short` and flag clearly unrelated
+  or risky files instead of silently committing them.
+
 ## Required Startup Reading
 
 - Always read this file before starting work in this project.
