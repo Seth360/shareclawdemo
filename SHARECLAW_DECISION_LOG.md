@@ -63,6 +63,16 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
 - Do not regress: opening an automation task must not clear unread. Clicking
   `[data-automation-run-id]` is the read action.
 
+### 2026-05-28 - Automation Business Outputs Are Task-Level
+
+- Decision: in automation task conversations, the right `业务生成结果` card shows
+  all generated business outputs for the current automation task, not only the
+  selected task history run.
+- Reason: user clarified that `任务历史` controls the central report content,
+  while `业务生成结果` is the full output set under the automation entry.
+- Do not regress: switching `[data-automation-run-id]` must not filter or replace
+  the business generated-results card.
+
 ### 2026-05-28 - Checkpoints Are A Project Capability
 
 - Decision: add `scripts/checkpoint.sh` as the standard way to create a local

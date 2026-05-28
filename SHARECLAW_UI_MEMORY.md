@@ -43,6 +43,7 @@ Core shared state:
 | `state.outputResultsPanelOpen` | Whether the generated results panel is open. |
 | `state.outputResultsPanelMode` | Generated results mode: `list` or `detail`. |
 | `state.outputOpenTabs`, `state.activeOutputTabId` | Dynamic generated-result detail tabs. |
+| `state.activeOutputMenuId`, `state.activeOutputMenuPosition` | Active generated-result row menu and its fixed viewport anchor. |
 | `state.activeSchemePlanId` | Active first-level interaction scheme. Default: `sidebar-interaction`. |
 | `state.activeSchemeCapability` | Active second-level capability: `dynamic-tabs` or `static-tabs`. |
 | `state.schemeCapabilityByPlan` | Per-scheme capability selection. |
@@ -110,7 +111,7 @@ Core shared render/navigation functions:
 | 创建任务弹窗 | `task.html` | `#createTaskOverlay`, `#createTaskDialogBody`, `state.createTaskForm` | `openCreateTaskDialog()`, `renderCreateTaskDialog()`, `confirmCreateTaskDialog()` |
 | 自动化任务对话 | `task-conversation.html` | `?task`, `state.activeAutomationTaskId`, `state.activeAutomationRunId`, `automationTaskCatalog` | `openAutomationTaskConversation()`, `renderAutomationTaskConversation()` |
 | 自动化任务报告侧栏 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `#chatOutputPanel`, `.automation-output-card`, `.automation-report-row.unread`, `[data-automation-run-id]`, `sidebarHistoryStatus.automationReadRunKeys` | `renderAutomationTaskReportCard()`, `renderOutputListPanel()`, `markAutomationRunRead()` |
-| 自动化业务生成结果 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `[data-output-doc-id]`, `[data-output-business-id]` | `renderBusinessOutputCard()`, `getAutomationOutputDocs()`, `getAutomationOutputBusinessSources()` |
+| 自动化业务生成结果 | `task-conversation.html` | `#chatOutputPanelShell.automation-list`, `[data-output-doc-id]`, `[data-output-business-id]` | `renderBusinessOutputCard()`, `getAutomationTaskOutputRuns()`, `getAutomationOutputDocs()`, `getAutomationOutputBusinessSources()` |
 | 智能体广场 | `market.html` | `#marketShell`, `#appSquarePage`, `state.marketMode` | `openMarketPage("square")`, `renderMarketSquare()` |
 | 技能中心 / 已添加 | `market.html` | `#createdPage`, `#manageInstalledTab`, `#createdGrid`, `state.manageSource = "installed"` | `renderCreatedView()` |
 | 我创建的技能 | `market.html` | `#manageCreatedTab`, `state.manageSource = "created"` | `renderCreatedView()` |
@@ -137,6 +138,9 @@ Core shared render/navigation functions:
   controlled by the external `#chatOutputToggleBtn`.
 - Generic document rows expose download and forward. Business source rows expose
   only forward in the list.
+- Generated-result more menus use `.docs-row-menu-panel.output-floating-menu`
+  with fixed viewport positioning so they are not clipped by card or scroll
+  containers. Document-library menus keep the default in-row menu positioning.
 - `source.actionLabel` may render row action tags such as `查询`, `更新`, or
   `创建`.
 - In dynamic-tab mode, output details use `state.outputOpenTabs` and
@@ -200,7 +204,10 @@ Core shared render/navigation functions:
   `[data-automation-run-id]` calls `markAutomationRunRead(taskId, runId)`,
   clears that report dot, and recomputes the left unread count.
 - Clicking an automation report switches the active run, refreshes the central
-  CRM report, clears stale output detail state, and refreshes generated outputs.
+  CRM report, and clears stale output detail state.
+- Automation `业务生成结果` is task-level output, not active-run output. It
+  aggregates all generated docs and business objects for the current automation
+  task, so switching `任务历史` rows does not filter or replace this card.
 - Automation business output rows reuse the static no-dynamic-tab behavior and
   open the detached business object drawer.
 
