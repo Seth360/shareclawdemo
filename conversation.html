@@ -667,7 +667,7 @@
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
         border-radius: 6px;
       }
 
@@ -676,8 +676,8 @@
       }
 
       .sidebar-row-icon {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         color: #181c25;
         flex: 0 0 auto;
       }
@@ -718,7 +718,7 @@
         min-width: 0;
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
       }
 
       .history-collapse-icon {
@@ -741,8 +741,7 @@
         transform: rotate(0deg);
       }
 
-      .history-header.is-collapsed + .history-list,
-      .history-header.is-collapsed + .automation-task-list {
+      .history-header.is-collapsed + .history-list {
         display: none;
       }
 
@@ -752,77 +751,61 @@
         color: #c1c5ce;
       }
 
-      .history-list,
-      .automation-task-list {
+      .history-list {
         display: flex;
         flex-direction: column;
       }
 
-      .history-block .history-list,
-      .history-block .automation-task-list {
+      .history-block .history-list {
         margin-top: 0;
         gap: 2px;
       }
 
-      .history-row,
-      .automation-task-row {
+      .history-row {
         width: 240px;
         height: 34px;
-        padding: 8px 12px;
+        padding: 8px 8px 8px 12px;
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
         border-radius: 8px;
         text-align: left;
       }
 
       .history-row:hover,
-      .automation-task-row:hover,
-      .history-row.active,
-      .automation-task-row.active {
+      .history-row.active {
         background: #f7f8fc;
       }
 
-      .history-row-icon,
-      .automation-task-icon {
+      .history-row-icon {
         width: 14px;
         height: 14px;
         color: #181c25;
         flex: 0 0 auto;
       }
 
-      .automation-task-icon {
+      .history-row-kind-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .history-row-kind-icon svg {
+        width: 14px;
+        height: 14px;
+        display: block;
+      }
+
+      .history-status-dot {
         position: relative;
         width: 14px;
         height: 14px;
+        flex: 0 0 auto;
         border: 0;
         border-radius: 999px;
       }
 
-      .automation-task-icon::after {
-        content: "";
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        width: 6px;
-        height: 6px;
-        border: 1px solid #dee1e8;
-        border-radius: 999px;
-        background: #fff;
-      }
-
-      .automation-task-row.has-unread .automation-task-icon::after {
-        border-color: #0c6cff;
-        background: #0c6cff;
-      }
-
-      .history-row-dot {
-        position: relative;
-        border: 0;
-        border-radius: 999px;
-      }
-
-      .history-row-dot::after {
+      .history-status-dot::after {
         content: "";
         position: absolute;
         left: 4px;
@@ -834,12 +817,12 @@
         background: #fff;
       }
 
-      .history-row-dot.is-unread::after {
+      .history-status-dot.is-unread::after {
         border-color: #0c6cff;
         background: #0c6cff;
       }
 
-      .history-row-dot.is-pending::after {
+      .history-status-dot.is-pending::after {
         border-color: #ff8000;
         background: #ff8000;
       }
@@ -856,8 +839,7 @@
         font-weight: 500;
       }
 
-      .history-row-text,
-      .automation-task-text {
+      .history-row-text {
         font-size: 13px;
         line-height: 18px;
         color: var(--text-strong);
@@ -866,21 +848,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-      }
-
-      .automation-task-count {
-        min-width: 18px;
-        height: 18px;
-        padding: 0 6px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        background: #f2f4fb;
-        color: #545861;
-        font-size: 10px;
-        line-height: 18px;
-        font-weight: 500;
       }
 
       .main-shell {
@@ -3565,158 +3532,6 @@
         flex: 0 0 12px;
       }
 
-      .agent-action-card {
-        width: 380px;
-        max-width: 100%;
-        padding: 16px;
-        border: 0.5px solid #dee1e8;
-        border-radius: 16px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        overflow: hidden;
-      }
-
-      .agent-action-badge {
-        width: fit-content;
-        min-height: 20px;
-        padding: 1px 6px;
-        border-radius: 6px;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        background: #f7f0ff;
-        color: #7341de;
-        font-size: 12px;
-        line-height: 18px;
-        font-weight: 700;
-        white-space: nowrap;
-      }
-
-      .agent-action-badge.orange {
-        background: #fff7e6;
-        color: #ff8000;
-      }
-
-      .agent-action-badge-dot {
-        width: 12px;
-        height: 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 12px;
-        font-size: 12px;
-        line-height: 1;
-        font-weight: 400;
-      }
-
-      .agent-action-badge-dot svg {
-        width: 12px;
-        height: 12px;
-        display: block;
-      }
-
-      .agent-action-title-block {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-      }
-
-      .agent-action-title {
-        margin: 0;
-        font-size: 14px;
-        line-height: 24px;
-        font-weight: 500;
-        color: #181c25;
-      }
-
-      .agent-action-subtitle {
-        margin: 0;
-        font-size: 12px;
-        line-height: 18px;
-        color: #545861;
-      }
-
-      .agent-action-divider {
-        height: 1px;
-        background: #eaebee;
-      }
-
-      .agent-action-fields {
-        display: grid;
-        gap: 4px;
-      }
-
-      .agent-action-field {
-        display: grid;
-        grid-template-columns: 88px minmax(0, 1fr);
-        gap: 8px;
-        font-size: 12px;
-        line-height: 18px;
-      }
-
-      .agent-action-field-label {
-        color: #545861;
-      }
-
-      .agent-action-field-value {
-        color: #181c25;
-        font-weight: 500;
-      }
-
-      .agent-action-details {
-        width: fit-content;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        color: #71717a;
-        font-size: 11px;
-        line-height: 18px;
-        cursor: pointer;
-      }
-
-      .agent-action-details-arrow {
-        font-size: 14px;
-        line-height: 18px;
-      }
-
-      .agent-action-extra-fields {
-        display: none;
-      }
-
-      .agent-action-card.is-expanded .agent-action-extra-fields {
-        display: grid;
-      }
-
-      .agent-action-footer {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .agent-action-btn {
-        height: 32px;
-        padding: 0 12px;
-        border: 1px solid #c1c5ce;
-        border-radius: 8px;
-        background: #fff;
-        color: #181c25;
-        font-size: 13px;
-        line-height: 18px;
-        cursor: pointer;
-      }
-
-      .agent-action-btn.primary {
-        border-color: #181c25;
-        background: #181c25;
-        color: #fff;
-      }
-
       @keyframes chat-waiting-spin {
         to {
           transform: rotate(360deg);
@@ -4031,14 +3846,12 @@
       .complex-query-list {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
         align-items: flex-start;
       }
 
       .complex-query-card {
-        width: 380px;
-        max-width: 100%;
-        padding: 16px;
+        width: 360px;
         border: 0.5px solid #dee1e8;
         border-radius: 16px;
         background: #fff;
@@ -4047,11 +3860,11 @@
       }
 
       .complex-query-card-header {
-        padding: 0 0 8px;
+        min-height: 75px;
+        padding: 16px;
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        align-items: center;
+        gap: 12px;
         box-sizing: border-box;
       }
 
@@ -4061,57 +3874,55 @@
 
       .complex-query-card-main {
         min-width: 0;
-        width: 100%;
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 0;
+        gap: 2px;
       }
 
       .complex-query-card-name {
-        color: #181c25;
+        color: #1c1c1e;
         font-size: 14px;
-        line-height: 24px;
-        font-weight: 500;
+        line-height: 20px;
+        font-weight: 700;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
       .complex-query-card-meta {
-        color: #545861;
-        font-size: 12px;
-        line-height: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         min-width: 0;
       }
 
       .complex-query-tag {
         height: 20px;
         padding: 1px 8px;
-        border-radius: 6px;
+        border-radius: 10px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #f7f0ff;
-        color: #7341de;
         font-size: 12px;
         line-height: 18px;
-        font-weight: 700;
+        font-weight: 500;
         white-space: nowrap;
       }
 
       .complex-query-tag.important {
-        background: #f7f0ff;
-        color: #7341de;
+        background: #fffaf0;
+        color: #d95d0b;
       }
 
       .complex-query-tag.normal {
-        background: #f7f0ff;
-        color: #7341de;
+        background: #f0fff3;
+        color: #1fa160;
       }
 
       .complex-query-tag.new {
-        background: #f7f0ff;
-        color: #7341de;
+        background: #f0fcff;
+        color: #097bd9;
       }
 
       .complex-query-owner {
@@ -4133,7 +3944,7 @@
 
       .complex-query-card-body {
         border-top: 0.5px solid #eaebee;
-        padding: 12px 0 0;
+        padding: 16px;
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -4188,7 +3999,7 @@
       .complex-query-object-card {
         border: 0;
         border-radius: 8px;
-        background: #F7F4FD;
+        background: #f7f4fd;
         overflow: hidden;
       }
 
@@ -4198,7 +4009,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        background: #F7F4FD;
+        background: #faf9ff;
         color: #181c25;
         font-size: 12px;
         line-height: 18px;
@@ -4237,7 +4048,7 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
-        background: #F7F4FD;
+        background: #faf9ff;
         font-size: 12px;
         line-height: 18px;
       }
@@ -4262,8 +4073,7 @@
       }
 
       .complex-query-more {
-        width: 380px;
-        max-width: 100%;
+        width: 360px;
         min-height: 37px;
         border: 0.5px solid #dee1e8;
         border-radius: 12px;
@@ -12286,40 +12096,32 @@
                 </div>
 
                 <button class="sidebar-row" type="button" data-panel="task">
-                  <svg class="sidebar-row-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <circle class="icon-stroke" cx="8" cy="8" r="5.6"></circle>
-                    <path class="icon-stroke" d="m5.4 8.1 1.7 1.7 3.5-3.8"></path>
+                  <svg class="sidebar-row-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M11.3726 0.874176H2.62417C1.65768 0.874176 0.874176 1.65768 0.874176 2.62417V11.3726C0.874176 12.3391 1.65768 13.1226 2.62417 13.1226H11.3726C12.3391 13.1226 13.1226 12.3391 13.1226 11.3726V2.62417C13.1226 1.65768 12.3391 0.874176 11.3726 0.874176ZM12.2484 11.375C12.2485 11.4898 12.2259 11.6035 12.182 11.7096C12.1381 11.8157 12.0736 11.9121 11.9924 11.9932C11.9111 12.0744 11.8147 12.1387 11.7085 12.1825C11.6024 12.2263 11.4886 12.2487 11.3738 12.2484H2.62619C2.39224 12.2484 2.17132 12.1585 2.00587 11.9931C1.84042 11.8276 1.74836 11.6089 1.74836 11.375V2.62501C1.74878 2.39243 1.84143 2.16951 2.006 2.00517C2.17057 1.84082 2.39362 1.74846 2.62619 1.74836H11.3738C11.4888 1.74847 11.6026 1.77124 11.7088 1.81537C11.815 1.85949 11.9115 1.9241 11.9927 2.00551C12.0739 2.08691 12.1383 2.18353 12.1822 2.28982C12.2261 2.39612 12.2486 2.51001 12.2484 2.62501V11.375Z" fill="currentColor"/>
+                    <path d="M10.8281 4.81048H7.32812C7.2122 4.81048 7.10102 4.85653 7.01905 4.9385C6.93708 5.02047 6.89103 5.13165 6.89103 5.24757C6.89103 5.3635 6.93708 5.47467 7.01905 5.55664C7.10102 5.63861 7.2122 5.68466 7.32812 5.68466H10.8281C10.944 5.68466 11.0552 5.63861 11.1372 5.55664C11.2192 5.47467 11.2652 5.3635 11.2652 5.24757C11.2652 5.13165 11.2192 5.02047 11.1372 4.9385C11.0552 4.85653 10.944 4.81048 10.8281 4.81048ZM10.8281 8.31215H7.32812C7.2122 8.31215 7.10102 8.3582 7.01905 8.44017C6.93708 8.52214 6.89103 8.63332 6.89103 8.74924C6.89103 8.86516 6.93708 8.97634 7.01905 9.05831C7.10102 9.14028 7.2122 9.18633 7.32812 9.18633H10.8281C10.944 9.18633 11.0552 9.14028 11.1372 9.05831C11.2192 8.97634 11.2652 8.86516 11.2652 8.74924C11.2652 8.63332 11.2192 8.52214 11.1372 8.44017C11.0552 8.3582 10.944 8.31215 10.8281 8.31215ZM4.70316 7.21873C3.85747 7.21873 3.17211 7.9043 3.17211 8.74978C3.17211 9.59527 3.85767 10.2808 4.70316 10.2808C5.54865 10.2808 6.23421 9.59527 6.23421 8.74978C6.23421 7.9043 5.54884 7.21873 4.70316 7.21873ZM5.16776 9.21458C5.06025 9.32198 4.91884 9.38879 4.7676 9.40362C4.61637 9.41844 4.46467 9.38038 4.33835 9.2959C4.21203 9.21143 4.11891 9.08577 4.07485 8.94033C4.03079 8.7949 4.03852 8.63869 4.09671 8.49831C4.15491 8.35794 4.25998 8.24208 4.39402 8.17048C4.52805 8.09889 4.68277 8.07598 4.8318 8.10566C4.98084 8.13534 5.11497 8.21578 5.21135 8.33326C5.30773 8.45075 5.3604 8.59802 5.36038 8.74998C5.36059 8.83632 5.34368 8.92184 5.31062 9.0016C5.27756 9.08136 5.229 9.15377 5.16776 9.21463V9.21458ZM5.70659 4.06595L4.26562 5.50686L3.69973 4.94092C3.61775 4.85895 3.50658 4.81289 3.39065 4.81289C3.27472 4.81289 3.16355 4.85895 3.08158 4.94092C2.9996 5.02289 2.95355 5.13407 2.95355 5.24999C2.95355 5.36592 2.9996 5.4771 3.08158 5.55907L3.95655 6.43409C3.99714 6.47468 4.04532 6.50688 4.09835 6.52884C4.15138 6.55081 4.20822 6.56212 4.26562 6.56212C4.32302 6.56212 4.37986 6.55081 4.43289 6.52884C4.48593 6.50688 4.53411 6.47468 4.5747 6.43409L6.32469 4.6841C6.40574 4.60194 6.45101 4.49106 6.45063 4.37565C6.45024 4.26025 6.40422 4.14968 6.32262 4.06807C6.24102 3.98646 6.13045 3.94043 6.01504 3.94004C5.89964 3.93964 5.78875 3.9849 5.70659 4.06595Z" fill="currentColor"/>
                   </svg>
                   <span class="sidebar-row-text">自动化</span>
                 </button>
 
                 <button class="sidebar-row" id="marketSidebarRow" type="button" data-panel="market">
-                  <svg class="sidebar-row-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path class="icon-stroke" d="M3 3h4v4H3zM9 3h4v4H9zM3 9h4v4H3zM9 9h4v4H9z"></path>
+                  <svg class="sidebar-row-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M6.5625 1.3125H1.3125V6.5625H6.5625V1.3125ZM2.1875 5.6875V2.1875H5.6875V5.6875H2.1875Z" fill="currentColor"/>
+                    <path d="M12.6875 1.3125H7.4375V6.5625H12.6875V1.3125ZM8.3125 5.6875V2.1875H11.8125V5.6875H8.3125Z" fill="currentColor"/>
+                    <path d="M6.5625 7.4375H1.3125V12.6875H6.5625V7.4375ZM2.1875 11.8125V8.3125H5.6875V11.8125H2.1875Z" fill="currentColor"/>
+                    <path d="M10.5 9.625H12.6875V10.5H10.5V12.6875H9.625V10.5H7.4375V9.625H9.625V7.4375H10.5V9.625Z" fill="currentColor"/>
                   </svg>
                   <span class="sidebar-row-text">智能体</span>
                 </button>
 
                 <button class="sidebar-row" type="button" data-panel="docs">
-                  <svg class="sidebar-row-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path class="icon-stroke" d="M4 2.8h5.5l2.5 2.6v7.8H4z"></path>
-                    <path class="icon-stroke" d="M9.5 2.8v2.6H12"></path>
-                    <path class="icon-stroke" d="M5.7 8h4.6M5.7 10.6h4.6"></path>
+                  <svg class="sidebar-row-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M7.4375 8.3125H3.9375V9.1875H7.4375V8.3125Z" fill="currentColor"/>
+                    <path d="M3.9375 6.5625H8.3125V7.4375H3.9375V6.5625Z" fill="currentColor"/>
+                    <path d="M8.3125 4.8125H3.9375V5.6875H8.3125V4.8125Z" fill="currentColor"/>
+                    <path d="M10.9375 1.3125H1.3125V12.6875H12.6875V3.9375H10.9375V1.3125ZM11.9219 11.8125H10.9375V4.8125H11.9219V11.8125ZM2.1875 11.8125V2.1875H10.0625V11.8125H2.1875Z" fill="currentColor"/>
                   </svg>
                   <span class="sidebar-row-text">文档库</span>
                 </button>
-              </div>
-
-              <div class="history-block">
-                <button class="history-header" id="automationTaskGroupHeader" type="button" data-sidebar-group-toggle="automation" aria-expanded="true">
-                  <span class="history-header-main">
-                    <span class="history-title">自动化任务</span>
-                    <svg class="history-collapse-icon" viewBox="0 0 9 9" aria-hidden="true">
-                      <path class="icon-stroke" d="M3.1 1.8 5.8 4.5 3.1 7.2"></path>
-                    </svg>
-                  </span>
-                </button>
-                <div class="automation-task-list" id="automationTaskList"></div>
               </div>
 
               <div class="history-block">
@@ -12335,16 +12137,6 @@
               </div>
             </div>
 
-            <div class="sidebar-footer">
-              <button class="sidebar-footer-entry hidden" id="openConfigBtn" type="button" aria-label="打开 ShareAgent 配置">
-                <span class="sidebar-footer-entry-main">
-                  <span>ShareAgent配置</span>
-                </span>
-                <svg viewBox="0 0 16 16" aria-hidden="true">
-                  <path class="icon-stroke" d="m6.2 3.2 4.1 4.8-4.1 4.8"></path>
-                </svg>
-              </button>
-            </div>
           </div>
 
           <div class="sidebar-view hidden" id="settingsSidebarView">
@@ -14349,7 +14141,7 @@
           marketMode: pickAllowedValue(params.get("mode"), ["agent", "skill", "automation"], "agent"),
           marketPage: pickAllowedValue(params.get("page"), ["square", "created", "batch", "share", "skill-import"], "square"),
           launchAction: isConversationEntry ? params.get("launch") || "" : "",
-          launchType: isConversationEntry ? params.get("action") || params.get("type") || "" : "",
+          launchType: isConversationEntry ? params.get("type") || "" : "",
           launchLabel: isConversationEntry ? params.get("label") || "" : "",
           launchPrompt: isConversationEntry ? params.get("prompt") || "" : "",
           launchAgent: isConversationEntry ? params.get("type") || "" : ""
@@ -14496,9 +14288,7 @@
       const openRailSettingsBtn = document.getElementById("openRailSettingsBtn");
       const settingsBackBtn = document.getElementById("settingsBackBtn");
       const configBackBtn = document.getElementById("configBackBtn");
-      const automationTaskGroupHeader = document.getElementById("automationTaskGroupHeader");
       const historyGroupHeader = document.getElementById("historyGroupHeader");
-      const automationTaskList = document.getElementById("automationTaskList");
       const historyList = document.getElementById("historyList");
       const sidebarPrimaryHomeBtn = document.querySelector(".sidebar-primary-entry[data-panel='home']");
       const homeDashboardShell = document.getElementById("homeDashboardShell");
@@ -14701,24 +14491,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
 每个模板都应附带参数示例和失败兜底说明。`
       };
-      const INFO_COLLECTION_TRIGGERS = ["信息收集"];
-      const INFO_COLLECTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
+      const ASK_USER_QUESTION_TRIGGERS = ["信息收集"];
+      const ASK_USER_QUESTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
       const DEFAULT_CREATE_CUSTOMER_NAME = "新客户";
       const DEFAULT_CREATE_CUSTOMER_PROMPT = `请按规划模式继续整理 新建客户：${DEFAULT_CREATE_CUSTOMER_NAME}`;
-      const AGENT_ACTION_CREATE_OBJECT_TRIGGER = "新建对象";
-      const AGENT_ACTION_CREATE_OBJECT_SESSION_ID = "agent-action-create-object";
-      const AGENT_ACTION_CREATE_OBJECT_PROMPT = "帮我创建一个客户：橘子科技有限责任公司 ，是个重要客户 ，互联网行业，联系人是李明，电话是13500000000";
-      const AGENT_ACTION_EDIT_OBJECT_TRIGGER = "编辑对象";
-      const AGENT_ACTION_EDIT_OBJECT_SESSION_ID = "agent-action-edit-object";
-      const AGENT_ACTION_EDIT_OBJECT_PROMPT = "编辑橘子科技有限责任公司客户信息";
-      const AGENT_ACTION_UPDATE_OBJECT_TRIGGER = "更新对象";
-      const AGENT_ACTION_UPDATE_OBJECT_SESSION_ID = "agent-action-update-object";
-      const AGENT_ACTION_UPDATE_OBJECT_PROMPT = "更新橘子科技有限责任公司客户信息";
-      const AGENT_ACTION_CREATE_TASK_TRIGGER = "新建定时任务";
-      const AGENT_ACTION_CREATE_TASK_SESSION_ID = "agent-action-create-scheduled-task";
-      const AGENT_ACTION_CREATE_TASK_PROMPT = "我要做一个定时任务，每天早上九点给我发送AI新闻资讯";
-      const AGENT_ACTION_THINKING_DELAY = 1000;
-      const MD_INFO_DEMO_TRIGGER = "信息补全";
+      const MD_INFO_DEMO_TRIGGER = "创建客户";
       const MD_INFO_DEMO_SESSION_ID = "md-info-demo";
       const MD_INFO_DEMO_DISPLAY_PROMPT = "帮我把刚才开会的客户录进去";
       const MD_INFO_DEMO_BASE_FIELDS = {
@@ -14733,8 +14510,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       const DELETE_CUSTOMER_DEMO_TRIGGER = "删除客户";
       const DELETE_CUSTOMER_DEMO_SESSION_ID = "delete-customer-demo";
       const DELETE_CUSTOMER_DEMO_DISPLAY_PROMPT = "删除橘子科技";
-      const COMPLEX_QUERY_TRIGGER = "复杂查询";
       const QUERY_CUSTOMER_DEMO_SESSION_ID = "query-customer-demo";
+      const COMPLEX_QUERY_TRIGGER = "复杂查询";
       const COMPLEX_QUERY_SESSION_ID = "complex-query-demo";
       const COMPLEX_QUERY_DISPLAY_PROMPT = "帮我查一下本季度名下有进行中商机的客户，并列出每个客户关联的商机和订单。";
       const CUSTOMER_INTAKE_FIELDS = [
@@ -14778,6 +14555,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         { id: "history-chat-chart", title: "显示过去30天的对话趋势条形图", type: "static" }
       ];
       const automationTaskHistoryItems = [
+        { id: "task-payment-close-loop", title: "回款闭环自动处理流程", unread: 1 },
         { id: "task-morning-check", title: "重点客户异动晨检", unread: 1 },
         { id: "task-meeting-crm", title: "客户会议纪要回填 CRM", unread: 0 },
         { id: "task-lead-cleanup", title: "线索池清理与分发", unread: 0 },
@@ -16176,7 +15954,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const useScheme2 = state.uiScheme === "scheme2";
         marketSidebarRow.classList.toggle("hidden", useScheme2);
         openSettingsBtn.classList.toggle("hidden", useScheme2);
-        openConfigBtn.classList.toggle("hidden", !useScheme2);
+        openConfigBtn?.classList.toggle("hidden", !useScheme2);
         backToSquareBtn.classList.toggle("hidden", useScheme2);
         renderConfigSidebar();
       }
@@ -19820,6 +19598,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getHistoryItemStatus(item) {
+        if (item.type === "automation") {
+          return item.unread ? "unread" : "";
+        }
         if (item.id === "pinned-haiyue-brief") {
           return sidebarHistoryStatus.haiyueUnread === false ? "" : "unread";
         }
@@ -19830,8 +19611,28 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function historyIconMarkup(item) {
+        if (item.type === "automation") {
+          return `
+            <span class="history-row-icon history-row-kind-icon" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none">
+                <path d="M11.3726 0.874207H2.62417C1.65768 0.874207 0.874176 1.65771 0.874176 2.6242V11.3726C0.874176 12.3391 1.65768 13.1226 2.62417 13.1226H11.3726C12.3391 13.1226 13.1226 12.3391 13.1226 11.3726V2.6242C13.1226 1.65771 12.3391 0.874207 11.3726 0.874207ZM12.2484 11.375C12.2485 11.4898 12.2259 11.6036 12.182 11.7096C12.1381 11.8157 12.0736 11.9121 11.9924 11.9932C11.9111 12.0744 11.8147 12.1387 11.7085 12.1825C11.6024 12.2263 11.4886 12.2487 11.3738 12.2484H2.62619C2.39224 12.2484 2.17132 12.1586 2.00587 11.9931C1.84042 11.8277 1.74836 11.609 1.74836 11.375V2.62504C1.74878 2.39246 1.84143 2.16954 2.006 2.0052C2.17057 1.84085 2.39362 1.74849 2.62619 1.74839H11.3738C11.4888 1.74851 11.6026 1.77127 11.7088 1.8154C11.815 1.85952 11.9115 1.92413 11.9927 2.00554C12.0739 2.08694 12.1383 2.18356 12.1822 2.28985C12.2261 2.39615 12.2486 2.51004 12.2484 2.62504V11.375Z" fill="currentColor"/>
+                <path d="M10.8281 4.81045H7.32812C7.2122 4.81045 7.10102 4.8565 7.01905 4.93847C6.93708 5.02044 6.89103 5.13162 6.89103 5.24754C6.89103 5.36347 6.93708 5.47464 7.01905 5.55661C7.10102 5.63858 7.2122 5.68463 7.32812 5.68463H10.8281C10.944 5.68463 11.0552 5.63858 11.1372 5.55661C11.2192 5.47464 11.2652 5.36347 11.2652 5.24754C11.2652 5.13162 11.2192 5.02044 11.1372 4.93847C11.0552 4.8565 10.944 4.81045 10.8281 4.81045ZM10.8281 8.31212H7.32812C7.2122 8.31212 7.10102 8.35817 7.01905 8.44014C6.93708 8.52211 6.89103 8.63328 6.89103 8.74921C6.89103 8.86513 6.93708 8.97631 7.01905 9.05828C7.10102 9.14025 7.2122 9.1863 7.32812 9.1863H10.8281C10.944 9.1863 11.0552 9.14025 11.1372 9.05828C11.2192 8.97631 11.2652 8.86513 11.2652 8.74921C11.2652 8.63328 11.2192 8.52211 11.1372 8.44014C11.0552 8.35817 10.944 8.31212 10.8281 8.31212ZM4.70316 7.2187C3.85747 7.2187 3.17211 7.90426 3.17211 8.74975C3.17211 9.59524 3.85767 10.2808 4.70316 10.2808C5.54865 10.2808 6.23421 9.59524 6.23421 8.74975C6.23421 7.90426 5.54884 7.2187 4.70316 7.2187ZM5.16776 9.21455C5.06025 9.32195 4.91884 9.38876 4.7676 9.40359C4.61637 9.41841 4.46467 9.38035 4.33835 9.29587C4.21203 9.2114 4.11891 9.08574 4.07485 8.9403C4.03079 8.79487 4.03852 8.63866 4.09671 8.49828C4.15491 8.35791 4.25998 8.24205 4.39402 8.17045C4.52805 8.09886 4.68277 8.07595 4.8318 8.10563C4.98084 8.13531 5.11497 8.21575 5.21135 8.33323C5.30773 8.45072 5.3604 8.59799 5.36038 8.74995C5.36059 8.83629 5.34368 8.92181 5.31062 9.00157C5.27756 9.08133 5.229 9.15374 5.16776 9.2146V9.21455ZM5.70659 4.06591L4.26562 5.50683L3.69973 4.94089C3.61775 4.85891 3.50658 4.81286 3.39065 4.81286C3.27472 4.81286 3.16355 4.85891 3.08158 4.94089C2.9996 5.02286 2.95355 5.13404 2.95355 5.24996C2.95355 5.36589 2.9996 5.47707 3.08158 5.55904L3.95655 6.43406C3.99714 6.47465 4.04532 6.50684 4.09835 6.52881C4.15138 6.55078 4.20822 6.56208 4.26562 6.56208C4.32302 6.56208 4.37986 6.55078 4.43289 6.52881C4.48593 6.50684 4.53411 6.47465 4.5747 6.43406L6.32469 4.68406C6.40574 4.60191 6.45101 4.49103 6.45063 4.37562C6.45024 4.26022 6.40422 4.14965 6.32262 4.06804C6.24102 3.98643 6.13045 3.9404 6.01504 3.94001C5.89964 3.93961 5.78875 3.98487 5.70659 4.06591Z" fill="currentColor"/>
+              </svg>
+            </span>
+          `;
+        }
+        return `
+          <span class="history-row-icon history-row-kind-icon" aria-hidden="true">
+            <svg viewBox="0 0 14 14" fill="none">
+              <path d="M1.05 13.125L1.42536 10.5321C0.530951 9.42983 0 8.0543 0 6.5625C0 2.93813 3.13401 0 7 0C10.866 0 14 2.93813 14 6.5625C14 10.1869 10.866 13.125 7 13.125C5.87231 13.125 4.8069 12.875 3.86339 12.4309L1.05 13.125ZM3.95517 11.507L4.23602 11.6392C5.08484 12.0388 6.0251 12.25 7 12.25C10.3949 12.25 13.125 9.69055 13.125 6.5625C13.125 3.43445 10.3949 0.875 7 0.875C3.60508 0.875 0.875 3.43445 0.875 6.5625C0.875 7.81277 1.30996 9.00119 2.10481 9.98075L2.34622 10.2783L2.10216 11.9642L3.95517 11.507Z" fill="currentColor"/>
+            </svg>
+          </span>
+        `;
+      }
+
+      function historyStatusDotMarkup(item) {
         const status = getHistoryItemStatus(item);
-        return '<span class="history-row-icon history-row-dot ' + (status ? 'is-' + status : '') + '" aria-hidden="true"></span>';
+        return status === "unread" ? '<span class="history-status-dot is-unread" aria-hidden="true"></span>' : "";
       }
 
       function historyStatusLabelMarkup(item) {
@@ -19839,6 +19640,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function isHistoryItemActive(item) {
+        if (item.type === "automation") {
+          return sidebarHistoryStatus.activeAutomationTaskId === item.id;
+        }
         if (state.activeHistoryId === item.id) {
           return true;
         }
@@ -19884,7 +19688,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderSidebarGroupHeaders() {
         [
-          { key: "automation", element: automationTaskGroupHeader },
           { key: "history", element: historyGroupHeader }
         ].forEach(({ key, element }) => {
           if (!element) {
@@ -19896,33 +19699,29 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       }
 
-      function renderAutomationTaskList() {
-        if (!automationTaskList) {
-          return;
-        }
-        automationTaskList.innerHTML = automationTaskHistoryItems
-          .map(
-            (item) => `
-              <button
-                class="automation-task-row ${item.unread ? "has-unread" : ""} ${sidebarHistoryStatus.activeAutomationTaskId === item.id ? "active" : ""}"
-                type="button"
-                data-automation-task="${escapeHtml(item.id)}"
-              >
-                <span class="automation-task-icon" aria-hidden="true"></span>
-                <span class="automation-task-text">${escapeHtml(item.title)}</span>
-                ${item.unread ? `<span class="automation-task-count">${escapeHtml(String(item.unread))}</span>` : ""}
-              </button>
-            `
-          )
-          .join("");
-      }
-
       function renderHistoryList() {
         renderSidebarGroupHeaders();
-        renderAutomationTaskList();
         const pinnedKeys = new Set(pinnedHistoryItems.flatMap((item) => [item.sessionId, item.title]).filter(Boolean));
         const dynamicItems = conversationHistory.filter((item) => !pinnedKeys.has(item.sessionId) && !pinnedKeys.has(item.title));
-        const items = [...pinnedHistoryItems, ...dynamicItems, ...baseHistoryItems];
+        const automationItems = automationTaskHistoryItems.map((item) => ({
+          ...item,
+          type: "automation",
+          unread: typeof getAutomationTaskUnreadCount === "function" ? getAutomationTaskUnreadCount(item.id) : item.unread
+        }));
+        const conversationItems = [...pinnedHistoryItems, ...dynamicItems, ...baseHistoryItems];
+        const items = [
+          automationItems[0],
+          conversationItems[0],
+          automationItems[1],
+          conversationItems[1],
+          automationItems[2],
+          conversationItems[2],
+          automationItems[3],
+          conversationItems[3],
+          automationItems[4],
+          ...automationItems.slice(5),
+          ...conversationItems.slice(4)
+        ].filter(Boolean);
         historyList.innerHTML = items
           .map(
             (item) => `
@@ -19931,11 +19730,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                 type="button"
                 data-history-id="${escapeHtml(item.id)}"
                 data-history-type="${escapeHtml(item.type)}"
+                ${item.type === "automation" ? `data-automation-task="${escapeHtml(item.id)}"` : ""}
                 ${item.sessionId ? `data-session-id="${escapeHtml(item.sessionId)}"` : ""}
                 ${item.url ? `data-history-url="${escapeHtml(item.url)}"` : ""}
               >
                 ${historyIconMarkup(item)}
                 <span class="history-row-text">${escapeHtml(item.title)}</span>
+                ${historyStatusDotMarkup(item)}
                 ${historyStatusLabelMarkup(item)}
               </button>
             `
@@ -20168,81 +19969,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           <ul class="chat-ai-list">
             ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
           </ul>
-        `;
-      }
-
-      function renderAgentActionFieldRows(rows) {
-        return (rows || []).map(([label, value]) => `
-          <div class="agent-action-field">
-            <span class="agent-action-field-label">${escapeHtml(label)}</span>
-            <span class="agent-action-field-value">${escapeHtml(value)}</span>
-          </div>
-        `).join("");
-      }
-
-      function renderAgentActionBadgeIcon(card) {
-        if (card.badgeIconType === "edit") {
-          return `
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <g transform="rotate(-45 8 8)">
-                <path d="M6.8 2.5h2.4c.8 0 1.5.7 1.5 1.5v6.8H5.3V4c0-.8.7-1.5 1.5-1.5Z" fill="#7341de"></path>
-                <path d="M5.3 10.8h5.4l-1.6 2.5c-.5.8-1.7.8-2.2 0l-1.6-2.5Z" fill="#7341de"></path>
-                <path d="M6.1 4.6h3.8" fill="none" stroke="#f7f0ff" stroke-width=".7" stroke-linecap="round"></path>
-              </g>
-            </svg>
-          `;
-        }
-
-        if (card.badgeIconType === "update") {
-          return `
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <circle cx="8" cy="8" r="6.5" fill="none" stroke="#7341de" stroke-width="1.8"></circle>
-              <path d="M8 11.4V4.6" fill="none" stroke="#7341de" stroke-width="1.8" stroke-linecap="round"></path>
-              <path d="M4.9 7.2 8 4.1l3.1 3.1" fill="none" stroke="#7341de" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="M5.7 12h4.6" fill="none" stroke="#7341de" stroke-width="1.8" stroke-linecap="round"></path>
-            </svg>
-          `;
-        }
-
-        return escapeHtml(card.badgeIcon || "○");
-      }
-
-      function renderAgentActionCard(session) {
-        const card = session.actionCard || createAgentActionCreateObjectCard();
-        const buttons = card.buttons || [
-          { label: "创建", action: "create", primary: true },
-          { label: "编辑", action: "edit-draft" },
-          { label: "取消", action: "cancel" }
-        ];
-        return `
-          <div class="agent-action-card ${card.expanded ? "is-expanded" : ""}">
-            <div class="agent-action-badge ${card.badgeTone === "orange" ? "orange" : ""}">
-              <span class="agent-action-badge-dot" aria-hidden="true">${renderAgentActionBadgeIcon(card)}</span>
-              <span>${escapeHtml(card.badge)}</span>
-            </div>
-            <div class="agent-action-title-block">
-              <p class="agent-action-title">${escapeHtml(card.title)}</p>
-              <p class="agent-action-subtitle">${escapeHtml(card.subtitle)}</p>
-            </div>
-            <div class="agent-action-divider"></div>
-            <div class="agent-action-fields">
-              ${renderAgentActionFieldRows(card.fields)}
-            </div>
-            <div class="agent-action-fields agent-action-extra-fields">
-              ${renderAgentActionFieldRows(card.extraFields)}
-            </div>
-            ${card.showDetails === false || card.expanded ? "" : `
-              <button class="agent-action-details" type="button" data-agent-action="toggle-details">
-                <span class="agent-action-details-arrow" aria-hidden="true">›</span>
-                <span>${escapeHtml(card.detailsLabel || "展开全部")}</span>
-              </button>
-            `}
-            <div class="agent-action-footer">
-              ${buttons.map((button) => `
-                <button class="agent-action-btn ${button.primary ? "primary" : ""}" type="button" data-agent-action="${escapeHtml(button.action)}">${escapeHtml(button.label)}</button>
-              `).join("")}
-            </div>
-          </div>
         `;
       }
 
@@ -20508,12 +20234,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         beginCreateCustomerConversation(DEFAULT_CREATE_CUSTOMER_PROMPT, DEFAULT_CREATE_CUSTOMER_NAME);
       }
 
-      function isInfoCollectionTrigger(text) {
-        return INFO_COLLECTION_TRIGGERS.includes((text || "").trim());
+      function isAskUserQuestionTrigger(text) {
+        return ASK_USER_QUESTION_TRIGGERS.includes((text || "").trim());
       }
 
-      function startInfoCollectionConversation() {
-        beginCreateCustomerConversation(INFO_COLLECTION_PROMPT, extractCustomerCreationName(INFO_COLLECTION_PROMPT));
+      function startAskUserQuestionConversation() {
+        beginCreateCustomerConversation(ASK_USER_QUESTION_PROMPT, extractCustomerCreationName(ASK_USER_QUESTION_PROMPT));
       }
 
       function isMdInfoDemoTrigger(text) {
@@ -20667,284 +20393,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return (text || "").trim() === DELETE_CUSTOMER_DEMO_TRIGGER;
       }
 
-      function isAgentActionCreateObjectTrigger(text) {
-        return (text || "").trim() === AGENT_ACTION_CREATE_OBJECT_TRIGGER;
+      function extractQueryCustomerName(text) {
+        const normalized = (text || "").replace(/\s+/g, "").trim();
+        const match = normalized.match(/^查询(.*)客户$/);
+        return normalizeCustomerName(match?.[1] || "");
       }
 
-      function isAgentActionEditObjectTrigger(text) {
-        return (text || "").trim() === AGENT_ACTION_EDIT_OBJECT_TRIGGER;
-      }
-
-      function isAgentActionUpdateObjectTrigger(text) {
-        return (text || "").trim() === AGENT_ACTION_UPDATE_OBJECT_TRIGGER;
-      }
-
-      function isAgentActionCreateTaskTrigger(text) {
-        return (text || "").trim() === AGENT_ACTION_CREATE_TASK_TRIGGER;
+      function isQueryCustomerDemoTrigger(text) {
+        return /^查询.*客户$/.test((text || "").replace(/\s+/g, "").trim());
       }
 
       function isComplexQueryTrigger(text) {
         return (text || "").trim() === COMPLEX_QUERY_TRIGGER;
-      }
-
-      function createAgentActionCreateObjectCard() {
-        return {
-          badge: "新建·客户",
-          badgeIcon: "○",
-          title: "橘子科技有限责任公司",
-          subtitle: "新客户 · 互联网行业",
-          fields: [
-            ["联系人", "李明"],
-            ["手机号", "13500000000"],
-            ["客户级别", "重要客户"],
-            ["所属行业", "互联网"]
-          ],
-          extraFields: [
-            ["创建来源", "AI 对话"],
-            ["执行对象", "客户对象"]
-          ],
-          expanded: false,
-          buttons: [
-            { label: "创建", action: "create", primary: true },
-            { label: "编辑", action: "edit-draft" },
-            { label: "取消", action: "cancel" }
-          ]
-        };
-      }
-
-      function createAgentActionEditObjectCard() {
-        return {
-          badge: "编辑·客户",
-          badgeIconType: "edit",
-          title: "橘子科技有限责任公司",
-          subtitle: "新客户 · 互联网行业",
-          fields: [
-            ["联系人", "李明"],
-            ["手机号", "13500000000"],
-            ["客户级别", "重要客户"],
-            ["所属行业", "互联网"]
-          ],
-          extraFields: [
-            ["编辑来源", "AI 对话"],
-            ["执行对象", "客户对象"]
-          ],
-          expanded: false,
-          showDetails: false,
-          buttons: [
-            { label: "编辑", action: "apply-edit", primary: true },
-            { label: "取消", action: "cancel" }
-          ]
-        };
-      }
-
-      function createAgentActionUpdateObjectCard() {
-        return {
-          badge: "更新·客户",
-          badgeIconType: "update",
-          title: "橘子科技有限责任公司",
-          subtitle: "新客户 · 互联网行业",
-          fields: [
-            ["联系人", "李明"],
-            ["手机号", "13500000000"],
-            ["客户级别", "VIP客户"],
-            ["所属行业", "互联网"]
-          ],
-          extraFields: [
-            ["更新来源", "AI 对话"],
-            ["执行对象", "客户对象"]
-          ],
-          expanded: false,
-          showDetails: false,
-          buttons: [
-            { label: "更新", action: "apply-update", primary: true },
-            { label: "编辑", action: "edit-draft" },
-            { label: "取消", action: "cancel" }
-          ]
-        };
-      }
-
-      function createAgentActionScheduledTaskCard() {
-        return {
-          badge: "创建·定时任务",
-          badgeIcon: "◐",
-          badgeTone: "orange",
-          title: "每日 AI 资讯推送",
-          subtitle: "每天 09:00 · 推送至会话",
-          fields: [
-            ["执行规则", "每天 09:00"],
-            ["推送渠道", "ShareClaw会话"]
-          ],
-          extraFields: [
-            ["任务内容", "AI 新闻资讯"],
-            ["创建来源", "AI 对话"]
-          ],
-          expanded: false,
-          detailsLabel: "详细信息",
-          buttons: [
-            { label: "创建定时任务", action: "create", primary: true },
-            { label: "取消", action: "cancel" }
-          ]
-        };
-      }
-
-      function startAgentActionCreateObjectConversation(promptText = AGENT_ACTION_CREATE_OBJECT_TRIGGER) {
-        if (!isConversationPage()) {
-          navigateToConversation({
-            launch: "agent-action",
-            type: "create-object",
-            prompt: promptText || AGENT_ACTION_CREATE_OBJECT_TRIGGER
-          });
-          return;
-        }
-
-        const now = new Date();
-        conversationSessions[AGENT_ACTION_CREATE_OBJECT_SESSION_ID] = {
-          id: AGENT_ACTION_CREATE_OBJECT_SESSION_ID,
-          historyTitle: "新建对象 · 橘子科技",
-          prompt: AGENT_ACTION_CREATE_OBJECT_PROMPT,
-          triggerPrompt: promptText || AGENT_ACTION_CREATE_OBJECT_TRIGGER,
-          time: formatChatTime(now),
-          stage: "thinking",
-          source: "agent-action-create-object",
-          actionCard: createAgentActionCreateObjectCard()
-        };
-
-        clearTimeout(chatReplyTimer);
-        state.mainPanel = "home";
-        state.homeView = "chat";
-        state.currentChannel = "claw";
-        state.homeInsightRailEnabled = false;
-        state.activeChatId = AGENT_ACTION_CREATE_OBJECT_SESSION_ID;
-        state.outputResultsPanelOpen = false;
-        state.activeOutputMenuId = "";
-        persistOutputPanelState();
-        upsertConversationHistory(AGENT_ACTION_CREATE_OBJECT_SESSION_ID);
-        setSidebarActive(null);
-        renderMainPanels();
-        setEditorText("");
-
-        chatReplyTimer = setTimeout(() => {
-          const session = conversationSessions[AGENT_ACTION_CREATE_OBJECT_SESSION_ID];
-          if (!session || session.source !== "agent-action-create-object" || session.stage !== "thinking") {
-            return;
-          }
-
-          session.stage = "action-review";
-          renderMainPanels();
-        }, AGENT_ACTION_THINKING_DELAY);
-      }
-
-      function startAgentActionEditObjectConversation(promptText = AGENT_ACTION_EDIT_OBJECT_TRIGGER) {
-        if (!isConversationPage()) {
-          navigateToConversation({
-            launch: "agent-action",
-            type: "edit-object",
-            prompt: promptText || AGENT_ACTION_EDIT_OBJECT_TRIGGER
-          });
-          return;
-        }
-
-        const now = new Date();
-        conversationSessions[AGENT_ACTION_EDIT_OBJECT_SESSION_ID] = {
-          id: AGENT_ACTION_EDIT_OBJECT_SESSION_ID,
-          historyTitle: "编辑对象 · 橘子科技",
-          prompt: promptText || AGENT_ACTION_EDIT_OBJECT_TRIGGER,
-          triggerPrompt: promptText || AGENT_ACTION_EDIT_OBJECT_TRIGGER,
-          time: formatChatTime(now),
-          stage: "action-review",
-          source: "agent-action-edit-object",
-          actionCard: createAgentActionEditObjectCard()
-        };
-
-        clearTimeout(chatReplyTimer);
-        state.mainPanel = "home";
-        state.homeView = "chat";
-        state.currentChannel = "claw";
-        state.homeInsightRailEnabled = false;
-        state.activeChatId = AGENT_ACTION_EDIT_OBJECT_SESSION_ID;
-        state.outputResultsPanelOpen = false;
-        state.activeOutputMenuId = "";
-        persistOutputPanelState();
-        upsertConversationHistory(AGENT_ACTION_EDIT_OBJECT_SESSION_ID);
-        setSidebarActive(null);
-        renderMainPanels();
-        setEditorText("");
-      }
-
-      function startAgentActionUpdateObjectConversation(promptText = AGENT_ACTION_UPDATE_OBJECT_TRIGGER) {
-        if (!isConversationPage()) {
-          navigateToConversation({
-            launch: "agent-action",
-            type: "update-object",
-            prompt: promptText || AGENT_ACTION_UPDATE_OBJECT_TRIGGER
-          });
-          return;
-        }
-
-        const now = new Date();
-        conversationSessions[AGENT_ACTION_UPDATE_OBJECT_SESSION_ID] = {
-          id: AGENT_ACTION_UPDATE_OBJECT_SESSION_ID,
-          historyTitle: "更新对象 · 橘子科技",
-          prompt: promptText || AGENT_ACTION_UPDATE_OBJECT_TRIGGER,
-          triggerPrompt: promptText || AGENT_ACTION_UPDATE_OBJECT_TRIGGER,
-          time: formatChatTime(now),
-          stage: "action-review",
-          source: "agent-action-update-object",
-          actionCard: createAgentActionUpdateObjectCard()
-        };
-
-        clearTimeout(chatReplyTimer);
-        state.mainPanel = "home";
-        state.homeView = "chat";
-        state.currentChannel = "claw";
-        state.homeInsightRailEnabled = false;
-        state.activeChatId = AGENT_ACTION_UPDATE_OBJECT_SESSION_ID;
-        state.outputResultsPanelOpen = false;
-        state.activeOutputMenuId = "";
-        persistOutputPanelState();
-        upsertConversationHistory(AGENT_ACTION_UPDATE_OBJECT_SESSION_ID);
-        setSidebarActive(null);
-        renderMainPanels();
-        setEditorText("");
-      }
-
-      function startAgentActionCreateTaskConversation(promptText = AGENT_ACTION_CREATE_TASK_TRIGGER) {
-        if (!isConversationPage()) {
-          navigateToConversation({
-            launch: "agent-action",
-            type: "create-scheduled-task",
-            prompt: promptText || AGENT_ACTION_CREATE_TASK_TRIGGER
-          });
-          return;
-        }
-
-        const now = new Date();
-        conversationSessions[AGENT_ACTION_CREATE_TASK_SESSION_ID] = {
-          id: AGENT_ACTION_CREATE_TASK_SESSION_ID,
-          historyTitle: "新建定时任务",
-          prompt: AGENT_ACTION_CREATE_TASK_PROMPT,
-          triggerPrompt: promptText || AGENT_ACTION_CREATE_TASK_TRIGGER,
-          time: formatChatTime(now),
-          stage: "action-review",
-          source: "agent-action-create-scheduled-task",
-          introCopy: "好的，我来帮你创建这个每日AI资讯定时任务",
-          hideWaiting: true,
-          actionCard: createAgentActionScheduledTaskCard()
-        };
-
-        clearTimeout(chatReplyTimer);
-        state.mainPanel = "home";
-        state.homeView = "chat";
-        state.currentChannel = "claw";
-        state.homeInsightRailEnabled = false;
-        state.activeChatId = AGENT_ACTION_CREATE_TASK_SESSION_ID;
-        state.outputResultsPanelOpen = false;
-        state.activeOutputMenuId = "";
-        persistOutputPanelState();
-        upsertConversationHistory(AGENT_ACTION_CREATE_TASK_SESSION_ID);
-        setSidebarActive(null);
-        renderMainPanels();
-        setEditorText("");
       }
 
       function startComplexQueryConversation(promptText = COMPLEX_QUERY_DISPLAY_PROMPT) {
@@ -20960,7 +20420,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         conversationSessions[COMPLEX_QUERY_SESSION_ID] = {
           id: COMPLEX_QUERY_SESSION_ID,
           historyTitle: "复杂查询",
-          prompt: promptText || COMPLEX_QUERY_DISPLAY_PROMPT,
+          prompt: COMPLEX_QUERY_DISPLAY_PROMPT,
           time: formatChatTime(now),
           stage: "thinking",
           source: "complex-query-demo"
@@ -20989,12 +20449,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           session.stage = "found";
           renderMainPanels();
         }, AI_REPLY_THINKING_DELAY);
-      }
-
-      function extractQueryCustomerName(text) {
-        const normalized = (text || "").replace(/\s+/g, "").trim();
-        const match = normalized.match(/^查询(.*)客户$/);
-        return normalizeCustomerName(match?.[1] || "");
       }
 
       function startQueryCustomerDemoConversation(customerName, promptText = "") {
@@ -21196,8 +20650,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (isMdInfoDemoTrigger(promptText)) {
-          startMdInfoDemoConversation();
+        if (isQueryCustomerDemoTrigger(promptText)) {
+          startQueryCustomerDemoConversation(extractQueryCustomerName(promptText), promptText);
+          return;
+        }
+
+        if (isComplexQueryTrigger(promptText)) {
+          startComplexQueryConversation(promptText);
           return;
         }
 
@@ -21442,28 +20901,26 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function getComplexQueryCustomers() {
         return [
           {
-            name: "橘子科技有限责任公司",
-            tag: "客户",
-            tagTone: "normal",
-            owner: "李明",
-            subtitle: "新客户 · 互联网行业",
+            name: "北京星河科技有限公司",
+            tag: "重要客户",
+            tagTone: "important",
+            owner: "李思远",
             opportunities: [
-              { name: "SaaS 平台年度续约", fields: ["商机金额：¥380,000", "阶段：谈判中"] },
-              { name: "数据中台建设项目", fields: ["商机金额：¥650,000", "阶段：方案制作中"] },
-              { name: "移动端 App 定制开发", fields: ["商机金额：¥650,000", "阶段：初步接触"] }
+              { name: "智能客服平台升级", fields: ["商机金额：¥860,000", "阶段：方案确认"] },
+              { name: "客户数据治理项目", fields: ["商机金额：¥520,000", "阶段：商务谈判"] },
+              { name: "营销自动化扩容", fields: ["商机金额：¥340,000", "阶段：需求评估"] }
             ],
             orders: [
-              { name: "年度订阅服务订单", fields: ["订单金额：¥180,000", "状态：履约中"] },
-              { name: "数据治理实施订单", fields: ["订单金额：¥260,000", "状态：待回款"] },
-              { name: "移动端开发订单", fields: ["订单金额：¥160,000", "状态：已确认"] }
+              { name: "2026-Q2 服务续费订单", fields: ["订单金额：¥280,000", "状态：履约中"] },
+              { name: "坐席扩容采购订单", fields: ["订单金额：¥180,000", "状态：待回款"] },
+              { name: "数据接口服务订单", fields: ["订单金额：¥120,000", "状态：已确认"] }
             ]
           },
           {
-            name: "深圳匠人科技",
-            tag: "客户",
+            name: "深圳匠人科技有限公司",
+            tag: "普通客户",
             tagTone: "normal",
             owner: "王志伟",
-            subtitle: "互联网行业",
             opportunities: [
               { name: "数据中台建设项目", fields: ["商机金额：¥640,000", "阶段：技术评审"] },
               { name: "移动端 App 定制开发", fields: ["商机金额：¥410,000", "阶段：需求确认"] },
@@ -21593,9 +21050,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
-      function renderComplexQueryRelatedSection(label, items, open = false) {
+      function renderComplexQueryRelatedSection(label, items) {
         return `
-          <details class="complex-query-related" ${open ? "open" : ""}>
+          <details class="complex-query-related">
             <summary>
               <span class="complex-query-related-title">${escapeHtml(label)}（${items.length}）</span>
               <svg class="complex-query-related-arrow" viewBox="0 0 8 8" aria-hidden="true">
@@ -21612,10 +21069,22 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return `
           <div class="complex-query-card">
             <div class="complex-query-card-header is-clickable" role="button" tabindex="0" data-chat-card="open-complex-query-customer" data-business-id="${escapeHtml(businessId)}">
-              <span class="complex-query-tag ${escapeHtml(customer.tagTone)}">${escapeHtml(customer.tag || "客户")}</span>
+              <span class="chat-customer-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20">
+                  <path fill="currentColor" d="M8.1 5.7H4v1.4h4.1V5.7Zm0 3.1H4v1.4h4.1V8.8Zm0 3.1H4v1.4h4.1v-1.4Zm4.2 0h3.1v1.4h-3.1v-1.4Zm3.1-3.1h-3.1v1.4h3.1V8.8ZM10.2 2v2.8H18V18H2V2h8.2Zm-1.4 14.6V3.4H3.4v13.2h5.4Zm7.8 0V6.2h-6.4v10.4h6.4Z"></path>
+                </svg>
+              </span>
               <span class="complex-query-card-main">
                 <span class="complex-query-card-name">${escapeHtml(customer.name)}</span>
-                <span class="complex-query-card-meta">${escapeHtml(customer.subtitle || `${customer.tag} · ${customer.owner}`)}</span>
+                <span class="complex-query-card-meta">
+                  <span class="complex-query-tag ${escapeHtml(customer.tagTone)}">${escapeHtml(customer.tag)}</span>
+                  <span class="complex-query-owner">
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <path class="icon-stroke" d="M8 8.1a2.7 2.7 0 1 0 0-5.4 2.7 2.7 0 0 0 0 5.4ZM3.2 13.3c.6-2.3 2.4-3.6 4.8-3.6s4.2 1.3 4.8 3.6"></path>
+                    </svg>
+                    ${escapeHtml(customer.owner)}
+                  </span>
+                </span>
               </span>
             </div>
             <div class="complex-query-card-body">
@@ -21628,13 +21097,15 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderComplexQueryResultBlock(session) {
         const customers = getComplexQueryCustomers();
-        const visibleCustomers = session?.showAllCustomers ? customers : customers.slice(0, 2);
+        const visibleCustomers = session?.showAllCustomers ? customers : customers.slice(0, 3);
         return `
           <div class="chat-ai-block">
             <div class="chat-ai-card">
               ${renderChatAiMeta("ShareAgent", "已处理3个步骤")}
               <p class="chat-ai-copy" style="margin-top:0;">已经搜索到相关资料</p>
-              <div class="complex-query-summary" style="margin-top:12px;">
+              <div class="complex-query-summary" style="margin-top:16px;">
+                <p class="complex-query-title">以下是你本季度有进行中商机的客户，点击可展开查看各客户详情：</p>
+                <p class="complex-query-count"><span class="complex-query-count-number">8</span>个客户 · <span class="complex-query-count-number">13</span> 条商机 · <span class="complex-query-count-number">10</span>条订单</p>
                 <div class="complex-query-list">
                   ${visibleCustomers.map((customer) => renderComplexQueryCustomerCard(customer, customers.indexOf(customer))).join("")}
                   ${session?.showAllCustomers ? "" : `<button class="complex-query-more" type="button" data-chat-card="open-complex-query-all">查看全部（共8个客户）</button>`}
@@ -21880,84 +21351,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return content;
       }
 
-      function renderAgentActionConversation(session) {
-        const isEditAction = session.source === "agent-action-edit-object";
-        const isUpdateAction = session.source === "agent-action-update-object";
-        const isScheduledTaskAction = session.source === "agent-action-create-scheduled-task";
-        const fallbackPrompt = isEditAction
-          ? AGENT_ACTION_EDIT_OBJECT_PROMPT
-          : isUpdateAction
-          ? AGENT_ACTION_UPDATE_OBJECT_PROMPT
-          : isScheduledTaskAction
-          ? AGENT_ACTION_CREATE_TASK_PROMPT
-          : AGENT_ACTION_CREATE_OBJECT_PROMPT;
-        const reviewCopy = isEditAction
-          ? "已生成客户编辑草稿，请确认："
-          : isUpdateAction
-          ? "已生成客户更新草稿，请确认："
-          : isScheduledTaskAction
-          ? "已生成定时任务创建草稿，请确认："
-          : "已生成客户创建草稿，请确认：";
-        const successCopy = isEditAction
-          ? "客户“橘子科技有限责任公司”已编辑。"
-          : isUpdateAction
-          ? "客户“橘子科技有限责任公司”已更新。"
-          : isScheduledTaskAction
-          ? "定时任务“每日 AI 资讯推送”已创建。"
-          : "客户“橘子科技有限责任公司”已创建。";
-        const cancelCopy = isEditAction
-          ? "已取消编辑客户“橘子科技有限责任公司”。"
-          : isUpdateAction
-          ? "已取消更新客户“橘子科技有限责任公司”。"
-          : isScheduledTaskAction
-          ? "已取消创建定时任务“每日 AI 资讯推送”。"
-          : "已取消新建客户“橘子科技有限责任公司”。";
-        let content = `
-          <div class="chat-feed-column">
-            <div class="chat-user-row"><div class="chat-user-bubble">${escapeHtml(session.prompt || fallbackPrompt)}</div></div>
-            <div class="chat-time">${escapeHtml(session.time || "")}</div>
-        `;
-
-        if (session.stage === "thinking") {
-          content += renderThinkingChip();
-        } else if (session.stage === "created" || session.stage === "edited" || session.stage === "updated") {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiStatus("已处理 1秒")}
-                <p class="chat-ai-title">${escapeHtml(successCopy)}</p>
-                ${renderChatToolbar()}
-              </div>
-            </div>
-          `;
-        } else if (session.stage === "canceled") {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiStatus("已处理 1秒")}
-                <p class="chat-ai-title">${escapeHtml(cancelCopy)}</p>
-                ${renderChatToolbar()}
-              </div>
-            </div>
-          `;
-        } else {
-          content += `
-            <div class="chat-ai-block">
-              <div class="chat-ai-card">
-                ${renderChatAiStatus("已处理3个步骤")}
-                <p class="chat-ai-copy">${escapeHtml(reviewCopy)}</p>
-                ${session.introCopy ? `<p class="chat-ai-title">${escapeHtml(session.introCopy)}</p>` : ""}
-                ${renderAgentActionCard(session)}
-                ${session.hideWaiting ? "" : renderWaitingAnswerCard("等待您的操作...")}
-              </div>
-            </div>
-          `;
-        }
-
-        content += "</div>";
-        return content;
-      }
-
       function renderCreateCustomerThread(session) {
         const customerName = session.customerName || "客户";
         const customerPrompt = session.customerPrompt || session.prompt || `创建客户 ${customerName}`;
@@ -22031,11 +21424,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return hasBaseAnswer;
       }
 
-      function renderWaitingAnswerCard(label = "等待您的回答...") {
+      function renderWaitingAnswerCard() {
         return `
           <div class="chat-waiting-answer-card">
             <span class="chat-waiting-answer-spinner" aria-hidden="true"></span>
-            <span>${escapeHtml(label)}</span>
+            <span>等待您的回答...</span>
           </div>
         `;
       }
@@ -22602,14 +21995,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         if (session.source === "delete-customer-demo") {
           chatFeed.innerHTML = renderDeleteCustomerDemoConversation(session);
-          requestAnimationFrame(() => {
-            chatFeed.scrollTop = chatFeed.scrollHeight;
-          });
-          return;
-        }
-
-        if (session.source?.startsWith("agent-action-")) {
-          chatFeed.innerHTML = renderAgentActionConversation(session);
           requestAnimationFrame(() => {
             chatFeed.scrollTop = chatFeed.scrollHeight;
           });
@@ -23429,10 +22814,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         if (
-          isInfoCollectionTrigger(initialRouteState.launchAction) ||
-          isInfoCollectionTrigger(initialRouteState.launchPrompt)
+          isAskUserQuestionTrigger(initialRouteState.launchAction) ||
+          isAskUserQuestionTrigger(initialRouteState.launchPrompt)
         ) {
-          startInfoCollectionConversation();
+          startAskUserQuestionConversation();
           return;
         }
 
@@ -23482,46 +22867,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         if (initialRouteState.launchAction === "delete-customer-demo") {
           startDeleteCustomerDemoConversation();
-          return;
-        }
-
-        if (
-          initialRouteState.launchAction === "agent-action" &&
-          (initialRouteState.launchType === "create-object" || isAgentActionCreateObjectTrigger(initialRouteState.launchPrompt))
-        ) {
-          startAgentActionCreateObjectConversation(initialRouteState.launchPrompt || AGENT_ACTION_CREATE_OBJECT_TRIGGER);
-          return;
-        }
-
-        if (
-          initialRouteState.launchAction === "agent-action" &&
-          (initialRouteState.launchType === "edit-object" || isAgentActionEditObjectTrigger(initialRouteState.launchPrompt))
-        ) {
-          startAgentActionEditObjectConversation(initialRouteState.launchPrompt || AGENT_ACTION_EDIT_OBJECT_TRIGGER);
-          return;
-        }
-
-        if (
-          initialRouteState.launchAction === "agent-action" &&
-          (initialRouteState.launchType === "update-object" || isAgentActionUpdateObjectTrigger(initialRouteState.launchPrompt))
-        ) {
-          startAgentActionUpdateObjectConversation(initialRouteState.launchPrompt || AGENT_ACTION_UPDATE_OBJECT_TRIGGER);
-          return;
-        }
-
-        if (
-          initialRouteState.launchAction === "agent-action" &&
-          (initialRouteState.launchType === "create-scheduled-task" || isAgentActionCreateTaskTrigger(initialRouteState.launchPrompt))
-        ) {
-          startAgentActionCreateTaskConversation(initialRouteState.launchPrompt || AGENT_ACTION_CREATE_TASK_TRIGGER);
-          return;
-        }
-
-        if (
-          initialRouteState.launchAction === "agent-action" &&
-          (initialRouteState.launchType === "complex-query" || isComplexQueryTrigger(initialRouteState.launchPrompt))
-        ) {
-          startComplexQueryConversation(initialRouteState.launchPrompt || COMPLEX_QUERY_TRIGGER);
           return;
         }
 
@@ -24615,8 +23960,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (isInfoCollectionTrigger(text)) {
-          startInfoCollectionConversation();
+        if (isQueryCustomerDemoTrigger(text)) {
+          startQueryCustomerDemoConversation(extractQueryCustomerName(text), text);
+          return;
+        }
+
+        if (isComplexQueryTrigger(text)) {
+          startComplexQueryConversation(text);
+          return;
+        }
+
+        if (isAskUserQuestionTrigger(text)) {
+          startAskUserQuestionConversation();
           return;
         }
 
@@ -24626,31 +23981,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         if (isDeleteCustomerDemoTrigger(text)) {
           startDeleteCustomerDemoConversation();
-          return;
-        }
-
-        if (isAgentActionCreateObjectTrigger(text)) {
-          startAgentActionCreateObjectConversation(text);
-          return;
-        }
-
-        if (isAgentActionEditObjectTrigger(text)) {
-          startAgentActionEditObjectConversation(text);
-          return;
-        }
-
-        if (isAgentActionUpdateObjectTrigger(text)) {
-          startAgentActionUpdateObjectConversation(text);
-          return;
-        }
-
-        if (isAgentActionCreateTaskTrigger(text)) {
-          startAgentActionCreateTaskConversation(text);
-          return;
-        }
-
-        if (isComplexQueryTrigger(text)) {
-          startComplexQueryConversation(text);
           return;
         }
 
@@ -25045,7 +24375,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         openSettings();
       });
 
-      openConfigBtn.addEventListener("click", () => {
+      openConfigBtn?.addEventListener("click", () => {
         openScheme2ConfigTab("market");
       });
 
@@ -25154,6 +24484,22 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (button.dataset.automationTask) {
+          const taskId = button.dataset.automationTask || "task-morning-check";
+          sidebarHistoryStatus.activeAutomationTaskId = taskId;
+          persistSidebarHistoryStatus();
+          renderHistoryList();
+          if (typeof getCurrentPageFile === "function" && typeof TASK_CONVERSATION_PAGE_FILE !== "undefined" && getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE && typeof openAutomationTaskConversation === "function") {
+            const url = new URL(window.location.href);
+            url.searchParams.set("task", taskId);
+            window.history.replaceState(null, "", url.toString());
+            openAutomationTaskConversation(taskId);
+            return;
+          }
+          window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
+          return;
+        }
+
         if (button.dataset.historyId === "pinned-haiyue-brief") {
           markHaiyueHistoryRead();
         }
@@ -25195,15 +24541,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
           return;
         }
-
-        const automationTaskButton = event.target.closest("[data-automation-task]");
-        if (automationTaskButton) {
-          const taskId = automationTaskButton.dataset.automationTask || "task-morning-check";
-          sidebarHistoryStatus.activeAutomationTaskId = taskId;
-          persistSidebarHistoryStatus();
-          renderHistoryList();
-          window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
-        }
       });
 
       chatFeed.addEventListener("click", async (event) => {
@@ -25219,55 +24556,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           upsertConversationHistory(session.id);
           renderMainPanels();
           return;
-        }
-
-        const agentAction = event.target.closest("[data-agent-action]");
-        if (agentAction) {
-          const session = conversationSessions[state.activeChatId];
-          if (!session?.source?.startsWith("agent-action-") || session.stage !== "action-review") {
-            return;
-          }
-
-          const action = agentAction.dataset.agentAction || "";
-          if (action === "toggle-details") {
-            session.actionCard = {
-              ...(session.actionCard || createAgentActionCreateObjectCard()),
-              expanded: !session.actionCard?.expanded
-            };
-            renderMainPanels();
-            return;
-          }
-
-          if (action === "create") {
-            session.stage = "created";
-            upsertConversationHistory(session.id);
-            renderMainPanels();
-            return;
-          }
-
-          if (action === "apply-edit") {
-            showToast("编辑页面暂未接入。");
-            return;
-          }
-
-          if (action === "apply-update") {
-            session.stage = "updated";
-            upsertConversationHistory(session.id);
-            renderMainPanels();
-            return;
-          }
-
-          if (action === "cancel") {
-            session.stage = "canceled";
-            upsertConversationHistory(session.id);
-            renderMainPanels();
-            return;
-          }
-
-          if (action === "edit-draft") {
-            showToast("已进入编辑草稿，后续接入字段编辑卡。");
-            return;
-          }
         }
 
         const actionButton = event.target.closest("[data-chat-action]");

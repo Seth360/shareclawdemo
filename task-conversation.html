@@ -667,7 +667,7 @@
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
         border-radius: 6px;
       }
 
@@ -676,8 +676,8 @@
       }
 
       .sidebar-row-icon {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         color: #181c25;
         flex: 0 0 auto;
       }
@@ -718,7 +718,7 @@
         min-width: 0;
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
       }
 
       .history-collapse-icon {
@@ -741,8 +741,7 @@
         transform: rotate(0deg);
       }
 
-      .history-header.is-collapsed + .history-list,
-      .history-header.is-collapsed + .automation-task-list {
+      .history-header.is-collapsed + .history-list {
         display: none;
       }
 
@@ -752,77 +751,61 @@
         color: #c1c5ce;
       }
 
-      .history-list,
-      .automation-task-list {
+      .history-list {
         display: flex;
         flex-direction: column;
       }
 
-      .history-block .history-list,
-      .history-block .automation-task-list {
+      .history-block .history-list {
         margin-top: 0;
         gap: 2px;
       }
 
-      .history-row,
-      .automation-task-row {
+      .history-row {
         width: 240px;
         height: 34px;
-        padding: 8px 12px;
+        padding: 8px 8px 8px 12px;
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
         border-radius: 8px;
         text-align: left;
       }
 
       .history-row:hover,
-      .automation-task-row:hover,
-      .history-row.active,
-      .automation-task-row.active {
+      .history-row.active {
         background: #f7f8fc;
       }
 
-      .history-row-icon,
-      .automation-task-icon {
+      .history-row-icon {
         width: 14px;
         height: 14px;
         color: #181c25;
         flex: 0 0 auto;
       }
 
-      .automation-task-icon {
+      .history-row-kind-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .history-row-kind-icon svg {
+        width: 14px;
+        height: 14px;
+        display: block;
+      }
+
+      .history-status-dot {
         position: relative;
         width: 14px;
         height: 14px;
+        flex: 0 0 auto;
         border: 0;
         border-radius: 999px;
       }
 
-      .automation-task-icon::after {
-        content: "";
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        width: 6px;
-        height: 6px;
-        border: 1px solid #dee1e8;
-        border-radius: 999px;
-        background: #fff;
-      }
-
-      .automation-task-row.has-unread .automation-task-icon::after {
-        border-color: #0c6cff;
-        background: #0c6cff;
-      }
-
-      .history-row-dot {
-        position: relative;
-        border: 0;
-        border-radius: 999px;
-      }
-
-      .history-row-dot::after {
+      .history-status-dot::after {
         content: "";
         position: absolute;
         left: 4px;
@@ -834,12 +817,12 @@
         background: #fff;
       }
 
-      .history-row-dot.is-unread::after {
+      .history-status-dot.is-unread::after {
         border-color: #0c6cff;
         background: #0c6cff;
       }
 
-      .history-row-dot.is-pending::after {
+      .history-status-dot.is-pending::after {
         border-color: #ff8000;
         background: #ff8000;
       }
@@ -856,8 +839,7 @@
         font-weight: 500;
       }
 
-      .history-row-text,
-      .automation-task-text {
+      .history-row-text {
         font-size: 13px;
         line-height: 18px;
         color: var(--text-strong);
@@ -866,21 +848,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-      }
-
-      .automation-task-count {
-        min-width: 18px;
-        height: 18px;
-        padding: 0 6px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        background: #f2f4fb;
-        color: #545861;
-        font-size: 10px;
-        line-height: 18px;
-        font-weight: 500;
       }
 
       .main-shell {
@@ -12181,40 +12148,32 @@
                 </div>
 
                 <button class="sidebar-row" type="button" data-panel="task">
-                  <svg class="sidebar-row-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <circle class="icon-stroke" cx="8" cy="8" r="5.6"></circle>
-                    <path class="icon-stroke" d="m5.4 8.1 1.7 1.7 3.5-3.8"></path>
+                  <svg class="sidebar-row-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M11.3726 0.874176H2.62417C1.65768 0.874176 0.874176 1.65768 0.874176 2.62417V11.3726C0.874176 12.3391 1.65768 13.1226 2.62417 13.1226H11.3726C12.3391 13.1226 13.1226 12.3391 13.1226 11.3726V2.62417C13.1226 1.65768 12.3391 0.874176 11.3726 0.874176ZM12.2484 11.375C12.2485 11.4898 12.2259 11.6035 12.182 11.7096C12.1381 11.8157 12.0736 11.9121 11.9924 11.9932C11.9111 12.0744 11.8147 12.1387 11.7085 12.1825C11.6024 12.2263 11.4886 12.2487 11.3738 12.2484H2.62619C2.39224 12.2484 2.17132 12.1585 2.00587 11.9931C1.84042 11.8276 1.74836 11.6089 1.74836 11.375V2.62501C1.74878 2.39243 1.84143 2.16951 2.006 2.00517C2.17057 1.84082 2.39362 1.74846 2.62619 1.74836H11.3738C11.4888 1.74847 11.6026 1.77124 11.7088 1.81537C11.815 1.85949 11.9115 1.9241 11.9927 2.00551C12.0739 2.08691 12.1383 2.18353 12.1822 2.28982C12.2261 2.39612 12.2486 2.51001 12.2484 2.62501V11.375Z" fill="currentColor"/>
+                    <path d="M10.8281 4.81048H7.32812C7.2122 4.81048 7.10102 4.85653 7.01905 4.9385C6.93708 5.02047 6.89103 5.13165 6.89103 5.24757C6.89103 5.3635 6.93708 5.47467 7.01905 5.55664C7.10102 5.63861 7.2122 5.68466 7.32812 5.68466H10.8281C10.944 5.68466 11.0552 5.63861 11.1372 5.55664C11.2192 5.47467 11.2652 5.3635 11.2652 5.24757C11.2652 5.13165 11.2192 5.02047 11.1372 4.9385C11.0552 4.85653 10.944 4.81048 10.8281 4.81048ZM10.8281 8.31215H7.32812C7.2122 8.31215 7.10102 8.3582 7.01905 8.44017C6.93708 8.52214 6.89103 8.63332 6.89103 8.74924C6.89103 8.86516 6.93708 8.97634 7.01905 9.05831C7.10102 9.14028 7.2122 9.18633 7.32812 9.18633H10.8281C10.944 9.18633 11.0552 9.14028 11.1372 9.05831C11.2192 8.97634 11.2652 8.86516 11.2652 8.74924C11.2652 8.63332 11.2192 8.52214 11.1372 8.44017C11.0552 8.3582 10.944 8.31215 10.8281 8.31215ZM4.70316 7.21873C3.85747 7.21873 3.17211 7.9043 3.17211 8.74978C3.17211 9.59527 3.85767 10.2808 4.70316 10.2808C5.54865 10.2808 6.23421 9.59527 6.23421 8.74978C6.23421 7.9043 5.54884 7.21873 4.70316 7.21873ZM5.16776 9.21458C5.06025 9.32198 4.91884 9.38879 4.7676 9.40362C4.61637 9.41844 4.46467 9.38038 4.33835 9.2959C4.21203 9.21143 4.11891 9.08577 4.07485 8.94033C4.03079 8.7949 4.03852 8.63869 4.09671 8.49831C4.15491 8.35794 4.25998 8.24208 4.39402 8.17048C4.52805 8.09889 4.68277 8.07598 4.8318 8.10566C4.98084 8.13534 5.11497 8.21578 5.21135 8.33326C5.30773 8.45075 5.3604 8.59802 5.36038 8.74998C5.36059 8.83632 5.34368 8.92184 5.31062 9.0016C5.27756 9.08136 5.229 9.15377 5.16776 9.21463V9.21458ZM5.70659 4.06595L4.26562 5.50686L3.69973 4.94092C3.61775 4.85895 3.50658 4.81289 3.39065 4.81289C3.27472 4.81289 3.16355 4.85895 3.08158 4.94092C2.9996 5.02289 2.95355 5.13407 2.95355 5.24999C2.95355 5.36592 2.9996 5.4771 3.08158 5.55907L3.95655 6.43409C3.99714 6.47468 4.04532 6.50688 4.09835 6.52884C4.15138 6.55081 4.20822 6.56212 4.26562 6.56212C4.32302 6.56212 4.37986 6.55081 4.43289 6.52884C4.48593 6.50688 4.53411 6.47468 4.5747 6.43409L6.32469 4.6841C6.40574 4.60194 6.45101 4.49106 6.45063 4.37565C6.45024 4.26025 6.40422 4.14968 6.32262 4.06807C6.24102 3.98646 6.13045 3.94043 6.01504 3.94004C5.89964 3.93964 5.78875 3.9849 5.70659 4.06595Z" fill="currentColor"/>
                   </svg>
                   <span class="sidebar-row-text">自动化</span>
                 </button>
 
                 <button class="sidebar-row" id="marketSidebarRow" type="button" data-panel="market">
-                  <svg class="sidebar-row-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path class="icon-stroke" d="M3 3h4v4H3zM9 3h4v4H9zM3 9h4v4H3zM9 9h4v4H9z"></path>
+                  <svg class="sidebar-row-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M6.5625 1.3125H1.3125V6.5625H6.5625V1.3125ZM2.1875 5.6875V2.1875H5.6875V5.6875H2.1875Z" fill="currentColor"/>
+                    <path d="M12.6875 1.3125H7.4375V6.5625H12.6875V1.3125ZM8.3125 5.6875V2.1875H11.8125V5.6875H8.3125Z" fill="currentColor"/>
+                    <path d="M6.5625 7.4375H1.3125V12.6875H6.5625V7.4375ZM2.1875 11.8125V8.3125H5.6875V11.8125H2.1875Z" fill="currentColor"/>
+                    <path d="M10.5 9.625H12.6875V10.5H10.5V12.6875H9.625V10.5H7.4375V9.625H9.625V7.4375H10.5V9.625Z" fill="currentColor"/>
                   </svg>
                   <span class="sidebar-row-text">智能体</span>
                 </button>
 
                 <button class="sidebar-row" type="button" data-panel="docs">
-                  <svg class="sidebar-row-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path class="icon-stroke" d="M4 2.8h5.5l2.5 2.6v7.8H4z"></path>
-                    <path class="icon-stroke" d="M9.5 2.8v2.6H12"></path>
-                    <path class="icon-stroke" d="M5.7 8h4.6M5.7 10.6h4.6"></path>
+                  <svg class="sidebar-row-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M7.4375 8.3125H3.9375V9.1875H7.4375V8.3125Z" fill="currentColor"/>
+                    <path d="M3.9375 6.5625H8.3125V7.4375H3.9375V6.5625Z" fill="currentColor"/>
+                    <path d="M8.3125 4.8125H3.9375V5.6875H8.3125V4.8125Z" fill="currentColor"/>
+                    <path d="M10.9375 1.3125H1.3125V12.6875H12.6875V3.9375H10.9375V1.3125ZM11.9219 11.8125H10.9375V4.8125H11.9219V11.8125ZM2.1875 11.8125V2.1875H10.0625V11.8125H2.1875Z" fill="currentColor"/>
                   </svg>
                   <span class="sidebar-row-text">文档库</span>
                 </button>
-              </div>
-
-              <div class="history-block">
-                <button class="history-header" id="automationTaskGroupHeader" type="button" data-sidebar-group-toggle="automation" aria-expanded="true">
-                  <span class="history-header-main">
-                    <span class="history-title">自动化任务</span>
-                    <svg class="history-collapse-icon" viewBox="0 0 9 9" aria-hidden="true">
-                      <path class="icon-stroke" d="M3.1 1.8 5.8 4.5 3.1 7.2"></path>
-                    </svg>
-                  </span>
-                </button>
-                <div class="automation-task-list" id="automationTaskList"></div>
               </div>
 
               <div class="history-block">
@@ -12230,16 +12189,6 @@
               </div>
             </div>
 
-            <div class="sidebar-footer">
-              <button class="sidebar-footer-entry hidden" id="openConfigBtn" type="button" aria-label="打开 ShareAgent 配置">
-                <span class="sidebar-footer-entry-main">
-                  <span>ShareAgent配置</span>
-                </span>
-                <svg viewBox="0 0 16 16" aria-hidden="true">
-                  <path class="icon-stroke" d="m6.2 3.2 4.1 4.8-4.1 4.8"></path>
-                </svg>
-              </button>
-            </div>
           </div>
 
           <div class="sidebar-view hidden" id="settingsSidebarView">
@@ -14412,9 +14361,7 @@
       const openRailSettingsBtn = document.getElementById("openRailSettingsBtn");
       const settingsBackBtn = document.getElementById("settingsBackBtn");
       const configBackBtn = document.getElementById("configBackBtn");
-      const automationTaskGroupHeader = document.getElementById("automationTaskGroupHeader");
       const historyGroupHeader = document.getElementById("historyGroupHeader");
-      const automationTaskList = document.getElementById("automationTaskList");
       const historyList = document.getElementById("historyList");
       const sidebarPrimaryHomeBtn = document.querySelector(".sidebar-primary-entry[data-panel='home']");
       const homeDashboardShell = document.getElementById("homeDashboardShell");
@@ -14621,11 +14568,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       };
       const ASK_USER_QUESTION_TRIGGERS = ["AskUserQuestion", "问询"];
       const ASK_USER_QUESTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
-      const INFO_COLLECTION_TRIGGERS = ["信息收集"];
-      const INFO_COLLECTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
       const DEFAULT_CREATE_CUSTOMER_NAME = "新客户";
       const DEFAULT_CREATE_CUSTOMER_PROMPT = `请按规划模式继续整理 新建客户：${DEFAULT_CREATE_CUSTOMER_NAME}`;
-      const MD_INFO_DEMO_TRIGGER = "信息补全";
+      const MD_INFO_DEMO_TRIGGER = "创建客户";
       const MD_INFO_DEMO_SESSION_ID = "md-info-demo";
       const MD_INFO_DEMO_DISPLAY_PROMPT = "帮我把刚才开会的客户录进去";
       const MD_INFO_DEMO_BASE_FIELDS = {
@@ -14708,6 +14653,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         { id: "history-chat-chart", title: "显示过去30天的对话趋势条形图", type: "static" }
       ];
       const automationTaskHistoryItems = [
+        { id: "task-payment-close-loop", title: "回款闭环自动处理流程", unread: 1 },
         { id: "task-morning-check", title: "重点客户异动晨检", unread: 1 },
         { id: "task-meeting-crm", title: "客户会议纪要回填 CRM", unread: 0 },
         { id: "task-lead-cleanup", title: "线索池清理与分发", unread: 0 },
@@ -16322,38 +16268,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         window.location.href = url.toString();
       }
 
-      const agentActionRouteMap = {
-        "新建对象": "create-object",
-        "编辑对象": "edit-object",
-        "更新对象": "update-object",
-        "复杂查询": "complex-query",
-        "新建定时任务": "create-scheduled-task"
-      };
-
-      function routeAgentActionTrigger(text) {
-        const prompt = (text || "").trim();
-        const actionType = agentActionRouteMap[prompt];
-        if (!actionType) {
-          return false;
-        }
-
-        navigateToConversation({
-          launch: "agent-action",
-          type: actionType,
-          prompt
-        });
-        return true;
-      }
-
-      function routeTaskLaunchToConversation(launch, prompt = "") {
-        if (getCurrentPageFile() !== TASK_CONVERSATION_PAGE_FILE) {
-          return false;
-        }
-
-        navigateToConversation({ launch, prompt });
-        return true;
-      }
-
       function escapeHtml(text) {
         return text
           .replaceAll("&", "&amp;")
@@ -16643,7 +16557,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const useScheme2 = state.uiScheme === "scheme2";
         marketSidebarRow.classList.toggle("hidden", useScheme2);
         openSettingsBtn.classList.toggle("hidden", useScheme2);
-        openConfigBtn.classList.toggle("hidden", !useScheme2);
+        openConfigBtn?.classList.toggle("hidden", !useScheme2);
         backToSquareBtn.classList.toggle("hidden", useScheme2);
         renderConfigSidebar();
       }
@@ -19266,9 +19180,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           .map((item) => buildRuntimeAutomationRun(item));
         const allRuns = [...handoffRuns, ...runtimeRuns, ...task.reports];
         return `
-          <section class="automation-output-card" aria-label="任务报告">
+          <section class="automation-output-card" aria-label="任务历史">
             <div class="automation-output-card-head">
-              <h3 class="automation-output-card-title">任务报告</h3>
+              <h3 class="automation-output-card-title">任务历史</h3>
               ${outputCardToggleMarkup()}
             </div>
             <div class="automation-output-card-body">
@@ -20318,6 +20232,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function getHistoryItemStatus(item) {
+        if (item.type === "automation") {
+          return item.unread ? "unread" : "";
+        }
         if (item.id === "pinned-haiyue-brief") {
           return sidebarHistoryStatus.haiyueUnread === false ? "" : "unread";
         }
@@ -20328,8 +20245,28 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function historyIconMarkup(item) {
+        if (item.type === "automation") {
+          return `
+            <span class="history-row-icon history-row-kind-icon" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none">
+                <path d="M11.3726 0.874207H2.62417C1.65768 0.874207 0.874176 1.65771 0.874176 2.6242V11.3726C0.874176 12.3391 1.65768 13.1226 2.62417 13.1226H11.3726C12.3391 13.1226 13.1226 12.3391 13.1226 11.3726V2.6242C13.1226 1.65771 12.3391 0.874207 11.3726 0.874207ZM12.2484 11.375C12.2485 11.4898 12.2259 11.6036 12.182 11.7096C12.1381 11.8157 12.0736 11.9121 11.9924 11.9932C11.9111 12.0744 11.8147 12.1387 11.7085 12.1825C11.6024 12.2263 11.4886 12.2487 11.3738 12.2484H2.62619C2.39224 12.2484 2.17132 12.1586 2.00587 11.9931C1.84042 11.8277 1.74836 11.609 1.74836 11.375V2.62504C1.74878 2.39246 1.84143 2.16954 2.006 2.0052C2.17057 1.84085 2.39362 1.74849 2.62619 1.74839H11.3738C11.4888 1.74851 11.6026 1.77127 11.7088 1.8154C11.815 1.85952 11.9115 1.92413 11.9927 2.00554C12.0739 2.08694 12.1383 2.18356 12.1822 2.28985C12.2261 2.39615 12.2486 2.51004 12.2484 2.62504V11.375Z" fill="currentColor"/>
+                <path d="M10.8281 4.81045H7.32812C7.2122 4.81045 7.10102 4.8565 7.01905 4.93847C6.93708 5.02044 6.89103 5.13162 6.89103 5.24754C6.89103 5.36347 6.93708 5.47464 7.01905 5.55661C7.10102 5.63858 7.2122 5.68463 7.32812 5.68463H10.8281C10.944 5.68463 11.0552 5.63858 11.1372 5.55661C11.2192 5.47464 11.2652 5.36347 11.2652 5.24754C11.2652 5.13162 11.2192 5.02044 11.1372 4.93847C11.0552 4.8565 10.944 4.81045 10.8281 4.81045ZM10.8281 8.31212H7.32812C7.2122 8.31212 7.10102 8.35817 7.01905 8.44014C6.93708 8.52211 6.89103 8.63328 6.89103 8.74921C6.89103 8.86513 6.93708 8.97631 7.01905 9.05828C7.10102 9.14025 7.2122 9.1863 7.32812 9.1863H10.8281C10.944 9.1863 11.0552 9.14025 11.1372 9.05828C11.2192 8.97631 11.2652 8.86513 11.2652 8.74921C11.2652 8.63328 11.2192 8.52211 11.1372 8.44014C11.0552 8.35817 10.944 8.31212 10.8281 8.31212ZM4.70316 7.2187C3.85747 7.2187 3.17211 7.90426 3.17211 8.74975C3.17211 9.59524 3.85767 10.2808 4.70316 10.2808C5.54865 10.2808 6.23421 9.59524 6.23421 8.74975C6.23421 7.90426 5.54884 7.2187 4.70316 7.2187ZM5.16776 9.21455C5.06025 9.32195 4.91884 9.38876 4.7676 9.40359C4.61637 9.41841 4.46467 9.38035 4.33835 9.29587C4.21203 9.2114 4.11891 9.08574 4.07485 8.9403C4.03079 8.79487 4.03852 8.63866 4.09671 8.49828C4.15491 8.35791 4.25998 8.24205 4.39402 8.17045C4.52805 8.09886 4.68277 8.07595 4.8318 8.10563C4.98084 8.13531 5.11497 8.21575 5.21135 8.33323C5.30773 8.45072 5.3604 8.59799 5.36038 8.74995C5.36059 8.83629 5.34368 8.92181 5.31062 9.00157C5.27756 9.08133 5.229 9.15374 5.16776 9.2146V9.21455ZM5.70659 4.06591L4.26562 5.50683L3.69973 4.94089C3.61775 4.85891 3.50658 4.81286 3.39065 4.81286C3.27472 4.81286 3.16355 4.85891 3.08158 4.94089C2.9996 5.02286 2.95355 5.13404 2.95355 5.24996C2.95355 5.36589 2.9996 5.47707 3.08158 5.55904L3.95655 6.43406C3.99714 6.47465 4.04532 6.50684 4.09835 6.52881C4.15138 6.55078 4.20822 6.56208 4.26562 6.56208C4.32302 6.56208 4.37986 6.55078 4.43289 6.52881C4.48593 6.50684 4.53411 6.47465 4.5747 6.43406L6.32469 4.68406C6.40574 4.60191 6.45101 4.49103 6.45063 4.37562C6.45024 4.26022 6.40422 4.14965 6.32262 4.06804C6.24102 3.98643 6.13045 3.9404 6.01504 3.94001C5.89964 3.93961 5.78875 3.98487 5.70659 4.06591Z" fill="currentColor"/>
+              </svg>
+            </span>
+          `;
+        }
+        return `
+          <span class="history-row-icon history-row-kind-icon" aria-hidden="true">
+            <svg viewBox="0 0 14 14" fill="none">
+              <path d="M1.05 13.125L1.42536 10.5321C0.530951 9.42983 0 8.0543 0 6.5625C0 2.93813 3.13401 0 7 0C10.866 0 14 2.93813 14 6.5625C14 10.1869 10.866 13.125 7 13.125C5.87231 13.125 4.8069 12.875 3.86339 12.4309L1.05 13.125ZM3.95517 11.507L4.23602 11.6392C5.08484 12.0388 6.0251 12.25 7 12.25C10.3949 12.25 13.125 9.69055 13.125 6.5625C13.125 3.43445 10.3949 0.875 7 0.875C3.60508 0.875 0.875 3.43445 0.875 6.5625C0.875 7.81277 1.30996 9.00119 2.10481 9.98075L2.34622 10.2783L2.10216 11.9642L3.95517 11.507Z" fill="currentColor"/>
+            </svg>
+          </span>
+        `;
+      }
+
+      function historyStatusDotMarkup(item) {
         const status = getHistoryItemStatus(item);
-        return '<span class="history-row-icon history-row-dot ' + (status ? 'is-' + status : '') + '" aria-hidden="true"></span>';
+        return status === "unread" ? '<span class="history-status-dot is-unread" aria-hidden="true"></span>' : "";
       }
 
       function historyStatusLabelMarkup(item) {
@@ -20337,6 +20274,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function isHistoryItemActive(item) {
+        if (item.type === "automation") {
+          return sidebarHistoryStatus.activeAutomationTaskId === item.id;
+        }
         if (state.activeHistoryId === item.id) {
           return true;
         }
@@ -20382,7 +20322,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderSidebarGroupHeaders() {
         [
-          { key: "automation", element: automationTaskGroupHeader },
           { key: "history", element: historyGroupHeader }
         ].forEach(({ key, element }) => {
           if (!element) {
@@ -20394,36 +20333,29 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       }
 
-      function renderAutomationTaskList() {
-        if (!automationTaskList) {
-          return;
-        }
-        automationTaskList.innerHTML = automationTaskHistoryItems
-          .map(
-            (item) => {
-              const unreadCount = getAutomationTaskUnreadCount(item.id);
-              return `
-              <button
-                class="automation-task-row ${unreadCount ? "has-unread" : ""} ${sidebarHistoryStatus.activeAutomationTaskId === item.id ? "active" : ""}"
-                type="button"
-                data-automation-task="${escapeHtml(item.id)}"
-              >
-                <span class="automation-task-icon" aria-hidden="true"></span>
-                <span class="automation-task-text">${escapeHtml(item.title)}</span>
-                ${unreadCount ? `<span class="automation-task-count">${escapeHtml(String(unreadCount))}</span>` : ""}
-              </button>
-            `;
-            }
-          )
-          .join("");
-      }
-
       function renderHistoryList() {
         renderSidebarGroupHeaders();
-        renderAutomationTaskList();
         const pinnedKeys = new Set(pinnedHistoryItems.flatMap((item) => [item.sessionId, item.title]).filter(Boolean));
         const dynamicItems = conversationHistory.filter((item) => !pinnedKeys.has(item.sessionId) && !pinnedKeys.has(item.title));
-        const items = [...pinnedHistoryItems, ...dynamicItems, ...baseHistoryItems];
+        const automationItems = automationTaskHistoryItems.map((item) => ({
+          ...item,
+          type: "automation",
+          unread: typeof getAutomationTaskUnreadCount === "function" ? getAutomationTaskUnreadCount(item.id) : item.unread
+        }));
+        const conversationItems = [...pinnedHistoryItems, ...dynamicItems, ...baseHistoryItems];
+        const items = [
+          automationItems[0],
+          conversationItems[0],
+          automationItems[1],
+          conversationItems[1],
+          automationItems[2],
+          conversationItems[2],
+          automationItems[3],
+          conversationItems[3],
+          automationItems[4],
+          ...automationItems.slice(5),
+          ...conversationItems.slice(4)
+        ].filter(Boolean);
         historyList.innerHTML = items
           .map(
             (item) => `
@@ -20432,11 +20364,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                 type="button"
                 data-history-id="${escapeHtml(item.id)}"
                 data-history-type="${escapeHtml(item.type)}"
+                ${item.type === "automation" ? `data-automation-task="${escapeHtml(item.id)}"` : ""}
                 ${item.sessionId ? `data-session-id="${escapeHtml(item.sessionId)}"` : ""}
                 ${item.url ? `data-history-url="${escapeHtml(item.url)}"` : ""}
               >
                 ${historyIconMarkup(item)}
                 <span class="history-row-text">${escapeHtml(item.title)}</span>
+                ${historyStatusDotMarkup(item)}
                 ${historyStatusLabelMarkup(item)}
               </button>
             `
@@ -20839,10 +20773,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function beginCreateCustomerConversation(promptText, customerName) {
-        if (routeTaskLaunchToConversation("create-customer", promptText)) {
-          return;
-        }
-
         if (!isConversationPage()) {
           navigateToConversation({
             launch: "create-customer",
@@ -20929,10 +20859,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return (text || "").trim() === MEETING_FORM_CARD_TRIGGER;
       }
 
-      function isInfoCollectionTrigger(text) {
-        return INFO_COLLECTION_TRIGGERS.includes((text || "").trim());
-      }
-
       function startMeetingFormCardConversation() {
         if (!isConversationPage()) {
           navigateToConversation({
@@ -21004,10 +20930,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function startMdInfoDemoConversation() {
-        if (routeTaskLaunchToConversation("md-info-demo", MD_INFO_DEMO_TRIGGER)) {
-          return;
-        }
-
         if (!isConversationPage()) {
           navigateToConversation({
             launch: "md-info-demo",
@@ -21231,10 +21153,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function startDeleteCustomerDemoConversation() {
-        if (routeTaskLaunchToConversation("delete-customer-demo", DELETE_CUSTOMER_DEMO_TRIGGER)) {
-          return;
-        }
-
         if (!isConversationPage()) {
           navigateToConversation({
             launch: "delete-customer-demo",
@@ -23729,17 +23647,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function applyInitialRouteLaunch() {
-        if (
-          getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE &&
-          ["create-customer", "md-info-demo", "delete-customer-demo"].includes(initialRouteState.launchAction)
-        ) {
-          navigateToConversation({
-            launch: initialRouteState.launchAction,
-            prompt: initialRouteState.launchPrompt
-          });
-          return;
-        }
-
         if (getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE) {
           openAutomationTaskConversation(initialRouteState.taskId || "task-morning-check", { runId: initialRouteState.taskRunId || "" });
           return;
@@ -24871,17 +24778,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (routeAgentActionTrigger(text)) {
-          return;
-        }
-
         if (isMdInfoDemoTrigger(text)) {
           startMdInfoDemoConversation();
-          return;
-        }
-
-        if (isInfoCollectionTrigger(text)) {
-          beginCreateCustomerConversation(INFO_COLLECTION_PROMPT, extractCustomerCreationName(INFO_COLLECTION_PROMPT));
           return;
         }
 
@@ -25375,7 +25273,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         openSettings();
       });
 
-      openConfigBtn.addEventListener("click", () => {
+      openConfigBtn?.addEventListener("click", () => {
         openScheme2ConfigTab("market");
       });
 
@@ -25484,6 +25382,22 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        if (button.dataset.automationTask) {
+          const taskId = button.dataset.automationTask || "task-morning-check";
+          sidebarHistoryStatus.activeAutomationTaskId = taskId;
+          persistSidebarHistoryStatus();
+          renderHistoryList();
+          if (typeof getCurrentPageFile === "function" && typeof TASK_CONVERSATION_PAGE_FILE !== "undefined" && getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE && typeof openAutomationTaskConversation === "function") {
+            const url = new URL(window.location.href);
+            url.searchParams.set("task", taskId);
+            window.history.replaceState(null, "", url.toString());
+            openAutomationTaskConversation(taskId);
+            return;
+          }
+          window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
+          return;
+        }
+
         if (button.dataset.historyId === "pinned-haiyue-brief") {
           markHaiyueHistoryRead();
         }
@@ -25524,23 +25438,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             renderHistoryList();
           }
           return;
-        }
-
-        const automationTaskButton = event.target.closest("[data-automation-task]");
-        if (automationTaskButton) {
-          const taskId = automationTaskButton.dataset.automationTask || "task-morning-check";
-          sidebarHistoryStatus.activeAutomationTaskId = taskId;
-          persistSidebarHistoryStatus();
-          renderHistoryList();
-          if (getCurrentPageFile() === TASK_CONVERSATION_PAGE_FILE) {
-            const url = new URL(window.location.href);
-            url.searchParams.set("task", taskId);
-            window.history.replaceState(null, "", url.toString());
-            openAutomationTaskConversation(taskId);
-            return;
-          }
-
-          window.location.href = `task-conversation.html?task=${encodeURIComponent(taskId)}`;
         }
       });
 
