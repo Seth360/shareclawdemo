@@ -87,6 +87,21 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
   also create a local checkpoint commit through the script, unless the user
   explicitly asks for a different save behavior.
 
+### 2026-05-28 - Left Sidebar Uses Desktop HTML Mixed History Model
+
+- Decision: the shared left secondary sidebar uses the newly provided Desktop
+  HTML model: one `历史会话` group whose `#historyList` mixes automation tasks
+  and normal conversations.
+- Reason: user clarified that the latest screenshot and Desktop HTML left menu
+  are the source of truth for the sidebar.
+- Boundary: only the left menu DOM/CSS/render/click entry is taken from the
+  Desktop HTML. Current project chat content, generated-results sidebar,
+  automation task reports, and business-object drawer remain the source of
+  truth.
+- Do not regress: do not reintroduce the old standalone
+  `#automationTaskList` group in the shared sidebar, and do not replace current
+  right-panel behavior with Desktop HTML content.
+
 ## Correction Log
 
 | Topic | Correction |

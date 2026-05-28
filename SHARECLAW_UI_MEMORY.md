@@ -19,7 +19,7 @@ need to be synchronized across multiple HTML files.
 | Top bar | `.topbar` | Company name, search, top-right icons, scheme switch. |
 | Left primary rail | `.channel-rail`, `.channel-item[data-channel]` | First-level navigation: Claw, 企信, 待办, CRM, 工作, 日程. |
 | Left secondary sidebar | `.sidebar` | Second-level navigation. Switches between default, settings, config, and messenger thread views. |
-| Default sidebar | `#defaultSidebarView` | ShareClaw menu, shortcuts, automation tasks, and history. |
+| Default sidebar | `#defaultSidebarView` | ShareAgent menu, shortcuts, and the mixed history list that contains automation tasks plus normal conversations. |
 | Settings sidebar | `#settingsSidebarView` | Settings tabs. |
 | Config sidebar | `#configSidebarView` | Scheme/config tabs. |
 | Messenger sidebar | `#messengerSidebarView`, `#messengerThreadList` | 企信 thread list. |
@@ -38,7 +38,7 @@ Core shared state:
 | `state.homeView` | Home sub-mode: `dashboard` or `chat`. |
 | `state.currentChannel` | Active first-level rail channel. |
 | `state.activeChatId` | Current conversation session id. |
-| `state.activeHistoryId` | Active sidebar history row. |
+| `state.activeHistoryId` | Active normal sidebar history row. Automation rows use `sidebarHistoryStatus.activeAutomationTaskId`. |
 | `state.activeMessengerThread` | Current 企信 thread id. |
 | `state.outputResultsPanelOpen` | Whether the generated results panel is open. |
 | `state.outputResultsPanelMode` | Generated results mode: `list` or `detail`. |
@@ -57,7 +57,7 @@ Core shared render/navigation functions:
 | `renderHomePanels()` | Toggles dashboard/chat, insight rail, chat feed, composer, and output panel. |
 | `renderSidebarMode()` | Switches secondary sidebar view. |
 | `renderChannelRail()` | Syncs active first-level channel. |
-| `renderHistoryList()` | Renders default sidebar history and automation task rows. |
+| `renderHistoryList()` | Renders the default sidebar mixed history list: automation task rows plus normal conversation rows in `#historyList`. |
 | `navigateToPanel(panel, params)` | Cross-page module navigation. |
 | `navigateToConversation(params)` | Cross-page navigation into `conversation.html`. |
 | `openSidebarHome()` | Returns to home dashboard. |
@@ -85,7 +85,7 @@ Core shared render/navigation functions:
 | 左侧一级菜单 / 左侧 rail | shared | `.channel-rail`, `.channel-item[data-channel]`, `state.currentChannel` | `renderChannelRail()`, channel click listeners |
 | 左侧二级菜单 | shared | `.sidebar`, `#defaultSidebarView` | `renderSidebarMode()`, `syncSidebarSelection()` |
 | 新建会话按钮 | shared | `.sidebar-primary-entry[data-panel="home"]` | `openSidebarHome()` |
-| 历史会话列表 | shared | `#historyList`, `.history-row` | `renderHistoryList()`, `openConversationSession()` |
+| 历史会话列表 / 左侧混排列表 | shared | `#historyList`, `.history-row`, `[data-automation-task]`, `[data-session-id]`, `[data-history-url]` | `renderHistoryList()`, `openAutomationTaskConversation()`, `openConversationSession()` |
 | 中间 chat | `index.html`, `conversation.html`, `task-conversation.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
 | Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText`, `.chat-output-entry`, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()` |
 | 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button listener, `openMockAiConversation()` |
@@ -214,7 +214,14 @@ Core shared render/navigation functions:
 ### Chat And Routing
 
 - Default sidebar rows use `data-panel` to route to task, market, docs, or home.
-- History rows with `data-session-id` open `conversation.html?session=...`.
+- The default sidebar uses one `历史会话` group. `renderHistoryList()` mixes
+  automation task rows and normal conversation rows in `#historyList`.
+- Automation rows use `data-history-type="automation"` plus
+  `data-automation-task` and route to `task-conversation.html?task=...`; on
+  `task-conversation.html`, clicking another automation row updates the current
+  task in place through `openAutomationTaskConversation()`.
+- Normal history rows with `data-session-id` open the corresponding
+  conversation session.
 - Haiyue brief prompts containing `复盘`, `客户简报`, `侧边栏`, or `产出物` route
   into the Haiyue brief flow.
 - Chat cards with supported `data-chat-card` values may route to messenger and
