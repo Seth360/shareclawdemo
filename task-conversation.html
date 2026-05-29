@@ -1285,21 +1285,21 @@
       }
 
       .chat-output-doc-icon {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         border-radius: 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        flex: 0 0 28px;
-        font-size: 11px;
-        line-height: 1;
-        font-weight: 700;
+        flex: 0 0 24px;
+        font-size: 9px;
+        line-height: 16px;
+        font-weight: 600;
       }
 
       .chat-output-doc-icon.doc {
-        background: #eef4ff;
-        color: #3f7cff;
+        background: #eaf6ff;
+        color: #0f5bdc;
       }
 
       .chat-output-doc-icon.ppt {
@@ -1308,8 +1308,8 @@
       }
 
       .chat-output-doc-icon.pdf {
-        background: #fff0ec;
-        color: #ff6b57;
+        background: #fff3ef;
+        color: #d92d20;
       }
 
       .chat-output-doc-icon.sheet {
@@ -1323,15 +1323,15 @@
       }
 
       .chat-output-doc-icon.figma-icon img {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         display: block;
         object-fit: contain;
       }
 
       .chat-output-doc-icon.figma-icon img {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         display: block;
       }
 
@@ -1375,6 +1375,10 @@
         display: flex;
         gap: 4px;
         justify-content: flex-end;
+      }
+
+      .chat-output-doc-action.single {
+        flex: 0 0 28px;
       }
 
       .chat-output-doc-action .docs-row-inline-action svg,
@@ -1439,30 +1443,26 @@
       }
 
       .chat-output-business-icon {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        flex: 0 0 28px;
+        flex: 0 0 24px;
       }
 
       .chat-output-business-icon-card {
         width: 24px;
         height: 24px;
-        border: 0.5px solid #c6deff;
         border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(162deg, #ebf3ff 4.5%, rgba(255, 255, 255, 0.6) 88%);
-      }
-
-      .chat-output-business-icon-card img {
-        width: 14px;
-        height: 14px;
-        display: block;
-        object-fit: contain;
+        background: #f7f0ff;
+        color: #542cb8;
+        font-size: 9px;
+        line-height: 16px;
+        font-weight: 600;
       }
 
       .chat-output-detail-tabs {
@@ -16268,6 +16268,28 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         window.location.href = url.toString();
       }
 
+
+      const specialConversationRouteMap = {
+        "信息收集": { launch: "info-collection", prompt: "信息收集" },
+        "信息补全": { launch: "md-info-demo", prompt: "信息补全" },
+        "删除客户": { launch: "delete-customer-demo", prompt: "删除客户" },
+        "新建对象": { launch: "agent-action", type: "create-object", prompt: "新建对象" },
+        "编辑对象": { launch: "agent-action", type: "edit-object", prompt: "编辑对象" },
+        "更新对象": { launch: "agent-action", type: "update-object", prompt: "更新对象" },
+        "复杂查询": { launch: "agent-action", type: "complex-query", prompt: "复杂查询" },
+        "新建定时任务": { launch: "agent-action", type: "create-scheduled-task", prompt: "新建定时任务" }
+      };
+
+      function routeSpecialConversationTrigger(text) {
+        const prompt = (text || "").trim();
+        const route = specialConversationRouteMap[prompt];
+        if (!route) {
+          return false;
+        }
+
+        navigateToConversation(route);
+        return true;
+      }
       function escapeHtml(text) {
         return text
           .replaceAll("&", "&amp;")
@@ -19052,10 +19074,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function renderOutputDocIcon(doc) {
-        if (doc.id === "doc-haiyue-brief" || doc.type === "pdf") {
-          return `<span class="chat-output-doc-icon figma-icon" aria-hidden="true">${figmaIconImg("pdfCard")}</span>`;
-        }
         return `<span class="chat-output-doc-icon ${escapeHtml(doc.type)}">${escapeHtml(getDocsTypeLabel(doc.type))}</span>`;
+      }
+
+      function shouldShowOutputActionTag(label) {
+        return Boolean(label) && !["查询", "查看"].includes(label);
       }
 
       function renderDocsInlineDownloadButton(doc, actionAttribute) {
@@ -19117,20 +19140,21 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function renderOutputBusinessRow(source) {
+        const showActionTag = shouldShowOutputActionTag(source.actionLabel);
         return `
           <div class="chat-output-doc-row clickable" data-output-business-id="${escapeHtml(source.id)}" tabindex="0" aria-label="在侧边栏打开 ${escapeHtml(source.title)}">
             <div class="chat-output-doc-main">
               <span class="chat-output-business-icon" aria-hidden="true">
                 <span class="chat-output-business-icon-card">
-                  ${figmaIconImg("outputCustomer")}
+                  CRM
                 </span>
               </span>
               <div class="chat-output-business-title-wrap">
                 <div class="chat-output-doc-title">${escapeHtml(source.title)}</div>
-                ${source.actionLabel ? `<span class="chat-output-action-tag">${escapeHtml(source.actionLabel)}</span>` : ""}
+                ${showActionTag ? `<span class="chat-output-action-tag">${escapeHtml(source.actionLabel)}</span>` : ""}
               </div>
             </div>
-            <div class="chat-output-doc-action">
+            <div class="chat-output-doc-action single">
               ${renderBusinessInlineForwardButton(source)}
             </div>
           </div>
@@ -24778,8 +24802,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (isMdInfoDemoTrigger(text)) {
-          startMdInfoDemoConversation();
+        if (routeSpecialConversationTrigger(text)) {
           return;
         }
 
@@ -24788,27 +24811,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
-        if (isComplexQueryTrigger(text)) {
-          startComplexQueryConversation(text);
-          return;
-        }
-
         if (handleMdInfoDemoMessage(text)) {
-          return;
-        }
-
-        if (isDeleteCustomerDemoTrigger(text)) {
-          startDeleteCustomerDemoConversation();
           return;
         }
 
         if (isMeetingFormCardTrigger(text)) {
           startMeetingFormCardConversation();
-          return;
-        }
-
-        if (isAskUserQuestionTrigger(text)) {
-          beginCreateCustomerConversation(ASK_USER_QUESTION_PROMPT, extractCustomerCreationName(ASK_USER_QUESTION_PROMPT));
           return;
         }
 

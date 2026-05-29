@@ -89,6 +89,7 @@ Core shared render/navigation functions:
 | 中间 chat | `index.html`, `conversation.html`, `task-conversation.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
 | Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText`, `.chat-output-entry`, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()` |
 | 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button listener, `openMockAiConversation()` |
+| 触发词路由 | shared input pages -> `conversation.html` | `routeSpecialConversationTrigger(text)`, `specialConversationRouteMap`, `routeAgentActionTrigger(text)` | `信息收集`, `信息补全`, `删除客户`, `新建对象`, `编辑对象`, `更新对象`, `复杂查询`, `新建定时任务` route into `conversation.html` launch URLs. |
 | 模式选择 / 指定智能体 | shared | `#agentPickerBtn`, `#agentPickerMenu`, `state.composerMode`, `state.activeAgent` | `setComposerMode()`, `renderAgentPill()`, `renderExposedPicker()` |
 | 右侧 Daily 洞察 | `index.html` | `#homeInsightRail`, `#homeInsightToggle`, `state.homeInsightRailCollapsed` | insight listeners, `openInsightConversation()` |
 | 右侧生成结果栏 / 产出物侧边栏 | mostly `conversation.html` | `#chatOutputPanelShell`, `#chatOutputPanel`, `.chat-output-entry`, `#chatOutputToggleBtn`, `state.outputResultsPanelOpen`, `state.businessObjectOverlayOpen` | `renderChatOutputPanel()` |
@@ -100,8 +101,12 @@ Core shared render/navigation functions:
 | 右侧业务详情 / 客户详情 | `conversation.html` | `[data-output-business-id]`, `.embedded-object-detail`, `#businessObjectOverlay` | `openOutputPanelTab("business", id)` or `openBusinessObjectOverlay(id)` |
 | 右侧详情宽度拖拽 | `conversation.html` | `[data-output-resize-handle]`, `state.outputDetailPanelWidth` | pointer listeners, `applyOutputDetailPanelWidth()` |
 | 创建客户确认卡片 | `conversation.html` | `#customerCreateComposerCard`, session `source: "create-customer"` | `beginCreateCustomerConversation()`, `updateCustomerCreateComposer()` |
+| 创建客户产出物 | `conversation.html` | `.created-customer-detail-card`, `[data-chat-card="open-created-customer"]`, dynamic source id `business-created-customer-${session.id}` | `renderCustomerObjectArtifactCard()`, `renderCreatedCustomerDetailCard()`, `getCreatedCustomerSource()`, `getCurrentBusinessSources()` |
+| 创建定时任务产出物 | `conversation.html` | `.scheduled-task-detail-card`, `[data-chat-card="open-created-scheduled-task"]`, dynamic source id `business-created-scheduled-task-${session.id}` | `renderScheduledTaskArtifactCard()`, `getCreatedScheduledTaskSource()`, `getCurrentBusinessSources()` |
 | 创建商机确认卡片 | `conversation.html` | `#dealCreateComposerCard`, session `stage: "deal-confirming"` | `beginCreateDealFromCustomer()` |
-| 客户卡片 / 商机卡片 | `conversation.html` | `[data-chat-card]`, `.chat-customer-card` | chat feed click handler |
+| 查询客户卡片 / 商机卡片 | `conversation.html` | `[data-chat-card]`, `.query-customer-card`, `.complex-query-card-icon` | chat feed click handler |
+| 复杂查询客户列表 | `conversation.html` | `.complex-query-summary`, `.complex-query-card`, `.complex-query-object-card`, `[data-chat-card="open-complex-query-customer"]` | `renderComplexQueryResultBlock()`, `renderComplexQueryCustomerCard()`, `getComplexQueryCustomers()` |
+| Agent Action 审核卡 | `conversation.html` | `.agent-action-card`, `[data-agent-action]`, session `source` starts with `agent-action-` | `startAgentActionCreateObjectConversation()`, `startAgentActionEditObjectConversation()`, `startAgentActionUpdateObjectConversation()`, `startAgentActionCreateTaskConversation()`, `renderAgentActionConversation()` |
 | 海岳客户简报 | `index.html`, `conversation.html` | session `haiyue-brief`, doc `doc-haiyue-brief` | `shouldUseHaiyueBriefFlow()`, `openHaiyueBriefConversation()` |
 | 企信线程列表 | `messenger.html` | `#messengerThreadList`, `[data-thread-id]`, `state.activeMessengerThread` | `renderMessengerSidebar()`, `openMessengerConversation()` |
 | 企信消息内容 | `messenger.html` | `#messengerHeader`, `#messengerCanvas` | `renderMessengerShell()`, `renderMessengerCanvasContent()` |
@@ -143,6 +148,37 @@ Core shared render/navigation functions:
   containers. Document-library menus keep the default in-row menu positioning.
 - `source.actionLabel` may render row action tags such as `查询`, `更新`, or
   `创建`.
+- Created-customer output is a business generated result, not only an in-chat
+  detail card. After `create-customer`, `md-info-demo`, or
+  `agent-action-create-object` reaches `stage: "created"`, or after
+  `agent-action-update-object` reaches `stage: "updated"`,
+  `getCurrentBusinessSources()` appends the dynamic
+  `business-created-customer-${session.id}` source and the right
+  `业务生成结果` list opens in list mode.
+- For `agent-action-create-object`, clicking `创建` first moves the session to
+  `stage: "creating"` and renders the standard thinking chip. After
+  `AGENT_ACTION_THINKING_DELAY`, it enters `created` and renders the CRM object
+  artifact.
+- For `agent-action-update-object`, clicking `更新` first moves the session to
+  `stage: "updating"` and renders the standard thinking chip. After
+  `AGENT_ACTION_THINKING_DELAY`, it enters `updated`, renders the CRM object
+  artifact with an `更新` action tag, and opens the right generated-results list.
+- For `agent-action-create-scheduled-task`, successful creation renders a
+  scheduled-task artifact card below the success copy and appends a dynamic
+  `business-created-scheduled-task-${session.id}` source into the right
+  `业务生成结果` list. The scheduled-task artifact uses an orange clock icon and
+  displays the task name directly, without a `[定时任务]` title prefix.
+- Ordinary customer object artifacts use `.created-customer-detail-card`. The
+  legacy `.chat-customer-card` class is retired; query-only cards use
+  `.query-customer-card`, and complex-query keeps only an isolated
+  `.complex-query-card-icon` reuse.
+- Complex-query results use the Figma object-list pattern from ShareClaw node
+  `3295:26112`: completion uses compact `renderChatAiStatus()` without the
+  ShareAgent identity row, then renders two summary text lines before the
+  cards. The default list exposes three 380px CRM customer cards plus
+  `查看全部（共X个客户）` when more exist; clicking that button only toasts
+  `待接入列表页` and does not expand more cards. Related opportunity/order
+  sections render as collapsed `details` rows that expand downward when clicked.
 - In dynamic-tab mode, output details use `state.outputOpenTabs` and
   `state.activeOutputTabId`; the tab strip is visible only in detail mode and
   includes an add-tab menu for unopened current-session outputs.
@@ -210,6 +246,14 @@ Core shared render/navigation functions:
   task, so switching `任务历史` rows does not filter or replace this card.
 - Automation business output rows reuse the static no-dynamic-tab behavior and
   open the detached business object drawer.
+- Automation `业务生成结果` list rows use text-square icons: PDF red, DOC blue,
+  and CRM purple. Icons are 24px in the task conversation generated-results
+  list; CRM icon text is 9px. Action tags that mean read-only viewing, such as
+  `查询` or `查看`, are hidden; mutating tags such as `创建` or `更新` remain
+  visible.
+- Business generated-result rows in task conversations usually expose only one
+  forward action. Use the compact single-action width so object titles can show
+  more text before truncation.
 
 ### Chat And Routing
 
@@ -228,6 +272,13 @@ Core shared render/navigation functions:
   set `state.mainPanel = "messenger"` plus `state.currentChannel = "messenger"`.
 - Agent/skill use buttons route through `openMarketUseConversation(type, title)`
   and may navigate to `conversation.html?launch=market-use&type=...&label=...`.
+- Special trigger words are normalized as route launches into
+  `conversation.html`, not handled as separate local scene starters on each
+  input page. Current trigger words are `信息收集`, `信息补全`, `删除客户`, `新建对象`,
+  `编辑对象`, `更新对象`, `复杂查询`, and `新建定时任务`.
+- The canonical trigger routes are `launch=info-collection`,
+  `launch=md-info-demo`, `launch=delete-customer-demo`, and
+  `launch=agent-action&type=create-object|edit-object|update-object|complex-query|create-scheduled-task`.
 
 ### Customer / Deal Flow
 
@@ -252,6 +303,19 @@ simpler than `conversation.html`.
 Use for independent chat and advanced chat-side interactions: dynamic output
 tabs, output details, static business object drawer, customer/deal confirmation,
 Haiyue brief flow, and mock PDF generation.
+Mock AI PDF cards use `.chat-info-card.is-pdf`: compact artifact-card rhythm,
+left `PDF` square with `#FFF5F0` background and `#D93518` text, title as the
+document name, and subtitle as `创建时间: ...` instead of `已生成 PDF · ...`.
+Conversation generated-results PDF rows use the same text-square PDF icon
+treatment instead of the old image icon. All `conversation.html`
+generated-results list icons use a 24px square with 9px text.
+CRM object artifact cards hide the action tag when `actionLabel` is `查询`;
+creation/update tags remain visible.
+Conversation generated-results business rows also hide read-only tags such as
+`查询` or `查看`; mutating tags such as `创建` or `更新` remain visible.
+Haiyue brief chat cards reuse the same artifact system: the customer link is a
+CRM object artifact card, and `doc-haiyue-brief` is a PDF artifact card with
+`创建时间: ...`.
 
 ### `task-conversation.html`
 

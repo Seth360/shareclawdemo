@@ -102,6 +102,49 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
   `#automationTaskList` group in the shared sidebar, and do not replace current
   right-panel behavior with Desktop HTML content.
 
+### 2026-05-28 - Trigger Words Enter Scenes Through Routes
+
+- Decision: AI composer trigger words on shared pages route to
+  `conversation.html` instead of starting special scenes locally.
+- Reason: one canonical route entry keeps cross-page behavior consistent and
+  makes the active scene visible in the URL.
+- Do not regress: trigger words such as `信息收集`, `信息补全`, `删除客户`, `新建对象`,
+  `编辑对象`, `更新对象`, `复杂查询`, and `新建定时任务` should reach their target
+  scenes through `conversation.html?launch=...` routes.
+
+### 2026-05-29 - Created Customer Uses Output Artifact Loop
+
+- Decision: after the info-collection customer intake creates a customer, the
+  result is rendered as a compact CRM output artifact and is also added to the
+  right `业务生成结果` list.
+- Reason: the created customer is a generated business object, so it must be
+  traceable from both the chat feed and the generated-result panel.
+- Do not regress: the created-customer success state should not fall back to a
+  large in-chat field-detail card or leave the right generated-result list
+  empty.
+- Update: `md-info-demo` customer creation also uses the same CRM object
+  artifact loop, and the legacy `.chat-customer-card` style is retired. Query
+  scenes keep isolated query-specific classes only.
+- Update: `agent-action-create-object` uses the same minimal object artifact
+  after create success and appends the dynamic customer to the right
+  `业务生成结果` list.
+- Update: clicking `创建` in `agent-action-create-object` shows a 1-second
+  thinking state before the CRM object artifact is produced.
+- Update: clicking `更新` in `agent-action-update-object` also shows a
+  1-second thinking state, then produces the CRM object artifact and appends the
+  customer to the right `业务生成结果` list.
+- Update: `agent-action-create-scheduled-task` also produces a generated
+  artifact after success: a scheduled-task card in the chat feed and a dynamic
+  task source in the right `业务生成结果` list. Scheduled-task artifacts use the
+  orange clock icon and display the task name directly without a type prefix.
+- Update: complex-query results follow ShareClaw Figma node `3295:26112`: a
+  CRM object-list layout without the old summary/count copy. Related
+  opportunity/order sections default collapsed and expand downward on click.
+  The completion state hides the ShareAgent identity row, renders two summary
+  text lines before the cards, exposes three customer cards by default, and
+  shows `查看全部（共X个客户）` when more customers exist. That button is a
+  placeholder for a future list page and only toasts `待接入列表页`.
+
 ## Correction Log
 
 | Topic | Correction |
