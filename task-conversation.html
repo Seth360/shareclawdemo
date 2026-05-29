@@ -3410,11 +3410,22 @@
       }
 
       .chat-session-title-main {
+        position: relative;
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .chat-session-title-trigger {
         min-width: 0;
         display: inline-flex;
         align-items: center;
         gap: 4px;
+        padding: 0;
+        border: 0;
+        background: transparent;
         color: #181c25;
+        cursor: pointer;
       }
 
       .chat-session-title-icon {
@@ -3438,7 +3449,55 @@
         width: 9px;
         height: 9px;
         flex: 0 0 9px;
-        transform: rotate(-90deg);
+      }
+
+      .chat-session-title-menu {
+        position: absolute;
+        top: 24px;
+        left: 0;
+        z-index: 80;
+        width: 140px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        border: 1px solid rgba(24, 28, 37, 0.06);
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 18px 36px rgba(24, 28, 37, 0.18), 0 0 0 1px rgba(24, 28, 37, 0.02);
+      }
+
+      .chat-session-title-menu.hidden {
+        display: none;
+      }
+
+      .chat-session-title-menu-item {
+        width: 100%;
+        min-height: 22px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #181c25;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 400;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .chat-session-title-menu-item:hover {
+        color: #0f62fe;
+      }
+
+      .chat-session-title-menu-item.danger {
+        color: #ff4d36;
+      }
+
+      .chat-session-title-menu-icon {
+        flex: 0 0 auto;
       }
 
       .chat-output-entry {
@@ -10146,45 +10205,82 @@
       }
 
       .create-task-dialog {
-        width: min(560px, calc(100vw - 48px));
-        max-height: calc(100vh - 48px);
-        overflow: auto;
-        border-radius: 20px;
+        width: min(688px, calc(100vw - 48px));
+        max-height: calc(100vh - 40px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 8px;
         background: #fff;
-        box-shadow:
-          0 32px 80px rgba(15, 23, 42, 0.18),
-          0 8px 24px rgba(15, 23, 42, 0.1);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
       }
 
       .create-task-dialog-head {
-        padding: 20px 20px 0;
+        height: 48px;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .create-task-dialog-title {
+        margin: 0;
+        font-size: 15px;
+        line-height: 24px;
+        font-weight: 700;
+        color: #181c25;
+      }
+
+      .create-task-close-btn {
+        width: 15px;
+        height: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #181c25;
+        flex: 0 0 auto;
+      }
+
+      .create-task-close-btn svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .create-task-dialog-divider {
+        height: 1px;
+        background: #eaebee;
       }
 
       .create-task-dialog-body {
-        padding: 16px 20px 20px;
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        overflow-y: auto;
       }
 
-      .create-task-form {
+      .create-task-section {
         border: 1px solid #dee1e8;
         border-radius: 8px;
         background: #fff;
         padding: 13px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
       }
 
-      .create-task-field,
-      .create-task-radio-group {
-        display: flex;
-        flex-direction: column;
+      .create-task-section-title {
+        margin: 0;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 700;
+        color: #181c25;
       }
 
       .create-task-field {
-        gap: 4px;
-      }
-
-      .create-task-radio-group {
+        display: flex;
+        flex-direction: column;
         gap: 8px;
       }
 
@@ -10194,11 +10290,10 @@
         color: #181c25;
       }
 
-      .create-task-input,
-      .create-task-time-btn {
+      .create-task-input {
         width: 100%;
-        min-height: 32px;
-        padding: 5px 8px;
+        height: 32px;
+        padding: 0 8px;
         border: 1px solid #c1c5ce;
         border-radius: 8px;
         background: #fff;
@@ -10213,12 +10308,13 @@
       }
 
       .create-task-prompt-box {
-        padding: 12px 16px;
-        border: 0.5px solid #09f;
+        min-height: 104px;
+        padding: 6px 8px;
+        border: 1px solid #c1c5ce;
         border-radius: 8px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 4px;
         background: #fff;
       }
 
@@ -10235,122 +10331,726 @@
         color: #181c25;
       }
 
-      .create-task-agent-chip {
+      .create-task-agent-btn {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        height: 26px;
-        padding: 0 8px;
-        border-radius: 6px;
-        background: #f2f4fb;
-        color: #455eee;
+        align-self: flex-start;
+        color: #181c25;
         font-size: 13px;
         line-height: 18px;
+      }
+
+      .create-task-agent-btn.is-placeholder {
+        color: #181c25;
+      }
+
+      .create-task-agent-btn svg,
+      .create-task-control svg,
+      .create-task-recipient-action svg {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 auto;
+      }
+
+      .create-task-menu-wrap,
+      .create-task-agent-wrap,
+      .create-task-recipient-wrap {
+        position: relative;
+      }
+
+      .create-task-menu-wrap {
+        display: inline-flex;
+        flex: 0 0 auto;
+      }
+
+      .create-task-frequency-row .create-task-menu-wrap.create-task-control--204 {
+        width: auto;
+        max-width: 100%;
+        flex: 0 1 auto;
+      }
+
+      .create-task-menu-wrap > .create-task-chip-select {
+        width: 100%;
+      }
+
+      .create-task-agent-wrap {
         align-self: flex-start;
       }
 
-      .create-task-agent-chip svg,
-      .create-task-time-btn svg {
-        width: 14px;
-        height: 14px;
-        flex: 0 0 auto;
+      .create-task-dropdown {
+        position: absolute;
+        left: 0;
+        top: calc(100% + 8px);
+        min-width: 100%;
+        padding: 6px;
+        border: 1px solid #dee1e8;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow:
+          0 16px 32px rgba(15, 23, 42, 0.14),
+          0 4px 12px rgba(15, 23, 42, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        z-index: 16;
       }
 
-      .create-task-radio-row {
+      .create-task-dropdown.upward {
+        top: auto;
+        bottom: calc(100% + 8px);
+      }
+
+      .create-task-dropdown.agent {
+        width: 236px;
+      }
+
+      .create-task-dropdown.cycle {
+        width: 196px;
+      }
+
+      .create-task-dropdown.interval-unit {
+        width: 120px;
+      }
+
+      .create-task-menu-option {
+        min-height: 36px;
+        padding: 8px 10px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
-        gap: 16px;
-        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        color: #181c25;
+        text-align: left;
       }
 
-      .create-task-radio {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
+      .create-task-menu-option:hover,
+      .create-task-menu-option.active {
+        background: #f2f4fb;
+      }
+
+      .create-task-menu-option-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .create-task-menu-option-title {
+        min-width: 0;
         font-size: 13px;
         line-height: 18px;
         color: #181c25;
-        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      .create-task-radio-dot {
-        width: 14px;
-        height: 14px;
-        border: 1.5px solid #c1c5ce;
-        border-radius: 50%;
+      .create-task-menu-option-meta {
+        font-size: 12px;
+        line-height: 16px;
+        color: #91959e;
+      }
+
+      .create-task-menu-check {
+        width: 16px;
+        height: 16px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        border-radius: 50%;
+        color: #7341de;
         flex: 0 0 auto;
       }
 
-      .create-task-radio.active .create-task-radio-dot {
-        border-color: #ff8800;
+      .create-task-menu-check svg {
+        width: 14px;
+        height: 14px;
       }
 
-      .create-task-radio-dot::after {
-        content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #ff8800;
-        opacity: 0;
+      .create-task-tabs {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 36px;
+        padding: 4px;
+        border-radius: 8px;
+        background: #f2f3f5;
       }
 
-      .create-task-radio.active .create-task-radio-dot::after {
-        opacity: 1;
-      }
-
-      .create-task-time-wrap {
-        padding-left: 72px;
-      }
-
-      .create-task-time-btn {
-        width: 240px;
-        min-height: 28px;
-        padding: 5px 8px;
+      .create-task-tab {
+        height: 28px;
+        padding: 0 12px;
         border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #545861;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .create-task-tab.active {
+        background: #fff;
+        color: #181c25;
+      }
+
+      .create-task-frequency-body {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .create-task-frequency-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 32px;
+        flex-wrap: wrap;
+      }
+
+      .create-task-frequency-prefix {
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: 500;
+        color: #181c25;
+      }
+
+      .create-task-control {
+        min-height: 32px;
+        padding: 5px 8px;
+        border: 1px solid #c1c5ce;
+        border-radius: 8px;
+        background: #fff;
         display: inline-flex;
         align-items: center;
         gap: 8px;
         font-size: 13px;
         line-height: 18px;
-        color: #c1c5ce;
-      }
-
-      .create-task-time-btn.has-value {
         color: #181c25;
       }
 
-      .create-task-dialog-footer {
-        padding: 0 20px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 12px;
+      .create-task-control.is-placeholder {
+        color: #c1c5ce;
       }
 
-      .create-task-cancel-btn,
-      .create-task-confirm-btn {
-        min-width: 96px;
-        height: 36px;
-        padding: 0 18px;
+      .create-task-control--56 {
+        width: 56px;
+      }
+
+      .create-task-control--82 {
+        width: 82px;
+      }
+
+      .create-task-control--120 {
+        width: 120px;
+      }
+
+      .create-task-control--204 {
+        width: 204px;
+      }
+
+      .create-task-control--406 {
+        width: 406px;
+      }
+
+      .create-task-control--flex {
+        width: 100%;
+      }
+
+      .create-task-select-label,
+      .create-task-control-main {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .create-task-control-main {
+        justify-content: flex-start;
+      }
+
+      .create-task-control-label-text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .create-task-number-input {
+        width: 100%;
+        border: 0;
+        outline: none;
+        background: transparent;
+        font-size: 14px;
+        line-height: 20px;
+        color: #181c25;
+      }
+
+      .create-task-number-input::-webkit-outer-spin-button,
+      .create-task-number-input::-webkit-inner-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+      }
+
+      .create-task-number-input[type="number"] {
+        -moz-appearance: textfield;
+      }
+
+      .create-task-chip-select {
+        width: auto;
+        max-width: 100%;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .create-task-chip-select.is-open {
+        border-color: #7341de;
+      }
+
+      .create-task-chip-track {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        overflow: hidden;
+      }
+
+      .create-task-chip-list {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        overflow: hidden;
+      }
+
+      .create-task-inline-chip {
+        min-width: 0;
+        height: 20px;
+        padding: 0 4px;
+        border: 1px solid #dee1e8;
+        border-radius: 4px;
+        background: #f2f4fb;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+        white-space: nowrap;
+      }
+
+      .create-task-inline-chip strong {
+        font-weight: 400;
+      }
+
+      .create-task-chip-remove,
+      .create-task-recipient-action {
+        width: 12px;
+        height: 12px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 10px;
+        color: #7a7f88;
+        flex: 0 0 auto;
+      }
+
+      .create-task-chip-placeholder {
+        color: #c1c5ce;
+        font-size: 13px;
+        line-height: 18px;
+        white-space: nowrap;
+      }
+
+      .create-task-setting-card {
+        border-radius: 8px;
+        background: #fafafa;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .create-task-setting-card.expanded {
+        gap: 12px;
+      }
+
+      .create-task-setting-head {
+        min-height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .create-task-setting-card.expanded .create-task-setting-head {
+        padding-bottom: 8px;
+        border-bottom: 1px solid #dee1e8;
+      }
+
+      .create-task-setting-title {
         font-size: 14px;
         line-height: 20px;
+        color: #181c25;
+        white-space: nowrap;
       }
 
-      .create-task-cancel-btn {
-        border: 1px solid #d9dfeb;
+      .create-task-setting-title .muted {
+        color: #91959e;
+      }
+
+      .create-task-switch {
+        width: 28px;
+        height: 16px;
+        padding: 2px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        background: #c9ced8;
+        transition:
+          background-color 0.18s ease,
+          justify-content 0.18s ease;
+      }
+
+      .create-task-switch::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
         background: #fff;
-        color: #354052;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.16);
       }
 
-      .create-task-confirm-btn {
-        background: linear-gradient(90deg, #4f68ff 0.12%, #8048ff 100.09%);
+      .create-task-switch.is-on {
+        justify-content: flex-end;
+        background: #7341de;
+      }
+
+      .create-task-setting-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .create-task-setting-row-label {
+        width: 128px;
+        flex: 0 0 128px;
+        font-size: 14px;
+        line-height: 20px;
+        color: #181c25;
+      }
+
+      .create-task-range-content {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .create-task-range-value {
+        min-width: 0;
+        flex: 1 1 0;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .create-task-range-dash {
+        flex: 0 0 auto;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .create-task-recipient-chip {
+        min-width: 0;
+        height: 20px;
+        padding: 0 4px;
+        border: 1px solid #dee1e8;
+        border-radius: 4px;
+        background: #f2f4fb;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+        white-space: nowrap;
+      }
+
+      .create-task-recipient-avatar {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        color: #fff;
+        font-size: 10px;
+        line-height: 1;
+      }
+
+      .create-task-recipient-avatar.person {
+        background: #8f9197;
+      }
+
+      .create-task-recipient-avatar.team {
+        background: #66c681;
+      }
+
+      .create-task-recipient-avatar.org {
+        background: #69a3ff;
+      }
+
+      .create-task-recipient-avatar.service {
+        background: #ff9a4c;
+      }
+
+      .create-task-recipient-avatar.person-blue {
+        background: #cfe0ff;
+        color: #3f7cff;
+      }
+
+      .create-task-recipient-avatar.group-orange {
+        background: #ffe7cf;
+        color: #ff7a00;
+      }
+
+      .create-task-recipient-avatar.work-blue {
+        background: #d9e7ff;
+        color: #3f7cff;
+      }
+
+      .create-task-recipient-field {
+        width: 406px;
+        justify-content: space-between;
+        gap: 12px;
+        margin-left: auto;
+      }
+
+      .create-task-recipient-wrap {
+        width: 406px;
+        max-width: 100%;
+        margin-left: auto;
+      }
+
+      .create-task-recipient-plus {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #181c25;
+        flex: 0 0 auto;
+      }
+
+      .create-task-recipient-plus:hover {
+        background: #f2f4fb;
+      }
+
+      .create-task-recipient-picker {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 8px);
+        width: 406px;
+        max-height: 320px;
+        padding: 8px;
+        border: 1px solid #dee1e8;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow:
+          0 16px 32px rgba(15, 23, 42, 0.14),
+          0 4px 12px rgba(15, 23, 42, 0.08);
+        z-index: 18;
+        overflow-y: auto;
+        box-sizing: border-box;
+      }
+
+      .create-task-recipient-picker-list {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .create-task-multi-menu {
+        position: absolute;
+        left: 0;
+        bottom: calc(100% + 8px);
+        width: 100%;
+        max-height: 248px;
+        padding: 6px;
+        border: 1px solid #dee1e8;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow:
+          0 16px 32px rgba(15, 23, 42, 0.14),
+          0 4px 12px rgba(15, 23, 42, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        overflow-y: auto;
+        z-index: 17;
+        box-sizing: border-box;
+      }
+
+      .create-task-multi-menu-option,
+      .create-task-recipient-picker-row {
+        width: 100%;
+        min-height: 36px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #181c25;
+        text-align: left;
+      }
+
+      .create-task-multi-menu-option:hover,
+      .create-task-multi-menu-option.active,
+      .create-task-recipient-picker-row:hover,
+      .create-task-recipient-picker-row.active {
+        background: #f2f4fb;
+      }
+
+      .create-task-multi-menu-option {
+        justify-content: flex-start;
+      }
+
+      .create-task-recipient-picker-row {
+        min-height: 44px;
+      }
+
+      .create-task-multi-checkbox,
+      .create-task-recipient-checkbox {
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 16px;
+      }
+
+      .create-task-multi-checkbox::before,
+      .create-task-recipient-checkbox::before {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border: 1px solid #c1c5ce;
+        border-radius: 4px;
+        background: #fff;
+        box-sizing: border-box;
+      }
+
+      .create-task-multi-menu-option.active .create-task-multi-checkbox::before,
+      .create-task-recipient-picker-row.active .create-task-recipient-checkbox::before {
+        border-color: #7341de;
+        background: #7341de;
+        box-shadow: inset 0 0 0 3px #fff;
+      }
+
+      .create-task-multi-option-label {
+        min-width: 0;
+        flex: 1 1 auto;
+        font-size: 13px;
+        line-height: 18px;
+        color: #181c25;
+        white-space: nowrap;
+      }
+
+      .create-task-setting-row--recipient {
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+
+      .create-task-recipient-picker-main {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .create-task-recipient-picker-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 36px;
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .create-task-recipient-picker-copy {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .create-task-recipient-picker-name {
+        font-size: 16px;
+        line-height: 24px;
+        color: #181c25;
+        white-space: nowrap;
+      }
+
+      .create-task-recipient-picker-badge {
+        padding: 2px 6px;
+        border-radius: 8px;
+        background: #e9f1ff;
+        color: #3f7cff;
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .create-task-dialog-footer {
+        height: 48px;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .create-task-dialog-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .create-task-secondary-btn,
+      .create-task-primary-btn {
+        min-width: 32px;
+        height: 28px;
+        padding: 0 10px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .create-task-secondary-btn {
+        border: 1px solid #c1c5ce;
+        background: #fff;
+        color: #181c25;
+      }
+
+      .create-task-primary-btn {
+        background: #7341de;
         color: #fff;
       }
 
@@ -12350,14 +13050,47 @@
                 <section class="chat-flow-shell hidden" id="chatFlowShell" aria-label="AI对话内容">
                   <div class="chat-session-titlebar hidden" id="chatSessionTitlebar">
                     <div class="chat-session-title-main">
-                      <svg class="chat-session-title-icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path class="icon-stroke" d="M8 2.3a5.7 5.7 0 1 0 0 11.4A5.7 5.7 0 0 0 8 2.3Z"></path>
-                        <path class="icon-stroke" d="M8 5.1v3.2l2.2 1.3"></path>
-                      </svg>
-                      <span class="chat-session-title-text" id="chatSessionTitleText"></span>
-                      <svg class="chat-session-title-caret" viewBox="0 0 9 9" aria-hidden="true">
-                        <path class="icon-stroke" d="M2.4 1.8 6 4.5 2.4 7.2"></path>
-                      </svg>
+                      <button class="chat-session-title-trigger" id="chatSessionTitleBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+                        <svg class="chat-session-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                          <path d="M7.5 0.770986H4.5V0H7.5V0.770986Z" fill="#181C25"></path>
+                          <path d="M5.625 3.74931V7.1237H8.68776V6.37383H6.375V3.74931H5.625Z" fill="#181C25"></path>
+                          <path d="M11.25 6.74876C11.25 3.8498 8.8995 1.49973 6 1.49973C3.10051 1.49973 0.75 3.8498 0.75 6.74876C0.75 9.64773 3.10051 11.9978 6 11.9978C8.8995 11.9978 11.25 9.64773 11.25 6.74876ZM1.5 6.74876C1.5 4.26394 3.51472 2.24959 6 2.24959C8.48528 2.24959 10.5 4.26394 10.5 6.74876C10.5 9.23359 8.48528 11.2479 6 11.2479C3.51472 11.2479 1.5 9.23359 1.5 6.74876Z" fill="#181C25"></path>
+                        </svg>
+                        <span class="chat-session-title-text" id="chatSessionTitleText"></span>
+                        <svg class="chat-session-title-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 9" fill="none" aria-hidden="true">
+                          <path d="M4.7883 6.52599L4.81027 6.50754L8.28107 3.33908C8.47003 3.16681 8.48322 2.87414 8.31095 2.68517C8.13869 2.49621 7.84601 2.48302 7.65705 2.65529L4.49474 5.54074L1.34123 2.65265C1.15314 2.48039 0.860465 2.49269 0.68732 2.68166C0.515055 2.86974 0.527359 3.16242 0.716324 3.33556L4.18185 6.50929C4.35412 6.6675 4.61339 6.67013 4.7883 6.52599Z" fill="#181C25"></path>
+                        </svg>
+                      </button>
+                      <div class="chat-session-title-menu hidden" id="chatSessionTitleMenu" role="menu" aria-label="会话操作">
+                        <button class="chat-session-title-menu-item" type="button" role="menuitem" data-chat-title-action="pin">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+                            <path d="M10.8011 10.0774L8.40947 7.68577C8.35114 7.62743 8.35114 7.62743 8.2928 7.62743L10.6261 5.2941C10.7061 5.20824 10.7679 5.1072 10.808 4.99697C10.8481 4.88673 10.8656 4.76957 10.8595 4.65243C10.8603 4.53908 10.8344 4.42713 10.7837 4.32574C10.733 4.22436 10.659 4.13641 10.5678 4.0691C10.0159 3.61225 9.35981 3.29868 8.65768 3.15622C7.95554 3.01376 7.2291 3.04681 6.5428 3.25243L4.44281 1.6191C4.42352 1.16257 4.28254 0.719501 4.03447 0.335767C3.97614 0.277434 3.97614 0.219101 3.91781 0.219101C3.7563 0.077851 3.54903 0 3.33447 0C3.11991 0 2.91264 0.077851 2.75114 0.219101L0.242805 2.6691C0.151918 2.74689 0.0826756 2.84684 0.0417936 2.95926C0.000911578 3.07169 -0.0102226 3.19277 0.00947122 3.31077C0.0194939 3.42824 0.0562398 3.54187 0.116901 3.64298C0.177562 3.74408 0.260532 3.82997 0.359471 3.8941C0.743205 4.14217 1.18628 4.28315 1.6428 4.30243L3.27614 6.40243C3.08032 7.09361 3.05772 7.82237 3.21032 8.52435C3.36293 9.22633 3.68605 9.87993 4.15114 10.4274L4.20947 10.4858C4.36675 10.6356 4.57562 10.7191 4.79281 10.7191C5.01 10.7191 5.21886 10.6356 5.37614 10.4858L7.65114 8.15243C7.65114 8.21077 7.70947 8.21077 7.70947 8.2691L10.1011 10.6608C10.1798 10.7357 10.2842 10.7774 10.3928 10.7774C10.5014 10.7774 10.6058 10.7357 10.6845 10.6608C10.7329 10.6323 10.7747 10.5939 10.8072 10.5481C10.8398 10.5024 10.8623 10.4503 10.8733 10.3952C10.8843 10.3401 10.8836 10.2834 10.8711 10.2286C10.8587 10.1739 10.8348 10.1223 10.8011 10.0774ZM4.79281 9.8441C4.41537 9.37657 4.16367 8.82035 4.06157 8.22822C3.95948 7.63609 4.01039 7.0277 4.20947 6.46077L4.2678 6.22743L2.05114 3.42743H1.75947C1.45173 3.43299 1.14859 3.35215 0.884471 3.1941L3.27614 0.802434C3.44155 1.08484 3.52253 1.40875 3.50947 1.73577V1.9691L6.30947 4.18577L6.5428 4.12743C7.10973 3.92835 7.71813 3.87744 8.31026 3.97954C8.90239 4.08163 9.45861 4.33333 9.92614 4.71077L4.79281 9.8441Z" fill="#181C25"></path>
+                          </svg>
+                          <span>置顶会话</span>
+                        </button>
+                        <button class="chat-session-title-menu-item" type="button" role="menuitem" data-chat-title-action="edit">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M7.65625 1.53125V2.40625H2.40625V11.5938H11.5938V6.34375H12.4688V12.4688H1.53125V1.53125H7.65625Z" fill="#181C25"></path>
+                            <path d="M12.4688 2.1852L5.63224 9.02171L4.97829 8.36777L11.8148 1.53125L12.4688 2.1852Z" fill="#181C25"></path>
+                          </svg>
+                          <span>编辑</span>
+                        </button>
+                        <button class="chat-session-title-menu-item" type="button" role="menuitem" data-chat-title-action="rename">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                            <path d="M0.000377928 11.3826L0.173671 8.09L8.10719 0.156484C8.31583 -0.0521614 8.65411 -0.0521615 8.86276 0.156484L11.5073 2.80099C11.7159 3.00964 11.7159 3.34792 11.5073 3.55656L3.57375 11.4901L0.281184 11.6634C0.122774 11.6717 -0.00795945 11.541 0.000377928 11.3826ZM9.20158 4.62481L7.03894 2.46217L1.02981 8.47129L0.909667 10.7541L3.19246 10.6339L9.20158 4.62481ZM9.75337 4.07303L10.6476 3.17878L8.48497 1.01613L7.59072 1.91038L9.75337 4.07303Z" fill="#181C25"></path>
+                          </svg>
+                          <span>重命名</span>
+                        </button>
+                        <button class="chat-session-title-menu-item danger" type="button" role="menuitem" data-chat-title-action="remove">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M5.54159 6.27087H4.66659V9.62504H5.54159V6.27087Z" fill="#FF522A"></path>
+                            <path d="M9.33325 6.27087H8.45825V9.62504H9.33325V6.27087Z" fill="#FF522A"></path>
+                            <path d="M6.56242 6.27087H7.43742V9.62504H6.56242V6.27087Z" fill="#FF522A"></path>
+                            <path d="M9.91658 1.45837V3.20837H12.5416V4.08337H11.6666V12.5417H2.33325V4.08337H1.45825V3.20837H4.08325V1.45837H9.91658ZM9.04158 3.20837V2.33337H4.95825V3.20837H9.04158ZM10.7916 4.08337H3.20825V11.6667H10.7916V4.08337Z" fill="#FF522A"></path>
+                          </svg>
+                          <span>移除</span>
+                        </button>
+                      </div>
                     </div>
                     <div class="chat-output-entry">
                       <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
@@ -13871,18 +14604,23 @@
         </div>
         <div class="detail-overlay hidden" id="createTaskOverlay" role="presentation">
           <section class="create-task-dialog" id="createTaskDialog" role="dialog" aria-modal="true" aria-labelledby="createTaskDialogHeading">
-            <div class="detail-dialog-head create-task-dialog-head">
-              <h2 class="detail-dialog-title" id="createTaskDialogHeading">创建任务</h2>
-              <button class="detail-close-btn" id="createTaskCloseBtn" type="button" aria-label="关闭创建任务弹窗">
+            <div class="create-task-dialog-head">
+              <h2 class="create-task-dialog-title" id="createTaskDialogHeading">创建自动化任务</h2>
+              <button class="create-task-close-btn" id="createTaskCloseBtn" type="button" aria-label="关闭创建任务弹窗">
                 <svg viewBox="0 0 16 16" aria-hidden="true">
                   <path class="icon-stroke" d="M4.3 4.3 11.7 11.7M11.7 4.3 4.3 11.7"></path>
                 </svg>
               </button>
             </div>
+            <div class="create-task-dialog-divider" aria-hidden="true"></div>
             <div class="create-task-dialog-body" id="createTaskDialogBody"></div>
+            <div class="create-task-dialog-divider" aria-hidden="true"></div>
             <div class="create-task-dialog-footer">
-              <button class="create-task-cancel-btn" id="createTaskCancelBtn" type="button">取消</button>
-              <button class="create-task-confirm-btn" id="createTaskConfirmBtn" type="button">创建任务</button>
+              <div class="create-task-dialog-actions">
+                <button class="create-task-primary-btn" id="createTaskConfirmBtn" type="button">保存并启用</button>
+                <button class="create-task-secondary-btn" id="createTaskSaveBtn" type="button">仅保存</button>
+                <button class="create-task-secondary-btn" id="createTaskCancelBtn" type="button">取消</button>
+              </div>
             </div>
           </section>
         </div>
@@ -13935,16 +14673,79 @@
         { id: "dima-medical", label: "帝迈医疗设备需求", desc: "客户洞察 · 医疗器械 · 中型企业", glyph: "帝" }
       ];
 
-      const createTaskFrequencyOptions = [
-        { value: "daily", label: "每天" },
+      const createTaskFrequencyTabs = [
+        { value: "cycle", label: "周期" },
         { value: "interval", label: "按间隔" },
         { value: "once", label: "单次" }
       ];
 
-      const createTaskTargetOptions = [
-        { value: "conversation", label: "对话通知" },
-        { value: "insight", label: "首页AI洞察卡片" }
+      const createTaskCycleOptions = [
+        { value: "daily", label: "每天", mode: "time" },
+        { value: "weekly", label: "每周", mode: "days-time" },
+        { value: "biweekly", label: "每双周", mode: "days-time" },
+        { value: "monthly", label: "每月", mode: "date-time" }
       ];
+
+      const createTaskWeekdayOptions = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+      const createTaskTimeOptions = ["09:00", "10:30", "14:00", "18:00"];
+      const createTaskMonthOptions = ["", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+      const createTaskDateOptions = ["", "2026/05/20", "2026/05/27", "2026/06/15"];
+      const createTaskIntervalUnitOptions = ["分钟", "小时"];
+      const createTaskMinuteIntervalMin = 30;
+      const createTaskAgentOptions = ["客户洞察", "销售推进", "商机巡检", "续约助手"];
+      const createTaskQixinRecipients = [
+        { id: "chenxu", label: "陈旭", glyph: "陈", tone: "person" },
+        { id: "linsong-eric", label: "林", tone: "person-blue", fullLabel: "林松Eric" },
+        { id: "tencent-segment", label: "腾", tone: "group-orange", fullLabel: "腾讯科技客群", badge: "客群" },
+        { id: "enterprise-connect", label: "企", tone: "group-orange", fullLabel: "企业互联", badge: "客群" },
+        { id: "east-ops", label: "华", tone: "group-orange", fullLabel: "华东运营组" },
+        { id: "work-message", label: "工", tone: "work-blue", fullLabel: "工作消息" },
+        { id: "rd-center", label: "研", tone: "team", fullLabel: "研发中心" },
+        { id: "north-impl", label: "华", tone: "org", fullLabel: "华北实施" },
+        { id: "success-team", label: "客", tone: "service", fullLabel: "客户成功" }
+      ];
+
+      function createDefaultTaskForm() {
+        return {
+          name: "",
+          prompt: "",
+          agent: "",
+          frequencyTab: "cycle",
+          cycleType: "daily",
+          cycleDays: ["周一", "周二", "周三", "周四"],
+          cycleTime: "09:00",
+          cycleMonth: "",
+          cycleDate: "",
+          intervalValue: "30",
+          intervalUnit: "分钟",
+          intervalDays: ["周一", "周二", "周三", "周四"],
+          onceTime: "09:00",
+          onceDate: "",
+          effectiveRangeEnabled: false,
+          effectiveRangeStart: "",
+          effectiveRangeEnd: "",
+          pushToQixinEnabled: true,
+          qixinRecipients: ["chenxu"]
+        };
+      }
+
+      function cloneTaskForm(form) {
+        const base = form || createDefaultTaskForm();
+        const clonedForm = {
+          ...base,
+          cycleDays: [...(base.cycleDays || [])],
+          intervalDays: [...(base.intervalDays || [])],
+          qixinRecipients: [...(base.qixinRecipients || [])]
+        };
+        return normalizeCreateTaskIntervalForm(clonedForm);
+      }
+
+      function createTaskFormPreset(overrides = {}) {
+        return cloneTaskForm({
+          ...createDefaultTaskForm(),
+          ...overrides
+        });
+      }
 
       const assistantTemplates = [
         {
@@ -14302,15 +15103,11 @@
         selectedForwardTargetIds: [],
         activeHoverCardMenuId: "",
         createTaskDialogOpen: false,
+        createTaskDialogMode: "create",
+        activeEditTaskId: "",
+        createTaskMenuOpen: "",
         createAssistantDialogOpen: false,
-        createTaskForm: {
-          name: "客户流失风险",
-          prompt: "当我负责的客户健康度下降50%以下时通知我",
-          agent: "客户洞察",
-          frequency: "daily",
-          time: "",
-          target: "insight"
-        },
+        createTaskForm: createDefaultTaskForm(),
         createAssistantForm: {
           template: "follow-up",
           name: "客户跟进助理",
@@ -14374,7 +15171,9 @@
       const homeInsightActionButtons = Array.from(document.querySelectorAll("[data-home-insight-session]"));
       const chatFlowShell = document.getElementById("chatFlowShell");
       const chatSessionTitlebar = document.getElementById("chatSessionTitlebar");
+      const chatSessionTitleBtn = document.getElementById("chatSessionTitleBtn");
       const chatSessionTitleText = document.getElementById("chatSessionTitleText");
+      const chatSessionTitleMenu = document.getElementById("chatSessionTitleMenu");
       const chatOutputEntry = document.querySelector(".chat-output-entry");
       const chatOutputToggleBtn = document.getElementById("chatOutputToggleBtn");
       const chatOutputPanelShell = document.getElementById("chatOutputPanelShell");
@@ -14506,9 +15305,11 @@
       const forwardConfirmBtn = document.getElementById("forwardConfirmBtn");
       const forwardCancelBtn = document.getElementById("forwardCancelBtn");
       const createTaskOverlay = document.getElementById("createTaskOverlay");
+      const createTaskDialogHeading = document.getElementById("createTaskDialogHeading");
       const createTaskDialogBody = document.getElementById("createTaskDialogBody");
       const createTaskCloseBtn = document.getElementById("createTaskCloseBtn");
       const createTaskConfirmBtn = document.getElementById("createTaskConfirmBtn");
+      const createTaskSaveBtn = document.getElementById("createTaskSaveBtn");
       const createTaskCancelBtn = document.getElementById("createTaskCancelBtn");
       const createAssistantOverlay = document.getElementById("createAssistantOverlay");
       const createAssistantDialogBody = document.getElementById("createAssistantDialogBody");
@@ -18343,78 +19144,652 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         );
       }
 
-      function renderCreateTaskRadioGroup(options, activeValue, dataKey) {
+      function getCreateTaskCycleMeta(cycleType) {
+        const legacyTypeMap = {
+          "biweekly-days": "biweekly",
+          "biweekly-date": "monthly",
+          yearly: "daily"
+        };
+        const normalizedType = legacyTypeMap[cycleType] || cycleType;
+        return createTaskCycleOptions.find((item) => item.value === normalizedType) || createTaskCycleOptions[0];
+      }
+
+      function getCreateTaskIntervalMin(unit) {
+        return unit === "分钟" ? createTaskMinuteIntervalMin : 1;
+      }
+
+      function normalizeCreateTaskIntervalValue(value, unit) {
+        const minValue = getCreateTaskIntervalMin(unit);
+        const digitsOnly = String(value || "").replace(/[^\d]/g, "");
+        const numericValue = digitsOnly ? Number(digitsOnly) : minValue;
+        return String(Math.max(minValue, numericValue));
+      }
+
+      function normalizeCreateTaskIntervalDraft(value) {
+        return String(value || "").replace(/[^\d]/g, "");
+      }
+
+      function normalizeCreateTaskIntervalForm(form) {
+        if (!form) {
+          return form;
+        }
+        form.intervalValue = normalizeCreateTaskIntervalValue(form.intervalValue, form.intervalUnit);
+        return form;
+      }
+
+      function getCreateTaskRecipientById(recipientId) {
+        return createTaskQixinRecipients.find((item) => item.id === recipientId) || null;
+      }
+
+      function getNextCycledValue(options, currentValue) {
+        const values = Array.isArray(options) ? options : [];
+        if (!values.length) {
+          return currentValue;
+        }
+        const currentIndex = values.indexOf(currentValue);
+        return values[(currentIndex + 1 + values.length) % values.length];
+      }
+
+      function addCreateTaskListValue(targetKey, allOptions) {
+        const nextValue = allOptions.find((item) => !state.createTaskForm[targetKey].includes(item));
+        if (!nextValue) {
+          return false;
+        }
+        state.createTaskForm[targetKey] = [...state.createTaskForm[targetKey], nextValue];
+        return true;
+      }
+
+      function removeCreateTaskListValue(targetKey, value) {
+        state.createTaskForm[targetKey] = state.createTaskForm[targetKey].filter((item) => item !== value);
+      }
+
+      function renderCreateTaskChevronIcon() {
         return `
-          <div class="create-task-radio-row">
-            ${options.map((option) => `
-              <button
-                class="create-task-radio ${activeValue === option.value ? "active" : ""}"
-                type="button"
-                data-create-task-radio="${escapeHtml(dataKey)}"
-                data-create-task-value="${escapeHtml(option.value)}"
-                aria-pressed="${String(activeValue === option.value)}"
-              >
-                <span class="create-task-radio-dot" aria-hidden="true"></span>
-                <span>${escapeHtml(option.label)}</span>
-              </button>
-            `).join("")}
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path class="icon-stroke" d="m3.1 4.5 2.9 3 2.9-3"></path>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskClockIcon() {
+        return `
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path class="icon-stroke" d="M6 3.1v3.1l1.7 1"></path>
+            <circle class="icon-stroke" cx="6" cy="6.1" r="4.3"></circle>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskCalendarIcon() {
+        return `
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path class="icon-stroke" d="M2.4 3.2h7.2v6H2.4z"></path>
+            <path class="icon-stroke" d="M4 2.2v1.4M8 2.2v1.4M2.4 4.5h7.2"></path>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskAgentIcon() {
+        return `
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <rect class="icon-stroke" x="2.5" y="3.7" width="11" height="8.6" rx="4"></rect>
+            <circle class="icon-fill" cx="5.9" cy="8" r="0.8"></circle>
+            <circle class="icon-fill" cx="10.1" cy="8" r="0.8"></circle>
+            <path class="icon-stroke" d="M5.3 2.5v1.4M10.7 2.5v1.4"></path>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskPlusIcon() {
+        return `
+          <svg viewBox="0 0 14 14" aria-hidden="true">
+            <path class="icon-stroke" d="M7 2.3v9.4M2.3 7h9.4"></path>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskCloseMiniIcon() {
+        return `
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path class="icon-stroke" d="M3.2 3.2 8.8 8.8M8.8 3.2 3.2 8.8"></path>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskCheckIcon() {
+        return `
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path class="icon-stroke" d="M3.8 8.4 6.7 11 12.2 5.5"></path>
+          </svg>
+        `;
+      }
+
+      function renderCreateTaskDropdownWrap(triggerHtml, menuHtml, extraClass = "") {
+        return `
+          <div class="create-task-menu-wrap ${extraClass}">
+            ${triggerHtml}
+            ${menuHtml}
           </div>
         `;
+      }
+
+      function renderCreateTaskDropdownMenu(options, activeValue, menuType, direction = "down") {
+        return `
+          <div class="create-task-dropdown ${escapeHtml(menuType)} ${direction === "up" ? "upward" : ""}" data-create-task-menu="${escapeHtml(menuType)}">
+            ${options
+              .map((option) => {
+                const label = option.fullLabel || option.label || option.value || "";
+                const isActive = activeValue === option.value;
+                return `
+                  <button
+                    class="create-task-menu-option ${isActive ? "active" : ""}"
+                    type="button"
+                    data-create-task-select-option="${escapeHtml(menuType)}"
+                    data-create-task-option-value="${escapeHtml(option.value)}"
+                  >
+                    <span class="create-task-menu-option-copy">
+                      <span class="create-task-menu-option-title">${escapeHtml(label)}</span>
+                      ${option.menuMeta ? `<span class="create-task-menu-option-meta">${escapeHtml(option.menuMeta)}</span>` : ""}
+                    </span>
+                    <span class="create-task-menu-check">${isActive ? renderCreateTaskCheckIcon() : ""}</span>
+                  </button>
+                `;
+              })
+              .join("")}
+          </div>
+        `;
+      }
+
+      function renderCreateTaskSelectControl(value, placeholder, widthClass, dataAttrs, withClock) {
+        return `
+          <button class="create-task-control ${widthClass} ${value ? "" : "is-placeholder"}" type="button" ${dataAttrs}>
+            <span class="create-task-control-main">
+              ${withClock ? renderCreateTaskClockIcon() : ""}
+              <span class="create-task-control-label-text">${escapeHtml(value || placeholder)}</span>
+            </span>
+            ${withClock ? "" : renderCreateTaskChevronIcon()}
+          </button>
+        `;
+      }
+
+      function renderCreateTaskDateControl(value, placeholder, widthClass, dataAttrs) {
+        return `
+          <button class="create-task-control ${widthClass} ${value ? "" : "is-placeholder"}" type="button" ${dataAttrs}>
+            <span class="create-task-control-main">
+              ${renderCreateTaskCalendarIcon()}
+              <span class="create-task-control-label-text">${escapeHtml(value || placeholder)}</span>
+            </span>
+          </button>
+        `;
+      }
+
+      function renderCreateTaskMultiSelectMenu(options, selectedValues, menuType) {
+        const activeValues = Array.isArray(selectedValues) ? selectedValues : [];
+        return `
+          <div class="create-task-multi-menu" data-create-task-menu="${escapeHtml(menuType)}">
+            ${options
+              .map((option) => {
+                const value = option.value || option;
+                const label = option.label || option.value || option;
+                const isActive = activeValues.includes(value);
+                return `
+                  <button
+                    class="create-task-multi-menu-option ${isActive ? "active" : ""}"
+                    type="button"
+                    data-create-task-toggle-multi="${escapeHtml(menuType)}"
+                    data-create-task-option-value="${escapeHtml(value)}"
+                    aria-pressed="${String(isActive)}"
+                  >
+                    <span class="create-task-multi-checkbox" aria-hidden="true"></span>
+                    <span class="create-task-multi-option-label">${escapeHtml(label)}</span>
+                  </button>
+                `;
+              })
+              .join("")}
+          </div>
+        `;
+      }
+
+      function renderCreateTaskChipSelector(targetKey, values, widthClass, placeholder, chipRenderer) {
+        const menuOpen = state.createTaskMenuOpen === targetKey;
+        const menuOptions = createTaskWeekdayOptions.map((day) => ({ value: day, label: day }));
+        return `
+          <div class="create-task-menu-wrap ${widthClass}">
+            <div class="create-task-control create-task-chip-select ${values.length ? "" : "is-placeholder"} ${menuOpen ? "is-open" : ""}" data-create-task-open-menu="${escapeHtml(targetKey)}" role="button" tabindex="0" aria-label="${escapeHtml(placeholder)}">
+              <span class="create-task-chip-track">
+                ${
+                  values.length
+                    ? `<span class="create-task-chip-list">${values.map((value) => chipRenderer(value)).join("")}</span>`
+                    : `<span class="create-task-chip-placeholder">${escapeHtml(placeholder)}</span>`
+                }
+              </span>
+              ${renderCreateTaskChevronIcon()}
+            </div>
+            ${
+              menuOpen
+                ? renderCreateTaskMultiSelectMenu(menuOptions, values, targetKey)
+                : ""
+            }
+          </div>
+        `;
+      }
+
+      function renderCreateTaskDayChip(targetKey, day) {
+        return `
+          <span class="create-task-inline-chip">
+            <strong>${escapeHtml(day)}</strong>
+            <button class="create-task-chip-remove" type="button" data-create-task-remove-list="${escapeHtml(targetKey)}" data-create-task-remove-value="${escapeHtml(day)}" aria-label="移除 ${escapeHtml(day)}">
+              ${renderCreateTaskCloseMiniIcon()}
+            </button>
+          </span>
+        `;
+      }
+
+      function renderCreateTaskRecipientChip(recipientId) {
+        const recipient = getCreateTaskRecipientById(recipientId);
+        if (!recipient) {
+          return "";
+        }
+        return `
+          <span class="create-task-recipient-chip">
+            <span class="create-task-recipient-avatar ${escapeHtml(recipient.tone)}">${escapeHtml(recipient.label)}</span>
+            <strong>${escapeHtml(recipient.fullLabel || recipient.label)}</strong>
+            <button class="create-task-recipient-action" type="button" data-create-task-remove-list="qixinRecipients" data-create-task-remove-value="${escapeHtml(recipient.id)}" aria-label="移除 ${escapeHtml(recipient.label)}">
+              ${renderCreateTaskCloseMiniIcon()}
+            </button>
+          </span>
+        `;
+      }
+
+      function renderCreateTaskRecipientPicker(form) {
+        return `
+          <div class="create-task-recipient-picker" data-create-task-menu="qixinRecipients">
+            <div class="create-task-recipient-picker-list">
+              ${createTaskQixinRecipients
+                .map((recipient) => {
+                  const isActive = form.qixinRecipients.includes(recipient.id);
+                  return `
+                    <button
+                      class="create-task-recipient-picker-row ${isActive ? "active" : ""}"
+                      type="button"
+                      data-create-task-recipient-toggle="${escapeHtml(recipient.id)}"
+                      aria-pressed="${String(isActive)}"
+                    >
+                      <span class="create-task-recipient-checkbox" aria-hidden="true"></span>
+                      <span class="create-task-recipient-picker-main">
+                        <span class="create-task-recipient-picker-avatar create-task-recipient-avatar ${escapeHtml(recipient.tone)}">${escapeHtml(recipient.label)}</span>
+                        <span class="create-task-recipient-picker-copy">
+                          <span class="create-task-recipient-picker-name">${escapeHtml(recipient.fullLabel || recipient.label)}</span>
+                          ${recipient.badge ? `<span class="create-task-recipient-picker-badge">${escapeHtml(recipient.badge)}</span>` : ""}
+                        </span>
+                      </span>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderCreateTaskRecipientField(form) {
+        const selectedRecipients = form.qixinRecipients
+          .map((recipientId) => renderCreateTaskRecipientChip(recipientId))
+          .filter(Boolean)
+          .join("");
+
+        return `
+          <div class="create-task-recipient-wrap">
+            <div class="create-task-control create-task-recipient-field ${state.createTaskMenuOpen === "qixinRecipients" ? "is-open" : ""}">
+              <span class="create-task-chip-track">
+                ${
+                  selectedRecipients
+                    ? `<span class="create-task-chip-list">${selectedRecipients}</span>`
+                    : `<span class="create-task-chip-placeholder">选择企信接收方</span>`
+                }
+              </span>
+              <button class="create-task-recipient-plus" type="button" data-create-task-open-menu="qixinRecipients" aria-label="添加企信接收方">
+                ${renderCreateTaskPlusIcon()}
+              </button>
+            </div>
+            ${state.createTaskMenuOpen === "qixinRecipients" ? renderCreateTaskRecipientPicker(form) : ""}
+          </div>
+        `;
+      }
+
+      function renderCreateTaskRangeControl(form) {
+        const hasValue = form.effectiveRangeStart && form.effectiveRangeEnd;
+        return `
+          <button class="create-task-control create-task-control--flex ${hasValue ? "" : "is-placeholder"}" type="button" data-create-task-range="effectiveRange">
+            ${renderCreateTaskClockIcon()}
+            <span class="create-task-range-content">
+              <span class="create-task-range-value">${escapeHtml(form.effectiveRangeStart || "开始日期")}</span>
+              <span class="create-task-range-dash">-</span>
+              <span class="create-task-range-value">${escapeHtml(form.effectiveRangeEnd || "结束日期")}</span>
+            </span>
+          </button>
+        `;
+      }
+
+      function renderCreateTaskFrequencyControls(form) {
+        const cycleMeta = getCreateTaskCycleMeta(form.cycleType);
+
+        if (form.frequencyTab === "interval") {
+          const intervalMin = getCreateTaskIntervalMin(form.intervalUnit);
+          const intervalValue = normalizeCreateTaskIntervalValue(form.intervalValue, form.intervalUnit);
+          const intervalUnitTrigger = renderCreateTaskSelectControl(form.intervalUnit, "分钟", "create-task-control--82", 'data-create-task-open-menu="intervalUnit"', false);
+          return `
+            <div class="create-task-frequency-row">
+              <span class="create-task-frequency-prefix">每</span>
+              <label class="create-task-control create-task-control--56">
+                <input class="create-task-number-input" id="createTaskIntervalValueInput" type="number" inputmode="numeric" step="1" min="${intervalMin}" value="${escapeHtml(intervalValue)}" />
+              </label>
+              ${renderCreateTaskDropdownWrap(
+                intervalUnitTrigger,
+                state.createTaskMenuOpen === "intervalUnit"
+                  ? renderCreateTaskDropdownMenu(
+                      createTaskIntervalUnitOptions.map((item) => ({ value: item, label: item })),
+                      form.intervalUnit,
+                      "interval-unit",
+                      "up"
+                    )
+                  : "",
+                "interval-unit"
+              )}
+              ${renderCreateTaskChipSelector("intervalDays", form.intervalDays, "create-task-control--204", "选择星期", (day) => renderCreateTaskDayChip("intervalDays", day))}
+            </div>
+          `;
+        }
+
+        if (form.frequencyTab === "once") {
+          return `
+            <div class="create-task-frequency-row">
+              ${renderCreateTaskDateControl(form.onceDate, "选择日期", "create-task-control--204", 'data-create-task-cycle-field="onceDate"')}
+              ${renderCreateTaskSelectControl(form.onceTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="onceTime"', true)}
+            </div>
+          `;
+        }
+
+        if (cycleMeta.mode === "days-time") {
+          const cycleTypeTrigger = renderCreateTaskSelectControl(cycleMeta.label, "每天", "create-task-control--82", 'data-create-task-open-menu="cycleType"', false);
+          return `
+            <div class="create-task-frequency-row">
+              ${renderCreateTaskDropdownWrap(
+                cycleTypeTrigger,
+                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
+                "cycle-type"
+              )}
+              ${renderCreateTaskChipSelector("cycleDays", form.cycleDays, "create-task-control--204", "选择星期", (day) => renderCreateTaskDayChip("cycleDays", day))}
+              ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="cycleTime"', true)}
+            </div>
+          `;
+        }
+
+        if (cycleMeta.mode === "date-time") {
+          const cycleTypeTrigger = renderCreateTaskSelectControl(cycleMeta.label, "每天", "create-task-control--82", 'data-create-task-open-menu="cycleType"', false);
+          return `
+            <div class="create-task-frequency-row">
+              ${renderCreateTaskDropdownWrap(
+                cycleTypeTrigger,
+                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
+                "cycle-type"
+              )}
+              ${renderCreateTaskDateControl(form.cycleDate, "选择日期", "create-task-control--204", 'data-create-task-cycle-field="cycleDate"')}
+              ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="cycleTime"', true)}
+            </div>
+          `;
+        }
+
+        if (cycleMeta.mode === "month-date-time") {
+          const cycleTypeTrigger = renderCreateTaskSelectControl(cycleMeta.label, "每天", "create-task-control--82", 'data-create-task-open-menu="cycleType"', false);
+          return `
+            <div class="create-task-frequency-row">
+              ${renderCreateTaskDropdownWrap(
+                cycleTypeTrigger,
+                state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
+                "cycle-type"
+              )}
+              ${renderCreateTaskSelectControl(form.cycleMonth, "选择月份", "create-task-control--120", 'data-create-task-cycle-field="cycleMonth"', false)}
+              ${renderCreateTaskDateControl(form.cycleDate, "选择日期", "create-task-control--204", 'data-create-task-cycle-field="cycleDate"')}
+              ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--82", 'data-create-task-cycle-field="cycleTime"', true)}
+            </div>
+          `;
+        }
+
+        const cycleTypeTrigger = renderCreateTaskSelectControl(cycleMeta.label, "每天", "create-task-control--82", 'data-create-task-open-menu="cycleType"', false);
+        return `
+          <div class="create-task-frequency-row">
+            ${renderCreateTaskDropdownWrap(
+              cycleTypeTrigger,
+              state.createTaskMenuOpen === "cycleType" ? renderCreateTaskDropdownMenu(createTaskCycleOptions, cycleMeta.value, "cycle") : "",
+              "cycle-type"
+            )}
+            ${renderCreateTaskSelectControl(form.cycleTime, "09:00", "create-task-control--120", 'data-create-task-cycle-field="cycleTime"', true)}
+          </div>
+        `;
+      }
+
+      function renderCreateTaskFrequencySummary(form) {
+        const cycleMeta = getCreateTaskCycleMeta(form.cycleType);
+        if (form.frequencyTab === "interval") {
+          const intervalValue = normalizeCreateTaskIntervalValue(form.intervalValue, form.intervalUnit);
+          return `每 ${intervalValue} ${form.intervalUnit}${form.intervalDays.length ? ` · ${form.intervalDays.join("、")}` : ""}`;
+        }
+        if (form.frequencyTab === "once") {
+          return `单次 ${form.onceDate || "选择日期"} · ${form.onceTime}`;
+        }
+        if (cycleMeta.mode === "days-time") {
+          return `${cycleMeta.label} ${form.cycleDays.join("、")} · ${form.cycleTime}`;
+        }
+        if (cycleMeta.mode === "date-time") {
+          return `${cycleMeta.label} ${form.cycleDate || "选择日期"} · ${form.cycleTime}`;
+        }
+        if (cycleMeta.mode === "month-date-time") {
+          return `${cycleMeta.label} ${form.cycleMonth || "选择月份"} ${form.cycleDate || "选择日期"} · ${form.cycleTime}`;
+        }
+        return `${cycleMeta.label} · ${form.cycleTime}`;
+      }
+
+      function getCreateTaskDialogTitle() {
+        return state.createTaskDialogMode === "edit" ? "编辑自动化任务" : "创建自动化任务";
+      }
+
+      function getCreateTaskConfirmLabel() {
+        return state.createTaskDialogMode === "edit" ? "保存修改并启用" : "保存并启用";
+      }
+
+      function getCreateTaskSaveLabel() {
+        return state.createTaskDialogMode === "edit" ? "仅保存修改" : "仅保存";
+      }
+
+      function getTaskRecordById(taskId) {
+        return taskPageRecords.find((item) => item.id === taskId) || null;
+      }
+
+      function syncTaskRecordWithForm(record, form, mode = "enable") {
+        if (!record || !form) {
+          return;
+        }
+
+        const nextForm = cloneTaskForm(form);
+        record.title = nextForm.name.trim() || record.title;
+        record.description = nextForm.prompt.trim() || record.description;
+        record.formPreset = nextForm;
+        if (mode === "enable") {
+          record.enabled = true;
+          record.status = "running";
+          record.statusLabel = "运行中";
+        }
+      }
+
+      function persistAiCreatedTaskRecords() {
+        // Static demo data only; task.html persists user-created records, but this page edits local preview state.
       }
 
       function renderCreateTaskDialog() {
         const form = state.createTaskForm;
+        const dialogTitle = getCreateTaskDialogTitle();
+        const confirmLabel = getCreateTaskConfirmLabel();
+        const saveLabel = getCreateTaskSaveLabel();
+        const heading = document.getElementById("createTaskDialogHeading");
+        if (heading) {
+          heading.textContent = dialogTitle;
+        }
+        if (createTaskCloseBtn) {
+          createTaskCloseBtn.setAttribute("aria-label", state.createTaskDialogMode === "edit" ? "关闭编辑任务弹窗" : "关闭创建任务弹窗");
+        }
+        if (createTaskConfirmBtn) {
+          createTaskConfirmBtn.textContent = confirmLabel;
+        }
+        if (createTaskSaveBtn) {
+          createTaskSaveBtn.textContent = saveLabel;
+        }
         createTaskDialogBody.innerHTML = `
-          <div class="create-task-form">
+          <section class="create-task-section">
+            <h3 class="create-task-section-title">任务信息配置</h3>
             <label class="create-task-field">
               <span class="create-task-field-label">名称</span>
-              <input class="create-task-input" id="createTaskNameInput" type="text" value="${escapeHtml(form.name)}" placeholder="请输入任务名称" />
+              <input class="create-task-input" id="createTaskNameInput" type="text" value="${escapeHtml(form.name)}" placeholder="请输入" />
             </label>
-
             <div class="create-task-field">
-              <span class="create-task-field-label">提示词</span>
+              <span class="create-task-field-label">任务指令</span>
               <div class="create-task-prompt-box">
-                <textarea class="create-task-prompt-textarea" id="createTaskPromptInput" placeholder="请输入触发条件或任务内容">${escapeHtml(form.prompt)}</textarea>
-                <span class="create-task-agent-chip">
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <rect class="icon-stroke" x="2.5" y="3.7" width="11" height="8.6" rx="4"></rect>
-                    <circle class="icon-fill" cx="5.9" cy="8" r="0.8"></circle>
-                    <circle class="icon-fill" cx="10.1" cy="8" r="0.8"></circle>
-                    <path class="icon-stroke" d="M5.3 2.5v1.4M10.7 2.5v1.4"></path>
-                  </svg>
-                  <span>${escapeHtml(form.agent)}</span>
-                  <svg viewBox="0 0 12 12" aria-hidden="true">
-                    <path class="icon-stroke" d="m3.1 4.5 2.9 3 2.9-3"></path>
-                  </svg>
-                </span>
+                <textarea class="create-task-prompt-textarea" id="createTaskPromptInput" placeholder="输入指令">${escapeHtml(form.prompt)}</textarea>
+                <div class="create-task-agent-wrap">
+                  <button class="create-task-agent-btn ${form.agent ? "" : "is-placeholder"}" id="createTaskAgentBtn" type="button" data-create-task-open-menu="agent">
+                    ${renderCreateTaskAgentIcon()}
+                    <span>${escapeHtml(form.agent || "选择智能体")}</span>
+                    ${renderCreateTaskChevronIcon()}
+                  </button>
+                  ${
+                    state.createTaskMenuOpen === "agent"
+                      ? renderCreateTaskDropdownMenu(
+                          createTaskAgentOptions.map((label) => ({ value: label, label })),
+                          form.agent,
+                          "agent",
+                          "up"
+                        )
+                      : ""
+                  }
+                </div>
               </div>
             </div>
+            <div class="create-task-field">
+              <span class="create-task-field-label">执行频率</span>
+              <div class="create-task-frequency-body">
+                <div class="create-task-tabs" role="tablist" aria-label="执行频率">
+                  ${createTaskFrequencyTabs
+                    .map(
+                      (tab) => `
+                        <button
+                          class="create-task-tab ${form.frequencyTab === tab.value ? "active" : ""}"
+                          type="button"
+                          data-create-task-tab="${escapeHtml(tab.value)}"
+                          aria-pressed="${String(form.frequencyTab === tab.value)}"
+                        >
+                          ${escapeHtml(tab.label)}
+                        </button>
+                      `
+                    )
+                    .join("")}
+                </div>
+                ${renderCreateTaskFrequencyControls(form)}
+              </div>
+            </div>
+          </section>
 
-            <div class="create-task-radio-group">
-              <span class="create-task-field-label">推送频率</span>
-              ${renderCreateTaskRadioGroup(createTaskFrequencyOptions, form.frequency, "frequency")}
+          <section class="create-task-section">
+            <h3 class="create-task-section-title">时效及范围</h3>
+
+            <div class="create-task-setting-card ${form.effectiveRangeEnabled ? "expanded" : ""}">
+              <div class="create-task-setting-head">
+                <span class="create-task-setting-title">配置生效时间范围 <span class="muted">（默认始终生效）</span></span>
+                <button class="create-task-switch ${form.effectiveRangeEnabled ? "is-on" : ""}" type="button" data-create-task-toggle="effectiveRangeEnabled" aria-pressed="${String(form.effectiveRangeEnabled)}"></button>
+              </div>
+              ${
+                form.effectiveRangeEnabled
+                  ? `
+                    <div class="create-task-setting-row">
+                      <span class="create-task-setting-row-label">选择起始时间</span>
+                      ${renderCreateTaskRangeControl(form)}
+                    </div>
+                  `
+                  : ""
+              }
             </div>
 
-            <div class="create-task-time-wrap">
-              <button class="create-task-time-btn ${form.time ? "has-value" : ""}" id="createTaskTimeBtn" type="button">
-                <svg viewBox="0 0 16 16" aria-hidden="true">
-                  <path class="icon-stroke" d="M8 4.1v4.2l2.3 1.4"></path>
-                  <circle class="icon-stroke" cx="8" cy="8.2" r="5.2"></circle>
-                </svg>
-                <span>${escapeHtml(form.time || "选择时间")}</span>
-              </button>
+            <div class="create-task-setting-card ${form.pushToQixinEnabled ? "expanded" : ""}">
+              <div class="create-task-setting-head">
+                <span class="create-task-setting-title">推送到纷享企信</span>
+                <button class="create-task-switch ${form.pushToQixinEnabled ? "is-on" : ""}" type="button" data-create-task-toggle="pushToQixinEnabled" aria-pressed="${String(form.pushToQixinEnabled)}"></button>
+              </div>
+              ${
+                form.pushToQixinEnabled
+                  ? `
+                    <div class="create-task-setting-row create-task-setting-row--recipient">
+                      <span class="create-task-setting-row-label">企信发送给</span>
+                      ${renderCreateTaskRecipientField(form)}
+                    </div>
+                  `
+                  : ""
+              }
             </div>
-
-            <div class="create-task-radio-group">
-              <span class="create-task-field-label">推送到</span>
-              ${renderCreateTaskRadioGroup(createTaskTargetOptions, form.target, "target")}
-            </div>
-          </div>
+          </section>
         `;
       }
 
       function openCreateTaskDialog() {
+        state.createTaskDialogMode = "create";
+        state.activeEditTaskId = "";
+        state.createTaskForm = createDefaultTaskForm();
         state.createTaskDialogOpen = true;
+        state.createTaskMenuOpen = "";
+        renderCreateTaskDialog();
+        createTaskOverlay.classList.remove("hidden");
+        syncDialogBodyLock();
+      }
+
+      function openEditTaskDialog(taskId) {
+        const record = getTaskRecordById(taskId);
+        if (!record) {
+          return;
+        }
+
+        state.createTaskDialogMode = "edit";
+        state.activeEditTaskId = taskId;
+        state.createTaskForm = cloneTaskForm(record.formPreset || createTaskFormPreset({
+          name: record.title,
+          prompt: record.prompt,
+          agent: createTaskAgentOptions.includes(record.agent) ? record.agent : ""
+        }));
+        state.createTaskDialogOpen = true;
+        state.createTaskMenuOpen = "";
+        renderCreateTaskDialog();
+        createTaskOverlay.classList.remove("hidden");
+        syncDialogBodyLock();
+      }
+
+      function openActiveAutomationTaskEditDialog() {
+        const session = conversationSessions[state.activeChatId];
+        const taskId = session && session.source === "automation-task" ? session.taskId : state.activeAutomationTaskId;
+        const task = getAutomationTaskDefinition(taskId);
+        const firstRun = Array.isArray(task.reports) ? task.reports[0] : null;
+
+        state.createTaskDialogMode = "edit";
+        state.activeEditTaskId = task.id || "";
+        state.createTaskForm = createTaskFormPreset({
+          name: task.title || "",
+          prompt: task.prompt || "",
+          agent: "销售推进",
+          frequencyTab: "cycle",
+          cycleType: "weekly",
+          cycleDays: ["周一", "周二", "周三", "周四", "周五"],
+          cycleTime: firstRun?.timeLabel?.includes("9:") || firstRun?.timeLabel?.includes("09:") ? "09:00" : "09:00",
+          pushToQixinEnabled: true,
+          qixinRecipients: ["chenxu", "east-ops"]
+        });
+        state.createTaskDialogOpen = true;
+        state.createTaskMenuOpen = "";
         renderCreateTaskDialog();
         createTaskOverlay.classList.remove("hidden");
         syncDialogBodyLock();
@@ -18422,14 +19797,32 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function closeCreateTaskDialog() {
         state.createTaskDialogOpen = false;
+        state.createTaskDialogMode = "create";
+        state.activeEditTaskId = "";
+        state.createTaskMenuOpen = "";
         createTaskOverlay.classList.add("hidden");
         syncDialogBodyLock();
       }
 
-      function confirmCreateTaskDialog() {
-        const { name, frequency, target } = state.createTaskForm;
+      function confirmCreateTaskDialog(mode = "enable") {
+        if (state.createTaskForm.frequencyTab === "interval") {
+          normalizeCreateTaskIntervalForm(state.createTaskForm);
+        }
+        const taskName = state.createTaskForm.name.trim() || "未命名任务";
+        const frequencyLabel = renderCreateTaskFrequencySummary(state.createTaskForm);
+        const isEditMode = state.createTaskDialogMode === "edit";
+        if (isEditMode) {
+          const record = getTaskRecordById(state.activeEditTaskId);
+          syncTaskRecordWithForm(record, state.createTaskForm, mode);
+          persistAiCreatedTaskRecords();
+          renderTaskPage();
+        }
         closeCreateTaskDialog();
-        showToast(`已创建任务：${name} · ${frequency === "daily" ? "每天" : frequency === "interval" ? "按间隔" : "单次"} · ${target === "insight" ? "首页AI洞察卡片" : "对话通知"}`);
+        if (isEditMode) {
+          showToast(mode === "save" ? `已保存修改：${taskName} · ${frequencyLabel}` : `已保存并启用：${taskName} · ${frequencyLabel}`);
+          return;
+        }
+        showToast(mode === "save" ? `已保存任务：${taskName} · ${frequencyLabel}` : `已保存并启用任务：${taskName} · ${frequencyLabel}`);
       }
 
       function getAssistantTemplateById(templateId) {
@@ -22735,6 +24128,28 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const showTitlebar = hasProducedChatMessage(session);
         chatSessionTitlebar.classList.toggle("hidden", !showTitlebar);
         chatSessionTitleText.textContent = showTitlebar ? getChatSessionTitle(session) : "";
+        if (!showTitlebar) {
+          closeChatSessionTitleMenu();
+        }
+      }
+
+      function closeChatSessionTitleMenu() {
+        if (!chatSessionTitleMenu || !chatSessionTitleBtn) {
+          return;
+        }
+
+        chatSessionTitleMenu.classList.add("hidden");
+        chatSessionTitleBtn.setAttribute("aria-expanded", "false");
+      }
+
+      function toggleChatSessionTitleMenu() {
+        if (!chatSessionTitleMenu || !chatSessionTitleBtn || !chatSessionTitlebar || chatSessionTitlebar.classList.contains("hidden")) {
+          return;
+        }
+
+        const isOpen = !chatSessionTitleMenu.classList.contains("hidden");
+        chatSessionTitleMenu.classList.toggle("hidden", isOpen);
+        chatSessionTitleBtn.setAttribute("aria-expanded", String(!isOpen));
       }
 
       function renderChatConversation() {
@@ -25241,6 +26656,22 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         renderMainPanels();
       });
 
+      chatSessionTitleBtn?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleChatSessionTitleMenu();
+      });
+
+      chatSessionTitleMenu?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const menuItem = event.target.closest(".chat-session-title-menu-item");
+        if (menuItem) {
+          closeChatSessionTitleMenu();
+          if (menuItem.dataset.chatTitleAction === "edit") {
+            openActiveAutomationTaskEditDialog();
+          }
+        }
+      });
+
       homeInsightActionButtons.forEach((button) => {
         button.addEventListener("click", () => {
           openInsightConversation(button.dataset.homeInsightSession || "", button.dataset.homeInsightPrompt || "");
@@ -26002,6 +27433,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           closeOutputResultsMenu();
         }
 
+        if (!event.target.closest(".chat-session-title-main")) {
+          closeChatSessionTitleMenu();
+        }
+
         if (state.activeHoverCardMenuId && !event.target.closest(".chat-card-hover-more")) {
           state.activeHoverCardMenuId = "";
           renderMainPanels();
@@ -26013,6 +27448,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && chatSessionTitleMenu && !chatSessionTitleMenu.classList.contains("hidden")) {
+          closeChatSessionTitleMenu();
+          chatSessionTitleBtn?.focus();
+          return;
+        }
+
         if (event.key === "Escape" && !forwardOverlay.classList.contains("hidden")) {
           closeForwardDialog();
           return;
@@ -26086,6 +27527,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       createTaskConfirmBtn.addEventListener("click", () => {
         confirmCreateTaskDialog();
+      });
+
+      createTaskSaveBtn?.addEventListener("click", () => {
+        confirmCreateTaskDialog("save");
       });
 
       createTaskOverlay.addEventListener("click", (event) => {
@@ -26183,23 +27628,146 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const promptInput = event.target.closest("#createTaskPromptInput");
         if (promptInput) {
           state.createTaskForm.prompt = promptInput.value;
+          return;
+        }
+
+        const intervalValueInput = event.target.closest("#createTaskIntervalValueInput");
+        if (intervalValueInput) {
+          const draftValue = normalizeCreateTaskIntervalDraft(intervalValueInput.value);
+          state.createTaskForm.intervalValue = draftValue;
+          intervalValueInput.value = draftValue;
         }
       });
 
+      createTaskDialogBody.addEventListener("change", (event) => {
+        const intervalValueInput = event.target.closest("#createTaskIntervalValueInput");
+        if (!intervalValueInput) {
+          return;
+        }
+
+        state.createTaskForm.intervalValue = normalizeCreateTaskIntervalValue(intervalValueInput.value, state.createTaskForm.intervalUnit);
+        intervalValueInput.value = state.createTaskForm.intervalValue;
+      });
+
       createTaskDialogBody.addEventListener("click", (event) => {
-        const radioButton = event.target.closest("[data-create-task-radio]");
-        if (radioButton) {
-          const key = radioButton.dataset.createTaskRadio;
-          const value = radioButton.dataset.createTaskValue || "";
-          if (key === "frequency" || key === "target") {
-            state.createTaskForm[key] = value;
+        if (event.target.closest("[data-create-task-remove-list]")) {
+          const removeListButton = event.target.closest("[data-create-task-remove-list]");
+          const targetKey = removeListButton?.dataset.createTaskRemoveList || "";
+          const removeValue = removeListButton?.dataset.createTaskRemoveValue || "";
+          if (targetKey && removeValue) {
+            removeCreateTaskListValue(targetKey, removeValue);
+            if (targetKey === "qixinRecipients") {
+              state.createTaskMenuOpen = "";
+            }
             renderCreateTaskDialog();
           }
           return;
         }
 
-        if (event.target.closest("#createTaskTimeBtn")) {
-          state.createTaskForm.time = state.createTaskForm.time ? "" : "每天 09:00";
+        const tabButton = event.target.closest("[data-create-task-tab]");
+        if (tabButton) {
+          state.createTaskForm.frequencyTab = tabButton.dataset.createTaskTab || "cycle";
+          if (state.createTaskForm.frequencyTab === "interval") {
+            normalizeCreateTaskIntervalForm(state.createTaskForm);
+          }
+          state.createTaskMenuOpen = "";
+          renderCreateTaskDialog();
+          return;
+        }
+
+        const openMenuTrigger = event.target.closest("[data-create-task-open-menu]");
+        if (openMenuTrigger) {
+          const menuType = openMenuTrigger.dataset.createTaskOpenMenu || "";
+          state.createTaskMenuOpen = state.createTaskMenuOpen === menuType ? "" : menuType;
+          renderCreateTaskDialog();
+          return;
+        }
+
+        const dropdownOption = event.target.closest("[data-create-task-select-option]");
+        if (dropdownOption) {
+          const menuType = dropdownOption.dataset.createTaskSelectOption || "";
+          const optionValue = dropdownOption.dataset.createTaskOptionValue || "";
+          if (menuType === "agent") {
+            state.createTaskForm.agent = optionValue;
+          } else if (menuType === "cycle") {
+            state.createTaskForm.cycleType = optionValue;
+          } else if (menuType === "interval-unit") {
+            state.createTaskForm.intervalUnit = optionValue;
+            normalizeCreateTaskIntervalForm(state.createTaskForm);
+          }
+          state.createTaskMenuOpen = "";
+          renderCreateTaskDialog();
+          return;
+        }
+
+        const toggleButton = event.target.closest("[data-create-task-toggle]");
+        if (toggleButton) {
+          const field = toggleButton.dataset.createTaskToggle;
+          if (field === "effectiveRangeEnabled" || field === "pushToQixinEnabled") {
+            state.createTaskForm[field] = !state.createTaskForm[field];
+            state.createTaskMenuOpen = "";
+            renderCreateTaskDialog();
+          }
+          return;
+        }
+
+        const cycleFieldButton = event.target.closest("[data-create-task-cycle-field]");
+        if (cycleFieldButton) {
+          const field = cycleFieldButton.dataset.createTaskCycleField || "";
+          if (field === "cycleTime" || field === "onceTime") {
+            state.createTaskForm[field] = getNextCycledValue(createTaskTimeOptions, state.createTaskForm[field]);
+          } else if (field === "cycleMonth") {
+            state.createTaskForm[field] = getNextCycledValue(createTaskMonthOptions, state.createTaskForm[field]);
+          } else if (field === "cycleDate" || field === "onceDate") {
+            state.createTaskForm[field] = getNextCycledValue(createTaskDateOptions, state.createTaskForm[field]);
+          }
+          state.createTaskMenuOpen = "";
+          renderCreateTaskDialog();
+          return;
+        }
+
+        const recipientToggle = event.target.closest("[data-create-task-recipient-toggle]");
+        if (recipientToggle) {
+          const recipientId = recipientToggle.dataset.createTaskRecipientToggle || "";
+          if (recipientId) {
+            if (state.createTaskForm.qixinRecipients.includes(recipientId)) {
+              state.createTaskForm.qixinRecipients = state.createTaskForm.qixinRecipients.filter((item) => item !== recipientId);
+            } else {
+              state.createTaskForm.qixinRecipients = [...state.createTaskForm.qixinRecipients, recipientId];
+            }
+          }
+          state.createTaskMenuOpen = "qixinRecipients";
+          renderCreateTaskDialog();
+          return;
+        }
+
+        const multiToggle = event.target.closest("[data-create-task-toggle-multi]");
+        if (multiToggle) {
+          const targetKey = multiToggle.dataset.createTaskToggleMulti || "";
+          const optionValue = multiToggle.dataset.createTaskOptionValue || "";
+          if ((targetKey === "cycleDays" || targetKey === "intervalDays") && optionValue) {
+            if (state.createTaskForm[targetKey].includes(optionValue)) {
+              state.createTaskForm[targetKey] = state.createTaskForm[targetKey].filter((item) => item !== optionValue);
+            } else {
+              state.createTaskForm[targetKey] = [...state.createTaskForm[targetKey], optionValue];
+            }
+            state.createTaskMenuOpen = targetKey;
+            renderCreateTaskDialog();
+          }
+          return;
+        }
+
+        if (event.target.closest("[data-create-task-range='effectiveRange']")) {
+          const hasValue = state.createTaskForm.effectiveRangeStart && state.createTaskForm.effectiveRangeEnd;
+          state.createTaskForm.effectiveRangeStart = hasValue ? "" : "2026/05/20";
+          state.createTaskForm.effectiveRangeEnd = hasValue ? "" : "2026/06/30";
+          state.createTaskMenuOpen = "";
+          renderCreateTaskDialog();
+          return;
+        }
+
+        if (state.createTaskMenuOpen && !event.target.closest("[data-create-task-menu]")) {
+          state.createTaskMenuOpen = "";
           renderCreateTaskDialog();
         }
       });

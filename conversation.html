@@ -3262,22 +3262,128 @@
         flex: 1 1 auto;
         min-height: 0;
         margin: 20px auto 0;
+        display: flex;
+        flex-direction: column;
       }
 
       .home-center-shell.chat-mode .chat-flow-shell {
         max-width: none;
       }
 
-      .chat-output-entry {
-        position: fixed;
-        top: 66px;
-        right: 16px;
-        z-index: 75;
-        transition: right 0.24s ease;
+      .chat-session-titlebar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: min(868px, calc(100% - 32px));
+        min-height: 34px;
+        margin: 0 auto;
+        padding: 0 0 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: #fbfcff;
       }
 
-      .chat-output-entry.output-open {
-        right: calc(var(--chat-output-entry-offset, 372px) + 8px);
+      .chat-session-titlebar.hidden {
+        display: none;
+      }
+
+      .chat-session-title-main {
+        position: relative;
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .chat-session-title-trigger {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #181c25;
+        cursor: pointer;
+      }
+
+      .chat-session-title-icon {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 12px;
+      }
+
+      .chat-session-title-text {
+        min-width: 0;
+        max-width: min(460px, 60vw);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .chat-session-title-caret {
+        width: 9px;
+        height: 9px;
+        flex: 0 0 9px;
+      }
+
+      .chat-session-title-menu {
+        position: absolute;
+        top: 24px;
+        left: 0;
+        z-index: 80;
+        width: 140px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        border: 1px solid rgba(24, 28, 37, 0.06);
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 18px 36px rgba(24, 28, 37, 0.18), 0 0 0 1px rgba(24, 28, 37, 0.02);
+      }
+
+      .chat-session-title-menu.hidden {
+        display: none;
+      }
+
+      .chat-session-title-menu-item {
+        width: 100%;
+        min-height: 22px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #181c25;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 400;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .chat-session-title-menu-item:hover {
+        color: #0f62fe;
+      }
+
+      .chat-session-title-menu-item.danger {
+        color: #ff4d36;
+      }
+
+      .chat-session-title-menu-icon {
+        flex: 0 0 auto;
+      }
+
+      .chat-output-entry {
+        position: static;
+        flex: 0 0 auto;
+        z-index: 75;
       }
 
       .chat-output-toggle-btn {
@@ -12461,6 +12567,50 @@
                 </div>
 
                 <section class="chat-flow-shell hidden" id="chatFlowShell" aria-label="AI对话内容">
+                  <div class="chat-session-titlebar hidden" id="chatSessionTitlebar">
+                    <div class="chat-session-title-main">
+                      <button class="chat-session-title-trigger" id="chatSessionTitleBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+                        <svg class="chat-session-title-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                          <path d="M1.05 13.5625L1.42536 10.9696C0.530951 9.86733 0 8.4918 0 7C0 3.37563 3.13401 0.4375 7 0.4375C10.866 0.4375 14 3.37563 14 7C14 10.6244 10.866 13.5625 7 13.5625C5.87231 13.5625 4.8069 13.3125 3.86339 12.8684L1.05 13.5625ZM3.95517 11.9445L4.23602 12.0767C5.08484 12.4763 6.0251 12.6875 7 12.6875C10.3949 12.6875 13.125 10.128 13.125 7C13.125 3.87195 10.3949 1.3125 7 1.3125C3.60508 1.3125 0.875 3.87195 0.875 7C0.875 8.25027 1.30996 9.43869 2.10481 10.4182L2.34622 10.7158L2.10216 12.4017L3.95517 11.9445Z" fill="#181C25"></path>
+                        </svg>
+                        <span class="chat-session-title-text" id="chatSessionTitleText"></span>
+                        <svg class="chat-session-title-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 9" fill="none" aria-hidden="true">
+                          <path d="M4.7883 6.52599L4.81027 6.50754L8.28107 3.33908C8.47003 3.16681 8.48322 2.87414 8.31095 2.68517C8.13869 2.49621 7.84601 2.48302 7.65705 2.65529L4.49474 5.54074L1.34123 2.65265C1.15314 2.48039 0.860465 2.49269 0.68732 2.68166C0.515055 2.86974 0.527359 3.16242 0.716324 3.33556L4.18185 6.50929C4.35412 6.6675 4.61339 6.67013 4.7883 6.52599Z" fill="#181C25"></path>
+                        </svg>
+                      </button>
+                      <div class="chat-session-title-menu hidden" id="chatSessionTitleMenu" role="menu" aria-label="会话操作">
+                        <button class="chat-session-title-menu-item" type="button" role="menuitem" data-chat-title-action="pin">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+                            <path d="M10.8011 10.0774L8.40947 7.68577C8.35114 7.62743 8.35114 7.62743 8.2928 7.62743L10.6261 5.2941C10.7061 5.20824 10.7679 5.1072 10.808 4.99697C10.8481 4.88673 10.8656 4.76957 10.8595 4.65243C10.8603 4.53908 10.8344 4.42713 10.7837 4.32574C10.733 4.22436 10.659 4.13641 10.5678 4.0691C10.0159 3.61225 9.35981 3.29868 8.65768 3.15622C7.95554 3.01376 7.2291 3.04681 6.5428 3.25243L4.44281 1.6191C4.42352 1.16257 4.28254 0.719501 4.03447 0.335767C3.97614 0.277434 3.97614 0.219101 3.91781 0.219101C3.7563 0.077851 3.54903 0 3.33447 0C3.11991 0 2.91264 0.077851 2.75114 0.219101L0.242805 2.6691C0.151918 2.74689 0.0826756 2.84684 0.0417936 2.95926C0.000911578 3.07169 -0.0102226 3.19277 0.00947122 3.31077C0.0194939 3.42824 0.0562398 3.54187 0.116901 3.64298C0.177562 3.74408 0.260532 3.82997 0.359471 3.8941C0.743205 4.14217 1.18628 4.28315 1.6428 4.30243L3.27614 6.40243C3.08032 7.09361 3.05772 7.82237 3.21032 8.52435C3.36293 9.22633 3.68605 9.87993 4.15114 10.4274L4.20947 10.4858C4.36675 10.6356 4.57562 10.7191 4.79281 10.7191C5.01 10.7191 5.21886 10.6356 5.37614 10.4858L7.65114 8.15243C7.65114 8.21077 7.70947 8.21077 7.70947 8.2691L10.1011 10.6608C10.1798 10.7357 10.2842 10.7774 10.3928 10.7774C10.5014 10.7774 10.6058 10.7357 10.6845 10.6608C10.7329 10.6323 10.7747 10.5939 10.8072 10.5481C10.8398 10.5024 10.8623 10.4503 10.8733 10.3952C10.8843 10.3401 10.8836 10.2834 10.8711 10.2286C10.8587 10.1739 10.8348 10.1223 10.8011 10.0774ZM4.79281 9.8441C4.41537 9.37657 4.16367 8.82035 4.06157 8.22822C3.95948 7.63609 4.01039 7.0277 4.20947 6.46077L4.2678 6.22743L2.05114 3.42743H1.75947C1.45173 3.43299 1.14859 3.35215 0.884471 3.1941L3.27614 0.802434C3.44155 1.08484 3.52253 1.40875 3.50947 1.73577V1.9691L6.30947 4.18577L6.5428 4.12743C7.10973 3.92835 7.71813 3.87744 8.31026 3.97954C8.90239 4.08163 9.45861 4.33333 9.92614 4.71077L4.79281 9.8441Z" fill="#181C25"></path>
+                          </svg>
+                          <span>置顶会话</span>
+                        </button>
+                        <button class="chat-session-title-menu-item" type="button" role="menuitem" data-chat-title-action="rename">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                            <path d="M0.000377928 11.3826L0.173671 8.09L8.10719 0.156484C8.31583 -0.0521614 8.65411 -0.0521615 8.86276 0.156484L11.5073 2.80099C11.7159 3.00964 11.7159 3.34792 11.5073 3.55656L3.57375 11.4901L0.281184 11.6634C0.122774 11.6717 -0.00795945 11.541 0.000377928 11.3826ZM9.20158 4.62481L7.03894 2.46217L1.02981 8.47129L0.909667 10.7541L3.19246 10.6339L9.20158 4.62481ZM9.75337 4.07303L10.6476 3.17878L8.48497 1.01613L7.59072 1.91038L9.75337 4.07303Z" fill="#181C25"></path>
+                          </svg>
+                          <span>重命名</span>
+                        </button>
+                        <button class="chat-session-title-menu-item danger" type="button" role="menuitem" data-chat-title-action="remove">
+                          <svg class="chat-session-title-menu-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M5.54159 6.27087H4.66659V9.62504H5.54159V6.27087Z" fill="#FF522A"></path>
+                            <path d="M9.33325 6.27087H8.45825V9.62504H9.33325V6.27087Z" fill="#FF522A"></path>
+                            <path d="M6.56242 6.27087H7.43742V9.62504H6.56242V6.27087Z" fill="#FF522A"></path>
+                            <path d="M9.91658 1.45837V3.20837H12.5416V4.08337H11.6666V12.5417H2.33325V4.08337H1.45825V3.20837H4.08325V1.45837H9.91658ZM9.04158 3.20837V2.33337H4.95825V3.20837H9.04158ZM10.7916 4.08337H3.20825V11.6667H10.7916V4.08337Z" fill="#FF522A"></path>
+                          </svg>
+                          <span>移除</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="chat-output-entry">
+                      <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
+                        <svg class="chat-output-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                          <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" stroke-width="1.4"></rect>
+                          <path d="M10.5 4.5V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
                   <div class="chat-feed" id="chatFeed"></div>
                 </section>
 
@@ -12618,15 +12768,6 @@
                   </div>
                 </section>
               </div>
-            </div>
-
-            <div class="chat-output-entry">
-              <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
-                <svg class="chat-output-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" stroke-width="1.4"></rect>
-                  <path d="M10.5 4.5V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
-                </svg>
-              </button>
             </div>
 
             <aside class="chat-output-panel-shell" id="chatOutputPanelShell" aria-label="生成结果侧滑面板">
@@ -14465,6 +14606,10 @@
       const homeInsightCollapseBtn = document.getElementById("homeInsightCollapseBtn");
       const homeInsightActionButtons = Array.from(document.querySelectorAll("[data-home-insight-session]"));
       const chatFlowShell = document.getElementById("chatFlowShell");
+      const chatSessionTitlebar = document.getElementById("chatSessionTitlebar");
+      const chatSessionTitleBtn = document.getElementById("chatSessionTitleBtn");
+      const chatSessionTitleText = document.getElementById("chatSessionTitleText");
+      const chatSessionTitleMenu = document.getElementById("chatSessionTitleMenu");
       const chatOutputEntry = document.querySelector(".chat-output-entry");
       const chatOutputToggleBtn = document.getElementById("chatOutputToggleBtn");
       const chatOutputPanelShell = document.getElementById("chatOutputPanelShell");
@@ -22814,12 +22959,63 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
+      function getChatSessionTitle(session) {
+        if (!session) {
+          return "";
+        }
+
+        return session.historyTitle || session.taskTitle || session.prompt || "";
+      }
+
+      function hasProducedChatMessage(session) {
+        if (!session) {
+          return false;
+        }
+
+        return !["draft", "thinking"].includes(session.stage || "");
+      }
+
+      function closeChatSessionTitleMenu() {
+        if (!chatSessionTitleMenu || !chatSessionTitleBtn) {
+          return;
+        }
+
+        chatSessionTitleMenu.classList.add("hidden");
+        chatSessionTitleBtn.setAttribute("aria-expanded", "false");
+      }
+
+      function toggleChatSessionTitleMenu() {
+        if (!chatSessionTitleMenu || !chatSessionTitleBtn || !chatSessionTitlebar || chatSessionTitlebar.classList.contains("hidden")) {
+          return;
+        }
+
+        const isOpen = !chatSessionTitleMenu.classList.contains("hidden");
+        chatSessionTitleMenu.classList.toggle("hidden", isOpen);
+        chatSessionTitleBtn.setAttribute("aria-expanded", String(!isOpen));
+      }
+
+      function syncChatSessionTitlebar(session) {
+        if (!chatSessionTitlebar || !chatSessionTitleText) {
+          return;
+        }
+
+        const showTitlebar = hasProducedChatMessage(session);
+        chatSessionTitlebar.classList.toggle("hidden", !showTitlebar);
+        chatSessionTitleText.textContent = showTitlebar ? getChatSessionTitle(session) : "";
+        if (!showTitlebar) {
+          closeChatSessionTitleMenu();
+        }
+      }
+
       function renderChatConversation() {
         const session = conversationSessions[state.activeChatId];
         if (!session) {
           chatFeed.innerHTML = "";
+          syncChatSessionTitlebar(null);
           return;
         }
+
+        syncChatSessionTitlebar(session);
 
         if (session.source === "market-use" && session.stage === "draft") {
           chatFeed.innerHTML = renderMarketUseConversation(session);
@@ -25237,6 +25433,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         renderMainPanels();
       });
 
+      chatSessionTitleBtn?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleChatSessionTitleMenu();
+      });
+
+      chatSessionTitleMenu?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (event.target.closest(".chat-session-title-menu-item")) {
+          closeChatSessionTitleMenu();
+        }
+      });
+
       homeInsightActionButtons.forEach((button) => {
         button.addEventListener("click", () => {
           openInsightConversation(button.dataset.homeInsightSession || "", button.dataset.homeInsightPrompt || "");
@@ -26069,6 +26277,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           closeOutputResultsMenu();
         }
 
+        if (!event.target.closest(".chat-session-title-main")) {
+          closeChatSessionTitleMenu();
+        }
+
         if (state.activeHoverCardMenuId && !event.target.closest(".chat-card-hover-more")) {
           state.activeHoverCardMenuId = "";
           renderMainPanels();
@@ -26080,6 +26292,12 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && chatSessionTitleMenu && !chatSessionTitleMenu.classList.contains("hidden")) {
+          closeChatSessionTitleMenu();
+          chatSessionTitleBtn?.focus();
+          return;
+        }
+
         if (event.key === "Escape" && !forwardOverlay.classList.contains("hidden")) {
           closeForwardDialog();
           return;
