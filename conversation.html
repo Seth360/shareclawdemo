@@ -11020,6 +11020,14 @@
           0 2px 6px rgba(24, 28, 37, 0.06);
       }
 
+      .docs-row-menu-panel.output-floating-menu {
+        position: fixed;
+        top: var(--output-menu-top, 0px);
+        left: var(--output-menu-left, 0px);
+        right: auto;
+        z-index: 120;
+      }
+
       .docs-row-menu-item {
         width: 100%;
         min-height: 32px;
@@ -14478,6 +14486,7 @@
         outputDetailPanelManualWidth: false,
         outputPanelResizing: false,
         activeOutputMenuId: "",
+        activeOutputMenuPosition: null,
         outputAddMenuOpen: false,
         businessObjectOverlayOpen: false,
         activeBusinessObjectSourceId: "",
@@ -18565,7 +18574,31 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         state.activeOutputMenuId = "";
+        state.activeOutputMenuPosition = null;
         renderChatOutputPanel();
+      }
+
+      function setOutputMenuPosition(anchor) {
+        const rect = anchor.getBoundingClientRect();
+        const menuWidth = 148;
+        const menuHeight = 120;
+        const gap = 6;
+        const margin = 12;
+        const maxTop = Math.max(margin, window.innerHeight - margin - menuHeight);
+        const maxLeft = Math.max(margin, window.innerWidth - margin - menuWidth);
+        state.activeOutputMenuPosition = {
+          top: Math.round(Math.min(maxTop, Math.max(margin, rect.bottom + gap))),
+          left: Math.round(Math.min(maxLeft, Math.max(margin, rect.right - menuWidth)))
+        };
+      }
+
+      function renderOutputMenuPanelAttrs() {
+        const position = state.activeOutputMenuPosition;
+        if (!position) {
+          return "";
+        }
+
+        return ` style="--output-menu-top: ${position.top}px; --output-menu-left: ${position.left}px;"`;
       }
 
       function persistOutputPanelState() {
@@ -18974,7 +19007,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                 ${figmaIconImg("more")}
               </button>
               ${state.activeOutputMenuId === doc.id ? `
-                <div class="docs-row-menu-panel" role="menu" aria-label="${escapeHtml(doc.title)} 的操作菜单">
+                <div class="docs-row-menu-panel output-floating-menu" role="menu" aria-label="${escapeHtml(doc.title)} 的操作菜单"${renderOutputMenuPanelAttrs()}>
                   ${docsMenuActions.filter((item) => item.key !== "forward-qixin" && item.key !== "download").map((item) => `
                     <button class="docs-row-menu-item" type="button" role="menuitem" data-output-doc-menu-action="${escapeHtml(item.key)}" data-doc-id="${escapeHtml(doc.id)}">
                       ${escapeHtml(item.label)}
@@ -19525,7 +19558,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                     <svg viewBox="0 0 16 16" aria-hidden="true"><circle class="icon-fill" cx="3.5" cy="8" r="1"></circle><circle class="icon-fill" cx="8" cy="8" r="1"></circle><circle class="icon-fill" cx="12.5" cy="8" r="1"></circle></svg>
                   </button>
                   ${state.activeOutputMenuId === activeRecord.item.id ? `
-                    <div class="docs-row-menu-panel" role="menu" aria-label="${escapeHtml(activeRecord.item.title)} 的操作菜单">
+                    <div class="docs-row-menu-panel output-floating-menu" role="menu" aria-label="${escapeHtml(activeRecord.item.title)} 的操作菜单"${renderOutputMenuPanelAttrs()}>
                       ${docsMenuActions.map((item) => `
                         <button class="docs-row-menu-item" type="button" role="menuitem" data-output-doc-menu-action="${escapeHtml(item.key)}" data-doc-id="${escapeHtml(activeRecord.item.id)}">
                           ${escapeHtml(item.label)}
@@ -19759,7 +19792,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
       }
 
-      async function handleOutputDetailAction(action) {
+      async function handleOutputDetailAction(action, anchor = null) {
         const record = getOutputTabRecord();
         if (!record) {
           return;
@@ -19778,7 +19811,15 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           if (action === "more") {
-            state.activeOutputMenuId = state.activeOutputMenuId === record.item.id ? "" : record.item.id;
+            if (state.activeOutputMenuId === record.item.id) {
+              state.activeOutputMenuId = "";
+              state.activeOutputMenuPosition = null;
+            } else {
+              state.activeOutputMenuId = record.item.id;
+              if (anchor) {
+                setOutputMenuPosition(anchor);
+              }
+            }
             renderChatOutputPanel();
           }
           return;
@@ -26006,7 +26047,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         const detailAction = event.target.closest("[data-output-detail-action]");
         if (detailAction) {
-          await handleOutputDetailAction(detailAction.dataset.outputDetailAction || "");
+          await handleOutputDetailAction(detailAction.dataset.outputDetailAction || "", detailAction);
           return;
         }
 
@@ -26018,6 +26059,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           state.activeOutputMenuId = "";
+          state.activeOutputMenuPosition = null;
           state.outputAddMenuOpen = false;
           await handleDocsMenuAction(menuItem.dataset.outputDocMenuAction || "", doc);
           renderMainPanels();
@@ -26032,6 +26074,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           state.activeOutputMenuId = "";
+          state.activeOutputMenuPosition = null;
           state.outputAddMenuOpen = false;
           await handleOutputBusinessMenuAction(businessMenuItem.dataset.outputBusinessMenuAction || "", source);
           renderMainPanels();
@@ -26041,7 +26084,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const actionButton = event.target.closest("[data-output-doc-action]");
         if (actionButton) {
           const docId = actionButton.dataset.docId || "";
-          state.activeOutputMenuId = state.activeOutputMenuId === docId ? "" : docId;
+          if (state.activeOutputMenuId === docId) {
+            state.activeOutputMenuId = "";
+            state.activeOutputMenuPosition = null;
+          } else {
+            state.activeOutputMenuId = docId;
+            setOutputMenuPosition(actionButton);
+          }
           renderChatOutputPanel();
           return;
         }

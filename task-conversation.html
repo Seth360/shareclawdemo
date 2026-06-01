@@ -11501,6 +11501,14 @@
           0 2px 6px rgba(24, 28, 37, 0.06);
       }
 
+      .docs-row-menu-panel.output-floating-menu {
+        position: fixed;
+        top: var(--output-menu-top, 0px);
+        left: var(--output-menu-left, 0px);
+        right: auto;
+        z-index: 120;
+      }
+
       .docs-row-menu-item {
         width: 100%;
         min-height: 32px;
@@ -15046,6 +15054,7 @@
         outputDetailPanelManualWidth: false,
         outputPanelResizing: false,
         activeOutputMenuId: "",
+        activeOutputMenuPosition: null,
         outputAddMenuOpen: false,
         businessObjectOverlayOpen: false,
         activeBusinessObjectSourceId: "",
@@ -15439,6 +15448,68 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         { id: "task-renewal-warning", title: "续费预警复盘提醒", unread: 0 }
       ];
       const automationTaskCatalog = {
+        "task-payment-close-loop": {
+          id: "task-payment-close-loop",
+          title: "回款闭环自动处理流程",
+          prompt: "自动检查已到回款节点的客户、合同和应收单，推动负责人完成回款闭环。",
+          agentLabel: "回款协同智能体",
+          crmObject: "客户 / 合同 / 应收单 / 跟进记录",
+          reports: [
+            {
+              id: "payment-close-loop-today-1000",
+              timeLabel: "今天 10:00",
+              displayTitle: "回款闭环自动处理流程",
+              dateLabel: "2026年5月22日",
+              duration: "已处理 1分12秒",
+              summary: "本次检查覆盖 18 条待回款应收单和 7 个合同节点，识别出 3 个需要销售与财务协同确认的回款风险。",
+              findings: [
+                "海岳智能制造集团尾款 86 万已到约定节点，但客户采购侧还未确认付款排期。",
+                "上海宏景装备的验收单已上传，财务缺少客户盖章版付款通知。",
+                "深圳拓远电子存在跨部门审批延迟，回款预计比原计划晚 3 天。"
+              ],
+              actions: [
+                "向海岳负责人生成回款确认话术，并提醒今天内同步采购付款窗口。",
+                "为上海宏景装备创建财务补件任务，补齐盖章版付款通知。",
+                "把深圳拓远电子标记为回款延期风险，推送给销售经理复核。"
+              ],
+              sources: ["应收单到期节点", "合同付款条款", "验收单状态", "最近跟进记录"],
+              outputs: {
+                docs: [
+                  { id: "auto-payment-close-loop-report", title: "回款闭环处理报告.pdf", type: "pdf", createdTimeLabel: "今天 10:00", sortKey: 202605221000 },
+                  { id: "auto-payment-close-loop-risk-list", title: "待回款风险客户清单", type: "doc", createdTimeLabel: "今天 10:00", sortKey: 202605220959 }
+                ],
+                business: [
+                  { id: "auto-payment-close-loop-haiyue", title: "【客户】海岳智能制造集团有限公司", tabTitle: "海岳回款跟进", typeLabel: "客户", owner: "负责人：刘志强", stage: "回款阶段：付款确认", health: "待回款金额：86万", lastTouch: "最近跟进：今天 09:40", nextAction: "下一步：确认付款排期", actionLabel: "更新", createdTimeLabel: "今天 10:00", sortKey: 202605220958 }
+                ]
+              }
+            },
+            {
+              id: "payment-close-loop-yesterday-1600",
+              timeLabel: "昨天 16:00",
+              displayTitle: "回款闭环自动处理流程",
+              dateLabel: "2026年5月21日",
+              duration: "已处理 48秒",
+              summary: "昨日回款闭环任务完成 2 条付款提醒推送，并把 1 个超期应收风险同步给销售主管。",
+              findings: [
+                "北京云启科技 42 万应收已超期 2 天，客户法务仍未完成付款审批流。",
+                "广州联科制造付款凭证已回传，但 CRM 应收状态尚未更新。"
+              ],
+              actions: [
+                "要求北京云启负责人补充法务审批阻塞原因。",
+                "提醒广州联科负责人同步财务确认结果，并更新 CRM 回款状态。"
+              ],
+              sources: ["应收单超期记录", "付款凭证", "负责人待办"],
+              outputs: {
+                docs: [
+                  { id: "auto-payment-close-loop-yesterday", title: "昨日回款闭环摘要.pdf", type: "pdf", createdTimeLabel: "昨天 16:00", sortKey: 202605211600 }
+                ],
+                business: [
+                  { id: "auto-payment-close-loop-yunqi", title: "【客户】北京云启科技有限公司", tabTitle: "北京云启回款", typeLabel: "客户", owner: "负责人：周予安", stage: "回款阶段：法务审批", health: "超期应收：42万", lastTouch: "最近跟进：昨天 15:30", nextAction: "下一步：补充审批原因", actionLabel: "更新", createdTimeLabel: "昨天 16:00", sortKey: 202605211559 }
+                ]
+              }
+            }
+          ]
+        },
         "task-morning-check": {
           id: "task-morning-check",
           title: "重点客户异动晨检",
@@ -15883,34 +15954,47 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         return getAutomationTaskRun();
       }
 
-      function getAutomationOutputDocs(taskId = state.activeAutomationTaskId, runId = state.activeAutomationRunId) {
+      function getAutomationTaskOutputRuns(taskId = state.activeAutomationTaskId) {
         const task = getAutomationTaskDefinition(taskId);
-        const run = getAutomationTaskRun(task.id, runId);
-        return (run.outputs?.docs || []).map((doc) => ({
-          ...doc,
-          dialog: `${task.title} · ${run.timeLabel}`,
-          sessionId: getAutomationTaskSessionId(task.id),
-          taskId: task.id,
-          runId: run.id,
-          url: `https://shareclaw.local/automation/${task.id}/${run.id}/${doc.id}`
-        }));
+        const handoffRuns = Object.values(loadTaskConversationHandoffs())
+          .filter((item) => item && (item.conversationTaskId || item.taskId) === task.id)
+          .map((item) => buildHandoffAutomationRun(item));
+        const runtimeRuns = loadTaskRuntimeLogs()
+          .filter((item) => item.taskId === task.id)
+          .map((item) => buildRuntimeAutomationRun(item));
+        return [...handoffRuns, ...runtimeRuns, ...task.reports];
       }
 
-      function getAutomationOutputBusinessSources(taskId = state.activeAutomationTaskId, runId = state.activeAutomationRunId) {
+      function getAutomationOutputDocs(taskId = state.activeAutomationTaskId) {
         const task = getAutomationTaskDefinition(taskId);
-        const run = getAutomationTaskRun(task.id, runId);
-        return (run.outputs?.business || []).map((source) => ({
-          ...source,
-          detailTitle: source.detailTitle || source.title.replace(/^【[^】]+】/, ""),
-          sessionId: getAutomationTaskSessionId(task.id),
-          taskId: task.id,
-          runId: run.id
-        }));
+        return getAutomationTaskOutputRuns(task.id)
+          .flatMap((run) => (run.outputs?.docs || []).map((doc) => ({
+            ...doc,
+            dialog: `${task.title} · ${run.timeLabel}`,
+            sessionId: getAutomationTaskSessionId(task.id),
+            taskId: task.id,
+            runId: run.id,
+            url: `https://shareclaw.local/automation/${task.id}/${run.id}/${doc.id}`
+          })))
+          .sort((a, b) => (b.sortKey || 0) - (a.sortKey || 0));
+      }
+
+      function getAutomationOutputBusinessSources(taskId = state.activeAutomationTaskId) {
+        const task = getAutomationTaskDefinition(taskId);
+        return getAutomationTaskOutputRuns(task.id)
+          .flatMap((run) => (run.outputs?.business || []).map((source) => ({
+            ...source,
+            detailTitle: source.detailTitle || source.title.replace(/^【[^】]+】/, ""),
+            sessionId: getAutomationTaskSessionId(task.id),
+            taskId: task.id,
+            runId: run.id
+          })))
+          .sort((a, b) => (b.sortKey || 0) - (a.sortKey || 0));
       }
 
       function getAutomationOutputDocById(docId) {
         for (const task of Object.values(automationTaskCatalog)) {
-          for (const run of task.reports) {
+          for (const run of getAutomationTaskOutputRuns(task.id)) {
             const doc = (run.outputs?.docs || []).find((item) => item.id === docId);
             if (doc) {
               return {
@@ -15929,7 +16013,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function getAutomationBusinessSourceById(sourceId) {
         for (const task of Object.values(automationTaskCatalog)) {
-          for (const run of task.reports) {
+          for (const run of getAutomationTaskOutputRuns(task.id)) {
             const source = (run.outputs?.business || []).find((item) => item.id === sourceId);
             if (source) {
               return {
@@ -20239,7 +20323,31 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         state.activeOutputMenuId = "";
+        state.activeOutputMenuPosition = null;
         renderChatOutputPanel();
+      }
+
+      function setOutputMenuPosition(anchor) {
+        const rect = anchor.getBoundingClientRect();
+        const menuWidth = 148;
+        const menuHeight = 120;
+        const gap = 6;
+        const margin = 12;
+        const maxTop = Math.max(margin, window.innerHeight - margin - menuHeight);
+        const maxLeft = Math.max(margin, window.innerWidth - margin - menuWidth);
+        state.activeOutputMenuPosition = {
+          top: Math.round(Math.min(maxTop, Math.max(margin, rect.bottom + gap))),
+          left: Math.round(Math.min(maxLeft, Math.max(margin, rect.right - menuWidth)))
+        };
+      }
+
+      function renderOutputMenuPanelAttrs() {
+        const position = state.activeOutputMenuPosition;
+        if (!position) {
+          return "";
+        }
+
+        return ` style="--output-menu-top: ${position.top}px; --output-menu-left: ${position.left}px;"`;
       }
 
       function persistOutputPanelState() {
@@ -20496,7 +20604,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                 ${figmaIconImg("more")}
               </button>
               ${state.activeOutputMenuId === doc.id ? `
-                <div class="docs-row-menu-panel" role="menu" aria-label="${escapeHtml(doc.title)} 的操作菜单">
+                <div class="docs-row-menu-panel output-floating-menu" role="menu" aria-label="${escapeHtml(doc.title)} 的操作菜单"${renderOutputMenuPanelAttrs()}>
                   ${docsMenuActions.filter((item) => item.key !== "forward-qixin" && item.key !== "download").map((item) => `
                     <button class="docs-row-menu-item" type="button" role="menuitem" data-output-doc-menu-action="${escapeHtml(item.key)}" data-doc-id="${escapeHtml(doc.id)}">
                       ${escapeHtml(item.label)}
@@ -21111,7 +21219,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                     <svg viewBox="0 0 16 16" aria-hidden="true"><circle class="icon-fill" cx="3.5" cy="8" r="1"></circle><circle class="icon-fill" cx="8" cy="8" r="1"></circle><circle class="icon-fill" cx="12.5" cy="8" r="1"></circle></svg>
                   </button>
                   ${state.activeOutputMenuId === activeRecord.item.id ? `
-                    <div class="docs-row-menu-panel" role="menu" aria-label="${escapeHtml(activeRecord.item.title)} 的操作菜单">
+                    <div class="docs-row-menu-panel output-floating-menu" role="menu" aria-label="${escapeHtml(activeRecord.item.title)} 的操作菜单"${renderOutputMenuPanelAttrs()}>
                       ${docsMenuActions.map((item) => `
                         <button class="docs-row-menu-item" type="button" role="menuitem" data-output-doc-menu-action="${escapeHtml(item.key)}" data-doc-id="${escapeHtml(activeRecord.item.id)}">
                           ${escapeHtml(item.label)}
@@ -21341,7 +21449,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
       }
 
-      async function handleOutputDetailAction(action) {
+      async function handleOutputDetailAction(action, anchor = null) {
         const record = getOutputTabRecord();
         if (!record) {
           return;
@@ -21360,7 +21468,15 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           if (action === "more") {
-            state.activeOutputMenuId = state.activeOutputMenuId === record.item.id ? "" : record.item.id;
+            if (state.activeOutputMenuId === record.item.id) {
+              state.activeOutputMenuId = "";
+              state.activeOutputMenuPosition = null;
+            } else {
+              state.activeOutputMenuId = record.item.id;
+              if (anchor) {
+                setOutputMenuPosition(anchor);
+              }
+            }
             renderChatOutputPanel();
           }
           return;
@@ -27162,7 +27278,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         const detailAction = event.target.closest("[data-output-detail-action]");
         if (detailAction) {
-          await handleOutputDetailAction(detailAction.dataset.outputDetailAction || "");
+          await handleOutputDetailAction(detailAction.dataset.outputDetailAction || "", detailAction);
           return;
         }
 
@@ -27174,6 +27290,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           state.activeOutputMenuId = "";
+          state.activeOutputMenuPosition = null;
           state.outputAddMenuOpen = false;
           await handleDocsMenuAction(menuItem.dataset.outputDocMenuAction || "", doc);
           renderMainPanels();
@@ -27188,6 +27305,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           }
 
           state.activeOutputMenuId = "";
+          state.activeOutputMenuPosition = null;
           state.outputAddMenuOpen = false;
           await handleOutputBusinessMenuAction(businessMenuItem.dataset.outputBusinessMenuAction || "", source);
           renderMainPanels();
@@ -27197,7 +27315,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         const actionButton = event.target.closest("[data-output-doc-action]");
         if (actionButton) {
           const docId = actionButton.dataset.docId || "";
-          state.activeOutputMenuId = state.activeOutputMenuId === docId ? "" : docId;
+          if (state.activeOutputMenuId === docId) {
+            state.activeOutputMenuId = "";
+            state.activeOutputMenuPosition = null;
+          } else {
+            state.activeOutputMenuId = docId;
+            setOutputMenuPosition(actionButton);
+          }
           renderChatOutputPanel();
           return;
         }
