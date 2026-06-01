@@ -76,7 +76,6 @@ Core shared render/navigation functions:
 | `market.html` | Agent square, skill center, automation view, created/batch/share flows, skill import flow. |
 | `docs.html` | Shared shell plus document library. Shallow semantic mapping only. |
 | `settings.html` | Shared shell plus settings pages. Shallow semantic mapping only. |
-| `object-detail-overlay.html` | Separate CRM-style object detail overlay reference, outside the main three-column shell. |
 
 ## Semantic Lookup
 
@@ -201,6 +200,19 @@ Core shared render/navigation functions:
 - The drawer uses a soft right-drawer shadow and slide-in/slide-out transition.
 - The drawer title area is rendered through `renderBusinessObjectTitleBar()`.
 - Business object detail header actions show only the forward/share icon.
+- There is no standalone `object-detail-overlay.html` module in the current
+  project. Business object detail is embedded in `conversation.html` and
+  `task-conversation.html`.
+
+### Removed Mobile Prototype Files
+
+- Removed mobile files: `Mobile.html`, `ShareClaw-Demo.html`, `image/1`, and
+  `image/frame*.png`.
+- Web desktop HTML files are `index.html`, `conversation.html`,
+  `task-conversation.html`, `task.html`, `docs.html`, `settings.html`,
+  `market.html`, and `messenger.html`.
+- Mobile-file cleanup must not change Web desktop HTML behavior unless the user
+  explicitly asks for a Web-side UI/navigation change.
 
 ### Scheme Switcher
 

@@ -128,6 +128,27 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
 - Update: `agent-action-create-object` uses the same minimal object artifact
   after create success and appends the dynamic customer to the right
   `业务生成结果` list.
+
+### 2026-06-01 - Mobile Prototype Files Removed From Runtime
+
+- Decision: remove the old mobile prototype files from the current project
+  runtime surface: `Mobile.html`, `ShareClaw-Demo.html`, `image/frame*.png`,
+  and `image/1`.
+- Reason: the active product work is the desktop ShareAgent shell and the
+  deleted mobile files were stale prototype surfaces.
+- Boundary correction: deleting mobile files does not imply changing Web
+  desktop HTML. Shared desktop pages must not be modified during mobile-file
+  cleanup unless the user explicitly asks for a Web-side UI/navigation change.
+
+### 2026-06-01 - Standalone Object Detail HTML Is Not Current
+
+- Decision: `object-detail-overlay.html` is not a current project module.
+- Reason: the file is absent from the working tree and not referenced by runtime
+  HTML. The current business detail surface is embedded in `conversation.html`
+  and `task-conversation.html` through `#businessObjectOverlay` and
+  `.embedded-object-detail`.
+- Do not regress: do not treat `object-detail-overlay.html` as a page ownership
+  target unless the user explicitly reintroduces that standalone file.
 - Update: clicking `创建` in `agent-action-create-object` shows a 1-second
   thinking state before the CRM object artifact is produced.
 - Update: clicking `更新` in `agent-action-update-object` also shows a
