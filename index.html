@@ -76,7 +76,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid var(--line);
         background: var(--page-bg);
       }
 
@@ -168,42 +167,18 @@
       }
 
       .company-logo {
-        position: relative;
-        width: 18px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      .company-logo-main {
-        position: absolute;
-        inset: 2px 0 0 0;
-        width: 18px;
-        height: 18px;
-        border-radius: 5px;
-        background:
-          radial-gradient(circle at 30% 30%, #fff 0 8%, transparent 9%),
-          radial-gradient(circle at 70% 30%, #fff 0 8%, transparent 9%),
-          linear-gradient(135deg, #ffc246 0%, #ffab14 42%, #ff8d1f 72%, #ff6a1a 100%);
-      }
-
-      .company-logo-main::before,
-      .company-logo-main::after {
-        content: "";
-        position: absolute;
-        top: -3px;
-        width: 4px;
-        height: 4px;
-        border: 2px solid #323232;
-        border-bottom: 0;
-        border-radius: 5px 5px 0 0;
-      }
-
-      .company-logo-main::before {
-        left: 2px;
-      }
-
-      .company-logo-main::after {
-        right: 2px;
+      .company-logo svg {
+        width: 16px;
+        height: 16px;
+        display: block;
       }
 
       .company-name {
@@ -9416,7 +9391,9 @@
         <div class="company-group">
           <div class="company-row">
             <div class="company-logo" aria-hidden="true">
-              <div class="company-logo-main"></div>
+              <svg viewBox="0 0 89 113" fill="none" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M60.7295 6.46164C63.7274 0.62106 70.8928 -1.6837 76.7334 1.31418C82.5739 4.31211 84.8777 11.4776 81.8799 17.3181C79.7148 21.5355 75.3765 23.9069 70.9336 23.7712L65.252 34.8405C78.9849 41.8108 88.3034 55.3729 88.3037 70.9626C88.3037 93.669 68.5366 112.077 44.1523 112.077C19.768 112.077 0 93.6691 0 70.9626C0.000313842 55.6719 8.96556 42.3317 22.2676 35.2487L16.377 23.7712C11.9331 23.9076 7.59396 21.5355 5.42871 17.3171C2.43096 11.4766 4.73566 4.31204 10.5762 1.31418C16.4166 -1.68335 23.5812 0.620489 26.5791 6.46066C28.7442 10.6788 28.1423 15.5878 25.4414 19.1189L31.7891 31.4861C35.7123 30.4225 39.8605 29.8493 44.1523 29.8493C48.1257 29.8494 51.976 30.3411 55.6387 31.2575L61.8691 19.1198C59.1672 15.5888 58.5644 10.6804 60.7295 6.46164ZM44.1523 45.6618C29.1469 45.6619 16.982 56.9898 16.9814 70.9626C16.9814 84.9358 29.1466 96.2633 44.1523 96.2634C59.158 96.2632 71.3223 84.9358 71.3223 70.9626C71.3218 56.9899 59.1577 45.662 44.1523 45.6618Z" fill="#FF8000"></path>
+              </svg>
             </div>
             <div class="company-name">北京易动纷享科技有限责任公司</div>
           </div>
