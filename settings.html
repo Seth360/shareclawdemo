@@ -3481,6 +3481,32 @@
         color: #91959e;
       }
 
+      .settings-usage-head {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        margin-bottom: 12px;
+      }
+
+      .settings-usage-reset {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        color: #545861;
+        overflow: hidden;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .settings-usage-reset strong {
+        color: #181c25;
+        font-weight: 400;
+      }
+
       .settings-card {
         position: relative;
         background: #fff;
@@ -3680,6 +3706,11 @@
         margin-top: 12px;
       }
 
+      .settings-panel > .settings-personality-box:first-child,
+      .settings-panel > .settings-option-card:first-child {
+        margin-top: 0;
+      }
+
       .settings-option-card {
         border-radius: 8px;
         background: #fafafa;
@@ -3780,6 +3811,12 @@
         background: #fafafa;
       }
 
+      .settings-knowledge-toggle-row {
+        padding-left: 0;
+        padding-right: 0;
+        background: transparent;
+      }
+
       .settings-inline-label {
         flex: 1 1 0;
         min-width: 0;
@@ -3855,6 +3892,59 @@
         margin-top: 0;
       }
 
+      .settings-usage-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .settings-usage-summary {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .settings-usage-meter {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .settings-usage-meter-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .settings-usage-label {
+        font-size: 14px;
+        line-height: 20px;
+        color: #181c25;
+      }
+
+      .settings-usage-meter-head strong {
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        color: #181c25;
+      }
+
+      .settings-usage-track {
+        height: 8px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #dee1e8;
+      }
+
+      .settings-usage-track span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: #30c776;
+      }
+
       .settings-panel-save-btn {
         height: 32px;
         min-width: 64px;
@@ -3877,9 +3967,8 @@
       }
 
       .settings-knowledge-surface {
-        padding: 8px 12px;
         border-radius: 8px;
-        background: #fafafa;
+        background: transparent;
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -9205,7 +9294,6 @@
         line-height: var(---20_line-height, 30px);
       }
 
-      .settings-section-title,
       .manage-section-title,
       .market-section-title,
       .task-section-title,
@@ -9843,6 +9931,14 @@
                   </svg>
                   <span class="sidebar-row-text">个人知识空间</span>
                 </button>
+
+                <button class="sidebar-row" type="button" data-settings-tab="usage">
+                  <svg class="sidebar-row-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M4.63758 14.258C4.95533 14.444 5.06215 14.8524 4.87615 15.1701C4.69015 15.4879 4.28178 15.5947 3.96402 15.4087C1.59414 14.0215 0 11.4473 0 8.5C0 4.08172 3.58172 0.5 8 0.5C12.4183 0.5 16 4.08172 16 8.5C16 11.4473 14.4059 14.0215 12.036 15.4087C11.7182 15.5947 11.3098 15.4879 11.1239 15.1701C10.9379 14.8524 11.0447 14.444 11.3624 14.258C13.3405 13.1001 14.6667 10.9546 14.6667 8.5C14.6667 4.8181 11.6819 1.83333 8 1.83333C4.3181 1.83333 1.33333 4.8181 1.33333 8.5C1.33333 10.9546 2.65949 13.1001 4.63758 14.258Z" fill="#181C25"></path>
+                    <path d="M11.319 5.53338L8.43146 8.93459C8.19908 9.20831 7.78249 9.2253 7.5286 8.9714C7.2747 8.7175 7.29168 8.30092 7.56541 8.06853L10.9666 5.181C11.2008 4.98217 11.5178 5.29919 11.319 5.53338Z" fill="#181C25"></path>
+                  </svg>
+                  <span class="sidebar-row-text">剩余算粒用量</span>
+                </button>
               </div>
             </div>
           </div>
@@ -10288,18 +10384,14 @@
           </div>
 
           <section class="settings-shell" id="settingsShell" aria-label="设置页面">
-            <div class="settings-page active" id="settingsOnboardingPage">
+            <div class="settings-page active" id="settingsIdentityPage" data-settings-page="identity">
               <div class="settings-page-body">
                 <div class="settings-main-column">
                   <div class="settings-section-head">
-                    <h2 class="settings-section-title">设置</h2>
+                    <h2 class="settings-section-title">个性化设置</h2>
                   </div>
 
                   <section class="settings-card settings-panel settings-anchor-section" id="settingsIdentitySection" data-settings-section="identity">
-                    <div class="settings-panel-head">
-                      <h3 class="settings-panel-title">个性化设置</h3>
-                    </div>
-
                     <div class="settings-personality-box">
                       <div class="settings-identity-box">
                         <div class="settings-avatar-stage">
@@ -10357,12 +10449,17 @@
                       </div>
                     </div>
                   </section>
+                </div>
+              </div>
+            </div>
 
+            <div class="settings-page" id="settingsRolePage" data-settings-page="role">
+              <div class="settings-page-body">
+                <div class="settings-main-column">
+                  <div class="settings-section-head">
+                    <h2 class="settings-section-title">其它设定</h2>
+                  </div>
                   <section class="settings-card settings-panel settings-anchor-section settings-combined-panel" id="settingsRoleSection" data-settings-section="role">
-                    <div class="settings-panel-head">
-                      <h3 class="settings-panel-title">其它设定</h3>
-                    </div>
-
                     <div class="settings-combined-section">
                       <div class="settings-panel-head">
                         <h3 class="settings-panel-title">ShareAgent设定</h3>
@@ -10441,15 +10538,19 @@
                       </div>
                     </div>
                   </section>
+                </div>
+              </div>
+            </div>
 
+            <div class="settings-page" id="settingsKnowledgePage" data-settings-page="knowledge">
+              <div class="settings-page-body">
+                <div class="settings-main-column">
+                  <div class="settings-section-head">
+                    <h2 class="settings-section-title">个人知识空间</h2>
+                  </div>
                   <section class="settings-card settings-panel settings-anchor-section" id="settingsKnowledgeSection" data-settings-section="knowledge">
-                    <div class="settings-panel-head">
-                      <h3 class="settings-panel-title">个人知识空间</h3>
-                      <p class="settings-panel-desc">知识库调用说明</p>
-                    </div>
-
                     <div class="settings-knowledge-surface">
-                      <div class="settings-inline-row">
+                      <div class="settings-inline-row settings-knowledge-toggle-row">
                         <span class="settings-inline-label">启用个人知识空间</span>
                         <label class="settings-identity-switch" aria-label="启用个人知识空间">
                           <input id="personalKnowledgeToggle" type="checkbox" />
@@ -10534,6 +10635,31 @@
                           <span>操作</span>
                         </div>
                         <div class="settings-local-docs-body" id="localDocsList"></div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-page" id="settingsUsagePage" data-settings-page="usage">
+              <div class="settings-page-body">
+                <div class="settings-main-column">
+                  <div class="settings-section-head settings-usage-head">
+                    <h2 class="settings-section-title">剩余算粒用量</h2>
+                    <span class="settings-usage-reset">距离重置还有 <strong>5小时/4分钟</strong></span>
+                  </div>
+
+                  <section class="settings-card settings-panel settings-usage-panel" id="settingsUsageSection" data-settings-section="usage">
+                    <div class="settings-usage-summary">
+                      <div class="settings-usage-meter">
+                        <div class="settings-usage-meter-head">
+                          <span class="settings-usage-label">今日剩余算粒</span>
+                          <strong>2598/10000</strong>
+                        </div>
+                        <div class="settings-usage-track" aria-hidden="true">
+                          <span style="width: 50%;"></span>
+                        </div>
                       </div>
                     </div>
                   </section>
@@ -11469,7 +11595,7 @@
           activeChatId: isConversationEntry ? params.get("session") || "" : "",
           homeInsightRailEnabled: !isConversationEntry && homeView !== "chat",
           activeMessengerThread: params.get("thread") || "work-message",
-          settingsTab: pickAllowedValue(params.get("tab"), ["identity", "role", "knowledge"], "identity"),
+          settingsTab: pickAllowedValue(params.get("tab"), ["identity", "role", "knowledge", "usage"], "identity"),
           marketMode: pickAllowedValue(params.get("mode"), ["agent", "skill", "automation"], "agent"),
           marketPage: pickAllowedValue(params.get("page"), ["square", "created", "batch", "share", "skill-import"], "square"),
           launchAction: isConversationEntry ? params.get("launch") || "" : "",
@@ -11620,8 +11746,7 @@
       const chatFeed = document.getElementById("chatFeed");
       const composerStage = document.querySelector(".composer-stage");
       const settingsShell = document.getElementById("settingsShell");
-      const settingsOnboardingPage = document.getElementById("settingsOnboardingPage");
-      const settingsSections = Array.from(settingsShell.querySelectorAll("[data-settings-section]"));
+      const settingsPages = Array.from(settingsShell.querySelectorAll("[data-settings-page]"));
       const aiAvatarTrigger = document.getElementById("aiAvatarTrigger");
       const aiAvatarPreview = document.getElementById("aiAvatarPreview");
       const aiAvatarInput = document.getElementById("aiAvatarInput");
@@ -11762,8 +11887,6 @@
       const settingsSidebarRows = Array.from(settingsSidebarView.querySelectorAll(".sidebar-row"));
       const configSidebarRows = Array.from(configSidebarView.querySelectorAll(".sidebar-row"));
       let skillImportLoadingTimer = null;
-      let settingsProgrammaticScrollTimer = null;
-      let isSettingsProgrammaticScroll = false;
       let pendingAiAvatar = null;
 
       const filterLabels = ["全部", "销售", "运营", "市场营销", "财务", "售前", "售后", "CPQ", "客户服务", "智能体(旧版)"];
@@ -17098,47 +17221,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderSettingsPanels() {
         const showSettings = state.mainPanel === "settings";
-        settingsOnboardingPage.classList.toggle("active", showSettings);
+        settingsPages.forEach((page) => {
+          page.classList.toggle("active", showSettings && page.dataset.settingsPage === state.settingsTab);
+        });
 
         settingsSidebarRows.forEach((button) => {
           button.classList.toggle("active", button.dataset.settingsTab === state.settingsTab);
         });
-      }
-
-      function scrollSettingsSectionIntoView(sectionKey, behavior = "smooth") {
-        const target = settingsSections.find((section) => section.dataset.settingsSection === sectionKey);
-        if (!target) {
-          return;
-        }
-        if (behavior === "smooth") {
-          isSettingsProgrammaticScroll = true;
-          clearTimeout(settingsProgrammaticScrollTimer);
-          settingsProgrammaticScrollTimer = setTimeout(() => {
-            isSettingsProgrammaticScroll = false;
-          }, 650);
-        }
-        target.scrollIntoView({ behavior, block: "start" });
-      }
-
-      function syncSettingsSidebarByScroll() {
-        if (state.mainPanel !== "settings" || isSettingsProgrammaticScroll) {
-          return;
-        }
-
-        const shellTop = settingsShell.getBoundingClientRect().top;
-        let activeSection = state.settingsTab;
-
-        settingsSections.forEach((section) => {
-          const distance = section.getBoundingClientRect().top - shellTop;
-          if (distance <= 80) {
-            activeSection = section.dataset.settingsSection || activeSection;
-          }
-        });
-
-        if (activeSection !== state.settingsTab) {
-          state.settingsTab = activeSection;
-          renderSettingsPanels();
-        }
       }
 
       function renderMainPanels() {
@@ -17190,22 +17279,18 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function openSettings(tab = "identity") {
-        tab = pickAllowedValue(tab, ["identity", "role", "knowledge"], "identity");
+        tab = pickAllowedValue(tab, ["identity", "role", "knowledge", "usage"], "identity");
         if (!isCurrentPanelDocument("settings")) {
           navigateToPanel("settings", { tab });
           return;
         }
-        const shouldAnimateScroll = state.mainPanel === "settings";
         state.mainPanel = "settings";
         state.currentChannel = "claw";
         state.settingsTab = tab;
         state.sourceMenuOpen = false;
         state.createMenuOpen = false;
         renderMainPanels();
-        scrollSettingsSectionIntoView(tab, shouldAnimateScroll ? "smooth" : "auto");
-        if (!shouldAnimateScroll) {
-          syncSettingsSidebarByScroll();
-        }
+        settingsShell.scrollTo({ top: 0, behavior: "auto" });
         closeMenu();
         closePlusMenu();
         closeExposedMenu();
@@ -18645,6 +18730,14 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       });
 
+      settingsSidebarView.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-settings-tab]");
+        if (!button || !settingsSidebarView.contains(button)) {
+          return;
+        }
+        openSettings(button.dataset.settingsTab || "identity");
+      });
+
       configSidebarRows.forEach((button) => {
         button.addEventListener("click", () => {
           openScheme2ConfigTab(button.dataset.configTab || "market");
@@ -18815,10 +18908,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }, { skipSync: true });
         renderPersonalKnowledgeState();
       });
-
-      settingsShell.addEventListener("scroll", () => {
-        syncSettingsSidebarByScroll();
-      }, { passive: true });
 
       settingsBackBtn.addEventListener("click", () => {
         openSidebarHome();
@@ -20093,10 +20182,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       renderExposedMenus();
       renderTaskPage();
       renderMainPanels();
-      if (state.mainPanel === "settings") {
-        scrollSettingsSectionIntoView(state.settingsTab, "auto");
-        syncSettingsSidebarByScroll();
-      }
     </script>
   </body>
 </html>
