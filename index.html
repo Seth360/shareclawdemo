@@ -389,23 +389,49 @@
 
       .sidebar-header {
         height: 60px;
-        padding: 18px 12px;
+        padding: 12px;
         display: flex;
         align-items: center;
-        gap: 16px;
+        position: relative;
+        z-index: 20;
       }
 
       .sidebar-title {
-        flex: 1;
-        min-width: 0;
+        height: 36px;
+        padding: 0 8px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         font-size: 16px;
         line-height: 24px;
         font-weight: 700;
         color: var(--text-strong);
+        cursor: pointer;
+        transition: background-color 0.16s ease;
+      }
+
+      .sidebar-title:hover,
+      .sidebar-title[aria-expanded="true"] {
+        background: #f4f5f8;
+      }
+
+      .sidebar-title::after {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-right: 1.2px solid currentColor;
+        border-bottom: 1.2px solid currentColor;
+        transform: translateY(-2px) rotate(45deg);
+        transition: transform 0.16s ease;
+      }
+
+      .sidebar-title[aria-expanded="true"]::after {
+        transform: translateY(2px) rotate(225deg);
       }
 
       .sidebar-header-actions {
-        display: flex;
+        display: none;
         align-items: center;
         gap: 16px;
         flex: 0 0 auto;
@@ -424,6 +450,117 @@
         width: 16px;
         height: 16px;
         color: #181c25;
+      }
+
+      .sidebar-title-menu {
+        position: absolute;
+        top: 52px;
+        left: 12px;
+        width: 240px;
+        padding: 6px;
+        border: 1px solid #e7e9ee;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(24, 28, 37, 0.12);
+      }
+
+      .sidebar-title-menu-item {
+        width: 100%;
+        min-height: 36px;
+        padding: 9px 8px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #181c25;
+        font-size: 14px;
+        line-height: 18px;
+        text-align: left;
+      }
+
+      .sidebar-title-menu-item:hover,
+      .sidebar-title-menu-item[aria-expanded="true"] {
+        background: #f4f5f8;
+      }
+
+      .sidebar-title-menu-icon {
+        width: 14px;
+        height: 14px;
+        flex: 0 0 auto;
+      }
+
+      .sidebar-title-menu-label {
+        flex: 1;
+      }
+
+      .sidebar-title-menu-arrow {
+        width: 12px;
+        height: 12px;
+        transition: transform 0.16s ease;
+      }
+
+      .sidebar-title-menu-item[aria-expanded="true"] .sidebar-title-menu-arrow {
+        transform: rotate(180deg);
+      }
+
+      .sidebar-usage-detail {
+        margin-top: 4px;
+        padding: 12px 0 4px;
+        border-top: 1px solid #eef0f3;
+      }
+
+      .sidebar-usage-card {
+        padding: 14px 12px;
+        border: 1px solid #e7e9ee;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(24, 28, 37, 0.06);
+      }
+
+      .sidebar-usage-card-reset {
+        margin-top: 14px;
+      }
+
+      .sidebar-usage-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .sidebar-usage-label {
+        color: #181c25;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .sidebar-usage-number {
+        color: #181c25;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .sidebar-usage-track {
+        height: 8px;
+        margin-top: 12px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #dfe2e8;
+      }
+
+      .sidebar-usage-progress {
+        width: 50%;
+        height: 100%;
+        border-radius: inherit;
+        background: #32c97a;
+      }
+
+      .sidebar-usage-stats {
+        padding: 12px 2px 0;
+      }
+
+      .sidebar-usage-stats .sidebar-usage-label {
+        color: #5d6470;
       }
 
       .sidebar-content {
@@ -7355,6 +7492,149 @@
           0 8px 24px rgba(15, 23, 42, 0.1);
       }
 
+      .general-settings-dialog {
+        width: min(680px, calc(100vw - 48px));
+        max-height: calc(100vh - 48px);
+        overflow: hidden;
+        border: 1px solid #e6e8ed;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 24px 64px rgba(24, 28, 37, 0.18);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .general-settings-head {
+        height: 56px;
+        padding: 0 16px 0 20px;
+        border-bottom: 1px solid #e9ebef;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .general-settings-title {
+        margin: 0;
+        color: #181c25;
+        font-size: 18px;
+        line-height: 26px;
+        font-weight: 600;
+      }
+
+      .general-settings-close {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #5d6470;
+      }
+
+      .general-settings-close:hover {
+        background: #f4f5f8;
+        color: #181c25;
+      }
+
+      .general-settings-close svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .general-settings-layout {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 16px 24px;
+      }
+
+      .general-settings-card {
+        padding: 16px 14px 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(24, 28, 37, 0.06);
+      }
+
+      .general-settings-card + .general-settings-card {
+        margin-top: 16px;
+      }
+
+      .general-settings-card-title {
+        margin: 0;
+        color: #181c25;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 600;
+      }
+
+      .general-settings-card-desc {
+        margin: 4px 0 12px;
+        color: #969ba5;
+        font-size: 13px;
+        line-height: 20px;
+      }
+
+      .general-settings-input,
+      .general-settings-textarea {
+        width: 100%;
+        border: 1px solid #c7cbd3;
+        border-radius: 8px;
+        background: #fff;
+        color: #181c25;
+        font-size: 14px;
+        line-height: 20px;
+        outline: none;
+      }
+
+      .general-settings-input {
+        height: 36px;
+        padding: 0 9px;
+      }
+
+      .general-settings-textarea {
+        min-height: 88px;
+        padding: 9px;
+        resize: vertical;
+      }
+
+      .general-settings-input:focus,
+      .general-settings-textarea:focus {
+        border-color: #7950e8;
+        box-shadow: 0 0 0 2px rgba(121, 80, 232, 0.12);
+      }
+
+      .general-settings-footer {
+        height: 58px;
+        padding: 0 24px;
+        border-top: 1px solid #e9ebef;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .general-settings-save,
+      .general-settings-cancel {
+        height: 32px;
+        padding: 0 14px;
+        border-radius: 6px;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .general-settings-save {
+        background: #7545df;
+        color: #fff;
+      }
+
+      .general-settings-cancel {
+        border: 1px solid #c7cbd3;
+        background: #fff;
+        color: #181c25;
+      }
+
       .create-task-dialog-head {
         padding: 20px 20px 0;
       }
@@ -9575,7 +9855,7 @@
         <aside class="sidebar" aria-label="二级导航">
           <div class="sidebar-view" id="defaultSidebarView">
             <div class="sidebar-header">
-              <div class="sidebar-title">ShareAgent</div>
+              <div class="sidebar-title" id="sidebarTitleTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="sidebarTitleMenu">ShareAgent</div>
               <div class="sidebar-header-actions">
                 <button class="sidebar-header-action" id="openSettingsBtn" type="button" aria-label="打开设置">
                   <svg class="sidebar-header-icon" viewBox="0 0 16 16" aria-hidden="true">
@@ -9588,6 +9868,43 @@
                     <path class="icon-stroke" d="M3 4.5h10M3 8h10M3 11.5h10"></path>
                   </svg>
                 </button>
+              </div>
+              <div class="sidebar-title-menu hidden" id="sidebarTitleMenu" role="menu">
+                <button class="sidebar-title-menu-item" id="sidebarMenuSettingsBtn" type="button" role="menuitem">
+                  <svg class="sidebar-title-menu-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M4.32078 11.667H9.67922L12.3626 7.00033L9.67922 2.33366H4.32078L1.63745 7.00033L4.32078 11.667ZM0.458864 7.2911C0.355346 7.11107 0.355346 6.88958 0.458864 6.70955L3.47761 1.45955C3.58168 1.27856 3.77454 1.16699 3.98331 1.16699H10.0167C10.2255 1.16699 10.4183 1.27856 10.5224 1.45955L13.5411 6.70955C13.6447 6.88958 13.6447 7.11107 13.5411 7.2911L10.5224 12.5411C10.4183 12.7221 10.2255 12.8337 10.0167 12.8337H3.98331C3.77454 12.8337 3.58168 12.7221 3.47761 12.5411L0.458864 7.2911ZM5.83333 7.00033C5.83333 6.35599 6.35567 5.83366 7 5.83366C7.64433 5.83366 8.16667 6.35599 8.16667 7.00033C8.16667 7.64466 7.64433 8.16699 7 8.16699C6.35567 8.16699 5.83333 7.64466 5.83333 7.00033ZM7 4.66699C5.71134 4.66699 4.66667 5.71166 4.66667 7.00033C4.66667 8.28899 5.71134 9.33366 7 9.33366C8.28867 9.33366 9.33333 8.28899 9.33333 7.00033C9.33333 5.71166 8.28867 4.66699 7 4.66699Z" fill="currentColor"></path>
+                  </svg>
+                  <span class="sidebar-title-menu-label">设置</span>
+                </button>
+                <button class="sidebar-title-menu-item" id="sidebarUsageTrigger" type="button" role="menuitem" aria-expanded="false" aria-controls="sidebarUsageDetail">
+                  <svg class="sidebar-title-menu-icon" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M4.05788 12.4757C4.33592 12.6385 4.42938 12.9958 4.26663 13.2738C4.10388 13.5519 3.74656 13.6453 3.46852 13.4826C1.39488 12.2688 0 10.0164 0 7.4375C0 3.57151 3.13401 0.4375 7 0.4375C10.866 0.4375 14 3.57151 14 7.4375C14 10.0164 12.6051 12.2688 10.5315 13.4826C10.2534 13.6453 9.89612 13.5519 9.73337 13.2738C9.57062 12.9958 9.66408 12.6385 9.94212 12.4757C11.6729 11.4626 12.8333 9.58524 12.8333 7.4375C12.8333 4.21584 10.2217 1.60417 7 1.60417C3.77834 1.60417 1.16667 4.21584 1.16667 7.4375C1.16667 9.58524 2.32705 11.4626 4.05788 12.4757Z" fill="currentColor"></path>
+                    <path d="M9.90412 4.84171L7.37753 7.81776C7.17419 8.05727 6.80968 8.07214 6.58752 7.84998C6.36536 7.62781 6.38022 7.2633 6.61973 7.05997L9.59579 4.53338C9.80071 4.3594 10.0781 4.63679 9.90412 4.84171Z" fill="currentColor"></path>
+                  </svg>
+                  <span class="sidebar-title-menu-label">剩余用量</span>
+                  <svg class="sidebar-title-menu-arrow" viewBox="0 0 12 12" aria-hidden="true">
+                    <path d="M3 4.75L6 7.75L9 4.75" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+                <div class="sidebar-usage-detail hidden" id="sidebarUsageDetail">
+                  <div class="sidebar-usage-card">
+                    <div class="sidebar-usage-row">
+                      <span class="sidebar-usage-label">今日剩余</span>
+                      <span class="sidebar-usage-number">50%</span>
+                    </div>
+                    <div class="sidebar-usage-track" aria-hidden="true"><div class="sidebar-usage-progress"></div></div>
+                    <div class="sidebar-usage-row sidebar-usage-card-reset">
+                      <span class="sidebar-usage-label">重置时间</span>
+                      <span class="sidebar-usage-number">6月5日 0:00</span>
+                    </div>
+                  </div>
+                  <div class="sidebar-usage-stats">
+                    <div class="sidebar-usage-row">
+                      <span class="sidebar-usage-label">月剩余</span>
+                      <span class="sidebar-usage-number">96%</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -11227,6 +11544,34 @@
             </div>
           </section>
         </main>
+        <div class="detail-overlay hidden" id="generalSettingsOverlay" role="presentation">
+          <section class="general-settings-dialog" id="generalSettingsDialog" role="dialog" aria-modal="true" aria-labelledby="generalSettingsHeading">
+            <div class="general-settings-head">
+              <h2 class="general-settings-title" id="generalSettingsHeading">设置</h2>
+              <button class="general-settings-close" id="generalSettingsCloseBtn" type="button" aria-label="关闭设置弹窗">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path class="icon-stroke" d="M4.3 4.3 11.7 11.7M11.7 4.3 4.3 11.7"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="general-settings-layout">
+              <section class="general-settings-card">
+                <h3 class="general-settings-card-title">名称</h3>
+                <p class="general-settings-card-desc">可以为你的ShareAgent取个性化的名字</p>
+                <input class="general-settings-input" id="generalSettingsNameInput" type="text" value="ShareAgent" aria-label="ShareAgent 名称" />
+              </section>
+              <section class="general-settings-card">
+                <h3 class="general-settings-card-title">设定</h3>
+                <p class="general-settings-card-desc">定义ShareAgent的称呼、定位与沟通风格，决定ShareAgent的语气、主动性与输出形式。</p>
+                <textarea class="general-settings-textarea" id="generalSettingsPromptInput" placeholder="请输入" aria-label="ShareAgent 设定"></textarea>
+              </section>
+            </div>
+            <div class="general-settings-footer">
+              <button class="general-settings-save" id="generalSettingsSaveBtn" type="button">保存</button>
+              <button class="general-settings-cancel" id="generalSettingsCancelBtn" type="button">取消</button>
+            </div>
+          </section>
+        </div>
         <div class="detail-overlay hidden" id="detailOverlay" role="presentation">
           <section class="detail-dialog" id="detailDialog" role="dialog" aria-modal="true" aria-labelledby="detailDialogHeading">
             <div class="detail-dialog-head">
@@ -11797,6 +12142,18 @@
       const settingsSidebarView = document.getElementById("settingsSidebarView");
       const configSidebarView = document.getElementById("configSidebarView");
       const messengerSidebarView = document.getElementById("messengerSidebarView");
+      const sidebarTitleTrigger = document.getElementById("sidebarTitleTrigger");
+      const sidebarTitleMenu = document.getElementById("sidebarTitleMenu");
+      const sidebarMenuSettingsBtn = document.getElementById("sidebarMenuSettingsBtn");
+      const sidebarUsageTrigger = document.getElementById("sidebarUsageTrigger");
+      const sidebarUsageDetail = document.getElementById("sidebarUsageDetail");
+      const generalSettingsOverlay = document.getElementById("generalSettingsOverlay");
+      const generalSettingsDialog = document.getElementById("generalSettingsDialog");
+      const generalSettingsCloseBtn = document.getElementById("generalSettingsCloseBtn");
+      const generalSettingsNameInput = document.getElementById("generalSettingsNameInput");
+      const generalSettingsPromptInput = document.getElementById("generalSettingsPromptInput");
+      const generalSettingsSaveBtn = document.getElementById("generalSettingsSaveBtn");
+      const generalSettingsCancelBtn = document.getElementById("generalSettingsCancelBtn");
       const openSettingsBtn = document.getElementById("openSettingsBtn");
       const marketSidebarRow = document.getElementById("marketSidebarRow");
       const openRailSettingsBtn = document.getElementById("openRailSettingsBtn");
@@ -13777,6 +14134,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        sidebarTitleTrigger.firstChild.textContent = getAiProfileName();
         aiRobotNameInput.value = getAiProfileName();
         aiIdentityToggle.checked = state.aiProfile.showIdentity !== false;
         aiSpecialtySelect.value = state.aiProfile.specialty || "CRM产品";
@@ -15022,12 +15380,36 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       function syncDialogBodyLock() {
         document.body.classList.toggle(
           "detail-dialog-open",
-          !detailOverlay.classList.contains("hidden") ||
+          !generalSettingsOverlay.classList.contains("hidden") ||
+            !detailOverlay.classList.contains("hidden") ||
             !crmSyncOverlay.classList.contains("hidden") ||
             !forwardOverlay.classList.contains("hidden") ||
             !createTaskOverlay.classList.contains("hidden") ||
             !createAssistantOverlay.classList.contains("hidden")
         );
+      }
+
+      function openGeneralSettingsDialog() {
+        generalSettingsNameInput.value = getAiProfileName();
+        generalSettingsPromptInput.value = state.aiProfile.prompt || "";
+        generalSettingsOverlay.classList.remove("hidden");
+        syncDialogBodyLock();
+        generalSettingsNameInput.focus();
+      }
+
+      function closeGeneralSettingsDialog() {
+        generalSettingsOverlay.classList.add("hidden");
+        syncDialogBodyLock();
+        sidebarTitleTrigger.focus();
+      }
+
+      function saveGeneralSettingsDialog() {
+        const name = generalSettingsNameInput.value.trim() || "ShareAgent";
+        const prompt = generalSettingsPromptInput.value.trim();
+        applyAiProfileChanges({ name, prompt });
+        sidebarTitleTrigger.firstChild.textContent = name;
+        closeGeneralSettingsDialog();
+        showToast("设置已保存");
       }
 
       function renderCreateTaskRadioGroup(options, activeValue, dataKey) {
@@ -18881,6 +19263,41 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         openSettings();
       });
 
+      function closeSidebarTitleMenu() {
+        sidebarTitleTrigger.setAttribute("aria-expanded", "false");
+        sidebarTitleMenu.classList.add("hidden");
+        sidebarUsageTrigger.setAttribute("aria-expanded", "false");
+        sidebarUsageDetail.classList.add("hidden");
+      }
+
+      function toggleSidebarTitleMenu() {
+        const willOpen = sidebarTitleMenu.classList.contains("hidden");
+        closeSidebarTitleMenu();
+        if (willOpen) {
+          sidebarTitleTrigger.setAttribute("aria-expanded", "true");
+          sidebarTitleMenu.classList.remove("hidden");
+        }
+      }
+
+      sidebarTitleTrigger.addEventListener("click", toggleSidebarTitleMenu);
+      sidebarTitleTrigger.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggleSidebarTitleMenu();
+        }
+      });
+
+      sidebarMenuSettingsBtn.addEventListener("click", () => {
+        closeSidebarTitleMenu();
+        openGeneralSettingsDialog();
+      });
+
+      sidebarUsageTrigger.addEventListener("click", () => {
+        const willExpand = sidebarUsageDetail.classList.contains("hidden");
+        sidebarUsageTrigger.setAttribute("aria-expanded", String(willExpand));
+        sidebarUsageDetail.classList.toggle("hidden", !willExpand);
+      });
+
 
       openRailSettingsBtn.addEventListener("click", () => {
         openSettings();
@@ -19286,7 +19703,17 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         openDocPreviewDialog(doc);
       });
 
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeSidebarTitleMenu();
+        }
+      });
+
       document.addEventListener("click", (event) => {
+        if (!event.target.closest(".sidebar-header")) {
+          closeSidebarTitleMenu();
+        }
+
         if (!event.target.closest(".composer-stage")) {
           closeMenu();
         }
@@ -19327,6 +19754,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !generalSettingsOverlay.classList.contains("hidden")) {
+          closeGeneralSettingsDialog();
+          return;
+        }
+
         if (event.key === "Escape" && !forwardOverlay.classList.contains("hidden")) {
           closeForwardDialog();
           return;
@@ -19350,6 +19782,24 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         if (event.key === "Escape" && !createAssistantOverlay.classList.contains("hidden")) {
           closeCreateAssistantDialog();
         }
+      });
+
+      generalSettingsCloseBtn.addEventListener("click", () => {
+        closeGeneralSettingsDialog();
+      });
+
+      generalSettingsOverlay.addEventListener("click", (event) => {
+        if (event.target === generalSettingsOverlay) {
+          closeGeneralSettingsDialog();
+        }
+      });
+
+      generalSettingsCancelBtn.addEventListener("click", () => {
+        closeGeneralSettingsDialog();
+      });
+
+      generalSettingsSaveBtn.addEventListener("click", () => {
+        saveGeneralSettingsDialog();
       });
 
       detailCloseBtn.addEventListener("click", () => {

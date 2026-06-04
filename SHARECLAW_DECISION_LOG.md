@@ -168,6 +168,16 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
 
 ## Correction Log
 
+### 2026-06-04 - ShareAgent Title Menu Is Shared Across Desktop Pages
+
+- Decision: the ShareAgent title dropdown, remaining-usage expansion, and
+  settings modal are shared navigation behavior and must remain identical on
+  all eight desktop HTML pages.
+- Reason: the user explicitly requested that the completed dropdown and modal
+  adjustments apply to every page navigation.
+- Do not regress: do not update only `index.html` when changing
+  `#sidebarTitleMenu`, `#sidebarUsageDetail`, or `#generalSettingsOverlay`.
+
 | Topic | Correction |
 | --- | --- |
 | Memory file display | Do not show Markdown file links/cards for project memory updates in final responses. State briefly that memory or guidelines were updated. |

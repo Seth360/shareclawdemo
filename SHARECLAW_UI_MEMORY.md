@@ -19,7 +19,9 @@ need to be synchronized across multiple HTML files.
 | Top bar | `.topbar` | Company name, search, top-right icons, scheme switch. |
 | Left primary rail | `.channel-rail`, `.channel-item[data-channel]` | First-level navigation: Claw, 企信, 待办, CRM, 工作, 日程. |
 | Left secondary sidebar | `.sidebar` | Second-level navigation. Switches between default, settings, config, and messenger thread views. |
-| Default sidebar | `#defaultSidebarView` | ShareAgent menu, shortcuts, and the mixed history list that contains automation tasks plus normal conversations. |
+| Default sidebar | `#defaultSidebarView` | ShareAgent title menu, shortcuts, and the mixed history list that contains automation tasks plus normal conversations. |
+| ShareAgent title menu | `#sidebarTitleTrigger`, `#sidebarTitleMenu`, `#sidebarUsageDetail` | Shared dropdown in every desktop page. Opens the settings modal and expands remaining-usage details in place. |
+| ShareAgent settings modal | `#generalSettingsOverlay`, `#generalSettingsNameInput`, `#generalSettingsPromptInput` | Shared name/prompt settings form. Save persists the AI profile and updates the sidebar title. |
 | Settings sidebar | `#settingsSidebarView` | Settings tabs. |
 | Config sidebar | `#configSidebarView` | Scheme/config tabs. |
 | Messenger sidebar | `#messengerSidebarView`, `#messengerThreadList` | 企信 thread list. |
@@ -125,6 +127,20 @@ Core shared render/navigation functions:
 | 自动化任务页 | `market.html` | `#marketAutomationView`, `state.marketMode = "automation"` | `switchMarketMode("automation")`, `renderMarketSquare()` |
 
 ## Interaction Contracts
+
+### Shared ShareAgent Title Menu
+
+- Every desktop HTML page uses the same ShareAgent title dropdown in
+  `#defaultSidebarView`; shared-shell changes to this dropdown must be applied
+  to `index.html`, `conversation.html`, `task-conversation.html`, `task.html`,
+  `docs.html`, `settings.html`, `market.html`, and `messenger.html`.
+- The dropdown contains `设置` and `剩余用量`. Remaining usage expands inside
+  the same dropdown: today's remaining percentage and reset time share one
+  card, while monthly remaining percentage is a separate row below.
+- `设置` opens `#generalSettingsOverlay` without navigating away. The modal
+  contains name and prompt fields plus save/cancel actions. Saving updates and
+  persists `state.aiProfile`; closing, canceling, overlay click, and Escape do
+  not submit pending edits.
 
 ### Generated Results Panel
 
