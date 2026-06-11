@@ -145,6 +145,9 @@
     "收起全部": "Collapse all",
     "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！": "Enter a new customer: company Orange Tech, contact Li Ming, likely a large deal.",
     "帮我创建一个客户：橘子科技有限责任公司 ，是个重要客户 ，互联网行业，联系人是李明，电话是13500000000": "Create a customer: Orange Technology Co., Ltd., key account, internet industry, contact Li Ming, phone 13500000000",
+    "好的，我从刚才的会议记录里整理了以下信息：": "Okay, I pulled the following information from the meeting notes:",
+    "李明的手机号是多少？": "What is Li Ming's mobile number?",
+    "橘子科技属于哪个行业？": "Which industry does Orange Tech belong to?",
     "客户创建完成": "Customer created",
     "创建商机": "Create opportunity",
     "补充详细信息": "Add details",
@@ -171,10 +174,18 @@
     "客户对象": "Customer object",
     "客户名称": "Customer name",
     "客户级别": "Customer level",
+    "客户性质": "Customer type",
     "联系人": "Contact",
     "初步判断": "Initial assessment",
     "大单意向": "Large deal intent",
     "手机号": "Mobile number",
+    "性质": "Type",
+    "企业规模": "Company size",
+    "是否首次接触": "First contact",
+    "民营Enterprise": "Private enterprise",
+    "民营企业": "Private enterprise",
+    "500-1000 人": "500-1000 people",
+    "未填写": "Not filled",
     "重要客户": "Key account",
     "新客户": "New customer",
     "新客户 · 互联网行业": "New customer · Internet industry",
@@ -677,6 +688,7 @@
       .replace(/已处理\s*(\d+)分0?(\d+)秒/g, "Processed in $1 min $2 sec")
       .replace(/已处理\s*(\d+)秒/g, "Processed in $1 sec")
       .replace(/已处理\s*(\d+)个步骤/g, "Processed $1 steps")
+      .replace(/有\s*(\d+)\s*个字段没有获取到，请补充一下/g, "$1 fields are missing. Please add them")
       .replace(/Customer insightsAgents/g, "Customer Insights Agent")
       .replace(/Customer success/g, "Customer Success")
       .replace(/CustomerMeeting notes回填List/g, "Customer Meeting Notes Backfill List")
