@@ -88,7 +88,9 @@ Core shared render/navigation functions:
 | 新建会话按钮 | shared | `.sidebar-primary-entry[data-panel="home"]` | `openSidebarHome()` |
 | 历史会话列表 / 左侧混排列表 | shared | `#historyList`, `.history-row`, `[data-automation-task]`, `[data-session-id]`, `[data-history-url]` | `renderHistoryList()`, `openAutomationTaskConversation()`, `openConversationSession()` |
 | 中间 chat | `index.html`, `conversation.html`, `task-conversation.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
-| Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText`, `.chat-output-entry`, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()` |
+| Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText` | `syncChatSessionTitlebar()` |
+| 左侧菜单收起/展开按钮 | `conversation.html`, `task-conversation.html` | `.chat-sidebar-entry`（标题栏首子节点：镜像图标 + 8px 竖分隔线）, `#chatSidebarToggleBtn`, `.sidebar.collapsed` | 点击切换 `.sidebar` 的 `collapsed`（width 264↔0, 0.24s）；一级 rail 不受影响 |
+| 生成结果展开/收起按钮 | `conversation.html`, `task-conversation.html` | `.chat-output-entry`（`#chatFlowShell` 直接子节点，absolute 锚定 `.chat-flow-shell` 右缘）, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()` 同步其 hidden；位置随聊天列宽度跟随面板展开/收起动画 |
 | 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button listener, `openMockAiConversation()` |
 | 触发词路由 | shared input pages -> `conversation.html` | `routeSpecialConversationTrigger(text)`, `specialConversationRouteMap`, `routeAgentActionTrigger(text)` | `信息收集`, `信息补全`, `删除客户`, `新建对象`, `编辑对象`, `更新对象`, `复杂查询`, `新建定时任务` route into `conversation.html` launch URLs. |
 | 模式选择 / 指定智能体 | shared | `#agentPickerBtn`, `#agentPickerMenu`, `state.composerMode`, `state.activeAgent` | `setComposerMode()`, `renderAgentPill()`, `renderExposedPicker()` |
@@ -97,7 +99,7 @@ Core shared render/navigation functions:
 | 右侧生成结果列表 | `conversation.html` | `[data-output-doc-id]`, `[data-output-business-id]` | `getCurrentOutputResults()`, `renderOutputListPanel()` |
 | 右侧通用文档操作 | `conversation.html`, `docs.html` | `[data-output-doc-action]`, `[data-output-doc-menu-action]`, `.docs-row-inline-action` | Document row actions expose download and forward; remaining actions stay in more menu. |
 | 右侧业务文档操作 | `conversation.html` | `[data-output-business-id]`, `[data-output-business-menu-action="forward"]` | Business source rows expose only forward icon in list. |
-| 方案切换入口 | `conversation.html` | `#schemeSwitchBtn`, `#schemeSwitchMenu`, `state.activeSchemePlanId`, `state.activeSchemeCapability` | `renderSchemeSwitch()` |
+| 方案切换入口（已移除） | `conversation.html`, `task-conversation.html` | 入口已删；交互锁定 `static-tabs`（见 Scheme Lock 节） | `renderSchemeSwitch()` 现为空守卫 |
 | 右侧文档详情 | `conversation.html` | `state.outputOpenTabs`, `state.activeOutputTabId` | `openOutputPanelTab("doc", id)`, `renderOutputDetailPanel()` |
 | 右侧业务详情 / 客户详情 | `conversation.html` | `[data-output-business-id]`, `.embedded-object-detail`, `#businessObjectOverlay` | `openOutputPanelTab("business", id)` or `openBusinessObjectOverlay(id)` |
 | 右侧详情宽度拖拽 | `conversation.html` | `[data-output-resize-handle]`, `state.outputDetailPanelWidth` | pointer listeners, `applyOutputDetailPanelWidth()` |
@@ -156,6 +158,24 @@ Core shared render/navigation functions:
 - The list surface is a floating card. In list mode its title is
   `业务生成结果`, with no title icon and no internal close button; collapse is
   controlled by the external `#chatOutputToggleBtn`.
+- In `conversation.html` and `task-conversation.html`, the external toggle
+  `.chat-output-entry` is a direct child of `#chatFlowShell` (not inside the
+  titlebar), absolutely anchored to the chat column's right edge
+  (`top: -5px; right: 0` on `.chat-flow-shell`). Because the panel shell is a
+  flex sibling animating `width 0 ↔ 372px`, the button follows the panel's
+  expand/collapse motion automatically; no JS offset is involved. Its
+  visibility mirrors the session titlebar through `syncChatSessionTitlebar()`.
+  `index.html` keeps its own simpler model (button hidden while panel open).
+- The session titlebar on those two pages spans the full chat column
+  (`width: 100%`, not the centered 868px block — the centered width only
+  applies to the chat feed column) and starts with `.chat-sidebar-entry`:
+  a mirrored toggle icon (vertical bar on the left of the rect) plus an 8px
+  `#dee1e8` divider, followed by the title text, all pinned to the column's
+  left edge (Figma node `4630:34893`).
+  Clicking `#chatSidebarToggleBtn` toggles `collapsed` on the shared
+  `.sidebar` (secondary navigation), animating width 264px ↔ 0 over 0.24s;
+  the primary channel rail stays. The title trigger has no leading icon —
+  `.chat-session-title-icon` is retired on these pages.
 - Generic document rows expose download and forward. Business source rows expose
   only forward in the list.
 - Generated-result more menus use `.docs-row-menu-panel.output-floating-menu`
@@ -230,17 +250,22 @@ Core shared render/navigation functions:
 - Mobile-file cleanup must not change Web desktop HTML behavior unless the user
   explicitly asks for a Web-side UI/navigation change.
 
-### Scheme Switcher
+### Scheme Lock (Switcher Removed)
 
-- `conversation.html` scheme switcher is a two-level menu.
-- First level lists interaction schemes. Default scheme:
-  `侧边栏交互方案` (`sidebar-interaction`).
-- First-level schemes can be added through the "新增方案" row.
-- Clicking a first-level scheme drills into second-level capability selection.
-- Second-level capabilities are `支持动态页签` (`dynamic-tabs`) and
-  `不支持动态页签` (`static-tabs`).
-- Default capability for `侧边栏交互方案` is `static-tabs`.
-- Capability selection is stored per scheme in `state.schemeCapabilityByPlan`.
+- The chat-page scheme switcher (`#schemeSwitchBtn` / `#schemeSwitchMenu`,
+  label `侧边栏交互方案`) was removed from the `conversation.html` and
+  `task-conversation.html` topbars on 2026-06-11. Those pages run permanently
+  in `static-tabs` capability (runtime mode `static-detail`): no dynamic tab
+  strip, document details as a single right-panel page, business objects in
+  the detached drawer.
+- The underlying scheme state machinery (`state.activeSchemeCapability`
+  defaulting to `static-tabs`, `usesDynamicOutputTabs()`,
+  `usesStaticOutputDetail()`, `SCHEME_CAPABILITIES`) is still in the code and
+  consumed by `renderChatOutputPanel()`; `renderSchemeSwitch()` early-returns
+  because its DOM is gone. Scheme choice was never persisted, so the default
+  is authoritative.
+- Other pages keep their separate `方案1/方案2` (`state.uiScheme`) topbar
+  switcher; that is an unrelated config system.
 
 ### Automation Task Conversation
 

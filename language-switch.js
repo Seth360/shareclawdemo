@@ -37,6 +37,8 @@
     "设置": "Settings",
     "打开设置": "Open settings",
     "更多操作": "More actions",
+    "收起菜单": "Collapse menu",
+    "展开菜单": "Expand menu",
     "新建会话": "New chat",
     "销售记录": "Record",
     "现场会议": "Review",

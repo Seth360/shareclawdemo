@@ -432,6 +432,16 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        transition: width 0.24s ease;
+      }
+
+      .sidebar > * {
+        min-width: 264px;
+      }
+
+      .sidebar.collapsed {
+        width: 0;
+        border-right-width: 0;
       }
 
       .sidebar-view {
@@ -3386,15 +3396,28 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        width: min(868px, calc(100% - 32px));
+        width: 100%;
         min-height: 34px;
-        margin: 0 auto;
+        margin: 0;
         padding: 0 0 18px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+        justify-content: flex-start;
+        gap: 8px;
         background: #fbfcff;
+      }
+
+      .chat-sidebar-entry {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        flex: 0 0 auto;
+      }
+
+      .chat-sidebar-toggle-divider {
+        width: 1px;
+        height: 8px;
+        background: #dee1e8;
       }
 
       .chat-session-titlebar.hidden {
@@ -3418,12 +3441,6 @@
         background: transparent;
         color: #181c25;
         cursor: pointer;
-      }
-
-      .chat-session-title-icon {
-        width: 12px;
-        height: 12px;
-        flex: 0 0 12px;
       }
 
       .chat-session-title-text {
@@ -3493,8 +3510,9 @@
       }
 
       .chat-output-entry {
-        position: static;
-        flex: 0 0 auto;
+        position: absolute;
+        top: -5px;
+        right: 0;
         z-index: 75;
       }
 
@@ -12403,15 +12421,6 @@
             </div>
             <div class="company-name">北京易动纷享科技有限责任公司</div>
           </div>
-          <div class="scheme-switch-anchor">
-            <button class="scheme-switch-btn" id="schemeSwitchBtn" type="button" aria-haspopup="menu" aria-expanded="false">
-              <span id="schemeSwitchLabel">侧边栏交互方案</span>
-              <svg viewBox="0 0 12 12" aria-hidden="true">
-                <path class="icon-fill" fill="currentColor" d="M6 8.3 2.2 4.5h7.6L6 8.3Z"></path>
-              </svg>
-            </button>
-            <div class="scheme-switch-menu" id="schemeSwitchMenu" role="menu"></div>
-          </div>
         </div>
 
         <div class="topbar-right">
@@ -12869,11 +12878,17 @@
 
                 <section class="chat-flow-shell hidden" id="chatFlowShell" aria-label="AI对话内容">
                   <div class="chat-session-titlebar hidden" id="chatSessionTitlebar">
+                    <div class="chat-sidebar-entry">
+                      <button class="chat-output-toggle-btn" id="chatSidebarToggleBtn" type="button" aria-label="收起菜单" aria-expanded="true">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                          <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" stroke-width="1.4"></rect>
+                          <path d="M5.5 4.5V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+                        </svg>
+                      </button>
+                      <span class="chat-sidebar-toggle-divider" aria-hidden="true"></span>
+                    </div>
                     <div class="chat-session-title-main">
                       <button class="chat-session-title-trigger" id="chatSessionTitleBtn" type="button" aria-haspopup="menu" aria-expanded="false">
-                        <svg class="chat-session-title-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                          <path d="M1.05 13.5625L1.42536 10.9696C0.530951 9.86733 0 8.4918 0 7C0 3.37563 3.13401 0.4375 7 0.4375C10.866 0.4375 14 3.37563 14 7C14 10.6244 10.866 13.5625 7 13.5625C5.87231 13.5625 4.8069 13.3125 3.86339 12.8684L1.05 13.5625ZM3.95517 11.9445L4.23602 12.0767C5.08484 12.4763 6.0251 12.6875 7 12.6875C10.3949 12.6875 13.125 10.128 13.125 7C13.125 3.87195 10.3949 1.3125 7 1.3125C3.60508 1.3125 0.875 3.87195 0.875 7C0.875 8.25027 1.30996 9.43869 2.10481 10.4182L2.34622 10.7158L2.10216 12.4017L3.95517 11.9445Z" fill="#181C25"></path>
-                        </svg>
                         <span class="chat-session-title-text" id="chatSessionTitleText"></span>
                         <svg class="chat-session-title-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 9" fill="none" aria-hidden="true">
                           <path d="M4.7883 6.52599L4.81027 6.50754L8.28107 3.33908C8.47003 3.16681 8.48322 2.87414 8.31095 2.68517C8.13869 2.49621 7.84601 2.48302 7.65705 2.65529L4.49474 5.54074L1.34123 2.65265C1.15314 2.48039 0.860465 2.49269 0.68732 2.68166C0.515055 2.86974 0.527359 3.16242 0.716324 3.33556L4.18185 6.50929C4.35412 6.6675 4.61339 6.67013 4.7883 6.52599Z" fill="#181C25"></path>
@@ -12903,14 +12918,14 @@
                         </button>
                       </div>
                     </div>
-                    <div class="chat-output-entry">
-                      <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
-                        <svg class="chat-output-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                          <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" stroke-width="1.4"></rect>
-                          <path d="M10.5 4.5V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
-                        </svg>
-                      </button>
-                    </div>
+                  </div>
+                  <div class="chat-output-entry hidden">
+                    <button class="chat-output-toggle-btn" id="chatOutputToggleBtn" type="button" aria-label="打开生成结果" aria-expanded="false">
+                      <svg class="chat-output-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" stroke-width="1.4"></rect>
+                        <path d="M10.5 4.5V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+                      </svg>
+                    </button>
                   </div>
                   <div class="chat-feed" id="chatFeed"></div>
                 </section>
@@ -14954,6 +14969,8 @@
       const chatSessionTitleMenu = document.getElementById("chatSessionTitleMenu");
       const chatOutputEntry = document.querySelector(".chat-output-entry");
       const chatOutputToggleBtn = document.getElementById("chatOutputToggleBtn");
+      const chatSidebarToggleBtn = document.getElementById("chatSidebarToggleBtn");
+      const secondarySidebar = document.querySelector(".sidebar");
       const chatOutputPanelShell = document.getElementById("chatOutputPanelShell");
       const chatOutputPanel = document.getElementById("chatOutputPanel");
       const businessObjectOverlay = document.getElementById("businessObjectOverlay");
@@ -16525,6 +16542,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function renderSchemeSwitch() {
+        if (!schemeSwitchBtn || !schemeSwitchLabel || !schemeSwitchMenu) {
+          return;
+        }
         const currentScheme = getActiveSchemePlan();
         schemeSwitchLabel.textContent = currentScheme?.label || "侧边栏交互方案";
         schemeSwitchBtn.setAttribute("aria-expanded", String(state.schemeMenuOpen));
@@ -19992,14 +20012,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         chatOutputToggleBtn.classList.toggle("active", isOpen);
         chatOutputToggleBtn.classList.toggle("has-badge", showOutputEntry && !isOpen && currentDocs.length > 0);
         chatOutputToggleBtn.setAttribute("aria-expanded", String(isOpen));
-        chatOutputEntry?.classList.toggle("output-open", showOutputEntry && isOpen);
-        if (chatOutputEntry) {
-          if (showOutputEntry && isOpen) {
-            chatOutputEntry.style.setProperty("--chat-output-entry-offset", "372px");
-          } else {
-            chatOutputEntry.style.removeProperty("--chat-output-entry-offset");
-          }
-        }
         chatOutputPanelShell.classList.toggle("open", isOpen);
         chatOutputPanelShell.classList.toggle("detail", isOpen && showDetail);
         chatOutputPanelShell.classList.toggle("resizing", state.outputPanelResizing);
@@ -23400,6 +23412,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         const showTitlebar = hasProducedChatMessage(session);
         chatSessionTitlebar.classList.toggle("hidden", !showTitlebar);
+        chatOutputEntry?.classList.toggle("hidden", !showTitlebar);
         chatSessionTitleText.textContent = showTitlebar ? getChatSessionTitle(session) : "";
         if (!showTitlebar) {
           closeChatSessionTitleMenu();
@@ -25820,6 +25833,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         renderMainPanels();
       });
 
+      chatSidebarToggleBtn?.addEventListener("click", () => {
+        const collapsed = !secondarySidebar?.classList.contains("collapsed");
+        secondarySidebar?.classList.toggle("collapsed", collapsed);
+        chatSidebarToggleBtn.setAttribute("aria-expanded", String(!collapsed));
+        chatSidebarToggleBtn.setAttribute("aria-label", collapsed ? "展开菜单" : "收起菜单");
+      });
+
       chatOutputToggleBtn?.addEventListener("click", () => {
         state.outputResultsPanelOpen = !state.outputResultsPanelOpen;
         if (state.outputResultsPanelOpen && usesStaticOutputDetail()) {
@@ -27048,72 +27068,6 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
 
         await handleDetailAction(actionButton.dataset.detailAction || "", record);
-      });
-
-      schemeSwitchBtn.addEventListener("click", () => {
-        state.schemeMenuOpen = !state.schemeMenuOpen;
-        if (state.schemeMenuOpen) {
-          state.schemeMenuLevel = "plans";
-        }
-        renderSchemeSwitch();
-      });
-
-      function handleSchemeMenuSelection(event) {
-        event.stopPropagation();
-
-        const addButton = event.target.closest("[data-scheme-action='add-plan']");
-        if (addButton) {
-          event.preventDefault();
-          addSchemePlan();
-          renderSchemeSwitch();
-          renderMainPanels();
-          return;
-        }
-
-        const backButton = event.target.closest("[data-scheme-back]");
-        if (backButton) {
-          event.preventDefault();
-          state.schemeMenuLevel = "plans";
-          renderSchemeSwitch();
-          return;
-        }
-
-        const planOption = event.target.closest("[data-scheme-plan]");
-        if (planOption) {
-          event.preventDefault();
-          state.activeSchemePlanId = planOption.dataset.schemePlan || "sidebar-interaction";
-          state.activeSchemeCapability = getSchemeCapability(state.activeSchemePlanId).key;
-          state.schemeMenuLevel = "capabilities";
-          state.schemeMenuOpen = true;
-          renderSchemeSwitch();
-          return;
-        }
-
-        const capabilityOption = event.target.closest("[data-scheme-capability]");
-        if (!capabilityOption) {
-          return;
-        }
-
-        event.preventDefault();
-        state.activeSchemeCapability = capabilityOption.dataset.schemeCapability || "dynamic-tabs";
-        state.schemeCapabilityByPlan[state.activeSchemePlanId] = state.activeSchemeCapability;
-        state.uiScheme = "scheme1";
-        state.schemeMenuOpen = false;
-        state.schemeMenuLevel = "plans";
-        if (usesDynamicOutputTabs()) {
-          state.businessObjectOverlayOpen = false;
-          state.activeBusinessObjectSourceId = "";
-        }
-        closePlusMenu();
-        closeExposedMenu();
-        renderSchemeSwitch();
-        renderMainPanels();
-        renderAgentPill();
-      }
-
-      schemeSwitchMenu.addEventListener("pointerdown", handleSchemeMenuSelection);
-      schemeSwitchMenu.addEventListener("click", (event) => {
-        event.stopPropagation();
       });
 
       platformSwitchBtn?.addEventListener("click", () => {

@@ -166,6 +166,48 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
   shows `查看全部（共X个客户）` when more customers exist. That button is a
   placeholder for a future list page and only toasts `待接入列表页`.
 
+### 2026-06-11 - Generated-Results Toggle Follows The Panel
+
+- Decision: in `conversation.html` and `task-conversation.html`, the
+  generated-results toggle button moves together with the output panel's
+  expand/collapse animation instead of staying fixed in the centered titlebar.
+- Reason: user pointed out the toggle sat in dead space far from the open
+  panel on wide screens; the icon should track the panel edge.
+- Implementation: `.chat-output-entry` moved out of `#chatSessionTitlebar` to
+  be a direct child of `#chatFlowShell`, absolutely anchored `right: 0` so the
+  shrinking chat column carries it along the panel's width transition. The
+  legacy half-wired `--chat-output-entry-offset` / `output-open` JS (never
+  consumed by CSS) was removed.
+- Do not regress: do not re-nest the toggle inside the titlebar flow and do
+  not reintroduce JS-computed offsets for it; visibility must keep mirroring
+  the titlebar via `syncChatSessionTitlebar()`.
+
+### 2026-06-11 - Session Titlebar Hosts A Sidebar Collapse Toggle
+
+- Decision: `conversation.html` and `task-conversation.html` get a sidebar
+  collapse toggle at the left of the session title — a mirrored twin of the
+  generated-results toggle — that collapses/expands the secondary `.sidebar`
+  while the primary channel rail stays (Figma `ShareClaw` node `4630:34893`).
+- Decision: the leading icon inside the session title trigger is removed; the
+  title row is now toggle + divider + title text.
+- Reason: user request following the Figma interaction spec.
+- Do not regress: collapsing must hide only the secondary sidebar, never the
+  channel rail; do not reintroduce a leading icon in the session title.
+
+### 2026-06-11 - Chat Pages Lock To Static-Tabs; Scheme Switcher Removed
+
+- Decision: remove the `侧边栏交互方案` two-level scheme switcher from the
+  `conversation.html` and `task-conversation.html` topbars and keep only the
+  `不支持动态页签` (static-tabs / static-detail) behavior.
+- Reason: user decided the scheme-comparison config is no longer needed; the
+  static scheme is the chosen one.
+- Implementation: topbar anchor markup and its listeners removed;
+  `renderSchemeSwitch()` keeps a null guard for remaining render-cycle calls;
+  scheme state machinery stays (default `static-tabs`, never persisted).
+- Do not regress: do not reintroduce dynamic-tab UI paths on these pages; the
+  `方案1/方案2` switcher on other pages is a separate system and was not
+  touched.
+
 ## Correction Log
 
 ### 2026-06-04 - ShareAgent Title Menu Is Shared Across Desktop Pages
