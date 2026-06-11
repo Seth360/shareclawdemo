@@ -20622,6 +20622,16 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             `
           )
           .join("");
+        syncSidebarToggleBadge();
+      }
+
+      function syncSidebarToggleBadge() {
+        if (!chatSidebarToggleBtn) {
+          return;
+        }
+        const collapsed = Boolean(secondarySidebar?.classList.contains("collapsed"));
+        const hasUnread = Boolean(historyList?.querySelector(".history-status-dot.is-unread"));
+        chatSidebarToggleBtn.classList.toggle("has-badge", collapsed && hasUnread);
       }
 
       function upsertConversationHistory(sessionId, { moveToTop = true } = {}) {
@@ -25838,6 +25848,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         secondarySidebar?.classList.toggle("collapsed", collapsed);
         chatSidebarToggleBtn.setAttribute("aria-expanded", String(!collapsed));
         chatSidebarToggleBtn.setAttribute("aria-label", collapsed ? "展开菜单" : "收起菜单");
+        syncSidebarToggleBadge();
       });
 
       chatOutputToggleBtn?.addEventListener("click", () => {

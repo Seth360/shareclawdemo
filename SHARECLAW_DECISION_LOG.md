@@ -199,8 +199,24 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
 - Decision: remove the `侧边栏交互方案` two-level scheme switcher from the
   `conversation.html` and `task-conversation.html` topbars and keep only the
   `不支持动态页签` (static-tabs / static-detail) behavior.
-- Reason: user decided the scheme-comparison config is no longer needed; the
-  static scheme is the chosen one.
+- History: this was applied, rolled back together with the collapse-toggle
+  red badge during a revert to an earlier checkpoint, then both were
+  explicitly re-confirmed and re-applied by the user the same day.
+
+### 2026-06-11 - Collapsed Sidebar Toggle Shows Unread Red Badge
+
+- Decision: the left sidebar collapse toggle mirrors the generated-results
+  toggle's badge logic — a red dot appears on `#chatSidebarToggleBtn` only
+  while the sidebar is collapsed AND the history list contains at least one
+  unread blue dot.
+- Implementation: `syncSidebarToggleBadge()` reads the rendered
+  `#historyList` for `.history-status-dot.is-unread`; synced at the end of
+  `renderHistoryList()` and on collapse toggle. Reuses the existing
+  `.chat-output-toggle-btn.has-badge` style.
+- Do not regress: expanding the sidebar must clear the badge; reading reports
+  while collapsed must update the badge through the normal
+  `markAutomationRunRead()` → `renderHistoryList()` path — do not add a
+  separate unread bookkeeping source.
 - Implementation: topbar anchor markup and its listeners removed;
   `renderSchemeSwitch()` keeps a null guard for remaining render-cycle calls;
   scheme state machinery stays (default `static-tabs`, never persisted).

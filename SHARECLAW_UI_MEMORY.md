@@ -90,6 +90,7 @@ Core shared render/navigation functions:
 | 中间 chat | `index.html`, `conversation.html`, `task-conversation.html` | `#chatFlowShell`, `#chatFeed`, `state.activeChatId` | `renderChatConversation()` |
 | Chat 吸顶标题区 | `task-conversation.html` | `#chatSessionTitlebar`, `#chatSessionTitleText` | `syncChatSessionTitlebar()` |
 | 左侧菜单收起/展开按钮 | `conversation.html`, `task-conversation.html` | `.chat-sidebar-entry`（标题栏首子节点：镜像图标 + 8px 竖分隔线）, `#chatSidebarToggleBtn`, `.sidebar.collapsed` | 点击切换 `.sidebar` 的 `collapsed`（width 264↔0, 0.24s）；一级 rail 不受影响 |
+| 左侧收起按钮红点 | `conversation.html`, `task-conversation.html` | `#chatSidebarToggleBtn.has-badge`（复用产出物按钮红点样式） | `syncSidebarToggleBadge()`：仅在「菜单已收起 且 `#historyList` 存在 `.history-status-dot.is-unread`」时显示；`renderHistoryList()` 末尾与收起切换时同步 |
 | 生成结果展开/收起按钮 | `conversation.html`, `task-conversation.html` | `.chat-output-entry`（`#chatFlowShell` 直接子节点，absolute 锚定 `.chat-flow-shell` 右缘）, `#chatOutputToggleBtn` | `syncChatSessionTitlebar()` 同步其 hidden；位置随聊天列宽度跟随面板展开/收起动画 |
 | 输入框 / composer | shared | `#composerEditor`, `.composer-card`, `#sendBtn` | send button listener, `openMockAiConversation()` |
 | 触发词路由 | shared input pages -> `conversation.html` | `routeSpecialConversationTrigger(text)`, `specialConversationRouteMap`, `routeAgentActionTrigger(text)` | `信息收集`, `信息补全`, `删除客户`, `新建对象`, `编辑对象`, `更新对象`, `复杂查询`, `新建定时任务` route into `conversation.html` launch URLs. |
@@ -253,9 +254,9 @@ Core shared render/navigation functions:
 ### Scheme Lock (Switcher Removed)
 
 - The chat-page scheme switcher (`#schemeSwitchBtn` / `#schemeSwitchMenu`,
-  label `侧边栏交互方案`) was removed from the `conversation.html` and
-  `task-conversation.html` topbars on 2026-06-11. Those pages run permanently
-  in `static-tabs` capability (runtime mode `static-detail`): no dynamic tab
+  label `侧边栏交互方案`) is removed from the `conversation.html` and
+  `task-conversation.html` topbars. Those pages run permanently in the
+  `static-tabs` capability (runtime mode `static-detail`): no dynamic tab
   strip, document details as a single right-panel page, business objects in
   the detached drawer.
 - The underlying scheme state machinery (`state.activeSchemeCapability`
