@@ -144,8 +144,10 @@
     "展开全部": "Expand all",
     "收起全部": "Collapse all",
     "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！": "Enter a new customer: company Orange Tech, contact Li Ming, likely a large deal.",
+    "帮我把刚才开会的客户录进去": "Enter the customer from the meeting",
     "帮我创建一个客户：橘子科技有限责任公司 ，是个重要客户 ，互联网行业，联系人是李明，电话是13500000000": "Create a customer: Orange Technology Co., Ltd., key account, internet industry, contact Li Ming, phone 13500000000",
     "好的，我从刚才的会议记录里整理了以下信息：": "Okay, I pulled the following information from the meeting notes:",
+    "好的，我从刚才的会议记录里整理了以下信息:": "Okay, I pulled the following information from the meeting notes:",
     "李明的手机号是多少？": "What is Li Ming's mobile number?",
     "橘子科技属于哪个行业？": "Which industry does Orange Tech belong to?",
     "客户创建完成": "Customer created",
@@ -184,7 +186,10 @@
     "是否首次接触": "First contact",
     "民营Enterprise": "Private enterprise",
     "民营企业": "Private enterprise",
+    "100-500 人": "100-500 people",
     "500-1000 人": "500-1000 people",
+    "是": "Yes",
+    "否": "No",
     "未填写": "Not filled",
     "重要客户": "Key account",
     "新客户": "New customer",
@@ -688,7 +693,9 @@
       .replace(/已处理\s*(\d+)分0?(\d+)秒/g, "Processed in $1 min $2 sec")
       .replace(/已处理\s*(\d+)秒/g, "Processed in $1 sec")
       .replace(/已处理\s*(\d+)个步骤/g, "Processed $1 steps")
-      .replace(/有\s*(\d+)\s*个字段没有获取到，请补充一下/g, "$1 fields are missing. Please add them")
+      .replace(/有\s*(\d+)\s*个字段没有获取到，请补充一下[:：]?/g, "$1 fields are missing. Please add them")
+      .replace(/帮我把刚才开会的Customer录进去/g, "Enter the customer from the meeting")
+      .replace(/民营Enterprise/g, "Private enterprise")
       .replace(/Customer insightsAgents/g, "Customer Insights Agent")
       .replace(/Customer success/g, "Customer Success")
       .replace(/CustomerMeeting notes回填List/g, "Customer Meeting Notes Backfill List")
