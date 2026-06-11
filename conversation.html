@@ -3789,7 +3789,7 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
-        overflow: hidden;
+        overflow: visible;
       }
 
       .agent-action-badge {
@@ -3929,6 +3929,136 @@
         border-color: #181c25;
         background: #181c25;
         color: #fff;
+      }
+
+      .agent-action-create-menu-wrap {
+        position: relative;
+        display: inline-flex;
+      }
+
+      .agent-action-split {
+        position: relative;
+        height: 32px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: stretch;
+        overflow: hidden;
+        background: #181c25;
+      }
+
+      .agent-action-split::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 32px;
+        width: 1px;
+        background: #fff;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .agent-action-split .agent-action-btn {
+        height: 32px;
+        border: 0;
+        border-radius: 0;
+        background: #181c25;
+        color: #fff;
+      }
+
+      .agent-action-split-main {
+        min-width: 64px;
+      }
+
+      .agent-action-split-toggle {
+        width: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .agent-action-split-toggle svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transform-origin: center;
+        transition: transform 0.16s ease;
+      }
+
+      .agent-action-split-toggle[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+      }
+
+      .agent-action-create-menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        width: 204px;
+        padding: 6px;
+        border: 1px solid #eaebee;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(24, 28, 37, 0.14);
+        display: grid;
+        gap: 2px;
+        z-index: 20;
+      }
+
+      .agent-action-create-menu-item {
+        min-height: 34px;
+        padding: 6px 8px;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: #181c25;
+        font-size: 13px;
+        line-height: 20px;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .agent-action-create-menu-item:hover {
+        background: #f5f7fb;
+      }
+
+      .agent-action-permission-note {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #545861;
+        font-size: 12px;
+        line-height: 20px;
+      }
+
+      .agent-action-permission-icon {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 16px;
+        border: 1.5px solid #91959e;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #91959e;
+        font-size: 11px;
+        line-height: 1;
+        font-weight: 700;
+      }
+
+      .agent-action-permission-link {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #545861;
+        font: inherit;
+        text-decoration: underline;
+        cursor: pointer;
       }
 
       @keyframes chat-waiting-spin {
@@ -10506,42 +10636,43 @@
       }
 
       .general-settings-dialog {
-        width: min(680px, calc(100vw - 48px));
+        width: min(800px, calc(100vw - 48px));
+        height: min(640px, calc(100vh - 48px));
         max-height: calc(100vh - 48px);
         overflow: hidden;
-        border: 1px solid #e6e8ed;
-        border-radius: 12px;
+        border-radius: 8px;
         background: #fff;
-        box-shadow: 0 24px 64px rgba(24, 28, 37, 0.18);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
         display: flex;
         flex-direction: column;
       }
 
       .general-settings-head {
-        height: 56px;
-        padding: 0 16px 0 20px;
-        border-bottom: 1px solid #e9ebef;
+        height: 48px;
+        padding: 0 24px;
+        border-bottom: 1px solid #dee1e8;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex: 0 0 auto;
       }
 
       .general-settings-title {
         margin: 0;
         color: #181c25;
-        font-size: 18px;
-        line-height: 26px;
-        font-weight: 600;
+        font-size: 15px;
+        line-height: 24px;
+        font-weight: 700;
       }
 
       .general-settings-close {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: #5d6470;
+        color: #181c25;
       }
 
       .general-settings-close:hover {
@@ -10554,17 +10685,69 @@
         height: 14px;
       }
 
-      .general-settings-layout {
+      .general-settings-main {
         flex: 1;
         min-height: 0;
+        display: flex;
+      }
+
+      .general-settings-nav {
+        width: 220px;
+        padding: 16px;
+        border-right: 1px solid #dee1e8;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        flex: 0 0 auto;
+      }
+
+      .general-settings-tab {
+        width: 100%;
+        height: 40px;
+        padding: 0 8px;
+        border-radius: 8px;
+        color: #181c25;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 18px;
+        text-align: left;
+      }
+
+      .general-settings-tab.active {
+        background: #f7f0ff;
+      }
+
+      .general-settings-tab svg {
+        width: 16px;
+        height: 16px;
+        color: #181c25;
+      }
+
+      .general-settings-tab.active svg {
+        color: #8b5cf6;
+      }
+
+      .general-settings-content {
+        flex: 1;
+        min-width: 0;
         overflow: auto;
         padding: 16px 24px;
+      }
+
+      .general-settings-pane {
+        display: none;
+      }
+
+      .general-settings-pane.active {
+        display: block;
       }
 
       .general-settings-card {
         padding: 16px 14px 14px;
         border: 1px solid #e5e7eb;
-        border-radius: 10px;
+        border-radius: 8px;
         background: #fff;
         box-shadow: 0 1px 3px rgba(24, 28, 37, 0.06);
       }
@@ -10618,32 +10801,213 @@
       }
 
       .general-settings-footer {
-        height: 58px;
-        padding: 0 24px;
-        border-top: 1px solid #e9ebef;
-        background: #fff;
+        margin-top: 20px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 8px;
       }
 
-      .general-settings-save,
-      .general-settings-cancel {
-        height: 32px;
-        padding: 0 14px;
+      .general-settings-save {
+        height: 28px;
+        min-width: 44px;
+        padding: 0 12px;
         border-radius: 6px;
+        font-size: 13px;
+        line-height: 18px;
+        background: #8b5cf6;
+        color: #fff;
+      }
+
+      .general-settings-save:disabled {
+        background: #f2f3f5;
+        color: #91959e;
+        cursor: not-allowed;
+      }
+
+      .authorization-heading {
+        margin: 0;
+        color: #1f2533;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
+      }
+
+      .authorization-desc {
+        margin: 4px 0 16px;
+        color: #91959e;
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .authorization-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .authorization-section {
+        border-radius: 6px;
+        background: #f7f8fa;
+        padding: 12px;
+        color: #181c25;
+      }
+
+      .authorization-row {
+        min-height: 28px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .authorization-object-row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-align: left;
+      }
+
+      .authorization-section:not(.expanded) .authorization-action-row {
+        display: none;
+      }
+
+      .authorization-section.expanded .authorization-row + .authorization-row {
+        margin-top: 12px;
+      }
+
+      .authorization-object-name,
+      .authorization-action-name {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #181c25;
         font-size: 14px;
         line-height: 20px;
       }
 
-      .general-settings-save {
-        background: #7545df;
-        color: #fff;
+      .authorization-object-name {
+        font-weight: 500;
+        background: transparent;
+        text-align: left;
       }
 
-      .general-settings-cancel {
-        border: 1px solid #c7cbd3;
+      .authorization-action-name {
+        padding-left: 18px;
+        font-weight: 400;
+      }
+
+      .authorization-caret {
+        width: 10px;
+        height: 10px;
+        color: #181c25;
+        flex: 0 0 auto;
+        transform: rotate(0deg);
+        transition: transform 0.16s ease;
+      }
+
+      .authorization-section.expanded .authorization-caret {
+        transform: rotate(90deg);
+      }
+
+      .authorization-select-wrap {
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .authorization-select-btn {
+        width: 148px;
+        height: 28px;
+        padding: 0 8px;
+        border: 1px solid #c1c5ce;
+        border-radius: 6px;
+        background: #fff;
+        color: #181c25;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 18px;
+        text-align: left;
+      }
+
+      .authorization-select-btn svg {
+        width: 12px;
+        height: 12px;
+        color: #91959e;
+      }
+
+      .authorization-select-btn[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+      }
+
+      .authorization-dropdown {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        z-index: 3;
+        width: 148px;
+        padding: 4px 0;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .authorization-dropdown.hidden {
+        display: none;
+      }
+
+      .authorization-option {
+        width: 100%;
+        height: 32px;
+        padding: 0 8px;
+        color: #181c25;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        line-height: 20px;
+        text-align: left;
+      }
+
+      .authorization-option:hover {
+        background: #f7f8fa;
+      }
+
+      .authorization-check {
+        width: 12px;
+        height: 12px;
+        color: #8b5cf6;
+      }
+
+      .authorization-segment {
+        height: 28px;
+        padding: 2px;
+        border-radius: 6px;
+        background: #f2f3f5;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 0 0 auto;
+      }
+
+      .authorization-segment-btn {
+        height: 24px;
+        min-width: 68px;
+        padding: 0 8px;
+        border-radius: 4px;
+        color: #545861;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+      }
+
+      .authorization-segment-btn.active {
         background: #fff;
         color: #181c25;
       }
@@ -14384,7 +14748,7 @@
           </section>
         </main>
         <div class="detail-overlay hidden" id="generalSettingsOverlay" role="presentation">
-          <section class="general-settings-dialog" id="generalSettingsDialog" role="dialog" aria-modal="true" aria-labelledby="generalSettingsHeading">
+          <section class="general-settings-dialog" id="generalSettingsDialog" role="dialog" aria-modal="true" aria-labelledby="generalSettingsHeading" tabindex="-1">
             <div class="general-settings-head">
               <h2 class="general-settings-title" id="generalSettingsHeading">设置</h2>
               <button class="general-settings-close" id="generalSettingsCloseBtn" type="button" aria-label="关闭设置弹窗">
@@ -14393,21 +14757,165 @@
                 </svg>
               </button>
             </div>
-            <div class="general-settings-layout">
-              <section class="general-settings-card">
-                <h3 class="general-settings-card-title">名称</h3>
-                <p class="general-settings-card-desc">可以为你的ShareAgent取个性化的名字</p>
-                <input class="general-settings-input" id="generalSettingsNameInput" type="text" value="ShareAgent" aria-label="ShareAgent 名称" />
-              </section>
-              <section class="general-settings-card">
-                <h3 class="general-settings-card-title">设定</h3>
-                <p class="general-settings-card-desc">定义ShareAgent的称呼、定位与沟通风格，决定ShareAgent的语气、主动性与输出形式。</p>
-                <textarea class="general-settings-textarea" id="generalSettingsPromptInput" placeholder="请输入" aria-label="ShareAgent 设定"></textarea>
-              </section>
-            </div>
-            <div class="general-settings-footer">
-              <button class="general-settings-save" id="generalSettingsSaveBtn" type="button">保存</button>
-              <button class="general-settings-cancel" id="generalSettingsCancelBtn" type="button">取消</button>
+            <div class="general-settings-main">
+              <nav class="general-settings-nav" aria-label="设置分类">
+                <button class="general-settings-tab active" type="button" data-general-settings-tab="profile">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path class="icon-stroke" d="M6.2 2.5h3.6v2h1.7a2 2 0 0 1 2 2v1.4h-2a1.4 1.4 0 1 0 0 2.8h2v1.8a2 2 0 0 1-2 2H9.8v-2a1.4 1.4 0 1 0-2.8 0v2H4.5a2 2 0 0 1-2-2V10h2a1.4 1.4 0 1 0 0-2.8h-2V6.5a2 2 0 0 1 2-2h1.7v-2Z"></path>
+                  </svg>
+                  <span>个性化设置</span>
+                </button>
+                <button class="general-settings-tab" type="button" data-general-settings-tab="authorization">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path class="icon-stroke" d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7"></path>
+                    <rect class="icon-stroke" x="3" y="7" width="10" height="7" rx="1.2"></rect>
+                  </svg>
+                  <span>授权</span>
+                </button>
+              </nav>
+              <div class="general-settings-content">
+                <section class="general-settings-pane active" data-general-settings-pane="profile">
+                  <section class="general-settings-card">
+                    <h3 class="general-settings-card-title">名称</h3>
+                    <p class="general-settings-card-desc">可以为你的ShareAgent取个性化的名字</p>
+                    <input class="general-settings-input" id="generalSettingsNameInput" type="text" value="ShareAgent" aria-label="ShareAgent 名称" />
+                  </section>
+                  <section class="general-settings-card">
+                    <h3 class="general-settings-card-title">设定</h3>
+                    <p class="general-settings-card-desc">定义ShareAgent的称呼、定位与沟通风格，决定ShareAgent的语气、主动性与输出形式。</p>
+                    <textarea class="general-settings-textarea" id="generalSettingsPromptInput" placeholder="请输入" aria-label="ShareAgent 设定"></textarea>
+                  </section>
+                  <div class="general-settings-footer">
+                    <button class="general-settings-save" id="generalSettingsSaveBtn" type="button">保存</button>
+                  </div>
+                </section>
+                <section class="general-settings-pane" data-general-settings-pane="authorization">
+                  <h3 class="authorization-heading">对象授权配置</h3>
+                  <p class="authorization-desc">配置 ShareAgent 对不同业务对象可执行的操作范围。</p>
+                  <div class="authorization-list">
+                    <section class="authorization-section expanded" data-authorization-object="customer">
+                      <div class="authorization-row authorization-object-row">
+                        <button class="authorization-object-name" type="button" data-authorization-toggle="customer" aria-expanded="true">
+                          <svg class="authorization-caret" viewBox="0 0 10 10" aria-hidden="true">
+                            <path class="icon-stroke" d="M3.8 2 6.8 5 3.8 8"></path>
+                          </svg>
+                          <span>客户</span>
+                        </button>
+                        <div class="authorization-select-wrap">
+                          <button class="authorization-select-btn" type="button" data-authorization-select="customer" aria-expanded="false">
+                            <span data-authorization-select-label="customer">自定义</span>
+                            <svg viewBox="0 0 12 12" aria-hidden="true">
+                              <path class="icon-stroke" d="M3 4.5 6 7.5 9 4.5"></path>
+                            </svg>
+                          </button>
+                          <div class="authorization-dropdown hidden" data-authorization-dropdown="customer">
+                            <button class="authorization-option" type="button" data-authorization-option="customer" data-value="永远询问">
+                              <span>永远询问</span>
+                            </button>
+                            <button class="authorization-option" type="button" data-authorization-option="customer" data-value="不再询问">
+                              <span>不再询问</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="authorization-row authorization-action-row">
+                        <div class="authorization-action-name">新建</div>
+                        <div class="authorization-segment" role="group" aria-label="客户新建授权">
+                          <button class="authorization-segment-btn" type="button" data-authorization-policy="customer-create" data-value="永远询问">永远询问</button>
+                          <button class="authorization-segment-btn active" type="button" data-authorization-policy="customer-create" data-value="不再询问">不再询问</button>
+                        </div>
+                      </div>
+                      <div class="authorization-row authorization-action-row">
+                        <div class="authorization-action-name">编辑</div>
+                        <div class="authorization-segment" role="group" aria-label="客户编辑授权">
+                          <button class="authorization-segment-btn active" type="button" data-authorization-policy="customer-edit" data-value="永远询问">永远询问</button>
+                          <button class="authorization-segment-btn" type="button" data-authorization-policy="customer-edit" data-value="不再询问">不再询问</button>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="authorization-section" data-authorization-object="lead">
+                      <div class="authorization-row authorization-object-row">
+                        <button class="authorization-object-name" type="button" data-authorization-toggle="lead" aria-expanded="false">
+                          <svg class="authorization-caret" viewBox="0 0 10 10" aria-hidden="true">
+                            <path class="icon-stroke" d="M3.8 2 6.8 5 3.8 8"></path>
+                          </svg>
+                          <span>线索</span>
+                        </button>
+                        <div class="authorization-select-wrap">
+                          <button class="authorization-select-btn" type="button" data-authorization-select="lead" aria-expanded="false">
+                            <span data-authorization-select-label="lead">永远询问</span>
+                            <svg viewBox="0 0 12 12" aria-hidden="true">
+                              <path class="icon-stroke" d="M3 4.5 6 7.5 9 4.5"></path>
+                            </svg>
+                          </button>
+                          <div class="authorization-dropdown hidden" data-authorization-dropdown="lead">
+                            <button class="authorization-option" type="button" data-authorization-option="lead" data-value="永远询问">
+                              <span>永远询问</span>
+                            </button>
+                            <button class="authorization-option" type="button" data-authorization-option="lead" data-value="不再询问">
+                              <span>不再询问</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="authorization-row authorization-action-row">
+                        <div class="authorization-action-name">新建</div>
+                        <div class="authorization-segment" role="group" aria-label="线索新建授权">
+                          <button class="authorization-segment-btn active" type="button" data-authorization-policy="lead-create" data-value="永远询问">永远询问</button>
+                          <button class="authorization-segment-btn" type="button" data-authorization-policy="lead-create" data-value="不再询问">不再询问</button>
+                        </div>
+                      </div>
+                      <div class="authorization-row authorization-action-row">
+                        <div class="authorization-action-name">编辑</div>
+                        <div class="authorization-segment" role="group" aria-label="线索编辑授权">
+                          <button class="authorization-segment-btn active" type="button" data-authorization-policy="lead-edit" data-value="永远询问">永远询问</button>
+                          <button class="authorization-segment-btn" type="button" data-authorization-policy="lead-edit" data-value="不再询问">不再询问</button>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="authorization-section" data-authorization-object="schedule">
+                      <div class="authorization-row authorization-object-row">
+                        <button class="authorization-object-name" type="button" data-authorization-toggle="schedule" aria-expanded="false">
+                          <svg class="authorization-caret" viewBox="0 0 10 10" aria-hidden="true">
+                            <path class="icon-stroke" d="M3.8 2 6.8 5 3.8 8"></path>
+                          </svg>
+                          <span>日程</span>
+                        </button>
+                        <div class="authorization-select-wrap">
+                          <button class="authorization-select-btn" type="button" data-authorization-select="schedule" aria-expanded="false">
+                            <span data-authorization-select-label="schedule">不再询问</span>
+                            <svg viewBox="0 0 12 12" aria-hidden="true">
+                              <path class="icon-stroke" d="M3 4.5 6 7.5 9 4.5"></path>
+                            </svg>
+                          </button>
+                          <div class="authorization-dropdown hidden" data-authorization-dropdown="schedule">
+                            <button class="authorization-option" type="button" data-authorization-option="schedule" data-value="永远询问">
+                              <span>永远询问</span>
+                            </button>
+                            <button class="authorization-option" type="button" data-authorization-option="schedule" data-value="不再询问">
+                              <span>不再询问</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="authorization-row authorization-action-row">
+                        <div class="authorization-action-name">新建</div>
+                        <div class="authorization-segment" role="group" aria-label="日程新建授权">
+                          <button class="authorization-segment-btn" type="button" data-authorization-policy="schedule-create" data-value="永远询问">永远询问</button>
+                          <button class="authorization-segment-btn active" type="button" data-authorization-policy="schedule-create" data-value="不再询问">不再询问</button>
+                        </div>
+                      </div>
+                      <div class="authorization-row authorization-action-row">
+                        <div class="authorization-action-name">编辑</div>
+                        <div class="authorization-segment" role="group" aria-label="日程编辑授权">
+                          <button class="authorization-segment-btn" type="button" data-authorization-policy="schedule-edit" data-value="永远询问">永远询问</button>
+                          <button class="authorization-segment-btn active" type="button" data-authorization-policy="schedule-edit" data-value="不再询问">不再询问</button>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+              </div>
             </div>
           </section>
         </div>
@@ -14944,7 +15452,10 @@
       const generalSettingsNameInput = document.getElementById("generalSettingsNameInput");
       const generalSettingsPromptInput = document.getElementById("generalSettingsPromptInput");
       const generalSettingsSaveBtn = document.getElementById("generalSettingsSaveBtn");
-      const generalSettingsCancelBtn = document.getElementById("generalSettingsCancelBtn");
+      const generalSettingsTabs = Array.from(document.querySelectorAll("[data-general-settings-tab]"));
+      const generalSettingsPanes = Array.from(document.querySelectorAll("[data-general-settings-pane]"));
+      const authorizationSelectButtons = Array.from(document.querySelectorAll("[data-authorization-select]"));
+      const authorizationDropdowns = Array.from(document.querySelectorAll("[data-authorization-dropdown]"));
       const openSettingsBtn = document.getElementById("openSettingsBtn");
       const marketSidebarRow = document.getElementById("marketSidebarRow");
       const openConfigBtn = document.getElementById("openConfigBtn");
@@ -18426,12 +18937,160 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         );
       }
 
-      function openGeneralSettingsDialog() {
+      const AUTHORIZATION_VALUES = ["永远询问", "不再询问"];
+      const authorizationPolicyState = {
+        customer: { create: "不再询问", edit: "永远询问" },
+        lead: { create: "永远询问", edit: "永远询问" },
+        schedule: { create: "不再询问", edit: "不再询问" }
+      };
+      const authorizationFocusState = { object: "", action: "" };
+      const generalSettingsInitialState = { name: "", prompt: "" };
+
+      function syncGeneralSettingsSaveState() {
+        const currentName = generalSettingsNameInput.value.trim();
+        const currentPrompt = generalSettingsPromptInput.value.trim();
+        const hasContent = Boolean(currentName || currentPrompt);
+        const hasChanged =
+          currentName !== generalSettingsInitialState.name ||
+          currentPrompt !== generalSettingsInitialState.prompt;
+        generalSettingsSaveBtn.disabled = !(hasContent && hasChanged);
+      }
+
+      function getAuthorizationObjectValue(objectKey) {
+        const policy = authorizationPolicyState[objectKey];
+        if (!policy) {
+          return "永远询问";
+        }
+        const values = Object.values(policy);
+        return values.every((value) => value === values[0]) ? values[0] : "自定义";
+      }
+
+      function setAuthorizationExpanded(objectKey, expanded) {
+        const section = generalSettingsDialog.querySelector(`[data-authorization-object="${objectKey}"]`);
+        const toggle = generalSettingsDialog.querySelector(`[data-authorization-toggle="${objectKey}"]`);
+        if (!section || !toggle) {
+          return;
+        }
+        section.classList.toggle("expanded", expanded);
+        toggle.setAttribute("aria-expanded", String(expanded));
+      }
+
+      function setAuthorizationPolicy(objectKey, actionKey, value) {
+        if (!authorizationPolicyState[objectKey] || !authorizationPolicyState[objectKey][actionKey] || !AUTHORIZATION_VALUES.includes(value)) {
+          return;
+        }
+        authorizationPolicyState[objectKey][actionKey] = value;
+      }
+
+      function setAuthorizationObjectPolicy(objectKey, value) {
+        const policy = authorizationPolicyState[objectKey];
+        if (!policy || !AUTHORIZATION_VALUES.includes(value)) {
+          return;
+        }
+        Object.keys(policy).forEach((actionKey) => {
+          policy[actionKey] = value;
+        });
+      }
+
+      function renderAuthorizationPolicies() {
+        Object.entries(authorizationPolicyState).forEach(([objectKey, policy]) => {
+          const objectValue = getAuthorizationObjectValue(objectKey);
+          const section = generalSettingsDialog.querySelector(`[data-authorization-object="${objectKey}"]`);
+          const label = generalSettingsDialog.querySelector(`[data-authorization-select-label="${objectKey}"]`);
+          const dropdown = generalSettingsDialog.querySelector(`[data-authorization-dropdown="${objectKey}"]`);
+          const toggle = generalSettingsDialog.querySelector(`[data-authorization-toggle="${objectKey}"]`);
+          section?.classList.toggle("source-active", authorizationFocusState.object === objectKey);
+          if (label) {
+            label.textContent = objectValue;
+          }
+          if (toggle && section) {
+            toggle.setAttribute("aria-expanded", String(section.classList.contains("expanded")));
+          }
+          dropdown?.querySelectorAll(".authorization-option").forEach((option) => {
+            option.querySelector(".authorization-check")?.remove();
+            if (option.dataset.value === objectValue) {
+              option.insertAdjacentHTML("beforeend", `
+                <svg class="authorization-check" viewBox="0 0 12 12" aria-hidden="true">
+                  <path class="icon-stroke" d="M2.5 6.2 4.8 8.5 9.5 3.5"></path>
+                </svg>
+              `);
+            }
+          });
+
+          Object.entries(policy).forEach(([actionKey, value]) => {
+            generalSettingsDialog
+              .querySelectorAll(`[data-authorization-policy="${objectKey}-${actionKey}"]`)
+              .forEach((button) => {
+                button.classList.toggle("active", button.dataset.value === value);
+              });
+          });
+        });
+      }
+
+      function applyAuthorizationContext(context = {}) {
+        const objectKey = context.object || "";
+        const actionKey = context.action || "";
+        const value = context.value || "";
+        authorizationFocusState.object = objectKey;
+        authorizationFocusState.action = actionKey;
+        if (objectKey && actionKey && value) {
+          setAuthorizationPolicy(objectKey, actionKey, value);
+        }
+        if (objectKey) {
+          setAuthorizationExpanded(objectKey, true);
+        }
+        renderAuthorizationPolicies();
+      }
+
+      function setGeneralSettingsTab(tab = "profile") {
+        const safeTab = tab === "authorization" ? "authorization" : "profile";
+        generalSettingsTabs.forEach((button) => {
+          const active = button.dataset.generalSettingsTab === safeTab;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-selected", String(active));
+        });
+        generalSettingsPanes.forEach((pane) => {
+          pane.classList.toggle("active", pane.dataset.generalSettingsPane === safeTab);
+        });
+        generalSettingsDialog.classList.toggle("auth-active", safeTab === "authorization");
+        closeAuthorizationDropdowns();
+        if (safeTab === "authorization") {
+          renderAuthorizationPolicies();
+        }
+      }
+
+      function closeAuthorizationDropdowns(exceptKey = "") {
+        authorizationSelectButtons.forEach((button) => {
+          if (button.dataset.authorizationSelect !== exceptKey) {
+            button.setAttribute("aria-expanded", "false");
+          }
+        });
+        authorizationDropdowns.forEach((dropdown) => {
+          dropdown.classList.toggle("hidden", dropdown.dataset.authorizationDropdown !== exceptKey);
+        });
+      }
+
+      function openGeneralSettingsDialog(tab = "profile", options = {}) {
         generalSettingsNameInput.value = getAiProfileName();
         generalSettingsPromptInput.value = state.aiProfile.prompt || "";
+        generalSettingsInitialState.name = generalSettingsNameInput.value.trim();
+        generalSettingsInitialState.prompt = generalSettingsPromptInput.value.trim();
+        setGeneralSettingsTab(tab);
+        syncGeneralSettingsSaveState();
+        if (tab === "authorization") {
+          applyAuthorizationContext(options.authorization || {});
+        } else {
+          authorizationFocusState.object = "";
+          authorizationFocusState.action = "";
+          renderAuthorizationPolicies();
+        }
         generalSettingsOverlay.classList.remove("hidden");
         syncDialogBodyLock();
-        generalSettingsNameInput.focus();
+        if (tab === "authorization") {
+          generalSettingsDialog.focus();
+        } else {
+          generalSettingsNameInput.focus();
+        }
       }
 
       function closeGeneralSettingsDialog() {
@@ -18441,6 +19100,9 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       }
 
       function saveGeneralSettingsDialog() {
+        if (generalSettingsSaveBtn.disabled) {
+          return;
+        }
         const name = generalSettingsNameInput.value.trim() || "ShareAgent";
         const prompt = generalSettingsPromptInput.value.trim();
         applyAiProfileChanges({ name, prompt });
@@ -20884,11 +21546,34 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       function renderAgentActionCard(session) {
         const card = session.actionCard || createAgentActionCreateObjectCard();
+        const isCreateObjectAction = session.source === "agent-action-create-object";
         const buttons = card.buttons || [
           { label: "创建", action: "create", primary: true },
           { label: "编辑", action: "edit-draft" },
           { label: "取消", action: "cancel" }
         ];
+        const footerMarkup = isCreateObjectAction
+          ? `
+            <div class="agent-action-create-menu-wrap">
+              <div class="agent-action-split">
+                <button class="agent-action-btn primary agent-action-split-main" type="button" data-agent-action="create">新建</button>
+                <button class="agent-action-btn primary agent-action-split-toggle" type="button" data-agent-action="toggle-create-menu" aria-label="展开新建选项" aria-expanded="${String(Boolean(session.createActionMenuOpen))}">
+                  <svg viewBox="0 0 14 14" aria-hidden="true"><path d="m4 5.5 3 3 3-3"></path></svg>
+                </button>
+              </div>
+              ${session.createActionMenuOpen ? `
+                <div class="agent-action-create-menu" role="menu" aria-label="新建选项">
+                  <button class="agent-action-create-menu-item" type="button" role="menuitem" data-agent-action="create-session-skip">新建，本次对话不再询问</button>
+                  <button class="agent-action-create-menu-item" type="button" role="menuitem" data-agent-action="create-future-skip">新建，以后不再询问</button>
+                </div>
+              ` : ""}
+            </div>
+            <button class="agent-action-btn" type="button" data-agent-action="edit-draft">编辑</button>
+            <button class="agent-action-btn" type="button" data-agent-action="cancel">取消</button>
+          `
+          : buttons.map((button) => `
+            <button class="agent-action-btn ${button.primary ? "primary" : ""}" type="button" data-agent-action="${escapeHtml(button.action)}">${escapeHtml(button.label)}</button>
+          `).join("");
         return `
           <div class="agent-action-card ${card.expanded ? "is-expanded" : ""}">
             <div class="agent-action-badge ${card.badgeTone === "orange" ? "orange" : ""}">
@@ -20913,9 +21598,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
               </button>
             `}
             <div class="agent-action-footer">
-              ${buttons.map((button) => `
-                <button class="agent-action-btn ${button.primary ? "primary" : ""}" type="button" data-agent-action="${escapeHtml(button.action)}">${escapeHtml(button.label)}</button>
-              `).join("")}
+              ${footerMarkup}
             </div>
           </div>
         `;
@@ -22501,6 +23184,31 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         });
       }
 
+      function renderAgentCreateObjectPermissionNote(session) {
+        if (session?.source !== "agent-action-create-object" || session.stage !== "created") {
+          return "";
+        }
+
+        if (session.createConfirmMode === "future-skip") {
+          return `
+            <div class="agent-action-permission-note">
+              <span class="agent-action-permission-icon" aria-hidden="true">!</span>
+              <span>以后所有对话，新建客户不再询问。</span>
+              <button
+                class="agent-action-permission-link"
+                type="button"
+                data-chat-action="open-authorization-settings"
+                data-authorization-object="customer"
+                data-authorization-action="create"
+                data-authorization-value="不再询问"
+              >前往授权设置</button>
+            </div>
+          `;
+        }
+
+        return "";
+      }
+
       function getMdInfoDemoRows(session) {
         const fields = getMdInfoDemoFields(session);
         return [
@@ -22714,6 +23422,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
                 <p class="chat-ai-title">${escapeHtml(successCopy)}</p>
                 ${((isCreateObjectAction && session.stage === "created") || (isUpdateAction && session.stage === "updated")) ? renderCreatedCustomerDetailCard(session) : ""}
                 ${(isScheduledTaskAction && session.stage === "created") ? renderScheduledTaskArtifactCard(session) : ""}
+                ${isCreateObjectAction ? renderAgentCreateObjectPermissionNote(session) : ""}
                 ${renderChatToolbar()}
               </div>
             </div>
@@ -24026,6 +24735,11 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         closeMenu();
         closePlusMenu();
         closeExposedMenu();
+      }
+
+      function openAuthorizationSettings(context = {}) {
+        closeSidebarTitleMenu();
+        openGeneralSettingsDialog("authorization", { authorization: context });
       }
 
       function openMarketPage(page) {
@@ -25901,7 +26615,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       openSettingsBtn.addEventListener("click", () => {
-        openSettings();
+        openAuthorizationSettings();
       });
 
       function closeSidebarTitleMenu() {
@@ -25945,7 +26659,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       });
 
       openRailSettingsBtn.addEventListener("click", () => {
-        openSettings();
+        openAuthorizationSettings();
       });
 
       aiAvatarTrigger.addEventListener("click", () => {
@@ -26140,8 +26854,23 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             return;
           }
 
-          if (action === "create") {
+          if (action === "toggle-create-menu") {
+            if (session.source !== "agent-action-create-object") {
+              return;
+            }
+            session.createActionMenuOpen = !session.createActionMenuOpen;
+            renderMainPanels();
+            return;
+          }
+
+          if (action === "create" || action === "create-session-skip" || action === "create-future-skip") {
             if (session.source === "agent-action-create-object") {
+              session.createConfirmMode = action === "create-session-skip"
+                ? "session-skip"
+                : action === "create-future-skip"
+                ? "future-skip"
+                : "normal";
+              session.createActionMenuOpen = false;
               session.stage = "creating";
               upsertConversationHistory(session.id);
               renderMainPanels();
@@ -26220,6 +26949,15 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         const actionButton = event.target.closest("[data-chat-action]");
         if (actionButton) {
+          if (actionButton.dataset.chatAction === "open-authorization-settings") {
+            openAuthorizationSettings({
+              object: actionButton.dataset.authorizationObject || "",
+              action: actionButton.dataset.authorizationAction || "",
+              value: actionButton.dataset.authorizationValue || ""
+            });
+            return;
+          }
+
           if (actionButton.dataset.chatAction === "create-deal") {
             showToast("创建商机流程已等待新设计接入。");
             return;
@@ -26805,19 +27543,75 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         closeGeneralSettingsDialog();
       });
 
+      generalSettingsTabs.forEach((button) => {
+        button.addEventListener("click", () => {
+          setGeneralSettingsTab(button.dataset.generalSettingsTab || "profile");
+        });
+      });
+
+      generalSettingsDialog.addEventListener("click", (event) => {
+        const toggleButton = event.target.closest("[data-authorization-toggle]");
+        if (toggleButton) {
+          const objectKey = toggleButton.dataset.authorizationToggle;
+          const section = generalSettingsDialog.querySelector(`[data-authorization-object="${objectKey}"]`);
+          const willExpand = !section?.classList.contains("expanded");
+          setAuthorizationExpanded(objectKey, willExpand);
+          renderAuthorizationPolicies();
+          closeAuthorizationDropdowns();
+          return;
+        }
+
+        const selectButton = event.target.closest("[data-authorization-select]");
+        if (selectButton) {
+          event.stopPropagation();
+          const key = selectButton.dataset.authorizationSelect;
+          const willOpen = selectButton.getAttribute("aria-expanded") !== "true";
+          closeAuthorizationDropdowns(willOpen ? key : "");
+          selectButton.setAttribute("aria-expanded", String(willOpen));
+          return;
+        }
+
+        const optionButton = event.target.closest("[data-authorization-option]");
+        if (optionButton) {
+          const key = optionButton.dataset.authorizationOption;
+          const value = optionButton.dataset.value || "";
+          setAuthorizationObjectPolicy(key, value);
+          authorizationFocusState.object = key;
+          authorizationFocusState.action = "";
+          setAuthorizationExpanded(key, true);
+          renderAuthorizationPolicies();
+          closeAuthorizationDropdowns();
+          return;
+        }
+
+        const policyButton = event.target.closest("[data-authorization-policy]");
+        if (policyButton) {
+          const [objectKey, actionKey] = (policyButton.dataset.authorizationPolicy || "").split("-");
+          setAuthorizationPolicy(objectKey, actionKey, policyButton.dataset.value || "");
+          authorizationFocusState.object = objectKey;
+          authorizationFocusState.action = actionKey;
+          renderAuthorizationPolicies();
+          closeAuthorizationDropdowns();
+          return;
+        }
+
+        if (!event.target.closest(".authorization-select-wrap")) {
+          closeAuthorizationDropdowns();
+        }
+      });
+
       generalSettingsOverlay.addEventListener("click", (event) => {
         if (event.target === generalSettingsOverlay) {
           closeGeneralSettingsDialog();
         }
       });
 
-      generalSettingsCancelBtn.addEventListener("click", () => {
-        closeGeneralSettingsDialog();
-      });
-
       generalSettingsSaveBtn.addEventListener("click", () => {
         saveGeneralSettingsDialog();
       });
+
+      generalSettingsNameInput.addEventListener("input", syncGeneralSettingsSaveState);
+      generalSettingsPromptInput.addEventListener("input", syncGeneralSettingsSaveState);
 
       detailCloseBtn.addEventListener("click", () => {
         closeDetailDialog();
