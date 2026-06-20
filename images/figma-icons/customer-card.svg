@@ -1,0 +1,10 @@
+<svg width="10.5" height="10.5" overflow="visible" style="display: block;" viewBox="0 0 10.5 10.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Vector">
+<path d="M4.125 3H1.875V3.75H4.125V3Z" fill="var(--fill-0, #368DFF)"/>
+<path d="M1.875 4.875H4.125V5.625H1.875V4.875Z" fill="var(--fill-0, #368DFF)"/>
+<path d="M4.125 6.75H1.875V7.5H4.125V6.75Z" fill="var(--fill-0, #368DFF)"/>
+<path d="M7.125 6.75H8.625V7.5H7.125V6.75Z" fill="var(--fill-0, #368DFF)"/>
+<path d="M8.625 4.875H7.125V5.625H8.625V4.875Z" fill="var(--fill-0, #368DFF)"/>
+<path d="M6 0V1.5H10.5V10.5H0V0H6ZM5.25 9.75V0.75H0.75V9.75H5.25ZM9.75 9.75V2.25H6V9.75H9.75Z" fill="var(--fill-0, #368DFF)"/>
+</g>
+</svg>
