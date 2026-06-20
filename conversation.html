@@ -268,6 +268,42 @@
         flex: 0 0 auto;
       }
 
+      .trace-scheme-tabs {
+        height: 28px;
+        padding: 2px;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        border-radius: 7px;
+        background: rgba(24, 28, 37, 0.05);
+        flex: 0 0 auto;
+      }
+
+      .trace-scheme-tab {
+        min-width: 54px;
+        height: 24px;
+        padding: 0 10px;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #545861;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+        transition:
+          background-color 0.16s ease,
+          color 0.16s ease,
+          box-shadow 0.16s ease;
+      }
+
+      .trace-scheme-tab[aria-selected="true"] {
+        background: #fff;
+        color: #0f62fe;
+        box-shadow: 0 1px 3px rgba(24, 28, 37, 0.12);
+      }
+
       .top-search {
         width: 290px;
         height: 28px;
@@ -3595,7 +3631,7 @@
         min-height: 100%;
         width: min(868px, calc(100% - 32px));
         margin: 0 auto;
-        padding-bottom: 20px;
+        padding-bottom: 148px;
       }
 
       .chat-user-row {
@@ -4913,6 +4949,419 @@
         width: 12px;
         height: 12px;
         color: #8f95a2;
+      }
+
+      .sales-brief-trace {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        color: #181c25;
+        font-size: 13px;
+        line-height: 22px;
+      }
+
+      .sales-brief-trace[data-playing="true"] > *,
+      .sales-brief-report[data-playing="true"] {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      .sales-brief-trace[data-playing="true"] > *.is-visible,
+      .sales-brief-report[data-playing="true"].is-visible {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+          opacity 0.28s ease,
+          transform 0.28s ease;
+      }
+
+      .sales-brief-status {
+        width: 100%;
+        min-height: 26px;
+        padding-bottom: 0;
+        display: none;
+        align-items: center;
+        gap: 2px;
+        border-bottom: 0;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: left;
+      }
+
+      .sales-brief-status.is-visible {
+        display: inline-flex;
+      }
+
+      .sales-brief-status svg {
+        width: 9px;
+        height: 9px;
+        color: #91959e;
+        flex: 0 0 9px;
+        transition: transform 0.16s ease;
+      }
+
+      .sales-brief-status[aria-expanded="true"] svg {
+        transform: rotate(90deg);
+      }
+
+      .sales-brief-trace.is-collapsed {
+        display: none;
+      }
+
+      .sales-brief-trace.is-compact-hidden {
+        display: none;
+      }
+
+      .sales-brief-trace-compact {
+        width: 100%;
+        min-height: 28px;
+        display: none;
+        align-items: center;
+        color: #545861;
+        font-size: 13px;
+        line-height: 22px;
+      }
+
+      .sales-brief-trace-compact.is-visible {
+        display: flex;
+      }
+
+      .sales-brief-compact-stage {
+        max-width: 100%;
+        min-height: 28px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .sales-brief-compact-text {
+        position: relative;
+        min-width: 0;
+        max-width: min(360px, 52vw);
+        display: inline-block;
+        overflow: hidden;
+        color: #545861;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .sales-brief-compact-stage.is-scanning .sales-brief-compact-text::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 48px;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 48%, transparent 100%);
+        animation: sales-brief-compact-scan 1.05s ease-in-out infinite;
+      }
+
+      .sales-brief-compact-more {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #91959e;
+        flex: 0 0 22px;
+        transition:
+          background-color 0.16s ease,
+          color 0.16s ease;
+      }
+
+      .sales-brief-compact-more:hover {
+        background: #f2f4fb;
+        color: #0f62fe;
+      }
+
+      .sales-brief-compact-more svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      @keyframes sales-brief-compact-scan {
+        from {
+          left: -56px;
+        }
+        to {
+          left: calc(100% + 12px);
+        }
+      }
+
+      .sales-brief-trace[data-playing="true"] > .sales-brief-tool-command.is-visible {
+        animation: sales-brief-command-pulse 0.72s ease both;
+      }
+
+      .sales-brief-trace .is-typing::after {
+        content: "";
+        width: 1px;
+        height: 14px;
+        margin-left: 2px;
+        display: inline-block;
+        vertical-align: -2px;
+        background: #181c25;
+        animation: sales-brief-caret 0.8s steps(2, start) infinite;
+      }
+
+      .sales-brief-report .is-typing::after {
+        content: "";
+        width: 1px;
+        height: 13px;
+        margin-left: 2px;
+        display: inline-block;
+        vertical-align: -2px;
+        background: #181c25;
+        animation: sales-brief-caret 0.8s steps(2, start) infinite;
+      }
+
+      .sales-brief-report .sales-brief-stream-hidden {
+        display: none !important;
+      }
+
+      .sales-brief-toolbar-pending {
+        display: none;
+      }
+
+      @keyframes sales-brief-caret {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes sales-brief-command-pulse {
+        0% {
+          box-shadow: 0 0 0 rgba(115, 65, 222, 0);
+        }
+        45% {
+          box-shadow: 0 0 0 4px rgba(115, 65, 222, 0.08);
+        }
+        100% {
+          box-shadow: 0 0 0 rgba(115, 65, 222, 0);
+        }
+      }
+
+      .sales-brief-trace p {
+        margin: 0;
+      }
+
+      .sales-brief-tool {
+        min-height: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #91959e;
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .sales-brief-tool::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-top: 1.4px solid currentColor;
+        border-right: 1.4px solid currentColor;
+        transform: rotate(45deg);
+        opacity: 0.72;
+      }
+
+      .sales-brief-tool.is-loading::before {
+        width: 10px;
+        height: 10px;
+        border: 1.4px solid #c4cad5;
+        border-top-color: #7f8795;
+        border-right-color: #c4cad5;
+        border-radius: 50%;
+        transform: none;
+        opacity: 1;
+        animation: sales-brief-tool-spin 0.8s linear infinite;
+      }
+
+      @keyframes sales-brief-tool-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .sales-brief-tool-command {
+        width: fit-content;
+        max-width: 100%;
+        min-height: 28px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f3f5fa;
+        color: #545861;
+        font-size: 12px;
+        line-height: 18px;
+        overflow-wrap: anywhere;
+      }
+
+      .sales-brief-tool-command::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #70788a;
+        box-shadow: inset 0 0 0 2px #f3f5fa;
+        flex: 0 0 8px;
+      }
+
+      .sales-brief-tool-command code {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 12px;
+        color: #3d4350;
+      }
+
+      .sales-brief-report {
+        margin-top: 4px;
+        padding-top: 18px;
+        border-top: 1px solid #e4e8f0;
+      }
+
+      .sales-brief-report-title {
+        margin: 0 0 14px;
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 700;
+        color: #181c25;
+      }
+
+      .sales-brief-section {
+        margin-top: 16px;
+      }
+
+      .sales-brief-section:first-child {
+        margin-top: 0;
+      }
+
+      .sales-brief-section-title {
+        margin: 0 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 20px;
+        font-weight: 700;
+        color: #181c25;
+      }
+
+      .sales-brief-section-title::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #ff8000;
+        box-shadow: 0 0 0 3px #fff2e1;
+        flex: 0 0 7px;
+      }
+
+      .sales-brief-section-title.blue::before {
+        background: #2d6cdf;
+        box-shadow: 0 0 0 3px #e8f0ff;
+      }
+
+      .sales-brief-section-title.green::before {
+        background: #13a879;
+        box-shadow: 0 0 0 3px #e5f8f1;
+      }
+
+      .sales-brief-section-copy {
+        margin: 0;
+        font-size: 13px;
+        line-height: 22px;
+        color: #181c25;
+      }
+
+      .sales-brief-table {
+        width: 100%;
+        margin-top: 8px;
+        border: 1px solid #dfe4ee;
+        border-radius: 12px;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: #fff;
+        overflow: hidden;
+        table-layout: fixed;
+      }
+
+      .sales-brief-table th,
+      .sales-brief-table td {
+        padding: 11px 14px;
+        border-right: 1px solid #e7ebf2;
+        border-bottom: 1px solid #e7ebf2;
+        text-align: left;
+        vertical-align: top;
+        font-size: 12px;
+        line-height: 20px;
+        color: #181c25;
+        overflow-wrap: anywhere;
+      }
+
+      .sales-brief-table th {
+        background: #f7f9fd;
+        font-weight: 700;
+      }
+
+      .sales-brief-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .sales-brief-table th:last-child,
+      .sales-brief-table td:last-child {
+        border-right: 0;
+      }
+
+      .sales-brief-list {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        color: #181c25;
+        font-size: 13px;
+        line-height: 22px;
+      }
+
+      .sales-brief-list li::marker {
+        color: #7a8291;
+      }
+
+      .sales-brief-priority-list {
+        margin: 8px 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .sales-brief-priority-list li {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 22px;
+        color: #181c25;
+      }
+
+      .sales-brief-dot {
+        width: 9px;
+        height: 9px;
+        margin-top: 6px;
+        border-radius: 50%;
+        background: #ff3b30;
+        flex: 0 0 9px;
+      }
+
+      .sales-brief-dot.amber {
+        background: #f4b400;
+      }
+
+      .sales-brief-dot.green {
+        background: #13a879;
       }
 
       .chat-card-shell {
@@ -12791,12 +13240,10 @@
         </div>
 
         <div class="topbar-right">
-          <button class="platform-switch-btn" id="platformSwitchBtn" type="button" aria-label="English">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M16 8C16 3.58154 12.4185 0 8 0C3.58154 0 0 3.58154 0 8C0 12.4185 3.58154 16 8 16C12.4185 16 16 12.4185 16 8ZM11.4363 1.88752C11.4349 1.89082 11.4332 1.89398 11.4317 1.89728C13.5617 3.09792 15 5.38082 15 7.99999C15.0014 8.98638 14.7934 9.96185 14.3899 10.8619C14.0336 10.1789 13.5393 9.88405 12.782 9.93708C12.6518 9.94598 12.5356 9.95956 12.3824 9.9812L12.1588 10.0113L12.06 10.0219L12.0154 10.0236L11.9667 10.0211L11.9276 10.0126C11.8525 9.99096 11.755 9.92265 11.5937 9.75083L11.5187 9.67362C10.7067 8.87647 9.61466 8.88877 8.60666 9.50265C7.30806 10.293 7.38272 12.1393 9.05593 13.3039L9.13569 13.3611C9.68635 13.7697 9.89975 14.2105 9.80641 14.7645C9.23029 14.9181 8.6249 15 7.99999 15C4.1343 15 1.00001 11.8661 1.00001 7.99999C0.997459 6.34974 1.58061 4.75214 2.64564 3.49157C2.91503 3.78473 2.94006 4.1186 2.7394 4.59333L2.70122 4.68581C2.42716 5.3909 2.48019 5.97169 2.95958 6.33781C3.24425 6.55502 3.54334 6.61993 4.01849 6.62884L4.23358 6.63011L4.57424 6.62587L4.64467 6.62799L4.70788 6.6369C4.79697 6.65599 4.86909 6.70478 4.9497 6.8223L4.99467 6.89399L5.018 6.93514L5.07994 7.05563L5.14824 7.20411L5.20891 7.34454L5.31157 7.59399L5.43163 7.8952C5.82236 8.8875 6.88254 9.07629 7.66442 8.45053C8.38223 7.87611 8.64187 6.83078 8.24308 5.76593C8.21763 5.69848 8.19514 5.63442 8.17393 5.57375L8.11708 5.40193C8.1086 5.37478 8.10054 5.3489 8.09333 5.32345L8.05345 5.18175L8.03733 5.11812L8.01272 5.00484L7.99617 4.91066L7.98769 4.83515C7.98267 4.79789 7.98483 4.76002 7.99405 4.72357L7.9966 4.71848C7.9966 4.71933 7.99745 4.71975 7.99914 4.71975L8.07508 4.70194C8.19514 4.67563 8.36993 4.66333 8.6389 4.66333C9.67829 4.66333 10.4432 3.86745 11.1292 2.53109L11.2531 2.28206C11.3135 2.15788 11.3725 2.02953 11.4317 1.89728C11.4316 1.89723 11.4318 1.89732 11.4317 1.89728L11.4363 1.88752ZM9.69908 12.1991C8.82684 11.5513 8.81326 10.867 9.26805 10.59C9.84035 10.2417 10.3125 10.2442 10.6647 10.6205C11.0172 10.9968 11.349 11.2047 11.7316 11.2722L11.7567 11.2764L11.8699 11.2925C11.9263 11.2987 11.983 11.301 12.0396 11.2993L12.1627 11.2917L12.3154 11.2747L12.6314 11.2314L12.7562 11.2166L12.8707 11.2068C13.0735 11.1924 13.2114 11.2696 13.3493 11.6056L13.3925 11.7206L13.4146 11.7851L13.4587 11.928L13.4812 12.0065L13.5279 12.1805L13.5491 12.2679C12.8941 13.1187 12.0528 13.8081 11.0897 14.283C11.0164 13.5007 10.5751 12.8109 9.78308 12.2594L9.69908 12.1991ZM3.55012 2.59685C4.75964 1.59903 6.31024 1 8.00042 1C8.77261 0.999169 9.53959 1.12647 10.2701 1.37673C9.71478 2.60152 9.10599 3.39061 8.6389 3.39061L8.41617 3.39358C7.70387 3.41267 7.29066 3.53612 6.97927 3.95315C6.59957 4.46182 6.65769 5.16139 7.05181 6.21266C7.26181 6.77393 7.14727 7.23466 6.86939 7.45696C6.71794 7.57829 6.67169 7.56981 6.61654 7.42896L6.4723 7.07217L6.38109 6.85666L6.29242 6.65896L6.20588 6.47781L6.12018 6.31278C5.72224 5.57927 5.33236 5.35315 4.57467 5.35315L4.31927 5.35612H4.06515L4.01552 5.35527L3.9277 5.35103L3.82376 5.34254L3.83055 5.31709C3.85246 5.23943 3.87953 5.16332 3.91158 5.08927L3.954 4.98363C4.30527 4.07066 4.164 3.24042 3.55012 2.59685Z" fill="#91959E"></path>
-            </svg>
-            <span>English</span>
-          </button>
+          <div class="trace-scheme-tabs" role="tablist" aria-label="工具调用流程方案">
+            <button class="trace-scheme-tab" id="schemeOneTab" type="button" role="tab" aria-selected="true" data-trace-scheme-tab="one">方案一</button>
+            <button class="trace-scheme-tab" id="schemeTwoTab" type="button" role="tab" aria-selected="false" data-trace-scheme-tab="two">方案二</button>
+          </div>
           <div class="top-search">
             <div class="search-scope">
               <span>全部</span>
@@ -13191,7 +13638,7 @@
                     <div class="hero-content">
                       <div class="hero-title-row">
                         <div class="hero-badge">
-                          <img class="hero-face" src="./images/shareclawlogo.png" alt="ShareAgent" />
+                          <img class="hero-face" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='16'%20fill='%23fff3e4'/%3E%3Cpath%20d='M10%2016c0-3.3%202.7-6%206-6s6%202.7%206%206-2.7%206-6%206-6-2.7-6-6Z'%20fill='%23ff8000'/%3E%3Ccircle%20cx='13.7'%20cy='15.8'%20r='.9'%20fill='white'/%3E%3Ccircle%20cx='18.3'%20cy='15.8'%20r='.9'%20fill='white'/%3E%3Cpath%20d='M13%207.5v2.2M19%207.5v2.2'%20stroke='%23ff8000'%20stroke-width='1.5'%20stroke-linecap='round'/%3E%3C/svg%3E" alt="ShareAgent" />
                         </div>
                         <h1 class="hero-title">你好Scott，告诉我今天想搞定什么，我来拆解和执行</h1>
                       </div>
@@ -13199,7 +13646,7 @@
                       <div class="suggest-list">
                         <div class="suggest-item">
                           <button type="button" data-suggest-id="weekly-report" data-fill="帮我分析一下 纷享销客 最近的跟进情况，并给出下一步建议">
-                            <img class="spark-icon" src="./images/prompticon.png" alt="" aria-hidden="true" />
+                            <img class="spark-icon" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20width='16'%20height='16'%20rx='8'%20fill='%23fff3e4'/%3E%3Cpath%20d='M8%203.2c.4%202%201.5%203.1%203.6%203.6-2.1.5-3.2%201.6-3.6%203.8-.5-2.2-1.6-3.3-3.6-3.8%202-.5%203.1-1.6%203.6-3.6Z'%20fill='%23ff8000'/%3E%3C/svg%3E" alt="" aria-hidden="true" />
                             <div class="suggest-content">
                               <span class="plain">帮我分析一下</span>
                               <svg class="mini-icon" viewBox="0 0 14 14" aria-hidden="true">
@@ -13217,7 +13664,7 @@
 
                         <div class="suggest-item">
                           <button type="button" data-suggest-id="visit-tencent" data-fill="帮我找出可能延迟回款的订单，并给出处理建议">
-                            <img class="spark-icon" src="./images/prompticon.png" alt="" aria-hidden="true" />
+                            <img class="spark-icon" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20width='16'%20height='16'%20rx='8'%20fill='%23fff3e4'/%3E%3Cpath%20d='M8%203.2c.4%202%201.5%203.1%203.6%203.6-2.1.5-3.2%201.6-3.6%203.8-.5-2.2-1.6-3.3-3.6-3.8%202-.5%203.1-1.6%203.6-3.6Z'%20fill='%23ff8000'/%3E%3C/svg%3E" alt="" aria-hidden="true" />
                             <div class="suggest-content">
                               <span class="plain">帮我找出可能延迟回款的订单，并给出处理建议</span>
                             </div>
@@ -13229,7 +13676,7 @@
 
                         <div class="suggest-item">
                           <button type="button" data-suggest-id="export-east" data-fill="帮我生成一个本周的销售跟进计划，优先推进高潜客户">
-                            <img class="spark-icon" src="./images/prompticon.png" alt="" aria-hidden="true" />
+                            <img class="spark-icon" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20width='16'%20height='16'%20rx='8'%20fill='%23fff3e4'/%3E%3Cpath%20d='M8%203.2c.4%202%201.5%203.1%203.6%203.6-2.1.5-3.2%201.6-3.6%203.8-.5-2.2-1.6-3.3-3.6-3.8%202-.5%203.1-1.6%203.6-3.6Z'%20fill='%23ff8000'/%3E%3C/svg%3E" alt="" aria-hidden="true" />
                             <div class="suggest-content">
                               <span class="plain">帮我生成一个本周的销售跟进计划，优先推进高潜客户</span>
                             </div>
@@ -13641,7 +14088,7 @@
                     <div class="settings-personality-box">
                       <div class="settings-avatar-stage">
                         <button class="settings-avatar-trigger" id="aiAvatarTrigger" type="button" aria-label="更换AI头像">
-                          <img class="settings-avatar-preview" id="aiAvatarPreview" src="./images/Image_byccxbyccxbyccxb.png" alt="ShareAgent" />
+                          <img class="settings-avatar-preview" id="aiAvatarPreview" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Crect%20width='28'%20height='28'%20rx='14'%20fill='%23fff3e4'/%3E%3Cpath%20d='M9%2013.4c0-2.8%202.2-5%205-5s5%202.2%205%205-2.2%205-5%205-5-2.2-5-5Z'%20fill='%23ff8000'/%3E%3Ccircle%20cx='12.1'%20cy='13.2'%20r='.8'%20fill='white'/%3E%3Ccircle%20cx='15.9'%20cy='13.2'%20r='.8'%20fill='white'/%3E%3Cpath%20d='M12%205.8v2M16%205.8v2'%20stroke='%23ff8000'%20stroke-width='1.4'%20stroke-linecap='round'/%3E%3C/svg%3E" alt="ShareAgent" />
                           <span class="settings-avatar-badge" aria-hidden="true">+</span>
                         </button>
                         <input id="aiAvatarInput" type="file" accept="image/*" class="hidden" />
@@ -15098,7 +15545,7 @@
       const CONVERSATION_SESSIONS_STORAGE_KEY = "shareclaw-conversation-sessions-v1";
       const SIDEBAR_HISTORY_STATUS_STORAGE_KEY = "shareclaw-sidebar-history-status-v1";
       const OUTPUT_TABS_STORAGE_KEY = "shareclaw-output-tabs-v1";
-      const DEFAULT_AI_AVATAR = "./images/Image_byccxbyccxbyccxb.png";
+      const DEFAULT_AI_AVATAR = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Crect%20width='28'%20height='28'%20rx='14'%20fill='%23fff3e4'/%3E%3Cpath%20d='M9%2013.4c0-2.8%202.2-5%205-5s5%202.2%205%205-2.2%205-5%205-5-2.2-5-5Z'%20fill='%23ff8000'/%3E%3Ccircle%20cx='12.1'%20cy='13.2'%20r='.8'%20fill='white'/%3E%3Ccircle%20cx='15.9'%20cy='13.2'%20r='.8'%20fill='white'/%3E%3Cpath%20d='M12%205.8v2M16%205.8v2'%20stroke='%23ff8000'%20stroke-width='1.4'%20stroke-linecap='round'/%3E%3C/svg%3E";
       const DEFAULT_SCHEME_PLANS = [
         { id: "sidebar-interaction", label: "侧边栏交互方案" }
       ];
@@ -15295,7 +15742,7 @@
           mainPanel,
           currentChannel: mainPanel === "messenger" ? "messenger" : "claw",
           homeView,
-          activeChatId: isConversationEntry ? params.get("session") || "" : "",
+          activeChatId: isConversationEntry ? params.get("session") || "sales-brief" : "",
           homeInsightRailEnabled: !isConversationEntry && homeView !== "chat",
           activeMessengerThread: params.get("thread") || "work-message",
           settingsTab: pickAllowedValue(params.get("tab"), ["onboarding", "runtime", "basic"], "onboarding"),
@@ -15410,7 +15857,8 @@
         createAssistantSearch: "",
         sourceKey: "all",
         sourceMenuOpen: false,
-        createMenuOpen: false
+        createMenuOpen: false,
+        traceScheme: "one"
       };
 
       const composerEditor = document.getElementById("composerEditor");
@@ -15419,7 +15867,7 @@
       const schemeSwitchBtn = document.getElementById("schemeSwitchBtn");
       const schemeSwitchLabel = document.getElementById("schemeSwitchLabel");
       const schemeSwitchMenu = document.getElementById("schemeSwitchMenu");
-      const platformSwitchBtn = document.getElementById("platformSwitchBtn");
+      const traceSchemeTabs = Array.from(document.querySelectorAll("[data-trace-scheme-tab]"));
       const composerSelects = document.getElementById("composerSelects");
       const dialogModeBtn = document.getElementById("dialogModeBtn");
       const planningModeBtn = document.getElementById("planningModeBtn");
@@ -15674,6 +16122,22 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
 每个模板都应附带参数示例和失败兜底说明。`
       };
+      let salesBriefTraceTimers = [];
+      const salesBriefCompactMessages = [
+        "调用客户简报技能",
+        "查询易动纷享 CRM 数据",
+        "核对客户候选记录",
+        "精确匹配北京易动纷享",
+        "关联历史八百万商机",
+        "拉取客户完整信息",
+        "补全商机与联系人",
+        "校验履约与订单风险",
+        "读取简报输出规则",
+        "计算见客准备度",
+        "生成会前销售简报"
+      ];
+      const salesBriefCompactStepIndexes = [0, 2, 4, 6, 8, 10, 12, 14, 20, 22, 25];
+      let salesBriefCompactActiveIndex = 0;
       const INFO_COLLECTION_TRIGGERS = ["信息收集"];
       const INFO_COLLECTION_PROMPT = "帮我录入一个新客户，公司叫橘子科技，对接人叫李明，感觉是个大单！";
       const DEFAULT_CREATE_CUSTOMER_NAME = "新客户";
@@ -15741,6 +16205,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
       ];
       const pinnedHistoryItems = [
+        { id: "pinned-sales-brief", title: "创建易动纷享销售简报", type: "session", sessionId: "sales-brief", url: "conversation.html?session=sales-brief" },
         { id: "pinned-haiyue-brief", title: "海岳智能制造集团客户近况", type: "session", sessionId: "haiyue-brief", url: "conversation.html?launch=haiyue-brief&prompt=%E5%B8%AE%E6%88%91%E6%9F%A5%E7%9C%8B%E6%B5%B7%E5%B2%B3%E6%99%BA%E8%83%BD%E5%88%B6%E9%80%A0%E9%9B%86%E5%9B%A2%E8%BF%91%E5%86%B5%E5%92%8C%E5%90%8E%E7%BB%AD%E6%80%8E%E4%B9%88%E5%81%9A" },
         { id: "pinned-create-baiziwan", title: "创建客户 · 百子湾", type: "launch", url: "conversation.html?launch=create-customer&prompt=%E5%88%9B%E5%BB%BA%E5%AE%A2%E6%88%B7%EF%BC%9A%E7%99%BE%E5%AD%90%E6%B9%BE" }
       ];
@@ -15797,6 +16262,13 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         }
       ];
       const conversationSessions = {
+        "sales-brief": {
+          id: "sales-brief",
+          historyTitle: "创建易动纷享销售简报",
+          prompt: "给我一份易动纷享的销售简报",
+          time: "10:20",
+          stage: "reply"
+        },
         "weekly-report": {
           id: "weekly-report",
           historyTitle: "分析纷享销客最近跟进情况",
@@ -24092,6 +24564,175 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         `;
       }
 
+      function renderSalesBriefTable(headers, rows, widths = []) {
+        return `
+          <table class="sales-brief-table">
+            <thead>
+              <tr>
+                ${headers.map((header, index) => `<th style="${widths[index] ? `width:${escapeHtml(widths[index])};` : ""}">${escapeHtml(header)}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map((row) => `
+                <tr>
+                  ${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+      }
+
+      function renderSalesBriefTool(label, command = "") {
+        return command
+          ? `<div class="sales-brief-tool-command"><code>${escapeHtml(command)}</code></div>`
+          : `<div class="sales-brief-tool">${escapeHtml(label)}</div>`;
+      }
+
+      function renderSalesBriefCompactTrace() {
+        return `
+          <div class="sales-brief-trace-compact" data-sales-brief-compact aria-live="polite">
+            <div class="sales-brief-compact-stage is-scanning" data-sales-brief-compact-stage>
+              <span class="sales-brief-compact-text" data-sales-brief-compact-text>调用客户简报技能</span>
+              <button class="sales-brief-compact-more" type="button" data-sales-brief-compact-more aria-label="展开全部流程">
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderSalesBriefConversation() {
+        return `
+          <div class="chat-ai-block">
+            <div class="chat-ai-card">
+              <button class="sales-brief-status" type="button" data-sales-brief-toggle aria-expanded="false">
+                <span>已处理 3分12秒</span>
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>
+              </button>
+              ${renderSalesBriefCompactTrace()}
+              <div class="sales-brief-trace" data-sales-brief-trace data-playing="true">
+                <p>好的，我先调用客户简报技能来生成易动纷享的销售简报。</p>
+                ${renderSalesBriefTool("读取了 1 个技能")}
+                <p>现在我需要先查询易动纷享的 CRM 数据。让我先读取 CLI 参考文档，然后拉取相关数据。</p>
+                ${renderSalesBriefTool("使用了 1 次工具")}
+                <p>好的，先查询易动纷享的客户记录。</p>
+                ${renderSalesBriefTool("使用了 1 次工具")}
+                ${renderSalesBriefTool("Sharecrm data record query-by-name --name 易动纷享 --object_api_names AccountObj")}
+                <p>查询到三个候选客户，但用户说的“易动纷享”在 CRM 中可能对应的是“北京易动纷享”。让我再精确查询一下。</p>
+                ${renderSalesBriefTool("使用了 2 次工具")}
+                <p>根据历史记忆，用户之前提到过“北京易动纷享 800 万商机”。让我直接用“易动纷享”这个关键词再查，同时查一下商机对象。</p>
+                ${renderSalesBriefTool("使用了 1 次工具")}
+                <p>找到了！客户是“北京易动纷享科技有限责任公司”。现在让我拉取这个客户的完整数据和关联信息。</p>
+                ${renderSalesBriefTool("使用了 1 次工具")}
+                <p>客户名称“北京易动纷享科技有限责任公司”在 AccountObj 中没有直接匹配。但商机中有关联到这个客户名称，让我直接用商机中的客户名称来查，同时拉取商机详情和关联数据。</p>
+                ${renderSalesBriefTool("使用了 1 次工具")}
+                <p>这个商机金额为 0、赢率 10%、阶段“验证客户”，看起来是一个新创建的商机。但根据历史记录，用户之前提到过“北京易动纷享 800 万商机”。让我查一下是否有其他关联商机，以及这个客户在 CRM 中的完整记录。</p>
+                ${renderSalesBriefTool("使用了 1 次工具")}
+                <p>找到了！客户 ID 是 <strong>68be78ed5b1fd30001d64f15</strong>。现在拉取完整的客户信息和所有关联数据。</p>
+                ${renderSalesBriefTool("使用了 4 次工具")}
+                <p>数据很丰富。现在让我再查一下竞品信息和订单合同数据。</p>
+                ${renderSalesBriefTool("使用了 3 次工具")}
+                <p>数据齐全了。现在让我读取简报规则文件来确保输出格式正确。</p>
+                ${renderSalesBriefTool("使用了 4 次工具")}
+                <p>现在让我运行就绪度计算脚本。</p>
+                ${renderSalesBriefTool("使用了 2 次工具")}
+                ${renderSalesBriefTool("使用了 1 次工具，创建了 1 个文件")}
+                <p>数据齐全，现在生成简报。</p>
+              </div>
+              <div class="sales-brief-report" data-sales-brief-report data-playing="true">
+                <p class="sales-brief-report-title">见客前简报：北京易动纷享科技有限责任公司</p>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title">会前结论</p>
+                  <p class="sales-brief-section-copy"><strong>一句话判断：</strong>今天这场会应以重建上下文与探测预算为主，最大风险是 <strong>124.76 万已收款 36 天未发货</strong> 导致信任断裂，打法是先确认发货状态、再探客户商机中真实购买需求。</p>
+                  ${renderSalesBriefTable(
+                    ["项目", "结论"],
+                    [
+                      ["今天主目标", "重建信任，确认发货进度，并摸清客户当前真实采购意图"],
+                      ["最大风险", "已收款未发货（订单 20260507-000005，¥1,247,600），客户可能已产生不满"],
+                      ["最关键的人", "张总（销售总监，推断为 EB）+ 陈伟（CIO，关键决策人，未触达）"],
+                      ["第一句话/第一个问题", "张总，上次数字营销系统的发货进度我们一直在跟进，今天先跟您同步一下最新状态，也想听听您这边最近的重点方向有没有变化。"],
+                      ["绝对不要做", "在发货问题未确认前推销任何新方案或新商机"]
+                    ],
+                    ["18%", "82%"]
+                  )}
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title blue">10 秒身份标签</p>
+                  <p class="sales-brief-section-copy"><strong>战略型客户 | 情绪温度：冷淡（推断） | 重点阶段</strong><br>CRM 行业独角兽（2024 年融资 7500 万美元），历史成交 ¥124.76 万但履约断裂，7 条商机中 5 条为 6 月 9-12 日集中新增，阶段虚高，真实 Pipeline 置信度仅 30-40%。</p>
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title">30 秒决策锚</p>
+                  <p class="sales-brief-section-copy"><strong>今日目标：</strong>重建上下文，先解决履约问题，再探测真实采购需求<br><strong>底线：</strong>发货问题未确认前，不主动推进任何新商机；不承诺无法交付的功能<br><strong>如果今天只能做一件事：</strong>确认订单 20260507-000005 的发货状态，并拿到客户对当前合作满意度的真实反馈</p>
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title green">20 秒预警</p>
+                  <ul class="sales-brief-priority-list">
+                    <li><span class="sales-brief-dot"></span><span><strong>履约断裂</strong> | 订单 ¥124.76 万已回款但 36 天未发货。应对：会前先内部确认发货进度，会上主动同步并给出明确时间节点。</span></li>
+                    <li><span class="sales-brief-dot"></span><span><strong>决策链薄弱</strong> | CIO 陈伟从未触达，决策链覆盖率仅 25%。应对：请张总引荐 CIO，或会后单独约技术交流。</span></li>
+                    <li><span class="sales-brief-dot amber"></span><span><strong>Pipeline 虚胖</strong> | 7 条商机中 5 条 6 月集中新增，cost_time=0，阶段虚高。应对：逐条验证需求真实性，不急于推进阶段。</span></li>
+                  </ul>
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title blue">见客就绪度</p>
+                  ${renderSalesBriefTable(
+                    ["维度", "得分", "说明"],
+                    [
+                      ["信息完整度", "75/100", "决策链信息缺失（CIO 未触达，缺采购/CFO）"],
+                      ["痛点匹配度", "80/100", "客户痛点明确（数据分散、跨部门协同），产品匹配度高"],
+                      ["竞争风险度", "65/100", "竞品情报空白，竞争准备为零"],
+                      ["综合就绪度", "60/100 准备中", "可推进，但会议前半段必须补齐决策链和竞品缺口"]
+                    ],
+                    ["22%", "22%", "56%"]
+                  )}
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title">人力地图</p>
+                  ${renderSalesBriefTable(
+                    ["人物", "角色", "当前立场", "今天打法"],
+                    [
+                      ["张总", "EB 候选（销售总监）", "意向偏积极（5/19 首访反馈）", "先同步发货进度，再问最近团队在销售管理上最大的卡点是什么"],
+                      ["陈伟", "TB（CIO，关键决策人）", "未知，从未触达", "请张总引荐，或会后单约技术交流"],
+                      ["王自达", "UB（IT 经理，关键决策人）", "未知", "确认是否参与本次会议，了解技术侧关注点"],
+                      ["赵大胆", "未知角色", "未知", "现场确认职务和决策影响力"]
+                    ],
+                    ["18%", "27%", "25%", "30%"]
+                  )}
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title">博弈时间线</p>
+                  <ul class="sales-brief-list">
+                    <li><strong>2025-09-08：</strong>首访，客户用 Excel 管销售，对今天的影响：客户有基础认知，但距今已 9 个月。</li>
+                    <li><strong>2026-05-07：</strong>订单签约 ¥124.76 万，全额回款，对今天的影响：核心信任节点，必须确认发货。</li>
+                    <li><strong>2026-05-19：</strong>王自达认可新能通行业 CRM 方向，同意后续交流，对今天的影响：技术侧有正向信号，但后续未推进。</li>
+                    <li><strong>2026-06-09：</strong>AI 诊断写回，红色预警，Pipeline 归零后重建 7 条商机，对今天的影响：商机真实性待验证。</li>
+                    <li><strong>今天：</strong>重建上下文的关键节点，必须完成：确认发货 + 摸清真实需求优先级。</li>
+                  </ul>
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title green">今日行动</p>
+                  <p class="sales-brief-section-copy"><strong>P0：</strong>会前确认订单 20260507-000005 发货状态，会上主动同步并给出明确时间节点。<br><strong>P1：</strong>问张总：“上次聊的新能通行业 CRM 方向，这一个月团队有没有新的想法或变化？”<br><strong>P2：</strong>请张总引荐 CIO 陈伟，或约定下周技术交流时间。<br><strong>需要规避：</strong>在发货问题未解决前推销任何新方案，不要对 7 条商机的阶段和金额做任何承诺。</p>
+                </section>
+
+                <section class="sales-brief-section">
+                  <p class="sales-brief-section-title blue">参考来源</p>
+                  <p class="sales-brief-section-copy">竞争来源：CRM 客户/商机/联系人/跟进记录（最近更新 2026-06-12）、竞品情报空白、决策链 CIO 未触达为已知缺口。情绪温度“冷淡”基于履约断裂推断，需现场验证。</p>
+                </section>
+              </div>
+              <div data-sales-brief-toolbar class="sales-brief-toolbar-pending">${renderChatToolbar()}</div>
+            </div>
+          </div>
+        `;
+      }
+
       function getChatSessionTitle(session) {
         if (!session) {
           return "";
@@ -24243,6 +24884,8 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           content += renderAiCreateSkillConversation(session);
         } else if (session.id === "shengquan-poc") {
           content += renderShengquanPocConversation(session);
+        } else if (session.id === "sales-brief") {
+          content += renderSalesBriefConversation(session);
         } else if (session.id === "haiyue-brief") {
           content += renderHaiyueBriefConversation(session);
         } else if (session.source === "mock-ai-task") {
@@ -24253,6 +24896,355 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
         content += "</div>";
         chatFeed.innerHTML = content;
+        if (session.id === "sales-brief") {
+          requestAnimationFrame(() => {
+            playSalesBriefTrace();
+          });
+        }
+      }
+
+      function syncTraceSchemeTabs() {
+        traceSchemeTabs.forEach((tab) => {
+          tab.setAttribute("aria-selected", String((tab.dataset.traceSchemeTab || "one") === state.traceScheme));
+        });
+      }
+
+      function showSalesBriefReport(report, toolbar) {
+        if (!report) {
+          return;
+        }
+
+        report.hidden = false;
+        report.dataset.playing = "false";
+        report.classList.remove("sales-brief-stream-hidden");
+        report.classList.add("is-visible");
+        report.querySelectorAll(".sales-brief-stream-hidden").forEach((element) => {
+          element.classList.remove("sales-brief-stream-hidden");
+        });
+        toolbar?.classList.remove("sales-brief-toolbar-pending");
+      }
+
+      function restoreSalesBriefTrace(trace) {
+        if (!trace) {
+          return;
+        }
+
+        trace.dataset.playing = "false";
+        trace.classList.remove("is-collapsed", "is-compact-hidden");
+        Array.from(trace.children).forEach((step) => {
+          step.classList.add("is-visible");
+          step.classList.remove("is-typing", "is-loading");
+          if (step.matches("p") || step.classList.contains("sales-brief-tool")) {
+            step.textContent = step.dataset.fullText || step.textContent;
+          }
+        });
+      }
+
+      function playSalesBriefCompactTrace() {
+        const trace = chatFeed?.querySelector("[data-sales-brief-trace]");
+        const compact = chatFeed?.querySelector("[data-sales-brief-compact]");
+        const compactStage = chatFeed?.querySelector("[data-sales-brief-compact-stage]");
+        const compactText = chatFeed?.querySelector("[data-sales-brief-compact-text]");
+        const report = chatFeed?.querySelector("[data-sales-brief-report]");
+        const status = chatFeed?.querySelector("[data-sales-brief-toggle]");
+        const toolbar = chatFeed?.querySelector("[data-sales-brief-toolbar]");
+        if (!compact || !compactText) {
+          return;
+        }
+
+        salesBriefTraceTimers.forEach((timer) => window.clearTimeout(timer));
+        salesBriefTraceTimers = [];
+        salesBriefCompactActiveIndex = 0;
+        status?.classList.remove("is-visible");
+        status?.setAttribute("aria-expanded", "false");
+        trace?.classList.add("is-compact-hidden");
+        trace?.classList.remove("is-collapsed");
+        compact.classList.add("is-visible");
+        compactStage?.classList.add("is-scanning");
+        toolbar?.classList.add("sales-brief-toolbar-pending");
+        if (report) {
+          report.hidden = true;
+          report.classList.remove("is-visible");
+          report.dataset.playing = "true";
+        }
+        if (chatFeed) {
+          chatFeed.scrollTop = 0;
+        }
+
+        let index = 0;
+        const showNext = () => {
+          salesBriefCompactActiveIndex = index;
+          compactText.textContent = salesBriefCompactMessages[index] || "";
+          index += 1;
+
+          if (index < salesBriefCompactMessages.length) {
+            const timer = window.setTimeout(showNext, 1280);
+            salesBriefTraceTimers.push(timer);
+            return;
+          }
+
+          const doneTimer = window.setTimeout(() => {
+            compactStage?.classList.remove("is-scanning");
+            status?.classList.add("is-visible");
+            showSalesBriefReport(report, toolbar);
+          }, 980);
+          salesBriefTraceTimers.push(doneTimer);
+        };
+
+        showNext();
+      }
+
+      function setTraceScheme(scheme, options = {}) {
+        state.traceScheme = scheme === "two" ? "two" : "one";
+        syncTraceSchemeTabs();
+
+        if (state.activeChatId !== "sales-brief") {
+          return;
+        }
+
+        if (state.traceScheme === "two") {
+          playSalesBriefCompactTrace();
+          return;
+        }
+
+        const trace = chatFeed?.querySelector("[data-sales-brief-trace]");
+        const compact = chatFeed?.querySelector("[data-sales-brief-compact]");
+        const report = chatFeed?.querySelector("[data-sales-brief-report]");
+        const status = chatFeed?.querySelector("[data-sales-brief-toggle]");
+        const toolbar = chatFeed?.querySelector("[data-sales-brief-toolbar]");
+        compact?.classList.remove("is-visible");
+        status?.classList.remove("is-visible");
+        if (report) {
+          report.hidden = false;
+        }
+
+        if (options.revealFull) {
+          salesBriefTraceTimers.forEach((timer) => window.clearTimeout(timer));
+          salesBriefTraceTimers = [];
+          restoreSalesBriefTrace(trace);
+          showSalesBriefReport(report, toolbar);
+          if (chatFeed) {
+            chatFeed.scrollTo({
+              top: Math.max(0, (trace?.offsetTop || 0) - 64),
+              behavior: "smooth"
+            });
+          }
+          return;
+        }
+
+        playSalesBriefTrace();
+      }
+
+      function continueSalesBriefTraceFromCompact() {
+        const startIndex = salesBriefCompactStepIndexes[Math.min(salesBriefCompactActiveIndex + 1, salesBriefCompactStepIndexes.length - 1)] || 0;
+        playSalesBriefTrace({ startIndex, keepScheme: "two", preserveScroll: true });
+      }
+
+      function playSalesBriefTrace(options = {}) {
+        if (state.traceScheme === "two" && options.keepScheme !== "two") {
+          playSalesBriefCompactTrace();
+          return;
+        }
+
+        const trace = chatFeed?.querySelector("[data-sales-brief-trace]");
+        const compact = chatFeed?.querySelector("[data-sales-brief-compact]");
+        const report = chatFeed?.querySelector("[data-sales-brief-report]");
+        const status = chatFeed?.querySelector("[data-sales-brief-toggle]");
+        const toolbar = chatFeed?.querySelector("[data-sales-brief-toolbar]");
+        if (!trace) {
+          return;
+        }
+
+        salesBriefTraceTimers.forEach((timer) => window.clearTimeout(timer));
+        salesBriefTraceTimers = [];
+        status?.classList.remove("is-visible");
+        status?.setAttribute("aria-expanded", "false");
+        toolbar?.classList.add("sales-brief-toolbar-pending");
+        compact?.classList.remove("is-visible");
+        trace.classList.remove("is-collapsed", "is-compact-hidden");
+        const steps = Array.from(trace.children);
+        trace.dataset.playing = "true";
+        if (report) {
+          report.hidden = false;
+          report.classList.remove("is-visible");
+        }
+        if (chatFeed && !options.preserveScroll) {
+          chatFeed.scrollTop = 0;
+        }
+
+        const startIndex = Math.max(0, Math.min(Number(options.startIndex) || 0, steps.length - 1));
+
+        steps.forEach((step, index) => {
+          step.classList.remove("is-visible", "is-typing", "is-loading");
+          if (index < startIndex) {
+            step.classList.add("is-visible");
+            if (step.matches("p") || step.classList.contains("sales-brief-tool")) {
+              step.dataset.fullText = step.dataset.fullText || step.textContent;
+              step.textContent = step.dataset.fullText || "";
+            }
+            return;
+          }
+
+          if (step.matches("p")) {
+            step.dataset.fullText = step.dataset.fullText || step.textContent;
+            step.textContent = "";
+          } else if (step.classList.contains("sales-brief-tool")) {
+            step.dataset.fullText = step.dataset.fullText || step.textContent;
+            step.textContent = "";
+          }
+        });
+
+        const prepareReportStream = () => {
+          if (!report) {
+            return [];
+          }
+
+          const actions = [];
+          const hideElement = (element) => {
+            element.classList.add("sales-brief-stream-hidden");
+            element.classList.remove("is-visible", "is-typing");
+          };
+          const revealElement = (element) => {
+            element.classList.remove("sales-brief-stream-hidden");
+            element.classList.add("is-visible");
+          };
+
+          Array.from(report.children).forEach((child) => {
+            hideElement(child);
+
+            if (!child.classList.contains("sales-brief-section")) {
+              actions.push({ type: "reveal", element: child, revealElement, delay: 180 });
+              return;
+            }
+
+            const sectionParts = Array.from(child.children);
+            sectionParts.forEach(hideElement);
+            actions.push({ type: "section", element: child, revealElement, delay: 80 });
+
+            sectionParts.forEach((part) => {
+              if (part.classList.contains("sales-brief-table")) {
+                actions.push({ type: "reveal", element: part, revealElement, delay: 520 });
+                return;
+              }
+
+              const listItems = part.matches("ul, ol") ? Array.from(part.children) : [];
+              if (listItems.length) {
+                hideElement(part);
+                listItems.forEach(hideElement);
+                actions.push({ type: "section", element: part, revealElement, delay: 80 });
+                listItems.forEach((item) => {
+                  actions.push({ type: "reveal", element: item, revealElement, delay: 220 });
+                });
+                return;
+              }
+
+              actions.push({ type: "reveal", element: part, revealElement, delay: part.querySelector("br") ? 340 : 220 });
+            });
+          });
+
+          return actions;
+        };
+
+        const reportActions = prepareReportStream();
+
+        if (report) {
+          report.dataset.playing = "true";
+          report.classList.remove("is-visible");
+        }
+
+        let lastScrollAt = 0;
+        const wait = (ms) => new Promise((resolve) => {
+          const timer = window.setTimeout(resolve, ms);
+          salesBriefTraceTimers.push(timer);
+        });
+        const maybeScrollFor = (element, force = false) => {
+          if (!chatFeed || !element) {
+            return;
+          }
+
+          const now = Date.now();
+          if (!force && now - lastScrollAt < 90) {
+            return;
+          }
+
+          const feedRect = chatFeed.getBoundingClientRect();
+          const elementRect = element.getBoundingClientRect();
+          const bottomGuard = feedRect.bottom - 190;
+          if (elementRect.bottom <= bottomGuard) {
+            return;
+          }
+
+          lastScrollAt = now;
+          const overflow = elementRect.bottom - bottomGuard;
+          chatFeed.scrollTo({
+            top: chatFeed.scrollTop + overflow + 18,
+            behavior: "smooth"
+          });
+        };
+
+        const typeLine = async (step) => {
+          const fullText = step.dataset.fullText || "";
+          step.classList.add("is-visible", "is-typing");
+          for (let index = 1; index <= fullText.length; index += 1) {
+            step.textContent = fullText.slice(0, index);
+            maybeScrollFor(step);
+            const char = fullText[index - 1] || "";
+            const nextDelay = /[。！？；]/.test(char) ? 160 : /[，、]/.test(char) ? 70 : 18;
+            await wait(nextDelay);
+          }
+          step.classList.remove("is-typing");
+          maybeScrollFor(step, true);
+        };
+
+        const streamReport = async () => {
+          if (!report) {
+            return;
+          }
+
+          report.classList.add("is-visible");
+          maybeScrollFor(report, true);
+          for (const action of reportActions) {
+            action.revealElement(action.element);
+            maybeScrollFor(action.element, true);
+            await wait(action.delay);
+          }
+        };
+
+        const play = async () => {
+          for (const step of steps.slice(startIndex)) {
+            if (step.matches("p")) {
+              await typeLine(step);
+              await wait(120);
+            } else {
+              if (step.classList.contains("sales-brief-tool")) {
+                step.classList.add("is-visible", "is-loading");
+                step.textContent = step.dataset.fullText || "";
+                maybeScrollFor(step, true);
+                await wait(800);
+                step.classList.remove("is-loading");
+              } else {
+                step.classList.add("is-visible");
+              }
+              maybeScrollFor(step, true);
+              await wait(step.classList.contains("sales-brief-tool-command") ? 360 : 260);
+            }
+          }
+
+          if (report) {
+            trace.classList.add("is-collapsed");
+            status?.classList.add("is-visible");
+            await streamReport();
+            toolbar?.classList.remove("sales-brief-toolbar-pending");
+            if (chatFeed) {
+              chatFeed.scrollTo({
+                top: 0,
+                behavior: "smooth"
+              });
+            }
+          }
+        };
+
+        play();
       }
 
       function renderCustomerIntakeInput(field, value, session) {
@@ -27072,6 +28064,27 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           return;
         }
 
+        const salesBriefToggle = event.target.closest("[data-sales-brief-toggle]");
+        if (salesBriefToggle) {
+          const trace = chatFeed.querySelector("[data-sales-brief-trace]");
+          const expanded = salesBriefToggle.getAttribute("aria-expanded") === "true";
+          salesBriefToggle.setAttribute("aria-expanded", String(!expanded));
+          trace?.classList.toggle("is-collapsed", expanded);
+          if (chatFeed) {
+            chatFeed.scrollTo({
+              top: Math.max(0, salesBriefToggle.offsetTop - 84),
+              behavior: "smooth"
+            });
+          }
+          return;
+        }
+
+        const salesBriefCompactMore = event.target.closest("[data-sales-brief-compact-more]");
+        if (salesBriefCompactMore) {
+          continueSalesBriefTraceFromCompact();
+          return;
+        }
+
         const cardButton = event.target.closest("[data-chat-card]");
         if (!cardButton) {
           return;
@@ -27878,11 +28891,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
         await handleDetailAction(actionButton.dataset.detailAction || "", record);
       });
 
-      platformSwitchBtn?.addEventListener("click", () => {
-        const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-        const mobileUrl = new URL("ShareClaw-Demo.html", window.location.href);
-        mobileUrl.searchParams.set("return", currentPath);
-        window.location.href = mobileUrl.toString();
+      traceSchemeTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          setTraceScheme(tab.dataset.traceSchemeTab || "one");
+        });
       });
 
       if (dialogModeBtn) {
@@ -28477,6 +29489,7 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       normalizeOutputPanelState();
       persistOutputPanelState();
       renderSchemeSwitch();
+      syncTraceSchemeTabs();
       syncAiProfileForm();
       applyInitialRouteLaunch();
       renderAgentPill();
@@ -28484,6 +29497,5 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
       renderTaskPage();
       renderMainPanels();
     </script>
-    <script src="./language-switch.js"></script>
   </body>
 </html>
