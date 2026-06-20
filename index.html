@@ -942,10 +942,11 @@
       }
 
       .home-center-inner {
+        position: relative;
         flex: 1 1 auto;
         width: 100%;
         min-width: 370px;
-        max-width: 868px;
+        max-width: var(--home-dialog-width);
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -953,16 +954,24 @@
         justify-content: center;
       }
 
+      .shareclaw-home-visual {
+        display: none;
+      }
+
       .home-center-shell.chat-mode .home-center-inner {
         max-width: none;
         align-items: stretch;
+      }
+
+      .home-center-shell.chat-mode .home-flat-ip {
+        display: none;
       }
 
       .content-stage {
         position: relative;
         width: 100%;
         min-width: 370px;
-        max-width: 868px;
+        max-width: var(--home-dialog-width);
         flex: 0 0 auto;
         min-height: auto;
         margin: 0;
@@ -977,25 +986,81 @@
       }
 
       .hero-block {
-        height: auto;
+        height: 155px;
         padding: 0;
         display: flex;
-        justify-content: center;
+        align-items: center;
+        justify-content: flex-start;
       }
 
       .hero-content {
         width: 100%;
-        max-width: 866px;
+        max-width: var(--home-dialog-width);
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: 22px;
+        padding: 0 16px;
       }
 
       .hero-title-row {
         display: flex;
         align-items: center;
+        gap: 16px;
         justify-content: center;
         text-align: center;
+      }
+
+      .home-flat-ip {
+        --flat-head-x: 0px;
+        --flat-head-y: 0px;
+        --flat-head-rotate-x: 0deg;
+        --flat-head-rotate-y: 0deg;
+        --flat-head-rotate: 0deg;
+        --flat-face-x: 0px;
+        --flat-face-y: 0px;
+        --flat-face-rotate: 0deg;
+        position: relative;
+        display: block;
+        width: 122px;
+        height: 122px;
+        flex: 0 0 122px;
+        pointer-events: none;
+        perspective: 700px;
+      }
+
+      .home-flat-ip-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+      }
+
+      .home-flat-ip-body {
+        filter: drop-shadow(0 12px 18px rgba(24, 28, 37, 0.12));
+      }
+
+      .home-flat-ip-head {
+        transform-origin: 50% 33%;
+        transform:
+          translate(var(--flat-head-x), var(--flat-head-y))
+          rotate(var(--flat-head-rotate))
+          rotateX(var(--flat-head-rotate-x))
+          rotateY(var(--flat-head-rotate-y));
+        transition: transform 0.18s ease-out;
+      }
+
+      .home-flat-ip-face {
+        transform-origin: 50% 39%;
+        transform:
+          translate(var(--flat-head-x), var(--flat-head-y))
+          rotate(var(--flat-head-rotate))
+          translate(var(--flat-face-x), var(--flat-face-y))
+          rotate(var(--flat-face-rotate))
+          rotateX(var(--flat-head-rotate-x))
+          rotateY(var(--flat-head-rotate-y));
+        transition: transform 0.18s ease-out;
       }
 
       .hero-title {
@@ -10088,6 +10153,11 @@
                   <section class="hero-block">
                     <div class="hero-content">
                       <div class="hero-title-row">
+                        <span class="home-flat-ip" id="homeFlatIp" aria-hidden="true">
+                          <img class="home-flat-ip-layer home-flat-ip-body" src="./images/ipbody.png" alt="" />
+                          <img class="home-flat-ip-layer home-flat-ip-head" src="./images/iphead.png" alt="" />
+                          <img class="home-flat-ip-layer home-flat-ip-face" src="./images/ipface.png" alt="" />
+                        </span>
                         <h1 class="hero-title">您好Scott，今天我有什么能帮您？</h1>
                       </div>
 
@@ -12163,8 +12233,10 @@
       const sidebarPrimaryHomeBtn = document.querySelector(".sidebar-primary-entry[data-panel='home']");
       const homeDashboardShell = document.getElementById("homeDashboardShell");
       const homeCenterShell = document.querySelector(".home-center-shell");
+      const homeCenterInner = document.querySelector(".home-center-inner");
       const homeShell = document.getElementById("homeShell");
       const homeDashboardSections = Array.from(homeShell.querySelectorAll(".hero-block"));
+      const homeFlatIp = document.getElementById("homeFlatIp");
       const homeInsightRail = document.getElementById("homeInsightRail");
       const homeInsightToggle = document.getElementById("homeInsightToggle");
       const homeInsightCollapseBtn = document.getElementById("homeInsightCollapseBtn");
@@ -19244,6 +19316,58 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
 
       sidebarPrimaryHomeBtn?.addEventListener("click", () => {
         openSidebarHome();
+      });
+
+      function resetHomeFlatIpFollow() {
+        homeFlatIp?.style.setProperty("--flat-head-x", "0px");
+        homeFlatIp?.style.setProperty("--flat-head-y", "0px");
+        homeFlatIp?.style.setProperty("--flat-head-rotate-x", "0deg");
+        homeFlatIp?.style.setProperty("--flat-head-rotate-y", "0deg");
+        homeFlatIp?.style.setProperty("--flat-head-rotate", "0deg");
+        homeFlatIp?.style.setProperty("--flat-face-x", "0px");
+        homeFlatIp?.style.setProperty("--flat-face-y", "0px");
+        homeFlatIp?.style.setProperty("--flat-face-rotate", "0deg");
+      }
+
+      window.addEventListener("pointermove", (event) => {
+        if (!homeFlatIp || state.mainPanel !== "home" || state.homeView !== "dashboard") {
+          return;
+        }
+
+        const bounds = homeFlatIp.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) {
+          return;
+        }
+
+        const maxDistanceX = Math.max(window.innerWidth * 0.36, bounds.width * 2);
+        const maxDistanceY = Math.max(window.innerHeight * 0.34, bounds.height * 2);
+        const offsetX = (event.clientX - (bounds.left + bounds.width / 2)) / maxDistanceX;
+        const offsetY = (event.clientY - (bounds.top + bounds.height / 2)) / maxDistanceY;
+        const clampedX = Math.max(-1, Math.min(1, offsetX));
+        const clampedY = Math.max(-1, Math.min(1, offsetY));
+        const headX = clampedX * 3;
+        const headY = clampedY * 2;
+        const headRotateY = clampedX * 9;
+        const headRotateX = -clampedY * 6;
+        const headRotate = clampedX * 1.6;
+        const faceX = clampedX * 6;
+        const faceY = clampedY * 4;
+        const faceRotate = clampedX * 1.4;
+
+        homeFlatIp.style.setProperty("--flat-head-x", `${headX.toFixed(2)}px`);
+        homeFlatIp.style.setProperty("--flat-head-y", `${headY.toFixed(2)}px`);
+        homeFlatIp.style.setProperty("--flat-head-rotate-x", `${headRotateX.toFixed(2)}deg`);
+        homeFlatIp.style.setProperty("--flat-head-rotate-y", `${headRotateY.toFixed(2)}deg`);
+        homeFlatIp.style.setProperty("--flat-head-rotate", `${headRotate.toFixed(2)}deg`);
+        homeFlatIp.style.setProperty("--flat-face-x", `${faceX.toFixed(2)}px`);
+        homeFlatIp.style.setProperty("--flat-face-y", `${faceY.toFixed(2)}px`);
+        homeFlatIp.style.setProperty("--flat-face-rotate", `${faceRotate.toFixed(2)}deg`);
+      });
+
+      window.addEventListener("pointerout", (event) => {
+        if (!event.relatedTarget) {
+          resetHomeFlatIpFollow();
+        }
       });
 
       settingsSidebarRows.forEach((button) => {

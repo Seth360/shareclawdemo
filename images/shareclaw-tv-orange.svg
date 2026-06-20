@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">ShareClaw TV Style Icon</title>
+  <desc id="desc">An orange rounded TV outline with two antennas and code-like inner marks.</desc>
+  <defs>
+    <linearGradient id="orangeStroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff7a00"/>
+      <stop offset="100%" stop-color="#ff8f00"/>
+    </linearGradient>
+  </defs>
+
+  <g fill="none" stroke="url(#orangeStroke)" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="106" y="310" width="812" height="592" rx="228" ry="228" stroke-width="56"/>
+
+    <path d="M346 245 L296 142" stroke-width="28"/>
+    <path d="M678 245 L728 142" stroke-width="28"/>
+
+    <rect x="228" y="108" width="118" height="64" rx="28" ry="28" transform="rotate(-24 287 140)" fill="url(#orangeStroke)" stroke="none"/>
+    <rect x="678" y="108" width="118" height="64" rx="28" ry="28" transform="rotate(24 737 140)" fill="url(#orangeStroke)" stroke="none"/>
+
+    <path d="M378 514 V708" stroke-width="58"/>
+    <path d="M648 528 L524 630 L648 732" stroke-width="58"/>
+  </g>
+</svg>
