@@ -670,6 +670,12 @@
       font-size: 13px;
       line-height: 22px;
     }
+    .agent-filter-description {
+      margin: 0 0 16px;
+      color: #1f1e1d;
+      font-size: 15px;
+      line-height: 1.7;
+    }
     .agent-chat-object-card {
       width: 100%;
       min-height: 70px;
@@ -736,6 +742,80 @@
       width: 12px;
       height: 12px;
       color: #8f95a2;
+    }
+    .agent-filter-card {
+      width: 100%;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #dee1e8;
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .agent-filter-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #f0fff4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1fa160;
+      flex: 0 0 auto;
+    }
+    .agent-filter-card-icon svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+    .agent-filter-card-main {
+      min-width: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .agent-filter-card-title {
+      margin: 0;
+      color: #1c1c1e;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-filter-card-meta {
+      margin: 0;
+      color: #91959e;
+      font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
+    }
+    .agent-filter-card-action {
+      height: 28px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #eaebee;
+      border-radius: 6px;
+      background: #fff;
+      color: #1f1e1d;
+      font-size: 15px;
+      line-height: 26px;
+      font-weight: 400;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+    .agent-filter-card-action.is-saved,
+    .agent-filter-card-action:disabled {
+      border-color: #c9f1de;
+      background: #f0fff4;
+      color: #1fa160;
+      cursor: default;
     }
     .slash-menu,
     .at-menu {
@@ -1275,7 +1355,7 @@
               <button class="view-name">全部客户<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             </div>
             <div class="title-actions">
-              <button class="btn primary">新建</button>
+              <button class="btn primary" type="button" onclick="window.location.href='create-order.html'">新建</button>
               <button class="btn">智能表单</button>
               <button class="btn">导入</button>
               <button class="icon-btn" title="更多"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
@@ -1333,7 +1413,7 @@
             </table>
           </div>
           <footer class="pager">
-            <span>2/20</span>
+            <span id="pagerStatus">2/20</span>
             <button class="page-btn" title="上一页"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
             <button class="page-btn" title="下一页"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
           </footer>
@@ -1379,10 +1459,10 @@
     <div class="agent-body">
       <h2 class="agent-greeting">Hi Scott,<br>在列表页我有什么能帮你?</h2>
       <div class="agent-prompts" aria-label="推荐问题">
-        <button class="agent-prompt" type="button">销售漏斗流失分析 <span>→</span></button>
-        <button class="agent-prompt" type="button">渠道流量和成交关联 <span>→</span></button>
-        <button class="agent-prompt" type="button">今年销售转化效率 <span>→</span></button>
-        <button class="agent-prompt" type="button">丢失交易改善优化方案 <span>→</span></button>
+        <button class="agent-prompt" type="button">高价值客户跟进缺口 <span>→</span></button>
+        <button class="agent-prompt" type="button">客户决策链完整度 <span>→</span></button>
+        <button class="agent-prompt" type="button">制造业重点客户排序 <span>→</span></button>
+        <button class="agent-prompt" type="button">近 30 天无有效跟进客户 <span>→</span></button>
       </div>
       <div class="agent-chat-feed" id="agentChatFeed" aria-live="polite"></div>
     </div>
@@ -1568,6 +1648,7 @@
 
     const tbody = document.getElementById("customerRows");
     const keyword = document.getElementById("keyword");
+    const pagerStatus = document.getElementById("pagerStatus");
 
     function renderRows(list) {
       tbody.innerHTML = list.map((item, index) => {
@@ -1602,11 +1683,40 @@
     }
 
     const customerRows = customers.map((item, index) => ({ ...item, originalIndex: index }));
-    renderRows(customerRows);
+    const filteredCustomerRows = [
+      { name: "苏州钧衡装备制造有限公司", level: "VIP客户", levelType: "vip", progress: 12, phone: "+86 13802190477", flag: "cn", owner: "沈文卓", avatar: "沈", avatarType: "blue" },
+      { name: "常州恒启自动化设备有限公司", level: "重要客户", levelType: "important", progress: 18, phone: "+86 13958021406", flag: "cn", owner: "顾清", avatar: "顾", avatarType: "green" },
+      { name: "无锡正和精密机械有限公司", level: "重要客户", levelType: "important", progress: 25, phone: "--", flag: "", owner: "陈景岚", avatar: "陈", avatarType: "orange", current: true },
+      { name: "宁波赛维智能工厂有限公司", level: "VIP客户", levelType: "vip", progress: 30, phone: "+86 13788902135", flag: "cn", owner: "赵明远", avatar: "赵", avatarType: "dark" },
+      { name: "佛山华铸工业科技有限公司", level: "重要客户", levelType: "important", progress: 8, phone: "+86 13611287054", flag: "cn", owner: "罗嘉仪", avatar: "罗", avatarType: "pink" },
+      { name: "青岛拓联重工设备有限公司", level: "重要客户", levelType: "important", progress: 15, phone: "--", flag: "", owner: "姜海", avatar: "姜", avatarType: "blue" }
+    ].map((item, index) => ({ ...item, originalIndex: index }));
+    let activeRows = customerRows;
+
+    function renderActiveRows() {
+      const value = keyword.value.trim().toLowerCase();
+      renderRows(activeRows.filter((item) => !value || `${item.name}${item.level}${item.owner}${item.phone}`.toLowerCase().includes(value)));
+    }
+
+    function setActiveRows(list, pageLabel) {
+      activeRows = list;
+      pagerStatus.textContent = pageLabel;
+      renderActiveRows();
+    }
+
+    setActiveRows(customerRows, "2/20");
+
+    window.applyCrmCustomerFilterDemo = function () {
+      keyword.value = "";
+      setActiveRows(filteredCustomerRows, "1/1");
+    };
+
+    window.resetCrmCustomerFilterDemo = function () {
+      setActiveRows(customerRows, "2/20");
+    };
 
     keyword.addEventListener("input", () => {
-      const value = keyword.value.trim().toLowerCase();
-      renderRows(customerRows.filter((item) => !value || `${item.name}${item.level}${item.owner}${item.phone}`.toLowerCase().includes(value)));
+      renderActiveRows();
     });
 
     tbody.addEventListener("click", (event) => {
@@ -1614,7 +1724,7 @@
       if (!row) return;
       const visibleRows = Array.from(tbody.querySelectorAll("tr"));
       visibleRows.forEach((item) => item.classList.toggle("current", item === row));
-      openDetail(customers[Number(row.dataset.index)]);
+      openDetail(activeRows[Number(row.dataset.index)]);
     });
 
     document.querySelectorAll(".view-btn").forEach((button) => {
@@ -1647,7 +1757,7 @@
         }
         var toast = document.getElementById("bridgeToast");
         if (!toast) return;
-        toast.textContent = "已触发扩展位：" + (payload.title || payload.target || payload.type);
+        toast.textContent = payload.toast || ("已触发扩展位：" + (payload.title || payload.target || payload.type));
         toast.classList.add("show");
         clearTimeout(timer);
         timer = setTimeout(function () { toast.classList.remove("show"); }, 1500);
@@ -1656,7 +1766,14 @@
       document.addEventListener("click", function (event) {
         var bridgeNode = event.target.closest(".agent-chat-feed [data-bridge]");
         if (bridgeNode) {
-          emitBridge(JSON.parse(bridgeNode.getAttribute("data-bridge")));
+          var payload = JSON.parse(bridgeNode.getAttribute("data-bridge"));
+          if (payload.type === "scenario" && payload.target === "save-filter") {
+            payload.toast = "已保存为周期监控场景";
+            bridgeNode.textContent = "已保存";
+            bridgeNode.classList.add("is-saved");
+            bridgeNode.disabled = true;
+          }
+          emitBridge(payload);
         }
       });
       var askAgentButton = document.getElementById("askAgentButton");
@@ -1687,6 +1804,7 @@
         pickerOpen: false,
         agentSubmenuOpen: false
       };
+      var crmFilterPrompt = "找近30天无有效跟进、缺少决策链的制造业重点客户，并按商机金额排序";
 
       function getEditorText() {
         return composerEditor.innerText.replace(/\u00a0/g, " ").trim();
@@ -1787,6 +1905,29 @@
         ].join("");
       }
 
+      function renderAgentFilterResponse() {
+        return [
+          '<div class="agent-chat-ai-block">',
+          '<div class="agent-chat-ai-card">',
+          renderAgentAiMeta("已处理 8秒"),
+          '<p class="agent-filter-description">当前列表已筛出近 30 天无跟进的制造业重点客户。建议批量创建跟进任务，并保存为周期监控。</p>',
+          '<div class="agent-filter-card">',
+          '<span class="agent-filter-card-icon" aria-hidden="true">',
+          '<svg viewBox="0 0 14 11" fill="none">',
+          '<path d="M13.714 9.143v1.714H4V9.143h9.714ZM1.714 9.143v1.714H0V9.143h1.714ZM13.714 4.571v1.715H4V4.571h9.714ZM1.714 4.571v1.715H0V4.571h1.714ZM13.714 0v1.714H4V0h9.714ZM1.714 0v1.714H0V0h1.714Z" fill="currentColor"/>',
+          '</svg>',
+          '</span>',
+          '<span class="agent-filter-card-main">',
+          '<p class="agent-filter-card-title">30天无跟进的制造业重点客户</p>',
+          '<p class="agent-filter-card-meta">操作时间: 2026-05-14</p>',
+          '</span>',
+          '<button class="agent-filter-card-action" type="button" data-bridge=\'{"type":"scenario","target":"save-filter","title":"保存为场景"}\'>保存为场景</button>',
+          '</div>',
+          '</div>',
+          '</div>'
+        ].join("");
+      }
+
       function sendAgentMessage(text) {
         var message = (text || "").trim();
         if (!message && composerState.activeAgent) message = composerState.activeAgent;
@@ -1806,10 +1947,13 @@
         updateComposerState();
         scrollAgentChatToBottom();
         emitBridge({ type: "ask-agent", target: "send", title: message });
+        if (message === crmFilterPrompt && typeof window.applyCrmCustomerFilterDemo === "function") {
+          window.applyCrmCustomerFilterDemo();
+        }
         agentReplyTimer = setTimeout(function () {
           var thinking = document.getElementById("agentThinkingRow");
           if (thinking) thinking.remove();
-          agentChatFeed.insertAdjacentHTML("beforeend", renderAgentResponse(message));
+          agentChatFeed.insertAdjacentHTML("beforeend", message === crmFilterPrompt ? renderAgentFilterResponse() : renderAgentResponse(message));
           scrollAgentChatToBottom();
         }, 650);
       }
@@ -1934,6 +2078,9 @@
         closeComposerMenus();
         setComposerMode("planning");
         updateComposerState();
+        if (typeof window.resetCrmCustomerFilterDemo === "function") {
+          window.resetCrmCustomerFilterDemo();
+        }
         var body = askAgentSidebar.querySelector(".agent-body");
         body.scrollTop = 0;
         focusEditorAtEnd();
@@ -2045,7 +2192,11 @@
         focusEditorAtEnd();
       });
       sendBtn.addEventListener("click", function () {
-        sendAgentMessage(getEditorText());
+        if (getEditorText()) {
+          sendAgentMessage(crmFilterPrompt);
+          return;
+        }
+        sendAgentMessage("");
       });
 
       document.addEventListener("keydown", function (event) {
