@@ -193,6 +193,114 @@
         height: 48px;
       }
 
+      .platform-switch {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        height: 28px;
+        flex: 0 0 auto;
+      }
+
+      .platform-switch-btn {
+        height: 28px;
+        padding: 6px 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        border-radius: 6px;
+        background: #fff;
+        color: #545861;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+
+      .platform-switch-btn:hover,
+      .platform-switch:focus-within .platform-switch-btn,
+      .platform-switch.open .platform-switch-btn {
+        background: #f7f8fc;
+        color: #181c25;
+      }
+
+      .platform-switch-btn svg {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+      }
+
+      .platform-switch-caret {
+        width: 12px !important;
+        height: 12px !important;
+        color: #7a7f88;
+      }
+
+      .platform-switch-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        z-index: 90;
+        width: 308px;
+        padding: 12px;
+        display: none;
+        border-radius: 12px;
+        border: 0;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(16, 24, 40, .16);
+      }
+
+      .platform-switch.open .platform-switch-menu {
+        display: grid;
+        gap: 12px;
+      }
+
+      .platform-switch-row {
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .platform-switch-title {
+        color: #181c25;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .platform-segmented {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px;
+        border-radius: 8px;
+        background: #f2f3f5;
+      }
+
+      .platform-segment {
+        width: 80px;
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 6px;
+        color: #545861;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .platform-segment:hover {
+        color: #181c25;
+      }
+
+      .platform-segment.active {
+        background: #fff;
+        color: #181c25;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .08);
+      }
+
       .top-search {
         width: 290px;
         height: 28px;
@@ -10020,6 +10128,36 @@
         </div>
 
         <div class="topbar-right">
+          <div class="platform-switch" id="platformSwitch">
+            <button class="platform-switch-btn" id="platformSwitchBtn" type="button" aria-label="切换方案" aria-haspopup="menu" aria-expanded="false">
+              <svg class="platform-switch-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path class="icon-stroke" d="M3 5.2h8.8"></path>
+                <path class="icon-stroke" d="m9.7 3.1 2.1 2.1-2.1 2.1"></path>
+                <path class="icon-stroke" d="M13 10.8H4.2"></path>
+                <path class="icon-stroke" d="m6.3 8.7-2.1 2.1 2.1 2.1"></path>
+              </svg>
+              <span id="platformSwitchLabel">切换方案</span>
+              <svg class="platform-switch-caret" viewBox="0 0 12 12" aria-hidden="true">
+                <path class="icon-fill" fill="currentColor" d="M6 8.3 2.2 4.5h7.6L6 8.3Z"></path>
+              </svg>
+            </button>
+            <div class="platform-switch-menu" id="platformSwitchMenu" role="menu" aria-label="切换方案">
+              <div class="platform-switch-row">
+                <div class="platform-switch-title">切换终端</div>
+                <div class="platform-segmented" role="group" aria-label="终端切换">
+                  <button class="platform-segment active" type="button" data-platform-device="web" aria-pressed="true">Web</button>
+                  <button class="platform-segment" type="button" data-platform-device="mobile" aria-pressed="false">Mobile</button>
+                </div>
+              </div>
+              <div class="platform-switch-row">
+                <div class="platform-switch-title">切换语言</div>
+                <div class="platform-segmented" role="tablist" aria-label="语言切换">
+                  <button class="platform-segment active" type="button" role="tab" aria-selected="true" data-platform-lang="zh">中文</button>
+                  <button class="platform-segment" type="button" role="tab" aria-selected="false" data-platform-lang="en">English</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="top-search">
             <div class="search-scope">
               <span>全部</span>
@@ -12150,6 +12288,10 @@
       const schemeSwitchBtn = document.getElementById("schemeSwitchBtn");
       const schemeSwitchLabel = document.getElementById("schemeSwitchLabel");
       const schemeSwitchMenu = document.getElementById("schemeSwitchMenu");
+      const platformSwitch = document.getElementById("platformSwitch");
+      const platformSwitchBtn = document.getElementById("platformSwitchBtn");
+      const platformSwitchLabel = document.getElementById("platformSwitchLabel");
+      const platformSwitchMenu = document.getElementById("platformSwitchMenu");
       const composerSelects = document.getElementById("composerSelects");
       const dialogModeBtn = document.getElementById("dialogModeBtn");
       const planningModeBtn = document.getElementById("planningModeBtn");
@@ -13577,6 +13719,40 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
             `
           )
           .join("");
+      }
+
+
+      let platformSwitchCloseTimer = null;
+
+      function setPlatformMenuOpen(open) {
+        if (!platformSwitch || !platformSwitchBtn) {
+          return;
+        }
+        clearTimeout(platformSwitchCloseTimer);
+        platformSwitch.classList.toggle("open", open);
+        platformSwitchBtn.setAttribute("aria-expanded", String(open));
+      }
+
+      function schedulePlatformMenuClose() {
+        clearTimeout(platformSwitchCloseTimer);
+        platformSwitchCloseTimer = setTimeout(() => {
+          setPlatformMenuOpen(false);
+        }, 260);
+      }
+
+      function setPlatformLanguage(lang) {
+        var nextLang = lang === "en" ? "en" : "zh";
+        document.querySelectorAll("[data-platform-lang]").forEach((button) => {
+          var active = button.dataset.platformLang === nextLang;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-selected", String(active));
+        });
+      }
+
+      function openMobileVersion() {
+        const mobileUrl = new URL("Mobile/index.html", window.location.href);
+        mobileUrl.searchParams.set("return", window.location.pathname + window.location.search + window.location.hash);
+        window.location.href = mobileUrl.toString();
       }
 
       function renderComposerMode() {
@@ -19811,6 +19987,10 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           renderSchemeSwitch();
         }
 
+        if (!event.target.closest(".platform-switch")) {
+          setPlatformMenuOpen(false);
+        }
+
         if (!event.target.closest(".market-dropdown")) {
           closeMarketMenus();
         }
@@ -20152,6 +20332,49 @@ description: 高德地图 MCP 封装技能。在本地通过 PowerShell 脚本�
           renderSchemeSwitch();
           renderMainPanels();
           renderAgentPill();
+        });
+      }
+
+      if (platformSwitchBtn && platformSwitchMenu) {
+        platformSwitch.addEventListener("mouseenter", () => {
+          setPlatformMenuOpen(true);
+        });
+
+        platformSwitch.addEventListener("mouseleave", () => {
+          schedulePlatformMenuClose();
+        });
+
+        platformSwitch.addEventListener("focusin", () => {
+          setPlatformMenuOpen(true);
+        });
+
+        platformSwitch.addEventListener("focusout", () => {
+          schedulePlatformMenuClose();
+        });
+
+        platformSwitchMenu.addEventListener("click", (event) => {
+          const langButton = event.target.closest("[data-platform-lang]");
+          if (langButton) {
+            setPlatformLanguage(langButton.dataset.platformLang);
+            return;
+          }
+
+          const deviceButton = event.target.closest("[data-platform-device]");
+          if (!deviceButton) {
+            return;
+          }
+
+          if (deviceButton.dataset.platformDevice === "mobile") {
+            openMobileVersion();
+            return;
+          }
+
+          document.querySelectorAll("[data-platform-device]").forEach((button) => {
+            var active = button.dataset.platformDevice === "web";
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+          setPlatformMenuOpen(false);
         });
       }
 

@@ -249,6 +249,8 @@
       .platform-switch {
         position: relative;
         display: inline-flex;
+        align-items: center;
+        height: 28px;
         flex: 0 0 auto;
       }
 
@@ -290,9 +292,9 @@
       .platform-switch-menu {
         position: absolute;
         top: calc(100% + 8px);
-        right: 0;
-        z-index: 80;
-        width: 360px;
+        left: 0;
+        z-index: 90;
+        width: 308px;
         padding: 12px;
         display: none;
         border-radius: 12px;
@@ -322,27 +324,34 @@
       }
 
       .platform-segmented {
-        height: 56px;
-        padding: 2px;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px;
         border-radius: 8px;
-        border: 1px solid #b9bfcc;
-        background: #fff;
+        background: #f2f3f5;
       }
 
       .platform-segment {
-        min-width: 0;
+        width: 80px;
+        height: 28px;
+        padding: 0 12px;
         border-radius: 6px;
+        color: #545861;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .platform-segment:hover {
         color: #181c25;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 600;
       }
 
       .platform-segment.active {
-        background: #fff6e6;
-        color: #ff8000;
+        background: #fff;
+        color: #181c25;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .08);
       }
 
       .top-search {
@@ -13090,19 +13099,19 @@
 
         <div class="topbar-right">
           <div class="platform-switch" id="platformSwitch">
-            <button class="platform-switch-btn" id="platformSwitchBtn" type="button" aria-label="切换" aria-haspopup="menu" aria-expanded="false">
+            <button class="platform-switch-btn" id="platformSwitchBtn" type="button" aria-label="切换方案" aria-haspopup="menu" aria-expanded="false">
               <svg class="platform-switch-icon" viewBox="0 0 16 16" aria-hidden="true">
                 <path class="icon-stroke" d="M3 5.2h8.8"></path>
                 <path class="icon-stroke" d="m9.7 3.1 2.1 2.1-2.1 2.1"></path>
                 <path class="icon-stroke" d="M13 10.8H4.2"></path>
                 <path class="icon-stroke" d="m6.3 8.7-2.1 2.1 2.1 2.1"></path>
               </svg>
-              <span id="platformSwitchLabel">切换</span>
+              <span id="platformSwitchLabel">切换方案</span>
               <svg class="platform-switch-caret" viewBox="0 0 12 12" aria-hidden="true">
                 <path class="icon-fill" fill="currentColor" d="M6 8.3 2.2 4.5h7.6L6 8.3Z"></path>
               </svg>
             </button>
-            <div class="platform-switch-menu" id="platformSwitchMenu" role="menu" aria-label="切换">
+            <div class="platform-switch-menu" id="platformSwitchMenu" role="menu" aria-label="切换方案">
               <div class="platform-switch-row">
                 <div class="platform-switch-title">切换终端</div>
                 <div class="platform-segmented" role="group" aria-label="终端切换">

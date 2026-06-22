@@ -1003,6 +1003,16 @@
       return;
     }
 
+    const fullPlatformSwitch = button.closest(".platform-switch");
+    if (fullPlatformSwitch && fullPlatformSwitch.querySelector(".platform-switch-menu")) {
+      const fixedLabel = button.querySelector("#platformSwitchLabel") || button.querySelector("span");
+      if (fixedLabel) {
+        fixedLabel.textContent = "切换方案";
+      }
+      button.setAttribute("aria-label", "切换方案");
+      return;
+    }
+
     const label = button.querySelector("span");
     if (label) {
       label.textContent = activeLanguage === "en" ? "中文" : "English";
@@ -1153,15 +1163,19 @@
 
   document.addEventListener(
     "click",
-    (event) => {
-      const button = event.target.closest(TARGET_BUTTON_SELECTOR);
-      if (!button) {
-        return;
-      }
+	    (event) => {
+	      const button = event.target.closest(TARGET_BUTTON_SELECTOR);
+	      if (!button) {
+	        return;
+	      }
+	      const fullPlatformSwitch = button.closest(".platform-switch");
+	      if (fullPlatformSwitch && fullPlatformSwitch.querySelector(".platform-switch-menu")) {
+	        return;
+	      }
 
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      setLanguage(activeLanguage === "en" ? "zh" : "en");
+	      event.preventDefault();
+	      event.stopImmediatePropagation();
+	      setLanguage(activeLanguage === "en" ? "zh" : "en");
     },
     true
   );
