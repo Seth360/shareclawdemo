@@ -341,10 +341,39 @@
 
     .left-stack, .right-stack { min-width: 0; display: flex; flex-direction: column; gap: var(--gap); overflow: visible; }
     .panel { background: var(--panel); border-radius: 10px; overflow: hidden; }
-    .card-head { height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; }
+    .card-head { position: relative; height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; }
     .card-title { margin: 0; font-size: 15px; line-height: 1.2; font-weight: 600; }
     .card-action { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; color: #344054; }
     .card-action:hover { background: var(--brand-soft); color: var(--brand); }
+    .ai-hover-action {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 999px;
+      background: #fff;
+      color: #9b6dff;
+      font-size: 12px;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-50%) scale(.94);
+      transition: transform .14s ease;
+    }
+    .ai-hover-action svg { width: 18px; height: 18px; stroke: none; }
+    .ai-hover-action svg path { stroke: none; }
+    .ai-hover-action:hover {
+      transform: translateY(-50%) scale(1);
+    }
+    .panel:hover .ai-hover-action,
+    .panel:focus-within .ai-hover-action {
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(-50%) scale(1);
+    }
 
     .brief { height: 165px; padding-bottom: 12px; }
     .brief-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 14px; }
@@ -747,6 +776,91 @@
       width: 12px;
       height: 12px;
       color: #8f95a2;
+    }
+    .agent-analysis-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .agent-analysis-panel .agent-chat-title { margin-bottom: 5px; }
+    .agent-analysis-card {
+      padding: 10px;
+      border: 1px solid #e5e8f0;
+      border-radius: 14px;
+      background: #fff;
+    }
+    .agent-analysis-chart-source {
+      width: 100%;
+      height: 156px;
+      display: block;
+      overflow: visible;
+    }
+    .agent-analysis-chart-source .chart-stage {
+      width: 100%;
+      height: 100%;
+    }
+    .agent-analysis-section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .agent-analysis-section-title {
+      margin: 0;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 800;
+    }
+    .agent-analysis-overview {
+      margin: 0;
+      color: #5f6675;
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .agent-analysis-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #5f6675;
+      font-size: 13px;
+      line-height: 20px;
+      list-style: decimal;
+    }
+    .agent-analysis-list li {
+      padding-left: 4px;
+      margin-bottom: 8px;
+    }
+    .agent-analysis-list li:last-child { margin-bottom: 0; }
+    .agent-analysis-list strong {
+      color: #181c25;
+      font-weight: 800;
+    }
+    .agent-analysis-em {
+      color: #4165ff;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .agent-analysis-actions {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 7px;
+      color: #181c25;
+    }
+    .agent-analysis-action {
+      width: 18px;
+      height: 18px;
+      display: inline-grid;
+      place-items: center;
+      color: inherit;
+    }
+    .agent-analysis-action svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .slash-menu,
     .at-menu {
@@ -1299,7 +1413,16 @@
         </section>
 
         <section class="panel funnel-card">
-          <div class="card-head"><h2 class="card-title">销售漏斗（商机金额）</h2></div>
+          <div class="card-head">
+            <h2 class="card-title">销售漏斗（商机金额）</h2>
+            <button class="ai-hover-action" type="button" aria-label="AI 分析销售漏斗" title="AI 分析" data-bridge='{"type":"ai-analysis","target":"opportunity-funnel","title":"销售漏斗 AI 分析"}'>
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10.9219 7.11618C11.1413 6.93621 11.4637 6.96958 11.6426 7.1904C11.8213 7.41127 11.7887 7.73591 11.5693 7.91598L10.1396 9.08981L11.5693 10.2636C11.7888 10.4438 11.8215 10.7693 11.6426 10.9902C11.4636 11.2109 11.1412 11.2435 10.9219 11.0634L9.00684 9.49215C8.88829 9.39483 8.82399 9.25493 8.81836 9.11227V9.06735C8.82405 8.92486 8.88849 8.78571 9.00684 8.68844L10.9219 7.11618Z" fill="currentColor"/>
+                <path d="M5.54688 7.01169C5.84881 7.01171 6.09368 7.25853 6.09375 7.56247V10.6006C6.09364 10.9045 5.84878 11.1503 5.54688 11.1504C5.24494 11.1504 5.00011 10.9045 5 10.6006V7.56247C5.00007 7.25851 5.24492 7.01169 5.54688 7.01169Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5068 1.08981C10.6235 0.83954 10.9216 0.73092 11.1719 0.847623L12.4404 1.43942C12.6905 1.55606 12.799 1.85332 12.6826 2.10348L12.4707 2.55661C12.354 2.80684 12.0569 2.91542 11.8066 2.79879L11.4287 2.62301L10.8506 3.76462C14.0265 4.09158 15.8318 5.27755 16 9.18747C16 14.638 13.7706 14.7871 8 14.7871C2.22939 14.7871 4.05521e-05 14.638 0 9.18747C0.168165 5.27755 1.97347 4.09158 5.14941 3.76462L4.57129 2.62301L4.19336 2.79879C3.94311 2.91542 3.64598 2.80684 3.5293 2.55661L3.31738 2.10348C3.20103 1.85332 3.30947 1.55606 3.55957 1.43942L4.82812 0.847623C5.07839 0.73092 5.37646 0.83954 5.49316 1.08981L5.7041 1.54294C5.82071 1.79318 5.71214 2.09031 5.46191 2.207L5.11523 2.36911L5.79492 3.70993C6.47504 3.66496 7.21092 3.65036 8 3.65036C8.78908 3.65036 9.52496 3.66496 10.2051 3.70993L10.8848 2.36911L10.5381 2.207C10.2879 2.09031 10.1793 1.79318 10.2959 1.54294L10.5068 1.08981ZM8 4.54684C7.13876 4.54684 6.36277 4.59632 5.66406 4.66208C5.35772 4.69118 5.05171 4.72479 4.74609 4.76071C3.82455 4.86904 3.23541 5.07953 2.71973 5.36032C2.23025 5.62685 1.86699 5.995 1.61035 6.55075C1.34193 7.13206 1.06641 7.96818 1.06641 9.18747C1.06643 11.6732 1.64356 12.3033 2.44434 12.7607C2.91656 13.0305 3.57927 13.32 4.52637 13.4287C5.47019 13.537 6.61082 13.5605 8 13.5605C9.38918 13.5605 10.5298 13.537 11.4736 13.4287C12.4207 13.32 13.0834 13.0305 13.5557 12.7607C14.3564 12.3033 14.9336 11.6732 14.9336 9.18747C14.9336 7.96815 14.6532 7.13206 14.3848 6.55075C14.1281 5.99499 13.7649 5.62685 13.2754 5.36032C12.7598 5.07961 12.1753 4.86901 11.2539 4.76071C10.9483 4.72479 10.6423 4.69118 10.3359 4.66208C9.63723 4.59632 8.86124 4.54684 8 4.54684Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
           <div class="funnel-area chart-slot" data-chart-kind="funnel" data-bridge='{"type":"chart","target":"opportunity-funnel","title":"销售漏斗"}'></div>
         </section>
 
@@ -1697,6 +1820,10 @@
         } else {
           window.dispatchEvent(new CustomEvent("crm-dashboard-bridge", { detail: payload }));
         }
+        if (payload.type === "ai-analysis" && payload.target === "opportunity-funnel") {
+          openFunnelCopilotAnalysis();
+          return;
+        }
         var toast = document.getElementById("bridgeToast");
         toast.textContent = "已触发扩展位：" + (payload.title || payload.target || payload.type);
         toast.classList.add("show");
@@ -1842,6 +1969,98 @@
           '</div>',
           '</div>'
         ].join("");
+      }
+
+      function renderFunnelAnalysisPanel() {
+        return [
+          '<div class="agent-chat-ai-block">',
+          '<div class="agent-chat-ai-card agent-analysis-panel">',
+          '<div class="agent-analysis-card">',
+          '<div class="agent-analysis-chart-source" id="agentFunnelChartClone" role="img" aria-label="销售漏斗阶段金额"></div>',
+          '</div>',
+          '<div class="agent-analysis-section">',
+          '<p class="agent-analysis-section-title">数据概览</p>',
+          '<p class="agent-analysis-overview">本图为销售漏斗，按商机金额展示从验证到赢单的五个阶段。金额从验证 1,050万 逐级收窄至赢单 203万，整体转化率约 19%。各环节转化率：验证→演示 60%、演示→报价 54%、报价→议价 84%、议价→赢单 71%。</p>',
+          '</div>',
+          '<div class="agent-analysis-section">',
+          '<p class="agent-analysis-section-title">关键洞察</p>',
+          '<ol class="agent-analysis-list">',
+          '<li><strong>损耗集中在中前段：</strong><span>验证、演示两段合计流失近 700万，占总损耗的 82%，是金额下滑的主因。</span></li>',
+          '<li><strong>后段成单稳定：</strong><span>进入报价后转化率均超 70%，说明一旦推进到报价，赢单确定性较高。</span></li>',
+          '</ol>',
+          '</div>',
+          '<div class="agent-analysis-section">',
+          '<p class="agent-analysis-section-title">问题诊断</p>',
+          '<ol class="agent-analysis-list">',
+          '<li><strong>演示→报价为最大单点流失：</strong><span>金额从 630万 跌至 340万，流失 46%。可能源于方案匹配度不足或报价响应慢。</span></li>',
+          '<li><strong>早期商机质量偏低：</strong><span>验证→演示即流失 40%，反映线索筛选或需求确认环节把关不够。</span></li>',
+          '</ol>',
+          '</div>',
+          '<div class="agent-analysis-section">',
+          '<p class="agent-analysis-section-title">行动建议</p>',
+          '<ol class="agent-analysis-list">',
+          '<li><strong>优先攻坚演示环节：</strong><span>复盘演示未推进的商机，沉淀标准化方案与报价话术，缩短报价响应周期。</span></li>',
+          '<li><strong>前置商机质量管控：</strong><span>在验证阶段强化线索评分与需求确认，减少低质商机进入漏斗。</span></li>',
+          '</ol>',
+          '</div>',
+          '<div class="agent-analysis-actions" aria-label="分析操作">',
+          '<button class="agent-analysis-action" type="button" aria-label="重新生成"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M14.5 8.9A5.5 5.5 0 1 1 12.8 5"></path><path class="icon-stroke" d="M14.4 3.8v3.6h-3.5"></path></svg></button>',
+          '<button class="agent-analysis-action" type="button" aria-label="复制"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M5.6 5.6h8v8h-8z"></path><path class="icon-stroke" d="M4.4 4.4h8"></path></svg></button>',
+          '<button class="agent-analysis-action" type="button" aria-label="赞"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7.3 15.1h6.2c.9 0 1.6-.7 1.6-1.6V8.1c0-.9-.7-1.6-1.6-1.6h-3l.4-2.3a1.7 1.7 0 0 0-3.3-.8L6.7 6.5H4.3v8.6h3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path><path class="icon-stroke" d="M4.3 6.5H2.8v8.6h1.5"></path></svg></button>',
+          '<button class="agent-analysis-action" type="button" aria-label="踩"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M10.7 15.1H4.5c-.9 0-1.6-.7-1.6-1.6V8.1c0-.9.7-1.6 1.6-1.6h3L7.1 4.2a1.7 1.7 0 0 1 3.3-.8l.9 3.1h2.4v8.6h-3Z"></path><path class="icon-stroke" d="M13.7 6.5h1.5v8.6h-1.5"></path></svg></button>',
+          '<button class="agent-analysis-action" type="button" aria-label="更多"><svg viewBox="0 0 18 18" aria-hidden="true"><circle class="icon-fill" cx="4.2" cy="9" r="1.2"></circle><circle class="icon-fill" cx="9" cy="9" r="1.2"></circle><circle class="icon-fill" cx="13.8" cy="9" r="1.2"></circle></svg></button>',
+          '</div>',
+          '</div>',
+          '<div class="agent-chat-replies">',
+          renderAgentReplyChip("帮我找出演示到报价流失的商机"),
+          renderAgentReplyChip("生成本周高优先级推进清单"),
+          renderAgentReplyChip("给报价阶段客户写推进话术"),
+          '</div>',
+          '</div>'
+        ].join("");
+      }
+
+      function syncFunnelAnalysisChart() {
+        var target = document.getElementById("agentFunnelChartClone");
+        if (!target) return;
+        var source = document.querySelector(".funnel-card .funnel-area .chart-stage");
+        if (!source) return;
+        var clone = source.cloneNode(true);
+        clone.setAttribute("viewBox", "150 0 455 220");
+        clone.querySelectorAll(".chart-line").forEach(function (line) {
+          line.setAttribute("d", line.getAttribute("d").replace(/H\s*610/, "H 488"));
+        });
+        clone.querySelectorAll("text").forEach(function (text) {
+          if (text.classList.contains("chart-value")) {
+            text.setAttribute("x", "548");
+          } else {
+            text.setAttribute("x", "502");
+          }
+        });
+        target.replaceChildren(clone);
+      }
+
+      function openFunnelCopilotAnalysis() {
+        clearTimeout(agentReplyTimer);
+        setAgentOpen(true, { skipFocus: true });
+        closeComposerMenus();
+        askAgentSidebar.classList.add("has-chat");
+        agentChatFeed.innerHTML = [
+          '<div class="agent-chat-user-row"><div class="agent-chat-user-bubble">智能洞察</div></div>',
+          '<div class="agent-chat-time">' + getTimeLabel() + '</div>',
+          renderAgentThinking()
+        ].join("");
+        composerEditor.textContent = "";
+        updateComposerState();
+        scrollAgentChatToBottom();
+        agentReplyTimer = setTimeout(function () {
+          var thinking = document.getElementById("agentThinkingRow");
+          if (thinking) thinking.remove();
+          agentChatFeed.insertAdjacentHTML("beforeend", renderFunnelAnalysisPanel());
+          syncFunnelAnalysisChart();
+          scrollAgentChatToBottom();
+        }, 1000);
+        setTimeout(focusEditorAtEnd, 180);
       }
 
       function sendAgentMessage(text) {
@@ -2031,6 +2250,11 @@
         button.addEventListener("click", function () {
           sendAgentMessage(button.textContent.replace("→", "").trim());
         });
+      });
+      agentChatFeed.addEventListener("click", function (event) {
+        var quickReply = event.target.closest(".agent-chat-reply-chip");
+        if (!quickReply) return;
+        sendAgentMessage(quickReply.textContent.trim());
       });
 
       composerEditor.addEventListener("input", updateComposerState);
