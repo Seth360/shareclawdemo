@@ -1,0 +1,1883 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>ShareClaw Mobile</title>
+    <style>
+      :root {
+        --page: #f7f9fc;
+        --surface: #ffffff;
+        --surface-2: #fafcff;
+        --line: #eaebee;
+        --line-strong: #dde2eb;
+        --text: #181c25;
+        --text-2: #545861;
+        --muted: #91959e;
+        --muted-2: #c1c5ce;
+        --brand: #ff8000;
+        --brand-soft: #fff3e5;
+        --blue: #40b6ff;
+        --blue-soft: #e9f7ff;
+        --green: #35c986;
+        --green-soft: #e9fbf3;
+        --purple: #7c58fd;
+        --purple-soft: #f1edff;
+        --danger: #ff522a;
+        --shadow: 0 0 12px rgba(209, 209, 209, 0.25);
+        --shadow-card: 0 10px 28px rgba(24, 28, 37, 0.08);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        background: var(--page);
+        color: var(--text);
+        font-family:
+          "Source Han Sans CN",
+          "Noto Sans SC",
+          "PingFang SC",
+          "Microsoft YaHei",
+          sans-serif;
+      }
+
+      body {
+        min-height: 100dvh;
+        overflow: hidden;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      .phone {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        overflow: hidden;
+        background: var(--page);
+      }
+
+      .screen {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(10px);
+        transition:
+          opacity 180ms ease,
+          transform 180ms ease;
+      }
+
+      .screen.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+      }
+
+      .statusbar {
+        height: 44px;
+        flex: 0 0 auto;
+      }
+
+      .scroll {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+
+      .scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .app-bg {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .app-bg::before {
+        content: "";
+        position: absolute;
+        left: -118px;
+        top: -125px;
+        width: 621px;
+        height: 1433px;
+        background:
+          radial-gradient(circle at 46% 3%, rgba(255, 128, 0, 0.12), transparent 21%),
+          radial-gradient(circle at 16% 23%, rgba(64, 182, 255, 0.16), transparent 24%),
+          linear-gradient(180deg, #f7f9ff 0%, #f4f6fb 47%, #ffffff 100%);
+      }
+
+      .topbar {
+        position: relative;
+        z-index: 2;
+        height: 56px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .top-title {
+        font-size: 19px;
+        font-weight: 650;
+        line-height: 26px;
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .icon-btn {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: var(--shadow);
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        display: block;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .im-content {
+        position: relative;
+        z-index: 1;
+        padding: 0 16px calc(92px + var(--safe-bottom));
+      }
+
+      .search-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 32px;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .search-box,
+      .round-tool {
+        height: 32px;
+        border-radius: 999px;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .round-tool {
+        display: grid;
+        place-items: center;
+      }
+
+      .login-tip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 18px;
+        margin-bottom: 15px;
+        color: var(--text-2);
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .login-tip .tip-text {
+        flex: 1;
+      }
+
+      .summary-card {
+        position: relative;
+        overflow: hidden;
+        margin: 0 -16px 12px;
+        padding: 3px 16px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.54);
+        filter: drop-shadow(0 0 6px rgba(209, 209, 209, 0.25));
+      }
+
+      .list-panel {
+        margin: 0 -16px;
+        padding: 16px;
+        border-top: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .conversation {
+        width: 100%;
+        min-height: 62px;
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+        text-align: left;
+      }
+
+      .conversation + .conversation {
+        border-top: 1px solid var(--line);
+      }
+
+      .avatar {
+        position: relative;
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        overflow: hidden;
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .avatar.todo {
+        background: linear-gradient(135deg, #ffb15f, #ff8000);
+      }
+
+      .avatar.work {
+        background: linear-gradient(135deg, #7c58fd, #40b6ff);
+      }
+
+      .avatar.group {
+        background: linear-gradient(135deg, #40b6ff, #4567f0);
+      }
+
+      .avatar.green {
+        background: linear-gradient(135deg, #35c986, #17a866);
+      }
+
+      .badge {
+        position: absolute;
+        right: -2px;
+        top: -2px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 5px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--danger);
+        color: #fff;
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .conv-main {
+        min-width: 0;
+        padding: 9px 0;
+      }
+
+      .conv-head {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .conv-title {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .conv-time {
+        flex: 0 0 auto;
+        color: var(--text-2);
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .conv-body {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      .conv-text {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 20px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pill {
+        flex: 0 0 auto;
+        height: 22px;
+        padding: 0 8px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: var(--blue);
+        color: #fff;
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .mute {
+        width: 16px;
+        height: 16px;
+        color: var(--muted);
+      }
+
+      .ai-screen {
+        background: #fafcff;
+      }
+
+      .ai-screen::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -330px;
+        width: 493px;
+        height: 278px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 50% 45%, rgba(255, 128, 0, 0.28), transparent 32%),
+          radial-gradient(circle at 35% 55%, rgba(64, 182, 255, 0.22), transparent 36%),
+          radial-gradient(circle at 65% 60%, rgba(124, 88, 253, 0.2), transparent 36%);
+        filter: blur(34px);
+        transform: translateX(-50%);
+      }
+
+      .ai-top {
+        position: relative;
+        z-index: 2;
+        height: 56px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .agent-menu {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .agent-name {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 32px;
+        color: var(--text);
+        font-size: 13px;
+      }
+
+      .ai-main {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 32px;
+        padding: 0 20px calc(150px + var(--safe-bottom));
+      }
+
+      .greeting {
+        display: grid;
+        grid-template-columns: 84px minmax(0, 1fr);
+        align-items: start;
+        gap: 0;
+      }
+
+      .agent-avatar {
+        position: relative;
+        width: 84px;
+        height: 84px;
+      }
+
+      .agent-avatar img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .agent-avatar .blink-frame {
+        opacity: 0;
+        animation: ipbee-blink 2s infinite;
+      }
+
+      @keyframes ipbee-blink {
+        0%,
+        88%,
+        100% {
+          opacity: 0;
+        }
+
+        90%,
+        95% {
+          opacity: 1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .agent-avatar .blink-frame {
+          animation: none;
+        }
+      }
+
+      .greeting-text {
+        padding-top: 0;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 42px;
+        letter-spacing: 0;
+      }
+
+      .prompt-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        padding-bottom: 1px;
+      }
+
+      .prompt-chip {
+        min-width: 0;
+        width: 100%;
+        height: 44px;
+        padding: 0 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+        color: var(--text);
+        font-size: 15px;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+      }
+
+      .prompt-icon {
+        width: 14px;
+        height: 14px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: none;
+      }
+
+      .prompt-icon * {
+        stroke: none;
+      }
+
+      .history {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .history-title {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .history-toggle {
+        display: inline-grid;
+        place-items: center;
+        color: var(--muted);
+      }
+
+      .history-toggle .icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .sheet-scrim {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        background: rgba(24, 28, 37, 0.08);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 180ms ease;
+      }
+
+      .sheet-scrim.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .history-sheet {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 21;
+        padding: 18px 16px calc(22px + var(--safe-bottom));
+        border-radius: 8px 8px 0 0;
+        background: #fff;
+        box-shadow: 0 -10px 32px rgba(24, 28, 37, 0.08);
+        transform: translateY(104%);
+        transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .history-sheet.show {
+        transform: translateY(0);
+      }
+
+      .sheet-handle {
+        display: none;
+      }
+
+      .sheet-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        color: var(--text);
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 28px;
+      }
+
+      .sheet-close {
+        width: 28px;
+        height: 28px;
+        display: grid;
+        place-items: center;
+        color: var(--text-2);
+        background: transparent;
+      }
+
+      .history-list {
+        display: grid;
+      }
+
+      .history-item {
+        min-height: 46px;
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+        border-bottom: 1px solid #dde2eb;
+        text-align: left;
+      }
+
+      .history-item:last-child {
+        border-bottom: 0;
+      }
+
+      .history-item strong {
+        display: block;
+        color: var(--text);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 22px;
+      }
+
+      .history-item .history-meta {
+        color: #8f95a2;
+        font-size: 14px;
+        line-height: 20px;
+        white-space: nowrap;
+      }
+
+      .history-item-icon {
+        width: 14px;
+        height: 14px;
+        color: var(--text);
+      }
+
+      .history-item-icon * {
+        stroke-width: 1.6;
+      }
+
+      .conversation-page {
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        display: flex;
+        flex-direction: column;
+        background: #f7f9fb;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .conversation-page.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .conversation-top {
+        height: 56px;
+        padding: 0 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .conversation-menu,
+      .conversation-new,
+      .conversation-back {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        color: var(--text);
+      }
+
+      .conversation-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .conversation-agent {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 32px;
+        margin-right: auto;
+        margin-left: 10px;
+        min-width: 0;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 18px;
+      }
+
+      .conversation-body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 22px 18px calc(88px + var(--safe-bottom));
+      }
+
+      .conversation-body [hidden] {
+        display: none !important;
+      }
+
+      .task-query {
+        padding: 14px 14px;
+        border-radius: 18px;
+        background: #f0f2fb;
+        color: var(--text);
+        font-size: 15px;
+        line-height: 24px;
+      }
+
+      .sent-message {
+        width: fit-content;
+        max-width: 78%;
+        margin-left: auto;
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-radius: 18px 18px 4px 18px;
+        background: #dff2ff;
+        color: #155a88;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .thinking-message {
+        width: fit-content;
+        margin-top: 12px;
+        display: none;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #eef0f4;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .thinking-message.show {
+        display: inline-flex;
+      }
+
+      .ai-reply-card {
+        display: none;
+        margin-top: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        color: var(--text);
+        box-shadow: 0 8px 22px rgba(24, 28, 37, 0.06);
+        font-size: 14px;
+        line-height: 21px;
+      }
+
+      .ai-reply-card.show {
+        display: block;
+      }
+
+      .task-status {
+        margin-top: 18px;
+        color: var(--text-2);
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .task-status button {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        color: var(--text-2);
+      }
+
+      .task-lead {
+        margin-top: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dde2eb;
+        color: var(--text-2);
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .customer-card {
+        margin-top: 18px;
+        padding: 16px 18px 18px;
+        border: 1px solid #dfe3eb;
+        border-radius: 18px;
+        background: #fff;
+      }
+
+      .customer-badge {
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        border-radius: 7px;
+        background: #f0e6ff;
+        color: #7c58fd;
+        font-size: 14px;
+        font-weight: 650;
+        line-height: 20px;
+      }
+
+      .customer-badge::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border: 1.5px solid currentColor;
+        border-radius: 50%;
+      }
+
+      .customer-name {
+        margin-top: 16px;
+        color: var(--text);
+        font-size: 19px;
+        font-weight: 650;
+        line-height: 28px;
+      }
+
+      .customer-sub {
+        margin-top: 6px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #eef0f4;
+        color: var(--text-2);
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .customer-fields {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr);
+        row-gap: 8px;
+        margin-top: 14px;
+        color: var(--text-2);
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .customer-fields strong {
+        color: var(--text);
+        font-weight: 650;
+      }
+
+      .expand-link {
+        margin-top: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-2);
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .customer-actions {
+        margin-top: 14px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .customer-action {
+        min-width: 62px;
+        height: 42px;
+        padding: 0 14px;
+        border: 1px solid #c9ced8;
+        border-radius: 12px;
+        color: var(--text);
+        background: #fff;
+        font-size: 15px;
+      }
+
+      .customer-action.primary {
+        border-color: var(--text);
+        background: var(--text);
+        color: #fff;
+      }
+
+      .waiting-chip {
+        width: fit-content;
+        margin-top: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #eef0f4;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .waiting-spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px dotted #8f95a2;
+        border-radius: 50%;
+      }
+
+      .chat-layer {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: calc(152px + var(--safe-bottom));
+        z-index: 4;
+        display: grid;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .user-bubble {
+        justify-self: end;
+        max-width: 78%;
+        padding: 10px 12px;
+        border-radius: 18px 18px 4px 18px;
+        background: #dff2ff;
+        color: #155a88;
+        font-size: 14px;
+        line-height: 20px;
+        box-shadow: 0 8px 22px rgba(24, 28, 37, 0.1);
+      }
+
+      .ai-answer {
+        display: none;
+        grid-template-columns: 30px minmax(0, 1fr);
+        gap: 8px;
+        align-items: start;
+      }
+
+      .ai-answer.show {
+        display: grid;
+      }
+
+      .mini-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: var(--brand-soft);
+        overflow: hidden;
+      }
+
+      .mini-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .answer-card {
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 14px 14px 14px 4px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: var(--shadow-card);
+        font-size: 13px;
+        line-height: 19px;
+      }
+
+      .answer-card strong {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--brand);
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .composer {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: calc(92px + var(--safe-bottom));
+        z-index: 5;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 16px;
+        border: 1px solid #f2f4fb;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 0 5.5px rgba(95, 72, 72, 0.12);
+        cursor: text;
+        transition:
+          bottom 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          opacity 180ms ease,
+          transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .composer:focus-within {
+        border-color: #e6eaf4;
+      }
+
+      .composer-input {
+        min-width: 0;
+        flex: 1;
+        height: 32px;
+        border: 0;
+        outline: 0;
+        color: var(--text);
+        font-size: 15px;
+        background: transparent;
+      }
+
+      .composer-input::placeholder {
+        color: var(--muted-2);
+      }
+
+      .composer-tools {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--text-2);
+      }
+
+      .composer-icon {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: none;
+      }
+
+      .composer-icon * {
+        stroke: none;
+      }
+
+      .send {
+        width: 32px;
+        height: 32px;
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #ece3ff;
+        color: #b794ff;
+        cursor: pointer;
+        transition: background 160ms ease, color 160ms ease;
+      }
+
+      .composer.has-value .send {
+        background: linear-gradient(19deg, #7091FF 0%, #BE64FF 100%);
+        color: #fff;
+      }
+
+      .send-icon {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: none;
+      }
+
+      .send-icon * {
+        stroke: none;
+      }
+
+      .conversation-composer {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: calc(92px + var(--safe-bottom));
+        z-index: 40;
+        display: flex;
+        opacity: 0;
+        transition:
+          bottom 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          opacity 180ms ease;
+      }
+
+      .conversation-page:not(.show) .conversation-composer {
+        display: none;
+      }
+
+      .phone.conversation-open.composer-moving .conversation-composer {
+        bottom: calc(16px + var(--safe-bottom));
+        opacity: 1;
+      }
+
+      .phone.conversation-open #composer {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .phone.conversation-open.composer-moving #composer {
+        bottom: calc(16px + var(--safe-bottom));
+      }
+
+      .phone.conversation-open .tabbar {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: none;
+      }
+
+      .tabbar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 8;
+        min-height: calc(76px + var(--safe-bottom));
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        align-items: start;
+        padding: 8px 10px calc(8px + var(--safe-bottom));
+        background: rgba(255, 255, 255, 0.88);
+        border-top: 1px solid rgba(234, 235, 238, 0.82);
+        backdrop-filter: blur(18px);
+        transition:
+          transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          opacity 180ms ease;
+      }
+
+      .phone.conversation-open.composer-moving .tabbar {
+        transform: translateY(calc(84px + var(--safe-bottom)));
+        opacity: 0;
+      }
+
+      .tab {
+        height: 54px;
+        display: grid;
+        place-items: center;
+        gap: 2px;
+        color: var(--text-2);
+        font-size: 10px;
+        line-height: 12px;
+      }
+
+      .tab .icon {
+        width: 22px;
+        height: 22px;
+      }
+
+      .tab .tab-brand-icon {
+        width: auto;
+        height: auto;
+        fill: none;
+        stroke: none;
+      }
+
+      .tab .tab-brand-icon * {
+        stroke: none;
+      }
+
+      .tab .tab-icon-active {
+        display: none;
+      }
+
+      .tab.active .tab-icon-default {
+        display: none;
+      }
+
+      .tab.active .tab-icon-active {
+        display: block;
+      }
+
+      .tab.active {
+        color: var(--brand);
+        font-weight: 700;
+      }
+
+      .toast {
+        position: absolute;
+        left: 50%;
+        bottom: calc(126px + var(--safe-bottom));
+        z-index: 20;
+        max-width: calc(100% - 48px);
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(24, 28, 37, 0.88);
+        color: #fff;
+        font-size: 13px;
+        line-height: 18px;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 10px);
+        transition:
+          opacity 160ms ease,
+          transform 160ms ease;
+        white-space: nowrap;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      @media (max-height: 740px) {
+        .ai-main {
+          justify-content: flex-start;
+          padding-top: 130px;
+        }
+
+        .greeting-text {
+          font-size: 23px;
+          line-height: 36px;
+        }
+      }
+
+      @media (min-width: 700px) and (min-height: 620px) {
+        body {
+          display: grid;
+          place-items: center;
+          background: #dfe4ee;
+        }
+
+        .phone {
+          position: relative;
+          inset: auto;
+          width: min(393px, calc((100dvh - 36px) * 0.461));
+          height: min(852px, calc(100dvh - 36px));
+          border-radius: 30px;
+          box-shadow: 0 18px 54px rgba(24, 28, 37, 0.18);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="phone" aria-label="ShareClaw 移动端静态交互页面">
+      <section class="screen" id="screen-im" aria-label="IM 会话列表">
+        <div class="app-bg"></div>
+        <div class="statusbar" aria-hidden="true"></div>
+        <header class="topbar">
+          <div class="top-title">企信</div>
+          <div class="top-actions">
+            <button class="icon-btn" type="button" data-toast="新建会话">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+            </button>
+          </div>
+        </header>
+        <div class="scroll">
+          <div class="im-content">
+            <div class="search-row">
+              <button class="search-box" type="button" data-toast="搜索">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <span>搜索</span>
+              </button>
+              <button class="round-tool" type="button" data-toast="筛选会话">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M7 12h10"></path><path d="M10 18h4"></path></svg>
+              </button>
+            </div>
+
+            <div class="login-tip">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="12" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg>
+              <span class="tip-text">网页端&amp; Mac客户端已登录</span>
+              <button type="button" data-toast="关闭提示">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+            </div>
+
+            <div class="summary-card">
+              <button class="conversation" type="button" data-thread="待办事项">
+                <span class="avatar todo">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M9 11l2 2 4-5"></path><path d="M5 4h14v16H5z"></path></svg>
+                  <span class="badge">1</span>
+                </span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">待办事项</span>
+                    <span class="conv-time">昨天</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">马骁 Shawn 请你回执：</span></span>
+                </span>
+              </button>
+              <button class="conversation" type="button" data-thread="PaaS设计体验">
+                <span class="avatar group">P</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">PaaS设计体验</span>
+                    <span class="pill">客群</span>
+                    <span class="conv-time">16:07</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">顾婉莹Jill：是有过这个结论。但在功能落地时，考虑到...</span></span>
+                </span>
+              </button>
+              <button class="conversation" type="button" data-thread="PaaS设计小分队">
+                <span class="avatar green">队</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">PaaS设计小分队</span>
+                    <span class="conv-time">10:28</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">李海芳Velika 更新了高频入口按钮</span></span>
+                </span>
+              </button>
+              <button class="conversation" type="button" data-thread="FX小程序组件设计沟通群">
+                <span class="avatar group">FX</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">FX小程序组件设计沟通群</span>
+                    <span class="conv-time">24/12/24</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">好的</span></span>
+                </span>
+              </button>
+            </div>
+
+            <div class="list-panel">
+              <button class="conversation" type="button" data-thread="工作消息">
+                <span class="avatar work">工</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">工作消息</span>
+                    <span class="conv-time">11:37</span>
+                  </span>
+                  <span class="conv-body">
+                    <span class="conv-text">徐承杰Corry发了一个分享提到你的部门</span>
+                    <svg class="mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5 6 9H3v6h3l5 4V5Z"></path><path d="m19 9-4 6"></path><path d="m15 9 4 6"></path></svg>
+                  </span>
+                </span>
+              </button>
+              <button class="conversation" type="button" data-thread="培训助手">
+                <span class="avatar todo">训</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">培训助手</span>
+                    <span class="conv-time">10:12</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">今日有 2 个学习任务待完成</span></span>
+                </span>
+              </button>
+              <button class="conversation" type="button" data-thread="腾讯科技客群">
+                <span class="avatar green">腾</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">腾讯科技客群</span>
+                    <span class="pill">客群</span>
+                    <span class="conv-time">09:41</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">客户希望今天确认上线排期</span></span>
+                </span>
+              </button>
+              <button class="conversation" type="button" data-thread="华东运营组">
+                <span class="avatar group">华</span>
+                <span class="conv-main">
+                  <span class="conv-head">
+                    <span class="conv-title">华东运营组</span>
+                    <span class="conv-time">昨天</span>
+                  </span>
+                  <span class="conv-body"><span class="conv-text">已收到 Excel 数据导出</span></span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen ai-screen active" id="screen-ai" aria-label="AI 对话">
+        <div class="statusbar" aria-hidden="true"></div>
+        <header class="ai-top">
+          <div class="agent-menu">
+            <button type="button" data-toast="打开侧滑菜单">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h11"></path></svg>
+            </button>
+            <button class="agent-name" type="button" data-toast="切换智能体">
+              <span>智能体</span>
+              <svg class="icon" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="ai-main">
+          <section class="greeting" aria-label="AI 问候">
+            <span class="agent-avatar" role="img" aria-label="ShareAgent">
+              <img src="./images/ipbee.png" alt="" />
+              <img class="blink-frame" src="./images/ipbee-eyes.png" alt="" />
+            </span>
+            <div class="greeting-text">
+              <div>Hi Scott，</div>
+              <div>今天我有什么能帮你？</div>
+            </div>
+          </section>
+
+          <div>
+            <div class="prompt-row" aria-label="快捷指令">
+              <button class="prompt-chip" type="button" data-quick-action="在线会议">
+                <svg class="prompt-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M3.48877 6.90723C3.48888 8.81442 5.03565 10.3604 6.94287 10.3604C8.79198 10.3599 10.3023 8.90604 10.3921 7.0791L10.396 6.90723V6.04395H11.2593V6.90723C11.2592 9.14526 9.55546 10.9852 7.37451 11.2021V12.9502H9.10107V13.8135H4.78369V12.9502H6.51123V11.2021C4.32987 10.9856 2.62559 9.14555 2.62549 6.90723V6.04395H3.48877V6.90723ZM6.94287 0.863281C6.03288 0.863281 5.28657 1.56791 5.22021 2.46094L5.21533 2.58984V6.90723C5.21544 7.86078 5.98929 8.63379 6.94287 8.63379C7.85271 8.63336 8.59854 7.92921 8.66455 7.03613L8.66943 6.90723V3.08789H9.07373C9.01142 2.90249 8.91566 2.69894 8.71729 2.52734C8.45956 2.30534 8.17732 2.22204 7.95654 2.15723L7.95166 2.15625C7.72175 2.08875 7.55917 2.04025 7.55908 1.875C7.55913 1.71946 7.71727 1.68101 7.93311 1.62988H7.93506C8.16915 1.57443 8.47083 1.50319 8.71143 1.24805C8.95159 0.992664 9.0239 0.671741 9.08057 0.419922C9.13321 0.18601 9.17275 0.0111923 9.32178 0.000976562C9.47148 -0.00874298 9.51572 0.159464 9.57471 0.388672V0.389648C9.63791 0.635245 9.71932 0.950167 9.96729 1.19043C10.2109 1.42533 10.5238 1.5007 10.7749 1.56055C11.0191 1.61873 11.206 1.66401 11.2153 1.8291C11.2244 2.00064 11.0214 2.06901 10.7671 2.1543C10.5275 2.23464 10.2418 2.33095 10.0444 2.54297C9.85126 2.75025 9.76938 3.00511 9.70166 3.21777C9.65161 3.37494 9.60764 3.50795 9.53271 3.58203V6.90723C9.53261 8.33732 8.37289 9.49662 6.94287 9.49707C5.51247 9.49707 4.35216 8.3376 4.35205 6.90723V2.58984C4.35251 1.15977 5.51269 0 6.94287 0V0.863281Z" fill="#30C776"/>
+                </svg>
+                在线会议
+              </button>
+              <button class="prompt-chip" type="button" data-quick-action="现场录音">
+                <svg class="prompt-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M6.125 0.875C8.2475 0.875 9.28833 2.31629 9.28833 4.58264C9.28823 5.62055 8.92292 6.59379 8.28772 7.29053C8.07167 7.67717 7.94258 8.06521 7.9425 8.41162C7.9425 8.71226 8.04738 8.81924 8.43896 8.90808L8.55261 8.93201C8.56581 8.93459 8.59841 8.9404 8.64062 8.94824C8.78015 8.97415 9.03257 9.02096 9.10376 9.03882C9.24678 9.07472 9.39089 9.11797 9.53528 9.16528C9.34561 9.39802 9.18555 9.65581 9.06018 9.93262L8.87476 9.88391L8.38513 9.79077C7.52927 9.62336 7.0675 9.2356 7.0675 8.41162C7.06756 7.9725 7.19352 7.51576 7.42041 7.05896L7.64087 6.70093C8.12967 6.16477 8.41323 5.40093 8.41333 4.58264C8.41333 2.68176 7.65284 1.75 6.125 1.75C4.59716 1.75 3.83667 2.68176 3.83667 4.58264C3.83676 5.33272 4.07502 6.03736 4.49121 6.5625L4.7262 6.86328C5.01779 7.38509 5.18243 7.90976 5.1825 8.41162C5.1825 9.18713 4.77351 9.57569 4.01184 9.7583L3.79907 9.80273L3.35901 9.88733C2.02301 10.2227 0.970244 11.0019 0.880981 11.6296L0.875 11.7142V12.25H8.86023C8.94016 12.5606 9.06235 12.8541 9.21912 13.125H0V11.7142C0.000251471 10.4267 1.65397 9.41337 3.14624 9.03882L3.69739 8.93201C4.18279 8.83703 4.3075 8.73952 4.3075 8.41162C4.30742 8.06521 4.17833 7.67717 3.96228 7.29053C3.32708 6.59379 2.96177 5.62055 2.96167 4.58264C2.96167 2.31629 4.0025 0.875 6.125 0.875ZM12.2961 9.63184C12.3222 9.63956 12.3462 9.65366 12.3654 9.67285C12.3844 9.69203 12.3987 9.71611 12.4064 9.74207L12.5089 10.0873C12.5814 10.3315 12.7132 10.5541 12.8934 10.7341C13.0737 10.9142 13.2968 11.0457 13.5411 11.1178L13.8838 11.2186C13.9173 11.2286 13.9466 11.2496 13.9675 11.2776C13.9885 11.3057 14 11.3399 14 11.375C14 11.4101 13.9885 11.4443 13.9675 11.4724C13.9466 11.5003 13.9172 11.5206 13.8838 11.5305L13.5352 11.6356C13.2925 11.7083 13.0716 11.8401 12.8926 12.0193C12.7136 12.1985 12.5813 12.4192 12.5089 12.6619L12.4064 13.0088C12.3963 13.0423 12.3754 13.0716 12.3474 13.0925C12.3193 13.1134 12.285 13.125 12.25 13.125C12.215 13.125 12.1807 13.1134 12.1526 13.0925C12.1246 13.0716 12.1037 13.0423 12.0936 13.0088L11.9911 12.6619C11.9187 12.4192 11.7864 12.1985 11.6074 12.0193C11.4284 11.8401 11.2075 11.7083 10.9648 11.6356L10.6162 11.5305C10.5828 11.5205 10.5534 11.5003 10.5325 11.4724C10.5116 11.4444 10.5 11.4099 10.5 11.375C10.5001 11.34 10.5115 11.3056 10.5325 11.2776C10.5536 11.2496 10.5834 11.2284 10.6171 11.2186L10.9589 11.1178C11.2032 11.0457 11.4263 10.9142 11.6066 10.7341C11.7868 10.5541 11.9186 10.3315 11.9911 10.0873L12.0936 9.74207C12.1059 9.70069 12.1343 9.66529 12.1722 9.64465C12.2101 9.62406 12.2548 9.61967 12.2961 9.63184ZM9.87878 2.63525C11.2238 2.74556 11.8843 3.74745 11.8843 5.27307C11.8843 6.01453 11.6237 6.70991 11.1699 7.20764C11.0156 7.4838 10.923 7.76088 10.923 8.0083C10.923 8.05518 10.9273 8.09552 10.9358 8.13049C10.6574 8.24335 10.3964 8.39012 10.1591 8.56714C10.0867 8.41125 10.048 8.22636 10.048 8.0083C10.048 7.6602 10.144 7.30605 10.3146 6.95557L10.406 6.7804L10.4556 6.69238L10.5231 6.61804C10.8294 6.28204 11.0093 5.79656 11.0093 5.27307C11.0093 4.26875 10.7136 3.7221 10.0924 3.55554C10.0448 3.22967 9.97281 2.92239 9.87878 2.63525Z" fill="#FFB602"/>
+                </svg>
+                现场录音
+              </button>
+              <button class="prompt-chip" type="button" data-quick-action="销售记录">
+                <svg class="prompt-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M3.53928 1.00567C3.56163 1.01229 3.58196 1.02438 3.59844 1.04086C3.61491 1.05734 3.62701 1.07768 3.63362 1.10002L3.72141 1.39618C3.78352 1.60559 3.89701 1.79614 4.05156 1.95047C4.20611 2.10481 4.39681 2.21804 4.60629 2.27984L4.8998 2.36633C4.92865 2.37483 4.95398 2.39244 4.972 2.41653C4.99002 2.44063 4.99976 2.4699 4.99976 2.49999C4.99976 2.53007 4.99002 2.55935 4.972 2.58344C4.95398 2.60754 4.92865 2.62515 4.8998 2.63365L4.60105 2.7232C4.39302 2.78549 4.20374 2.89855 4.05027 3.05219C3.89679 3.20584 3.78393 3.39525 3.72185 3.60336L3.63362 3.90039C3.62499 3.92918 3.6073 3.95442 3.58318 3.97237C3.55907 3.99031 3.52981 4 3.49976 4C3.4697 4 3.44044 3.99031 3.41633 3.97237C3.39222 3.95442 3.37453 3.92918 3.36589 3.90039L3.27766 3.60336C3.21558 3.39525 3.10273 3.20584 2.94925 3.05219C2.79577 2.89855 2.60649 2.78549 2.39846 2.7232L2.09928 2.63365C2.07045 2.62506 2.04518 2.60736 2.02724 2.58321C2.0093 2.55906 1.99966 2.52975 1.99976 2.49966C1.99985 2.46958 2.00969 2.44033 2.02778 2.4163C2.04588 2.39226 2.07127 2.37473 2.10015 2.36633L2.39322 2.27984C2.6027 2.21804 2.7934 2.10481 2.94795 1.95047C3.1025 1.79614 3.21599 1.60559 3.2781 1.39618L3.36589 1.10002C3.37641 1.06454 3.40058 1.03468 3.43308 1.017C3.46559 0.99931 3.50378 0.995237 3.53928 1.00567ZM11.538 4.34284L9.64904 2.45391L8.70457 3.39837L10.5935 5.28731L11.538 4.34284ZM2.38325 9.7197L2.27831 11.7136L4.27218 11.6086L9.83793 6.04288L7.949 4.15395L2.38325 9.7197ZM4.73781 12.6541L1.44525 12.8274C1.28684 12.8358 1.1561 12.705 1.16444 12.5466L1.33773 9.25406L9.27125 1.32055C9.4799 1.1119 9.81818 1.1119 10.0268 1.32055L12.6713 3.96505C12.88 4.1737 12.88 4.51198 12.6713 4.72063L4.73781 12.6541ZM10.6154 9.67291C10.5962 9.65369 10.5724 9.63958 10.5464 9.63186C10.5049 9.61969 10.4604 9.62444 10.4225 9.64507C10.3845 9.66571 10.3563 9.70054 10.3441 9.74193L10.2416 10.0874C10.1692 10.3318 10.0368 10.5541 9.85647 10.7341C9.67616 10.9142 9.45368 11.0463 9.20929 11.1184L8.86737 11.2193C8.83368 11.2291 8.80406 11.2496 8.78294 11.2776C8.76183 11.3056 8.75036 11.3397 8.75024 11.3748C8.75013 11.4099 8.76138 11.4441 8.78231 11.4723C8.80324 11.5005 8.83272 11.5211 8.86635 11.5312L9.2154 11.6356C9.45811 11.7083 9.67893 11.8402 9.85799 12.0195C10.037 12.1987 10.1687 12.4197 10.2411 12.6625L10.3441 13.009C10.3541 13.0426 10.3748 13.0721 10.4029 13.093C10.431 13.1139 10.4652 13.1252 10.5002 13.1252C10.5353 13.1252 10.5694 13.1139 10.5976 13.093C10.6257 13.0721 10.6463 13.0426 10.6564 13.009L10.7594 12.6625C10.8318 12.4197 10.9634 12.1987 11.1425 12.0195C11.3216 11.8402 11.5424 11.7083 11.7851 11.6356L12.1336 11.5312C12.1673 11.5213 12.1968 11.5007 12.2179 11.4726C12.2389 11.4445 12.2502 11.4103 12.2502 11.3752C12.2502 11.3401 12.2389 11.306 12.2179 11.2779C12.1968 11.2498 12.1673 11.2292 12.1336 11.2193L11.7912 11.1184C11.5468 11.0463 11.3243 10.9142 11.144 10.7341C10.9637 10.5541 10.8313 10.3318 10.7588 10.0874L10.6564 9.74193C10.6487 9.71587 10.6346 9.69214 10.6154 9.67291Z" fill="#976AEB"/>
+                </svg>
+                销售记录
+              </button>
+            </div>
+          </div>
+
+          <div class="history" data-history-sheet aria-label="历史会话">
+            <span>历史会话:</span>
+            <button class="history-title" type="button" data-open-conversation="待跟进客户每日收集通知">待跟进客户每日收集通知</button>
+            <button class="history-toggle" type="button" data-history-sheet aria-label="展开历史会话列表">
+              <svg class="icon" viewBox="0 0 24 24"><path d="m8 9 4-4 4 4"></path><path d="m16 15-4 4-4-4"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-layer" aria-live="polite">
+          <div class="user-bubble" id="user-bubble" hidden></div>
+          <div class="ai-answer" id="ai-answer">
+            <span class="mini-avatar"><img src="./images/shareagent-avatar.png" alt="" /></span>
+            <div class="answer-card">
+              <strong>ShareAgent</strong>
+              已收到，我会根据当前上下文生成可执行的下一步建议。
+            </div>
+          </div>
+        </div>
+
+        <form class="composer" id="composer" autocomplete="off">
+          <svg class="composer-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4.55334 6.5838C4.70508 6.68926 4.84908 6.81212 4.98278 6.95237C6.06083 8.08324 6.06083 9.91676 4.98278 11.0476C4.84908 11.1879 4.70508 11.3107 4.55334 11.4162L2.25 9L4.55334 6.5838ZM7.70077 3.28215C7.83942 3.40703 7.9746 3.53836 8.10596 3.67616C10.9089 6.61643 10.9089 11.3836 8.10596 14.3238C7.9746 14.4616 7.83942 14.593 7.70077 14.7179L6.52509 13.4846C6.66625 13.3632 6.80301 13.2335 6.93477 13.0953C9.09087 10.8335 9.09087 7.16649 6.93477 4.90474C6.80301 4.76652 6.66625 4.63675 6.52509 4.51543L7.70077 3.28215ZM10.8296 0C10.965 0.129348 11.0983 0.262664 11.2291 0.399947C15.757 5.14963 15.757 12.8504 11.2291 17.6001C11.0983 17.7373 10.965 17.8707 10.8296 18L9.65689 16.7698C9.7932 16.6417 9.92694 16.5089 10.0579 16.3715C13.9389 12.3003 13.9389 5.69968 10.0579 1.62853C9.92694 1.49111 9.7932 1.35833 9.65689 1.23018L10.8296 0Z" fill="#181C25"/>
+          </svg>
+          <input class="composer-input" id="composer-input" placeholder="发消息或按住说话" aria-label="发消息或按住说话" />
+          <div class="composer-tools">
+            <svg class="composer-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9.21094 0.5625C10.9584 0.5625 12.375 1.9791 12.375 3.72656V9C12.375 10.7475 10.9584 12.1641 9.21094 12.1641C7.46347 12.1641 6.04688 10.7475 6.04688 9V3.72656C6.04688 1.9791 7.46347 0.5625 9.21094 0.5625ZM9.21094 1.61719C8.09892 1.61719 7.18787 2.47768 7.10735 3.56914L7.10156 3.72656V9C7.10156 10.165 8.04596 11.1094 9.21094 11.1094C10.323 11.1094 11.234 10.2489 11.3145 9.15743L11.3203 9V3.72656C11.3203 2.56159 10.3759 1.61719 9.21094 1.61719Z" fill="#181C25"/>
+              <path d="M3.9375 9V7.94531H4.99219V9C4.99219 11.33 6.88099 13.2188 9.21094 13.2188C11.4703 13.2188 13.3148 11.4427 13.4245 9.21056L13.4297 9V7.94531H14.4844V9C14.4844 11.7345 12.4031 13.9828 9.73828 14.2474V16.3828H11.8477V17.4375H6.57422V16.3828H8.68359V14.2474C6.01876 13.9828 3.9375 11.7345 3.9375 9Z" fill="#181C25"/>
+            </svg>
+            <svg class="composer-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9.7199 9.73454V15.0077C9.7199 15.4177 9.39133 15.75 8.98604 15.75C8.58074 15.75 8.25218 15.4177 8.25218 15.0077V9.73454H2.98386C2.57856 9.73454 2.25 9.40222 2.25 8.99227C2.25 8.58232 2.57856 8.25 2.98386 8.25H8.25218V2.99227C8.25218 2.58232 8.58074 2.25 8.98604 2.25C9.39135 2.25 9.7199 2.58232 9.7199 2.99227V8.25H15.0161C15.4214 8.25 15.75 8.58232 15.75 8.99227C15.75 9.40222 15.4214 9.73454 15.0161 9.73454H9.7199Z" fill="#181C25"/>
+            </svg>
+            <button class="send" type="submit" aria-label="发送">
+              <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M15.5274 1.1409C15.649 1.47492 15.6486 1.83645 15.5405 2.16185L11.4813 14.4934C11.1842 15.3591 10.2507 15.8289 9.38616 15.5545C8.98127 15.4093 8.64454 15.1253 8.4449 14.7458L6.42344 10.9318C6.23834 10.5825 6.30276 10.1534 6.58226 9.87391L9.71903 6.73714C9.94866 6.50565 9.95091 6.13084 9.71916 5.88856C9.48436 5.65667 9.10953 5.65427 8.87058 5.88869L5.73612 9.02315C5.45552 9.30375 5.02427 9.36746 4.67451 9.17998L0.861905 7.13629C0.0661579 6.71064 -0.235892 5.70996 0.199298 4.90887C0.395467 4.53281 0.732279 4.25059 1.14082 4.12644L13.4591 0.0805006C14.3226 -0.199129 15.2551 0.273289 15.5274 1.1409Z" fill="white"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="conversation-page" id="conversation-page" aria-label="会话详情" aria-hidden="true">
+        <div class="statusbar" aria-hidden="true"></div>
+        <header class="conversation-top">
+          <button class="conversation-menu" type="button" data-close-conversation aria-label="返回智能体首页">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h11"></path></svg>
+          </button>
+          <button class="conversation-agent" type="button" data-close-conversation>
+            <span>智能体</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg>
+          </button>
+          <div class="conversation-actions">
+            <button class="conversation-new" type="button" data-toast="新建会话" aria-label="新建会话">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8.00008 1.68994C11.9401 1.68994 15.1601 4.43994 15.1601 7.87994C15.1601 7.90994 15.1601 7.93994 15.1501 7.97994C15.1501 8.00994 15.1401 8.03994 15.1201 8.06994C15.1101 8.09994 15.1001 8.12994 15.0801 8.15994C15.0601 8.17994 15.0401 8.20994 15.0201 8.22994C14.9901 8.25994 14.9701 8.27994 14.9401 8.28994C14.9101 8.30994 14.8801 8.32994 14.8501 8.33994L14.7601 8.36994C14.7301 8.37994 14.6901 8.37994 14.6601 8.37994C14.6301 8.37994 14.6001 8.37994 14.5601 8.36994L14.4701 8.33994C14.4381 8.32717 14.4078 8.31037 14.3801 8.28994C14.3521 8.2761 14.328 8.25547 14.3101 8.22994C14.2845 8.21198 14.2639 8.18792 14.2501 8.15994C14.2297 8.13219 14.2128 8.10195 14.2001 8.06994L14.1701 7.97994C14.1601 7.93994 14.1601 7.90994 14.1601 7.87994C14.1601 5.02994 11.4201 2.68994 8.00008 2.68994C4.57008 2.68994 1.83008 5.02994 1.83008 7.87994C1.83008 8.96994 2.23008 10.0199 2.98008 10.8899C3.02008 10.9399 3.05008 10.9899 3.07008 11.0399C3.09008 11.0999 3.10008 11.1599 3.10008 11.2199V13.4299L4.91008 12.4899C4.96008 12.4599 5.02008 12.4399 5.08008 12.4299C5.15008 12.4299 5.21008 12.4299 5.27008 12.4499L5.34008 12.4699C5.47008 12.5299 5.61008 12.5899 5.74008 12.6499C6.42008 12.9299 6.98008 13.0599 7.68008 13.0599C7.71008 13.0599 7.74008 13.0699 7.78008 13.0699L7.87008 13.0999C7.90008 13.1099 7.93008 13.1299 7.96008 13.1499C7.98008 13.1699 8.01008 13.1899 8.03008 13.2099C8.05008 13.2299 8.08008 13.2599 8.09008 13.2899C8.11008 13.3099 8.13008 13.3399 8.14008 13.3699C8.15008 13.3999 8.16008 13.4299 8.17008 13.4699C8.17008 13.4999 8.18008 13.5299 8.18008 13.5599C8.18008 13.5999 8.17008 13.6299 8.17008 13.6599C8.16008 13.6899 8.15008 13.7199 8.14008 13.7599C8.13008 13.7899 8.11008 13.8099 8.09008 13.8399C8.08008 13.8699 8.05008 13.8899 8.03008 13.9199C8.01008 13.9399 7.98008 13.9599 7.96008 13.9799C7.93008 13.9999 7.90008 14.0099 7.87008 14.0299C7.84008 14.0399 7.81008 14.0499 7.78008 14.0499C7.74008 14.0599 7.71008 14.0599 7.68008 14.0599C6.83008 14.0599 6.14008 13.8999 5.36008 13.5699C5.28604 13.5417 5.21268 13.5117 5.14008 13.4799L5.16008 13.4899L3.32008 14.4399C3.27008 14.4699 3.22008 14.4899 3.18008 14.4999C3.13008 14.5199 3.08008 14.5299 3.03008 14.5299C2.98008 14.5399 2.93008 14.5399 2.88008 14.5399C2.82008 14.5299 2.77008 14.5299 2.72008 14.5099C2.68008 14.4999 2.63008 14.4799 2.58008 14.4599C2.54008 14.4399 2.49008 14.4199 2.45008 14.3899C2.41008 14.3599 2.37008 14.3199 2.33008 14.2899L2.24008 14.1699L2.19008 14.0899C2.13096 13.972 2.10014 13.8419 2.10008 13.7099V11.3999L2.07008 11.3599C1.32008 10.4099 0.880078 9.27994 0.830078 8.09994V7.87994C0.830078 4.43994 4.05008 1.68994 8.00008 1.68994ZM12.0001 8.68994C12.3101 8.68994 12.5601 8.94994 12.5601 9.25994V10.9599H14.2601C14.2901 10.9599 14.3201 10.9599 14.3601 10.9699C14.3901 10.9699 14.4201 10.9799 14.4501 10.9899C14.4801 10.9999 14.5001 11.0199 14.5301 11.0299C14.5601 11.0499 14.5901 11.0599 14.6101 11.0799C14.6301 11.0999 14.6601 11.1199 14.6801 11.1499C14.7001 11.1699 14.7201 11.1899 14.7401 11.2199C14.7501 11.2499 14.7701 11.2699 14.7801 11.2999L14.8101 11.3899L14.8201 11.4599L14.8301 11.5299C14.8301 11.8399 14.5801 12.0999 14.2601 12.0999H12.5601V13.7899C12.5601 13.8299 12.5601 13.8599 12.5501 13.8899C12.5501 13.9199 12.5401 13.9499 12.5301 13.9799C12.5201 14.0099 12.5101 14.0399 12.4901 14.0599C12.4801 14.0899 12.4601 14.1199 12.4401 14.1399C12.4201 14.1699 12.4001 14.1899 12.3801 14.2099C12.3501 14.2299 12.3301 14.2499 12.3001 14.2699C12.2801 14.2899 12.2501 14.2999 12.2201 14.3099C12.1901 14.3299 12.1601 14.3399 12.1301 14.3399L12.0601 14.3599H12.0001C11.9601 14.3599 11.9201 14.3599 11.8801 14.3499L11.7801 14.3199C11.7401 14.2999 11.7101 14.2899 11.6801 14.2699C11.6501 14.2499 11.6201 14.2199 11.5901 14.1999C11.5701 14.1699 11.5401 14.1399 11.5201 14.1099C11.5001 14.0799 11.4901 14.0499 11.4701 14.0099L11.4401 13.9099C11.4301 13.8699 11.4301 13.8299 11.4301 13.7899V12.0999H9.73008C9.70008 12.0899 9.67008 12.0899 9.63008 12.0899L9.54008 12.0599C9.51008 12.0499 9.49008 12.0399 9.46008 12.0299C9.43166 12.0124 9.40489 11.9923 9.38008 11.9699C9.36008 11.9599 9.33008 11.9299 9.31008 11.9099C9.29008 11.8899 9.27008 11.8599 9.25008 11.8399C9.24008 11.8099 9.22008 11.7799 9.21008 11.7499C9.19704 11.721 9.18699 11.6909 9.18008 11.6599L9.17008 11.5899L9.16008 11.5299C9.16008 11.2199 9.42008 10.9599 9.73008 10.9599H11.4301V9.25994C11.4301 9.22994 11.4301 9.19994 11.4401 9.16994C11.4401 9.13994 11.4501 9.10994 11.4601 9.07994C11.4701 9.04994 11.4801 9.01994 11.5001 8.98994C11.5101 8.95994 11.5301 8.93994 11.5501 8.90994C11.5701 8.88994 11.5901 8.86994 11.6101 8.83994C11.6401 8.81994 11.6601 8.79994 11.6901 8.78994C11.7101 8.76994 11.7401 8.75994 11.7701 8.73994L11.8601 8.70994L11.9301 8.69994H11.9801L12.0001 8.68994Z" fill="#181C25"/>
+              </svg>
+            </button>
+            <button class="conversation-back" type="button" data-reset-index aria-label="回到首页">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M5.49698 8.43205L4.80096 7.77586L1.5 10.8879L4.80096 14L5.49698 13.3438L3.38399 11.3524L9.98108 11.3519C12.4744 11.3519 14.5 9.48465 14.5 7.17596C14.5 4.93324 12.5885 3.10706 10.1936 3.00454L9.98108 3H5.95433V3.92799H9.98108C11.9356 3.92799 13.5157 5.38452 13.5157 7.17596C13.5157 8.90769 12.0392 10.3265 10.1752 10.4191L9.98108 10.4239L3.38399 10.4244L5.49698 8.43205Z" fill="#181C25"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+        <div class="conversation-body">
+          <div class="task-query">帮我创建一个客户：橘子科技，是个重要客户，互联网行业，联系人是李明，电话是13500000000</div>
+          <div class="task-status">
+            <button type="button" data-toast="查看处理步骤">
+              <span>已处理3个步骤</span>
+              <svg class="icon" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+          <div class="task-lead">已生成客户创建草稿，请确认：</div>
+          <article class="customer-card">
+            <div class="customer-badge">新建 · 客户</div>
+            <div class="customer-name">橘子科技有限责任公司</div>
+            <div class="customer-sub">新客户 · 互联网行业</div>
+            <div class="customer-fields">
+              <span>联系人</span><strong>李明</strong>
+              <span>手机号</span><strong>13500000000</strong>
+              <span>客户级别</span><strong>重要客户</strong>
+              <span>所属行业</span><strong>互联网</strong>
+            </div>
+            <button class="expand-link" type="button" data-toast="展开全部字段">
+              <svg class="icon" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+              <span>展开全部</span>
+            </button>
+            <div class="customer-actions">
+              <button class="customer-action primary" type="button" data-toast="已创建客户">创建</button>
+              <button class="customer-action" type="button" data-toast="编辑客户草稿">编辑</button>
+              <button class="customer-action" type="button" data-close-conversation>取消</button>
+            </div>
+          </article>
+          <div class="waiting-chip">
+            <span class="waiting-spinner" aria-hidden="true"></span>
+            <span>等待您的回答...</span>
+          </div>
+          <div class="sent-message" id="sent-message" hidden></div>
+          <div class="thinking-message" id="thinking-message">
+            <span class="waiting-spinner" aria-hidden="true"></span>
+            <span>思考中...</span>
+          </div>
+          <div class="ai-reply-card" id="ai-reply-card">已收到，我会根据你的补充继续处理，并更新当前客户创建草稿。</div>
+        </div>
+        <form class="composer conversation-composer" id="conversation-composer" autocomplete="off">
+          <svg class="composer-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4.55334 6.5838C4.70508 6.68926 4.84908 6.81212 4.98278 6.95237C6.06083 8.08324 6.06083 9.91676 4.98278 11.0476C4.84908 11.1879 4.70508 11.3107 4.55334 11.4162L2.25 9L4.55334 6.5838ZM7.70077 3.28215C7.83942 3.40703 7.9746 3.53836 8.10596 3.67616C10.9089 6.61643 10.9089 11.3836 8.10596 14.3238C7.9746 14.4616 7.83942 14.593 7.70077 14.7179L6.52509 13.4846C6.66625 13.3632 6.80301 13.2335 6.93477 13.0953C9.09087 10.8335 9.09087 7.16649 6.93477 4.90474C6.80301 4.76652 6.66625 4.63675 6.52509 4.51543L7.70077 3.28215ZM10.8296 0C10.965 0.129348 11.0983 0.262664 11.2291 0.399947C15.757 5.14963 15.757 12.8504 11.2291 17.6001C11.0983 17.7373 10.965 17.8707 10.8296 18L9.65689 16.7698C9.7932 16.6417 9.92694 16.5089 10.0579 16.3715C13.9389 12.3003 13.9389 5.69968 10.0579 1.62853C9.92694 1.49111 9.7932 1.35833 9.65689 1.23018L10.8296 0Z" fill="#181C25"/>
+          </svg>
+          <input class="composer-input" id="conversation-input" placeholder="发消息或按住说话" aria-label="发消息或按住说话" />
+          <div class="composer-tools">
+            <svg class="composer-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9.21094 0.5625C10.9584 0.5625 12.375 1.9791 12.375 3.72656V9C12.375 10.7475 10.9584 12.1641 9.21094 12.1641C7.46347 12.1641 6.04688 10.7475 6.04688 9V3.72656C6.04688 1.9791 7.46347 0.5625 9.21094 0.5625ZM9.21094 1.61719C8.09892 1.61719 7.18787 2.47768 7.10735 3.56914L7.10156 3.72656V9C7.10156 10.165 8.04596 11.1094 9.21094 11.1094C10.323 11.1094 11.234 10.2489 11.3145 9.15743L11.3203 9V3.72656C11.3203 2.56159 10.3759 1.61719 9.21094 1.61719Z" fill="#181C25"/>
+              <path d="M3.9375 9V7.94531H4.99219V9C4.99219 11.33 6.88099 13.2188 9.21094 13.2188C11.4703 13.2188 13.3148 11.4427 13.4245 9.21056L13.4297 9V7.94531H14.4844V9C14.4844 11.7345 12.4031 13.9828 9.73828 14.2474V16.3828H11.8477V17.4375H6.57422V16.3828H8.68359V14.2474C6.01876 13.9828 3.9375 11.7345 3.9375 9Z" fill="#181C25"/>
+            </svg>
+            <svg class="composer-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9.7199 9.73454V15.0077C9.7199 15.4177 9.39133 15.75 8.98604 15.75C8.58074 15.75 8.25218 15.4177 8.25218 15.0077V9.73454H2.98386C2.57856 9.73454 2.25 9.40222 2.25 8.99227C2.25 8.58232 2.57856 8.25 2.98386 8.25H8.25218V2.99227C8.25218 2.58232 8.58074 2.25 8.98604 2.25C9.39135 2.25 9.7199 2.58232 9.7199 2.99227V8.25H15.0161C15.4214 8.25 15.75 8.58232 15.75 8.99227C15.75 9.40222 15.4214 9.73454 15.0161 9.73454H9.7199Z" fill="#181C25"/>
+            </svg>
+            <button class="send" type="submit" aria-label="发送">
+              <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M15.5274 1.1409C15.649 1.47492 15.6486 1.83645 15.5405 2.16185L11.4813 14.4934C11.1842 15.3591 10.2507 15.8289 9.38616 15.5545C8.98127 15.4093 8.64454 15.1253 8.4449 14.7458L6.42344 10.9318C6.23834 10.5825 6.30276 10.1534 6.58226 9.87391L9.71903 6.73714C9.94866 6.50565 9.95091 6.13084 9.71916 5.88856C9.48436 5.65667 9.10953 5.65427 8.87058 5.88869L5.73612 9.02315C5.45552 9.30375 5.02427 9.36746 4.67451 9.17998L0.861905 7.13629C0.0661579 6.71064 -0.235892 5.70996 0.199298 4.90887C0.395467 4.53281 0.732279 4.25059 1.14082 4.12644L13.4591 0.0805006C14.3226 -0.199129 15.2551 0.273289 15.5274 1.1409Z" fill="white"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <div class="sheet-scrim" id="history-scrim" data-close-history-sheet aria-hidden="true"></div>
+      <section class="history-sheet" id="history-sheet" aria-label="全部历史会话" aria-hidden="true">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <div class="sheet-head">
+          <span>历史会话</span>
+          <button class="sheet-close" type="button" data-close-history-sheet aria-label="关闭历史会话列表">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <div class="history-list">
+          <button class="history-item" type="button" data-open-conversation="如何提升客户续约率和留存">
+            <svg class="history-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="none">
+              <path d="M1.05 13.5625L1.42536 10.9696C0.530951 9.86733 0 8.4918 0 7C0 3.37563 3.13401 0.4375 7 0.4375C10.866 0.4375 14 3.37563 14 7C14 10.6244 10.866 13.5625 7 13.5625C5.87231 13.5625 4.8069 13.3125 3.86339 12.8684L1.05 13.5625ZM3.95517 11.9445L4.23602 12.0767C5.08484 12.4763 6.0251 12.6875 7 12.6875C10.3949 12.6875 13.125 10.128 13.125 7C13.125 3.87195 10.3949 1.3125 7 1.3125C3.60508 1.3125 0.875 3.87195 0.875 7C0.875 8.25027 1.30996 9.43869 2.10481 10.4182L2.34622 10.7158L2.10216 12.4017L3.95517 11.9445Z" fill="#181C25"/>
+            </svg>
+            <strong>如何提升客户续约率和留存</strong>
+            <span class="history-meta">19:01</span>
+          </button>
+          <button class="history-item" type="button" data-open-conversation="帮我分析这批销售漏斗数据">
+            <svg class="history-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="none">
+              <g clip-path="url(#history-analysis-icon)">
+                <path d="M11.3725 0.874023H2.62402C1.65753 0.874023 0.874023 1.65753 0.874023 2.62402V11.3725C0.874023 12.3389 1.65753 13.1224 2.62402 13.1224H11.3725C12.3389 13.1224 13.1224 12.3389 13.1224 11.3725V2.62402C13.1224 1.65753 12.3389 0.874023 11.3725 0.874023ZM12.2483 11.3748C12.2484 11.4897 12.2258 11.6034 12.1819 11.7095C12.1379 11.8155 12.0735 11.9119 11.9922 11.9931C11.911 12.0742 11.8145 12.1385 11.7084 12.1823C11.6022 12.2261 11.4885 12.2485 11.3736 12.2483H2.62604C2.39209 12.2483 2.17117 12.1584 2.00572 11.9929C1.84027 11.8275 1.74821 11.6088 1.74821 11.3748V2.62486C1.74862 2.39228 1.84128 2.16936 2.00585 2.00501C2.17042 1.84067 2.39346 1.74831 2.62604 1.74821H11.3736C11.4886 1.74832 11.6025 1.77109 11.7087 1.81521C11.8149 1.85934 11.9113 1.92395 11.9926 2.00535C12.0738 2.08676 12.1382 2.18337 12.182 2.28967C12.2259 2.39596 12.2484 2.50986 12.2483 2.62486V11.3748Z" fill="#181C25"/>
+                <path d="M10.8282 4.81039H7.32819C7.21226 4.81039 7.10109 4.85644 7.01912 4.93841C6.93714 5.02038 6.89109 5.13156 6.89109 5.24748C6.89109 5.3634 6.93714 5.47458 7.01912 5.55655C7.10109 5.63852 7.21226 5.68457 7.32819 5.68457H10.8282C10.9441 5.68457 11.0553 5.63852 11.1372 5.55655C11.2192 5.47458 11.2653 5.3634 11.2653 5.24748C11.2653 5.13156 11.2192 5.02038 11.1372 4.93841C11.0553 4.85644 10.9441 4.81039 10.8282 4.81039ZM10.8282 8.31206H7.32819C7.21226 8.31206 7.10109 8.35811 7.01912 8.44008C6.93714 8.52205 6.89109 8.63322 6.89109 8.74915C6.89109 8.86507 6.93714 8.97625 7.01912 9.05822C7.10109 9.14019 7.21226 9.18624 7.32819 9.18624H10.8282C10.9441 9.18624 11.0553 9.14019 11.1372 9.05822C11.2192 8.97625 11.2653 8.86507 11.2653 8.74915C11.2653 8.63322 11.2192 8.52205 11.1372 8.44008C11.0553 8.35811 10.9441 8.31206 10.8282 8.31206ZM4.70322 7.21864C3.85753 7.21864 3.17217 7.9042 3.17217 8.74969C3.17217 9.59518 3.85773 10.2807 4.70322 10.2807C5.54871 10.2807 6.23427 9.59518 6.23427 8.74969C6.23427 7.9042 5.5489 7.21864 4.70322 7.21864ZM5.16782 9.21449C5.06032 9.32189 4.9189 9.3887 4.76766 9.40352C4.61643 9.41835 4.46473 9.38029 4.33841 9.29581C4.21209 9.21133 4.11897 9.08568 4.07491 8.94024C4.03085 8.79481 4.03858 8.6386 4.09678 8.49822C4.15497 8.35785 4.26004 8.24199 4.39408 8.17039C4.52812 8.0988 4.68283 8.07589 4.83187 8.10557C4.9809 8.13525 5.11503 8.21569 5.21141 8.33317C5.30779 8.45066 5.36046 8.59793 5.36044 8.74989C5.36065 8.83623 5.34374 8.92175 5.31068 9.00151C5.27762 9.08127 5.22906 9.15368 5.16782 9.21454V9.21449ZM5.70665 4.06585L4.26568 5.50677L3.69979 4.94083C3.61781 4.85885 3.50664 4.8128 3.39071 4.8128C3.27479 4.8128 3.16361 4.85885 3.08164 4.94083C2.99966 5.0228 2.95361 5.13398 2.95361 5.2499C2.95361 5.36583 2.99966 5.477 3.08164 5.55898L3.95661 6.434C3.9972 6.47459 4.04538 6.50678 4.09841 6.52875C4.15144 6.55072 4.20828 6.56202 4.26568 6.56202C4.32308 6.56202 4.37992 6.55072 4.43295 6.52875C4.48599 6.50678 4.53417 6.47459 4.57476 6.434L6.32475 4.684C6.4058 4.60185 6.45108 4.49097 6.45069 4.37556C6.4503 4.26015 6.40428 4.14958 6.32268 4.06797C6.24108 3.98637 6.13051 3.94034 6.0151 3.93994C5.8997 3.93955 5.78881 3.98481 5.70665 4.06585Z" fill="#181C25"/>
+              </g>
+              <defs>
+                <clipPath id="history-analysis-icon">
+                  <rect width="14" height="14" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <strong>帮我分析这批销售漏斗数据</strong>
+            <span class="history-meta">17:26</span>
+          </button>
+          <button class="history-item" type="button" data-open-conversation="起草一封客户流失挽回邮件">
+            <svg class="icon history-item-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.9 8.9 0 0 1-4.2-1.05L3 20l1.05-4.1A8.3 8.3 0 0 1 4 11.5a8.5 8.5 0 1 1 17 0Z"></path></svg>
+            <strong>起草一封客户流失挽回邮件</strong>
+            <span class="history-meta">13:07</span>
+          </button>
+          <button class="history-item" type="button" data-open-conversation="制定Q3大客户拓展话术">
+            <svg class="icon history-item-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.9 8.9 0 0 1-4.2-1.05L3 20l1.05-4.1A8.3 8.3 0 0 1 4 11.5a8.5 8.5 0 1 1 17 0Z"></path></svg>
+            <strong>制定Q3大客户拓展话术</strong>
+            <span class="history-meta">昨天 9:50</span>
+          </button>
+          <button class="history-item" type="button" data-open-conversation="如何搭建CRM客户分级体系">
+            <svg class="icon history-item-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.9 8.9 0 0 1-4.2-1.05L3 20l1.05-4.1A8.3 8.3 0 0 1 4 11.5a8.5 8.5 0 1 1 17 0Z"></path></svg>
+            <strong>如何搭建CRM客户分级体系</strong>
+            <span class="history-meta">昨天 9:36</span>
+          </button>
+        </div>
+      </section>
+
+      <nav class="tabbar" aria-label="底部导航">
+        <button class="tab" type="button" data-tab="im" aria-label="企信">
+          <svg class="icon tab-brand-icon tab-icon-default" xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 18 17" fill="none">
+            <path d="M1.35 16.875L1.8326 13.5413C0.682652 12.1241 0 10.3555 0 8.4375C0 3.7776 4.02944 0 9 0C13.9706 0 18 3.7776 18 8.4375C18 13.0974 13.9706 16.875 9 16.875C7.55011 16.875 6.1803 16.5536 4.96721 15.9826L1.35 16.875ZM5.08522 14.7948L5.44632 14.9647C6.53766 15.4784 7.74655 15.75 9 15.75C13.3649 15.75 16.875 12.4593 16.875 8.4375C16.875 4.41573 13.3649 1.125 9 1.125C4.63511 1.125 1.125 4.41573 1.125 8.4375C1.125 10.045 1.68424 11.573 2.70618 12.8324L3.01657 13.2149L2.70278 15.3825L5.08522 14.7948Z" fill="#181C25"/>
+          </svg>
+          <svg class="icon tab-brand-icon tab-icon-active" xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 18 17" fill="none">
+            <path d="M2.34137 16.6304C1.86769 16.7473 1.42639 16.3473 1.49629 15.8644L1.8326 13.5413C0.682652 12.1241 0 10.3555 0 8.4375C0 3.7776 4.02944 0 9 0C13.9706 0 18 3.7776 18 8.4375C18 13.0974 13.9706 16.875 9 16.875C7.55011 16.875 6.1803 16.5536 4.96721 15.9826L2.34137 16.6304Z" fill="#FF9B29"/>
+          </svg>
+          <span>企信</span>
+        </button>
+        <button class="tab active" type="button" data-tab="ai" aria-label="Agent">
+          <svg class="icon tab-brand-icon tab-icon-default" xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none">
+            <path d="M11.6045 6.71017C11.8376 6.51896 12.1802 6.55441 12.3702 6.78903C12.5602 7.02371 12.5255 7.36864 12.2924 7.55997L10.7734 8.80716L12.2924 10.0544C12.5256 10.2457 12.5604 10.5916 12.3702 10.8263C12.1801 11.0608 11.8376 11.0954 11.6045 10.9041L9.56976 9.23465C9.44381 9.13124 9.37549 8.98259 9.36951 8.83102V8.78329C9.37555 8.6319 9.44402 8.48405 9.56976 8.38071L11.6045 6.71017Z" fill="#181C25"/>
+            <path d="M5.89355 6.59915C6.21436 6.59918 6.47454 6.86142 6.47461 7.18436V10.4123C6.47449 10.7352 6.21433 10.9965 5.89355 10.9965C5.57275 10.9965 5.31262 10.7352 5.3125 10.4123V7.18436C5.31257 6.8614 5.57272 6.59915 5.89355 6.59915Z" fill="#181C25"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1635 0.307158C11.2875 0.0412465 11.6042 -0.0741625 11.8701 0.0498342L13.218 0.678618C13.4837 0.802549 13.5989 1.11838 13.4753 1.38418L13.2501 1.86563C13.1261 2.1315 12.8104 2.24686 12.5446 2.12295L12.143 1.93619L11.5287 3.14914C14.9032 3.49654 16.8213 4.75663 17 8.91092C17 14.7021 14.6313 14.8605 8.5 14.8605C2.36872 14.8605 4.30866e-05 14.7021 0 8.91092C0.178675 4.75663 2.09681 3.49654 5.47125 3.14914L4.85699 1.93619L4.45544 2.12295C4.18956 2.24686 3.87386 2.1315 3.74988 1.86563L3.52472 1.38418C3.4011 1.11838 3.51632 0.802549 3.78204 0.678618L5.12988 0.0498342C5.39579 -0.0741625 5.71249 0.0412465 5.83649 0.307158L6.06061 0.788604C6.18451 1.05449 6.06915 1.37019 5.80328 1.49417L5.43494 1.66641L6.1571 3.09103C6.87973 3.04326 7.6616 3.02774 8.5 3.02774C9.3384 3.02774 10.1203 3.04326 10.8429 3.09103L11.5651 1.66641L11.1967 1.49417C10.9308 1.37019 10.8155 1.05449 10.9394 0.788604L11.1635 0.307158ZM8.5 3.98025C7.58493 3.98025 6.76044 4.03283 6.01807 4.10269C5.69258 4.13362 5.36744 4.16932 5.04272 4.20749C4.06358 4.32259 3.43763 4.54623 2.88971 4.84457C2.36964 5.12776 1.98367 5.51892 1.711 6.1094C1.4258 6.72705 1.13306 7.61542 1.13306 8.91092C1.13308 11.552 1.74628 12.2215 2.59711 12.7075C3.09885 12.9941 3.80297 13.3017 4.80927 13.4172C5.81208 13.5323 7.024 13.5573 8.5 13.5573C9.976 13.5573 11.1879 13.5323 12.1907 13.4172C13.197 13.3017 13.9012 12.9941 14.4029 12.7075C15.2537 12.2215 15.8669 11.552 15.8669 8.91092C15.8669 7.6154 15.569 6.72705 15.2838 6.1094C15.0111 5.51891 14.6252 5.12776 14.1051 4.84457C13.5573 4.54632 12.9362 4.32256 11.9573 4.20749C11.6326 4.16932 11.3074 4.13362 10.9819 4.10269C10.2396 4.03283 9.41507 3.98025 8.5 3.98025Z" fill="#181C25"/>
+          </svg>
+          <svg class="icon tab-brand-icon tab-icon-active" xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1635 0.325226C11.2875 0.0436728 11.6042 -0.078525 11.8701 0.0527656L13.218 0.718537C13.4837 0.849758 13.5989 1.18417 13.4753 1.46561L13.2501 1.97537C13.1261 2.25689 12.8104 2.37903 12.5446 2.24783L12.143 2.05008L11.5287 3.33438C14.9032 3.70222 16.8213 5.03643 17 9.43509C17 15.5669 14.6313 15.7347 8.5 15.7347C2.36872 15.7347 4.30866e-05 15.5669 0 9.43509C0.178675 5.03643 2.09681 3.70222 5.47125 3.33438L4.85699 2.05008L4.45544 2.24783C4.18956 2.37903 3.87386 2.25689 3.74988 1.97537L3.52472 1.46561C3.4011 1.18417 3.51632 0.849758 3.78204 0.718537L5.12988 0.0527656C5.39579 -0.078525 5.71249 0.0436728 5.83649 0.325226L6.06061 0.834992C6.18451 1.11652 6.06915 1.45079 5.80328 1.58206L5.43494 1.76444L6.1571 3.27286C6.87973 3.22228 7.6616 3.20584 8.5 3.20584C9.3384 3.20584 10.1203 3.22228 10.8429 3.27286L11.5651 1.76444L11.1967 1.58206C10.9308 1.45079 10.8155 1.11652 10.9394 0.834992L11.1635 0.325226ZM12.3702 7.18839C12.1802 6.93997 11.8376 6.90242 11.6045 7.10489L9.56976 8.87369C9.44402 8.98311 9.37555 9.13966 9.36951 9.29996V9.3505C9.37549 9.51098 9.44381 9.66837 9.56976 9.77786L11.6045 11.5456C11.8376 11.7481 12.1801 11.7115 12.3702 11.4632C12.5604 11.2147 12.5256 10.8484 12.2924 10.6458L10.7734 9.32523L12.2924 8.00467C12.5255 7.80209 12.5602 7.43687 12.3702 7.18839ZM5.89355 6.98734C5.57272 6.98734 5.31257 7.26501 5.3125 7.60696V11.0248C5.31262 11.3667 5.57275 11.6433 5.89355 11.6433C6.21433 11.6433 6.47449 11.3667 6.47461 11.0248V7.60696C6.47454 7.26503 6.21436 6.98737 5.89355 6.98734Z" fill="#FF8000"/>
+          </svg>
+          <span>Agent</span>
+        </button>
+        <button class="tab" type="button" data-tab="work" aria-label="工作">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16v13H4z"></path><path d="M9 7V4h6v3"></path></svg>
+          <span>工作</span>
+        </button>
+        <button class="tab" type="button" data-tab="crm" aria-label="CRM">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 2"></path></svg>
+          <span>CRM</span>
+        </button>
+        <button class="tab" type="button" data-tab="apps" aria-label="应用">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"></rect><rect x="14" y="4" width="6" height="6"></rect><rect x="4" y="14" width="6" height="6"></rect><rect x="14" y="14" width="6" height="6"></rect></svg>
+          <span>应用</span>
+        </button>
+        <button class="tab" type="button" data-tab="me" aria-label="我">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+          <span>我</span>
+        </button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script>
+      const screens = {
+        im: document.getElementById("screen-im"),
+        ai: document.getElementById("screen-ai")
+      };
+      const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+      const toast = document.getElementById("toast");
+      const composer = document.getElementById("composer");
+      const input = document.getElementById("composer-input");
+      const conversationComposer = document.getElementById("conversation-composer");
+      const conversationInput = document.getElementById("conversation-input");
+      const userBubble = document.getElementById("user-bubble");
+      const aiAnswer = document.getElementById("ai-answer");
+      const conversationPage = document.getElementById("conversation-page");
+      const phone = document.querySelector(".phone");
+      const taskQuery = document.querySelector(".task-query");
+      const historyContent = Array.from(document.querySelectorAll(".task-query, .task-status, .task-lead, .customer-card, .waiting-chip"));
+      const conversationBody = document.querySelector(".conversation-body");
+      const sentMessage = document.getElementById("sent-message");
+      const thinkingMessage = document.getElementById("thinking-message");
+      const aiReplyCard = document.getElementById("ai-reply-card");
+      const historySheet = document.getElementById("history-sheet");
+      const historyScrim = document.getElementById("history-scrim");
+      let answerTimer;
+      let conversationCloseTimer;
+
+      function showToast(text) {
+        toast.textContent = text;
+        toast.classList.add("show");
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1400);
+      }
+
+      function setTab(tab) {
+        if (!screens[tab]) {
+          const labels = { work: "工作页待接入", crm: "CRM 页待接入", apps: "应用页待接入", me: "我的页面待接入" };
+          showToast(labels[tab] || "页面待接入");
+          return;
+        }
+
+        Object.entries(screens).forEach(([key, screen]) => {
+          screen.classList.toggle("active", key === tab);
+        });
+        tabs.forEach((button) => {
+          button.classList.toggle("active", button.dataset.tab === tab);
+        });
+
+        if (tab === "ai") {
+          userBubble.hidden = true;
+          aiAnswer.classList.remove("show");
+          window.clearTimeout(answerTimer);
+        }
+      }
+
+      function syncComposerState(field, container) {
+        container.classList.toggle("has-value", field.value.trim().length > 0);
+      }
+
+      function syncAllComposerStates() {
+        syncComposerState(input, composer);
+        syncComposerState(conversationInput, conversationComposer);
+      }
+
+      function setHistoryContentVisible(visible) {
+        historyContent.forEach((item) => {
+          item.hidden = !visible;
+        });
+      }
+
+      function resetLiveMessages() {
+        sentMessage.hidden = true;
+        sentMessage.textContent = "";
+        thinkingMessage.classList.remove("show");
+        aiReplyCard.classList.remove("show");
+      }
+
+      function sendPrompt(value) {
+        const prompt = value.trim();
+        if (!prompt) {
+          showToast("请输入消息");
+          return;
+        }
+
+        setTab("ai");
+        input.value = "";
+        conversationInput.value = "";
+        syncAllComposerStates();
+        window.clearTimeout(answerTimer);
+        userBubble.hidden = true;
+        aiAnswer.classList.remove("show");
+        if (!conversationPage.classList.contains("show")) {
+          openConversation(prompt, { showHistory: false, resetMessages: false });
+        } else if (!historyContent.every((item) => item.hidden)) {
+          setHistoryContentVisible(false);
+        }
+        sentMessage.hidden = false;
+        sentMessage.textContent = prompt;
+        thinkingMessage.classList.add("show");
+        aiReplyCard.classList.remove("show");
+        conversationBody.scrollTop = conversationBody.scrollHeight;
+        answerTimer = window.setTimeout(() => {
+          thinkingMessage.classList.remove("show");
+          aiReplyCard.classList.add("show");
+          conversationBody.scrollTop = conversationBody.scrollHeight;
+        }, 1500);
+      }
+
+      function openHistorySheet() {
+        historyScrim.classList.add("show");
+        historySheet.classList.add("show");
+        historyScrim.setAttribute("aria-hidden", "false");
+        historySheet.setAttribute("aria-hidden", "false");
+      }
+
+      function closeHistorySheet() {
+        historyScrim.classList.remove("show");
+        historySheet.classList.remove("show");
+        historyScrim.setAttribute("aria-hidden", "true");
+        historySheet.setAttribute("aria-hidden", "true");
+      }
+
+      function openConversation(title, options = {}) {
+        const { showHistory = true, resetMessages = true } = options;
+        closeHistorySheet();
+        if (title !== "待跟进客户每日收集通知") {
+          taskQuery.textContent = title;
+        } else {
+          taskQuery.textContent = "帮我创建一个客户：橘子科技，是个重要客户，互联网行业，联系人是李明，电话是13500000000";
+        }
+        setHistoryContentVisible(showHistory);
+        if (resetMessages) {
+          resetLiveMessages();
+        }
+        window.clearTimeout(conversationCloseTimer);
+        phone.classList.remove("composer-moving");
+        phone.classList.add("conversation-open");
+        conversationPage.classList.add("show");
+        conversationPage.setAttribute("aria-hidden", "false");
+        window.requestAnimationFrame(() => {
+          phone.classList.add("composer-moving");
+        });
+      }
+
+      function closeConversation() {
+        window.clearTimeout(answerTimer);
+        window.clearTimeout(conversationCloseTimer);
+        phone.classList.remove("composer-moving");
+        conversationCloseTimer = window.setTimeout(() => {
+          phone.classList.remove("conversation-open");
+        }, 220);
+        conversationPage.classList.remove("show");
+        conversationPage.setAttribute("aria-hidden", "true");
+      }
+
+      function resetToAgent() {
+        closeHistorySheet();
+        closeConversation();
+        setTab("ai");
+        input.value = "";
+        conversationInput.value = "";
+        syncAllComposerStates();
+      }
+
+      document.querySelector(".tabbar").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-tab]");
+        if (button) {
+          setTab(button.dataset.tab);
+        }
+      });
+
+      document.addEventListener("click", (event) => {
+        const conversationButton = event.target.closest("[data-open-conversation]");
+        if (conversationButton) {
+          event.stopPropagation();
+          openConversation(conversationButton.dataset.openConversation, { showHistory: true });
+          return;
+        }
+
+        const closeConversationButton = event.target.closest("[data-close-conversation]");
+        if (closeConversationButton) {
+          closeConversation();
+          return;
+        }
+
+        const resetIndexButton = event.target.closest("[data-reset-index]");
+        if (resetIndexButton) {
+          resetToAgent();
+          return;
+        }
+
+        const closeHistorySheetButton = event.target.closest("[data-close-history-sheet]");
+        if (closeHistorySheetButton) {
+          closeHistorySheet();
+          return;
+        }
+
+        const historySheetButton = event.target.closest("[data-history-sheet]");
+        if (historySheetButton) {
+          openHistorySheet();
+          return;
+        }
+
+        const quickActionButton = event.target.closest("[data-quick-action]");
+        if (quickActionButton) {
+          window.clearTimeout(answerTimer);
+          userBubble.hidden = true;
+          aiAnswer.classList.remove("show");
+          showToast(quickActionButton.dataset.quickAction);
+          return;
+        }
+
+        const promptButton = event.target.closest("[data-prompt]");
+        if (promptButton) {
+          sendPrompt(promptButton.dataset.prompt);
+          return;
+        }
+
+        const threadButton = event.target.closest("[data-thread]");
+        if (threadButton) {
+          showToast(`打开 ${threadButton.dataset.thread}`);
+          return;
+        }
+
+        const toastButton = event.target.closest("[data-toast]");
+        if (toastButton) {
+          showToast(toastButton.dataset.toast);
+        }
+      });
+
+      composer.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendPrompt(input.value);
+      });
+
+      conversationComposer.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendPrompt(conversationInput.value);
+      });
+
+      composer.addEventListener("click", (event) => {
+        if (!event.target.closest("button")) {
+          input.focus();
+        }
+      });
+
+      conversationComposer.addEventListener("click", (event) => {
+        if (!event.target.closest("button")) {
+          conversationInput.focus();
+        }
+      });
+
+      input.addEventListener("input", () => syncComposerState(input, composer));
+      conversationInput.addEventListener("input", () => syncComposerState(conversationInput, conversationComposer));
+      syncAllComposerStates();
+    </script>
+  </body>
+</html>

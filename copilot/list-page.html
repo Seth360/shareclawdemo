@@ -1,0 +1,2085 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRM 客户列表页模板</title>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem("crmAskAgentOpen") === "true") {
+          document.documentElement.classList.add("agent-persist-open");
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --brand: #ff8000;
+      --brand-soft: #fff7e8;
+      --text: #181C25;
+      --muted: #545861;
+      --weak: #91959E;
+      --line: #DEE1E8;
+      --page: #EFF1F3;
+      --panel: #fff;
+      --white: #ffffff;
+      --color-neutrals05: #dde3ec;
+      --text-strong: #181c25;
+      --text-soft: #91959e;
+      --agent-blue: #455eee;
+      --shadow-menu: 0 4px 12px rgba(0, 0, 0, 0.15);
+      --green: #26c76f;
+      --cyan: #21c4b4;
+      --blue: #2087ff;
+      --topbar: 48px;
+      --primary-nav: 64px;
+      --secondary-menu: 200px;
+      --agent-sidebar: 360px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1280px;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--page);
+      color: var(--text);
+      font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      font-size: 13px;
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; background: none; color: inherit; cursor: pointer; padding: 0; }
+    svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .hidden { display: none !important; }
+    .icon-stroke { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-fill { fill: currentColor; }
+
+    /* ===== SHELL-BASE-START: 系统壳层 CSS，不需改动，直接复用 ===== */
+    .topbar {
+      position: fixed;
+      z-index: 40;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar);
+      display: grid;
+      grid-template-columns: minmax(330px, 1fr) minmax(260px, 360px) auto;
+      align-items: center;
+      gap: 16px;
+      padding: 0 12px;
+      background: var(--page);
+      transition: right .22s ease;
+    }
+
+    .brand { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .brand span { overflow: hidden; text-overflow: ellipsis; }
+    .brand-mark { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 800; transform: rotate(-8deg); flex: 0 0 20px; }
+    .topbar-search-group { min-width: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: center; gap: 8px; }
+    .global-search { min-width: 0; height: 28px; display: grid; grid-template-columns: 1fr 28px; align-items: center; border-radius: 6px; background: #e4e6e9; overflow: hidden; color: #344054; font-size: 12px; }
+    .global-search .scope { height: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 4px; background: transparent; border-right: 1px solid #d8dee8; font-size: 12px; }
+    .global-search .divider { display: none; }
+    .global-search input { min-width: 0; height: 100%; border: 0; outline: 0; padding: 0 10px; color: var(--text); background: #e4e6e9; font-size: 12px; }
+    .global-search svg { width: 14px; height: 14px; color: #1f2937; }
+    .platform-switch { position: relative; display: inline-flex; align-items: center; height: 28px; flex: 0 0 auto; }
+    .platform-switch-btn {
+      height: 28px;
+      padding: 6px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 6px;
+      background: #fff;
+      color: #545861;
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .platform-switch-btn:hover,
+    .platform-switch:focus-within .platform-switch-btn,
+    .platform-switch.open .platform-switch-btn { background: #f7f8fc; color: #181c25; }
+    .platform-switch-btn svg { width: 16px; height: 16px; flex: 0 0 auto; }
+    .platform-switch-caret { width: 12px !important; height: 12px !important; color: #7a7f88; }
+    .platform-switch-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 90;
+      width: 308px;
+      padding: 12px;
+      display: none;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(16, 24, 40, .16);
+    }
+    .platform-switch.open .platform-switch-menu { display: grid; gap: 12px; }
+    .platform-switch-row { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 12px; }
+    .platform-switch-title { color: #181c25; font-size: 14px; line-height: 20px; font-weight: 600; white-space: nowrap; }
+    .platform-segmented { display: inline-flex; align-items: center; gap: 8px; padding: 4px; border-radius: 8px; background: #f2f3f5; }
+    .platform-segment { width: 80px; height: 28px; padding: 0 12px; border-radius: 6px; color: #545861; font-size: 13px; line-height: 18px; font-weight: 500; text-align: center; }
+    .platform-segment:hover { color: #181c25; }
+    .platform-segment.active { background: #fff; color: #181c25; box-shadow: 0 1px 2px rgba(16, 24, 40, .08); }
+    .top-icons { display: flex; justify-content: flex-end; align-items: center; gap: 14px; white-space: nowrap; color: #1f2937; }
+    .top-icons svg { width: 16px; height: 16px; }
+    .avatar { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #1f2937; color: #fff; font-size: 12px; font-weight: 700; flex: 0 0 28px; }
+    .ask-agent-btn {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      border: 1px solid #d8dee8;
+      border-radius: 8px;
+      background: #fff;
+      color: #181c25;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    }
+    .ask-agent-btn:hover,
+    .ask-agent-btn.is-active {
+      border-color: #b9c7ff;
+      background: #f5f7ff;
+      color: #1f3fb8;
+    }
+    .ask-agent-glyph { width: 12px; height: 11px; flex: 0 0 12px; fill: currentColor; stroke: none; }
+
+    .primary-nav {
+      position: fixed;
+      z-index: 35;
+      top: var(--topbar);
+      bottom: 0;
+      left: 0;
+      width: var(--primary-nav);
+      padding: 8px 0 12px;
+      background: var(--page);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform .22s ease;
+    }
+
+    .nav-item { position: relative; width: 64px; height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #202936; font-size: 12px; }
+    .nav-item.active { color: var(--brand); font-weight: 700; }
+    .nav-item.active::before { content: ""; position: absolute; z-index: 0; inset: 0 -1px 0 4px; background: #fff; border-radius: 8px 0 0 8px; }
+    .nav-item svg, .nav-item span { position: relative; z-index: 1; }
+    .nav-item svg { width: 20px; height: 20px; }
+    .nav-agent-item {
+      height: 64px;
+      margin-bottom: 2px;
+      color: #202936;
+      font-weight: 800;
+    }
+    .nav-agent-item:hover,
+    .nav-agent-item:focus-visible { color: var(--brand); }
+    .nav-agent-static {
+      position: relative;
+      z-index: 1;
+      width: 20px;
+      height: 20px;
+      display: block;
+      color: currentColor;
+      stroke: none;
+      transition: opacity .12s ease;
+    }
+    .nav-agent-static path { stroke: none; }
+    .nav-agent-item.active .nav-agent-static { color: var(--brand); }
+    .nav-agent-icon {
+      position: relative;
+      z-index: 1;
+      width: 28px;
+      height: 22px;
+      display: block;
+      overflow: hidden;
+      flex: 0 0 auto;
+      opacity: 0;
+      margin-top: -22px;
+    }
+    .nav-agent-eye {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .nav-agent-eye-closed { opacity: 0; }
+    .nav-agent-item:hover .nav-agent-static,
+    .nav-agent-item:focus-visible .nav-agent-static { opacity: 0; }
+    .nav-agent-item:hover .nav-agent-icon,
+    .nav-agent-item:focus-visible .nav-agent-icon { opacity: 1; }
+    .nav-agent-item:hover .nav-agent-icon,
+    .nav-agent-item:focus-visible .nav-agent-icon {
+      animation: navAgentIconHoverFloat 1.1s ease-in-out infinite;
+    }
+    .nav-agent-item:hover .nav-agent-eye-open,
+    .nav-agent-item:focus-visible .nav-agent-eye-open {
+      animation: navAgentEyeOpen 1.1s steps(1, end) infinite;
+    }
+    .nav-agent-item:hover .nav-agent-eye-closed,
+    .nav-agent-item:focus-visible .nav-agent-eye-closed {
+      animation: navAgentEyeClosed 1.1s steps(1, end) infinite;
+    }
+    @keyframes navAgentIconHoverFloat {
+      0%, 100% { transform: translateY(0); }
+      45% { transform: translateY(-1px); }
+      55% { transform: translateY(0); }
+    }
+    @keyframes navAgentEyeOpen {
+      0%, 42%, 58%, 100% { opacity: 1; }
+      43%, 57% { opacity: 0; }
+    }
+    @keyframes navAgentEyeClosed {
+      0%, 42%, 58%, 100% { opacity: 0; }
+      43%, 57% { opacity: 1; }
+    }
+    .nav-spacer { flex: 1; }
+
+    .secondary-menu {
+      position: fixed;
+      z-index: 10;
+      top: var(--topbar);
+      bottom: 12px;
+      left: var(--primary-nav);
+      width: var(--secondary-menu);
+      padding: 0 12px 12px;
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform .22s ease;
+    }
+
+    .menu-title { height: 42px; display: flex; align-items: center; font-size: 15px; font-weight: 800; margin: 0; }
+    .menu-search { height: 28px; display: grid; grid-template-columns: 1fr 28px; gap: 8px; margin-bottom: 10px; }
+    .menu-search input { min-width: 0; height: 28px; border: 1px solid var(--line); border-radius: 6px; padding: 0 8px; outline: 0; font-size: 12px; background: #fff; }
+    .icon-btn, .add-btn { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: #344054; }
+    .icon-btn svg, .add-btn svg { width: 14px; height: 14px; }
+
+    .menu-scroll { height: calc(100% - 80px); overflow: hidden; }
+    .menu-section { margin-top: 8px; }
+    .menu-row { width: 100%; height: 28px; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-radius: 6px; color: #2b3442; font-size: 12px; white-space: nowrap; cursor: default; }
+    .menu-row.active { border-radius: 8px; background: var(--brand-soft); color: #1f2937; font-weight: 700; }
+    .menu-row svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .menu-row[data-tone="orange"] svg { color: var(--brand); }
+    .menu-row[data-tone="blue"] svg { color: #6677ff; }
+    .menu-row[data-tone="red"] svg { color: #ff5a52; }
+    .menu-row[data-tone="green"] svg { color: #20b970; }
+    .menu-row.sub { padding-left: 24px; }
+    .menu-row .twisty {
+      width: 14px;
+      height: 14px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 14px;
+      border-radius: 50%;
+      background: #eef2f8;
+    }
+    .menu-row .twisty svg { display: none; }
+    .menu-row .twisty::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 5px solid #667085;
+      transform: translateX(1px);
+    }
+    .menu-row .twisty.expanded::before {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #667085;
+      border-bottom: 0;
+      transform: translateY(1px);
+    }
+    .menu-row.indent { padding-left: 24px; }
+    .menu-row.indent2 { padding-left: 36px; }
+    .menu-section.is-collapsed .menu-row.indent,
+    .menu-section.is-collapsed .menu-row.indent2 { display: none; }
+    .menu-section-toggle { cursor: pointer; }
+    .tree-caret { width: 12px; height: 12px; color: #98a2b3; flex: 0 0 auto; }
+    .menu-dot { width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 4px; color: var(--brand); flex: 0 0 auto; }
+    .menu-footer { position: absolute; left: 12px; right: 12px; bottom: 10px; display: flex; justify-content: flex-end; gap: 12px; color: #667085; }
+    .menu-footer svg { width: 14px; height: 14px; }
+    /* ===== SHELL-BASE-END ===== */
+
+    .workspace {
+      position: fixed;
+      top: var(--topbar);
+      right: 12px;
+      bottom: 12px;
+      left: calc(var(--primary-nav) + var(--secondary-menu));
+      padding-left: 12px;
+      background: var(--page);
+      transition: right .22s ease;
+    }
+
+    .list-shell {
+      width: 100%;
+      height: 100%;
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .list-layout { height: calc(100% - 24px); margin: 12px; }
+    .title-area { height: 64px; }
+    .title-row { height: 28px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
+    .title-group { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; }
+    .divider { width: 1px; height: 12px; background: #d7dde7; }
+    .view-name { display: inline-flex; align-items: center; gap: 4px; color: #344054; font-size: 15px; font-weight: 500; }
+    .title-actions { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .btn.primary { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .btn svg { width: 14px; height: 14px; }
+
+    .filter-row { height: 28px; display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding: 0 8px; }
+    .filter-left { display: flex; align-items: center; gap: 8px; }
+    .field-search { width: 290px; height: 28px; display: grid; grid-template-columns: 84px 1px 1fr 28px; align-items: center; border: 1px solid var(--line); border-radius: 6px; background: #fff; overflow: hidden; }
+    .field-search button { height: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 5px; color: #344054; font-size: 12px; }
+    .field-search .vline { height: 24px; background: var(--line); }
+    .field-search input { height: 100%; min-width: 0; border: 0; outline: 0; padding: 0 8px; font-size: 12px; }
+    .field-search svg { width: 14px; height: 14px; color: #1f2937; }
+    .filter-right { display: flex; align-items: center; gap: 8px; }
+    .view-switch { height: 28px; display: flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+    .view-btn { width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; color: #344054; }
+    .view-btn.active { color: var(--brand); background: var(--brand-soft); }
+    .view-btn svg { width: 14px; height: 14px; }
+    .tool-icons { display: flex; align-items: center; }
+    .tool-icons .icon-btn { border-color: transparent; border-radius: 0; }
+
+    .table-area { height: calc(100% - 72px); }
+    .table-wrap { height: calc(100% - 40px); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+    th, td { height: 36px; padding: 0 8px; border-bottom: 1px solid #edf1f5; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    th { background: #fff; color: #1f2937; font-weight: 800; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover, tbody tr.current { background: var(--brand-soft); }
+    .check-cell { width: 24px; padding: 0 0 0 8px; }
+    .checkbox { width: 14px; height: 14px; display: block; border: 1px solid #d9e0ea; border-radius: 3px; background: #fff; }
+    .name-cell { font-weight: 700; color: #202936; }
+    .tag {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tag.vip { background: #fff2dd; color: #ff8000; }
+    .tag.important { background: #e9fbf8; color: #0fa89a; }
+    .tag.normal { background: #f4f6f9; color: #344054; }
+    .progress-cell { display: flex; align-items: center; gap: 8px; }
+    .progress-track { width: 48px; height: 4px; border-radius: 999px; background: #e3e8f0; overflow: hidden; }
+    .progress-fill { display: block; height: 100%; border-radius: inherit; background: var(--brand); }
+    .progress-fill.done { background: var(--brand); }
+    .phone { display: inline-flex; align-items: center; gap: 5px; }
+    .flag { width: 18px; height: 12px; display: inline-block; border-radius: 1px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+    .flag-svg { width: 18px; height: 12px; display: inline-block; flex: 0 0 18px; border-radius: 1px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+    .flag-svg * { stroke: none; }
+    .flag.nl { background: linear-gradient(#ae1c28 0 33%, #fff 33% 66%, #21468b 66%); }
+    .flag.bs { background: linear-gradient(#00abc9 0 33%, #fcd116 33% 66%, #00abc9 66%); position: relative; }
+    .flag.bs::before { content: ""; position: absolute; left: 0; top: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid #000; }
+    .owner { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+    .owner-avatar { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: #1f2937; font-size: 11px; font-weight: 800; flex: 0 0 20px; }
+    .owner-avatar.orange { background: #f59e0b; }
+    .owner-avatar.green { background: #78c257; }
+    .owner-avatar.blue { background: #5aa2ff; }
+    .owner-avatar.pink { background: #ff7aa2; }
+    .muted { color: var(--weak); }
+    .row-actions { display: flex; gap: 10px; color: #1677ff; }
+    .row-actions button { font-size: 12px; color: #1677ff; }
+
+    .pager { height: 40px; display: flex; justify-content: flex-end; align-items: center; gap: 8px; color: #344054; font-size: 12px; }
+    .page-btn { width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 5px; background: #fff; }
+    .page-btn svg { width: 12px; height: 12px; }
+    .agent-open .workspace,
+    .agent-persist-open .workspace { right: calc(var(--agent-sidebar) + 12px); }
+    .agent-open .topbar,
+    .agent-persist-open .topbar {
+      right: var(--agent-sidebar);
+      grid-template-columns: minmax(220px, 1fr) minmax(180px, 280px) max-content;
+      gap: 10px;
+    }
+    .agent-open .top-icons,
+    .agent-persist-open .top-icons { gap: 10px; }
+    body.agent-instant .topbar,
+    body.agent-instant .workspace,
+    .agent-persist-open .topbar,
+    .agent-persist-open .workspace,
+    .agent-persist-open .agent-sidebar,
+    body.agent-instant .agent-sidebar { transition: none !important; }
+
+    .agent-sidebar {
+      position: fixed;
+      z-index: 60;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: var(--agent-sidebar);
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-left: 1px solid #e5e8ee;
+      box-shadow: -18px 0 36px rgba(16, 24, 40, .08);
+      transform: translateX(100%);
+      transition: transform .22s ease;
+    }
+    .agent-open .agent-sidebar,
+    .agent-persist-open .agent-sidebar { transform: translateX(0); }
+    .agent-toolbar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      color: #181c25;
+    }
+    .agent-toolbar-left,
+    .agent-toolbar-right { display: flex; align-items: center; gap: 14px; }
+    .agent-tool-btn {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: #181c25;
+    }
+    .agent-tool-btn:hover { background: #f2f4f8; }
+    .agent-tool-btn svg { width: 16px; height: 16px; }
+    .agent-tool-btn > svg,
+    .send-btn svg { stroke: none; }
+    .agent-tool-btn > svg path,
+    .send-btn svg path { stroke: none; }
+    #closeAskAgent svg { stroke: none; }
+    #closeAskAgent svg path { stroke: none; }
+    .agent-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      padding: 24px 24px 120px;
+      overflow: hidden;
+    }
+    .agent-sidebar.has-chat .agent-body {
+      justify-content: flex-start;
+      padding: 14px 16px 176px;
+      overflow-y: auto;
+      scroll-padding-bottom: 176px;
+    }
+    .agent-greeting {
+      margin: 0 0 26px;
+      color: #181c25;
+      font-size: 24px;
+      line-height: 1.45;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    .agent-prompts {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .agent-prompt {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 100%;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #eff1f3;
+      color: #2b3442;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .agent-prompt:hover { background: #e9edf6; }
+    .agent-sidebar.has-chat .agent-greeting,
+    .agent-sidebar.has-chat .agent-prompts { display: none; }
+    .agent-chat-feed {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 16px;
+      padding: 4px 0 16px;
+    }
+    .agent-sidebar.has-chat .agent-chat-feed { display: flex; }
+    .agent-chat-user-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .agent-chat-user-bubble {
+      max-width: 292px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #f2f4fb;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 20px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .agent-chat-time {
+      margin: -4px 0;
+      text-align: center;
+      color: #91959e;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 700;
+    }
+    .agent-chat-thinking-row {
+      display: flex;
+      justify-content: flex-start;
+    }
+    .agent-chat-thinking {
+      min-height: 28px;
+      padding: 5px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 6px;
+      background: #f2f3f5;
+      color: #181c25;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .agent-chat-thinking svg {
+      width: 12px;
+      height: 12px;
+      animation: agent-thinking-spin 1s linear infinite;
+    }
+    @keyframes agent-thinking-spin {
+      to { transform: rotate(360deg); }
+    }
+    .agent-chat-ai-block {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .agent-chat-ai-card {
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .agent-chat-ai-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .agent-chat-ai-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .agent-chat-ai-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex: 0 0 28px;
+    }
+    .agent-chat-ai-name {
+      margin: 0;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 18px;
+      font-weight: 700;
+    }
+    .agent-chat-ai-status {
+      width: 100%;
+      padding-bottom: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border-bottom: 1px solid #eaebee;
+      color: #545861;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .agent-chat-ai-status svg {
+      width: 9px;
+      height: 9px;
+      color: #91959e;
+      flex: 0 0 9px;
+    }
+    .agent-chat-title {
+      margin: 0 0 10px;
+      color: #181c25;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 800;
+    }
+    .agent-chat-copy {
+      margin: 0;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 22px;
+    }
+    .agent-chat-section {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .agent-chat-section-title {
+      margin: 0;
+      font-weight: 800;
+    }
+    .agent-chat-section p {
+      margin: 0;
+      padding-left: 12px;
+      position: relative;
+    }
+    .agent-chat-section p::before {
+      content: "·";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .agent-chat-section .agent-chat-section-title {
+      padding-left: 0;
+    }
+    .agent-chat-section .agent-chat-section-title::before { content: none; }
+    .agent-chat-artifact-copy {
+      margin: 14px 0 8px;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 22px;
+    }
+    .agent-chat-object-card {
+      width: 100%;
+      min-height: 70px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #e3e8f1;
+      border-radius: 12px;
+      background: #fff;
+    }
+    .agent-chat-object-icon {
+      width: 40px;
+      height: 40px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 9px;
+      background: #f3eafd;
+      color: #6b38d5;
+      font-size: 16px;
+      font-weight: 800;
+      flex: 0 0 40px;
+    }
+    .agent-chat-object-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .agent-chat-object-title {
+      color: #181c25;
+      font-size: 13px;
+      line-height: 18px;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-chat-object-meta {
+      color: #91959e;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .agent-chat-replies {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .agent-chat-reply-chip {
+      min-height: 34px;
+      padding: 8px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 31px;
+      background: #f2f4fb;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 18px;
+      text-align: left;
+    }
+    .agent-chat-reply-chip svg {
+      width: 12px;
+      height: 12px;
+      color: #8f95a2;
+    }
+    .slash-menu,
+    .at-menu {
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 10px);
+      width: 100%;
+      padding: 6px 8px 8px;
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow-menu);
+      display: none;
+      z-index: 20;
+    }
+    .slash-menu.open,
+    .at-menu.open { display: block; }
+
+    .agent-composer {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 22px;
+    }
+    .composer-shell {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      min-height: 116px;
+      height: auto;
+      max-height: calc(100vh - 180px);
+      padding: 0;
+      border-radius: var(--border-radius, 16px);
+      border: 1px solid var(--color-neutrals05);
+      background: #fff;
+      box-shadow: 4px 4px 30px 0 rgba(217, 217, 217, .15), -4px 4px 30px 0 rgba(217, 217, 217, .15);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .composer-shell.is-focused {
+      border-radius: var(--border-radius, 16px);
+      border: 1px solid transparent;
+      background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(90deg, rgba(0, 153, 255, .5) 0%, rgba(112, 145, 255, .5) 34%, rgba(162, 116, 255, .5) 63%, rgba(190, 100, 255, .5) 100%) border-box;
+      box-shadow: -4px 4px 20px 12px rgba(177, 175, 255, .15);
+    }
+    .composer-card {
+      width: 100%;
+      min-height: 114px;
+      height: auto;
+      max-height: calc(100vh - 182px);
+      padding: 12px 16px;
+      border-radius: inherit;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .composer-editor-wrap {
+      flex: 1 1 auto;
+      width: 100%;
+      min-height: 48px;
+      max-height: calc(100vh - 320px);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .composer-editor {
+      position: relative;
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      background: transparent;
+      outline: none;
+      cursor: text;
+      font-size: 15px;
+      line-height: 24px;
+      color: var(--text-strong);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .composer-editor[data-empty="true"]::before {
+      content: attr(data-placeholder);
+      position: absolute;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      color: #c1c5ce;
+    }
+    .composer-editor:not(:empty)::before { content: none; }
+    .composer-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      flex-shrink: 0;
+    }
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toolbar-left { flex: 1 1 auto; min-width: 0; }
+    .toolbar-right { flex: 0 0 auto; }
+    .plus-btn,
+    .voice-btn {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #181c25;
+    }
+    .plus-btn svg,
+    .voice-btn svg { color: #181c25; }
+    .plus-menu-anchor,
+    .composer-picker-anchor {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    .plus-menu,
+    .composer-picker-menu {
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 12px);
+      display: none;
+      z-index: 26;
+    }
+    .plus-menu.open {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .plus-menu-panel,
+    .plus-submenu {
+      width: 250px;
+      background: #fff;
+      border-radius: 8px;
+    }
+    .plus-menu-panel {
+      padding: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+    }
+    .plus-submenu {
+      padding: 6px 8px 8px;
+      box-shadow: var(--shadow-menu);
+    }
+    .plus-menu-item {
+      width: 100%;
+      min-height: 32px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .plus-menu-item:hover,
+    .plus-menu-item.active { background: #f7f8fc; }
+    .plus-menu-item-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .plus-menu-item-main span {
+      font-size: 13px;
+      line-height: 20px;
+      color: #181c25;
+      white-space: nowrap;
+    }
+    .plus-menu-item-icon,
+    .plus-menu-item-caret,
+    .plus-menu-item-check {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #181c25;
+      flex: 0 0 auto;
+    }
+    .plus-menu-item-check { color: #455eee; }
+    .plus-menu-item-end {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .plus-submenu-search {
+      width: 100%;
+      height: 24px;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #c1c5ce;
+      border-radius: 6px;
+      background: #fff;
+      color: #181c25;
+    }
+    .plus-submenu-search input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      line-height: 20px;
+      color: #181c25;
+    }
+    .plus-submenu-list {
+      margin-top: 6px;
+      max-height: 190px;
+      overflow-y: auto;
+    }
+    .plus-submenu-option {
+      width: 100%;
+      min-height: 32px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .plus-submenu-option:hover,
+    .plus-submenu-option.active { background: #f2f4fb; }
+    .plus-submenu-option.active .plus-submenu-option-label,
+    .plus-submenu-option.current .plus-submenu-option-label { color: #ff8000; }
+    .plus-submenu-option-label {
+      min-width: 0;
+      font-size: 13px;
+      line-height: 18px;
+      color: #181c25;
+      word-break: break-word;
+    }
+    .plus-submenu-option-check {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #455eee;
+      flex: 0 0 auto;
+    }
+    .plus-submenu-empty {
+      padding: 8px;
+      font-size: 13px;
+      line-height: 18px;
+      color: var(--text-soft);
+    }
+    .plus-submenu-footer {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #dee1e8;
+    }
+    .plus-submenu-manage {
+      width: 100%;
+      min-height: 32px;
+      padding: 6px 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: #f7f8fc;
+      font-size: 13px;
+      line-height: 18px;
+      color: #181c25;
+    }
+    .composer-picker-trigger {
+      min-width: 0;
+      height: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+    }
+    .composer-picker-trigger.selected { background: #f2f4fb; border-color: transparent; }
+    .composer-picker-trigger.active { border-color: #cfd8ea; box-shadow: 0 4px 12px rgba(24, 28, 37, .08); }
+    .composer-picker-btn {
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #181c25;
+      flex: 1 1 auto;
+    }
+    .composer-picker-icon,
+    .composer-picker-caret,
+    .composer-picker-clear,
+    .composer-picker-check {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+    .composer-picker-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      line-height: 18px;
+      color: #181c25;
+    }
+    .composer-picker-trigger.selected .composer-picker-label { color: #181c25; }
+    .composer-picker-clear { color: #7b86f8; }
+    .composer-picker-menu {
+      width: auto;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .composer-picker-menu.open {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .composer-picker-menu .plus-menu-panel,
+    .composer-picker-menu .plus-submenu {
+      box-shadow: var(--shadow-menu);
+    }
+    .composer-picker-menu .plus-submenu {
+      width: 250px;
+    }
+    .agent-pill {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      height: 28px;
+      padding: 0 8px 0 6px;
+      border-radius: 6px;
+      background: #f2f4fb;
+      max-width: calc(100% - 26px);
+    }
+    .agent-pill.visible { display: inline-flex; }
+    .agent-pill-label {
+      font-size: 13px;
+      line-height: 18px;
+      color: var(--agent-blue);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .close-mini {
+      width: 12px;
+      height: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      color: #7b86f8;
+    }
+    .send-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .send-btn svg {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+    .send-btn svg g > path:first-child { fill: url(#sendBtnGradient); fill-opacity: 1; }
+    .send-btn.is-empty svg g > path:first-child { fill: #ddc4ff; fill-opacity: 1; }
+
+    .bridge-toast {
+      position: fixed;
+      right: 20px;
+      bottom: 18px;
+      z-index: 90;
+      max-width: 360px;
+      padding: 10px 12px;
+      border: 1px solid #ffd2a0;
+      border-radius: 8px;
+      background: #fffaf4;
+      color: #344054;
+      box-shadow: 0 8px 24px rgba(16, 24, 40, .12);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      font-size: 13px;
+    }
+    .bridge-toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.27 21a2 2 0 0 0 3.46 0"></path><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M21.8 10a10 10 0 1 1-3.5-6.2"></path><path d="m9 11 3 3L22 4"></path></symbol>
+    <symbol id="i-pie" viewBox="0 0 24 24"><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9v9z"></path><path d="M12 3a9 9 0 0 1 9 9h-9z"></path></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M10 6V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v1"></path><rect x="3" y="6" width="18" height="14" rx="2"></rect><path d="M3 12h18"></path></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3z"></path><path d="m9 12 2 2 4-5"></path></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"></path><path d="M3 18a2 2 0 0 1 2-2h7V4H5a2 2 0 0 0-2 2z"></path><path d="M21 18a2 2 0 0 0-2-2h-7V4h7a2 2 0 0 1 2 2z"></path></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5z"></path><path d="M19.4 15a1.8 1.8 0 0 0 .36 2l.07.07a2 2 0 0 1-2.83 2.83l-.07-.07a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1 1.63V21a2 2 0 0 1-4 0v-.1a1.8 1.8 0 0 0-1-1.63 1.8 1.8 0 0 0-2 .36l-.07.07a2 2 0 1 1-2.83-2.83l.07-.07a1.8 1.8 0 0 0 .36-2 1.8 1.8 0 0 0-1.63-1H3a2 2 0 0 1 0-4h.1a1.8 1.8 0 0 0 1.63-1 1.8 1.8 0 0 0-.36-2l-.07-.07a2 2 0 1 1 2.83-2.83l.07.07a1.8 1.8 0 0 0 2 .36h0a1.8 1.8 0 0 0 1-1.63V3a2 2 0 0 1 4 0v.1a1.8 1.8 0 0 0 1 1.63h0a1.8 1.8 0 0 0 2-.36l.07-.07a2 2 0 1 1 2.83 2.83l-.07.07a1.8 1.8 0 0 0-.36 2v0a1.8 1.8 0 0 0 1.63 1H21a2 2 0 0 1 0 4h-.1a1.8 1.8 0 0 0-1.5 1z"></path></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="M12 5v14"></path></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h8l-1 8 10-12h-8z"></path></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"></path></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></symbol>
+    <symbol id="i-yen" viewBox="0 0 24 24"><path d="m6 3 6 8 6-8"></path><path d="M12 11v10"></path><path d="M8 15h8"></path><path d="M8 19h8"></path></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">F</div><span>北京易动纷享科技有限公司</span></div>
+    <div class="topbar-search-group">
+      <div class="platform-switch" data-platform-switch>
+        <button class="platform-switch-btn" type="button" aria-label="切换方案" aria-haspopup="menu" aria-expanded="false">
+          <svg class="platform-switch-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path class="icon-stroke" d="M3 5.2h8.8"></path>
+            <path class="icon-stroke" d="m9.7 3.1 2.1 2.1-2.1 2.1"></path>
+            <path class="icon-stroke" d="M13 10.8H4.2"></path>
+            <path class="icon-stroke" d="m6.3 8.7-2.1 2.1 2.1 2.1"></path>
+          </svg>
+          <span>切换方案</span>
+          <svg class="platform-switch-caret" viewBox="0 0 12 12" aria-hidden="true">
+            <path class="icon-fill" fill="currentColor" d="M6 8.3 2.2 4.5h7.6L6 8.3Z"></path>
+          </svg>
+        </button>
+        <div class="platform-switch-menu" role="menu" aria-label="切换方案">
+          <div class="platform-switch-row">
+            <div class="platform-switch-title">切换终端</div>
+            <div class="platform-segmented" role="group" aria-label="终端切换">
+              <button class="platform-segment active" type="button" data-platform-device="web" aria-pressed="true">Web</button>
+              <button class="platform-segment" type="button" data-platform-device="mobile" aria-pressed="false">Mobile</button>
+            </div>
+          </div>
+          <div class="platform-switch-row">
+            <div class="platform-switch-title">切换语言</div>
+            <div class="platform-segmented" role="tablist" aria-label="语言切换">
+              <button class="platform-segment active" type="button" role="tab" aria-selected="true" data-platform-lang="zh">中文</button>
+              <button class="platform-segment" type="button" role="tab" aria-selected="false" data-platform-lang="en">English</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="global-search">
+        <input placeholder="搜索">
+        <svg><use href="#i-search"></use></svg>
+      </div>
+    </div>
+    <div class="top-icons">
+      <svg><use href="#i-bell"></use></svg>
+      <svg><use href="#i-check"></use></svg>
+      <svg><use href="#i-grid"></use></svg>
+      <div class="avatar">李</div>
+      <button class="ask-agent-btn" id="askAgentButton" type="button" aria-controls="askAgentSidebar" aria-expanded="false">
+        <svg class="ask-agent-glyph" xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11" fill="none" aria-hidden="true">
+          <path d="M5.82617 0C9.02726 0.000170348 11.6436 2.2344 11.6436 5.0293C11.6436 5.05358 11.6429 5.07797 11.6348 5.11035C11.6347 5.1347 11.6266 5.15925 11.6104 5.18359C11.6023 5.20786 11.5943 5.23257 11.5781 5.25684C11.562 5.27309 11.5455 5.29731 11.5293 5.31348C11.5051 5.33769 11.489 5.35418 11.4648 5.3623C11.4406 5.37849 11.4159 5.39419 11.3916 5.40234L11.3184 5.42676C11.2941 5.43486 11.2617 5.43555 11.2373 5.43555C11.213 5.43555 11.1886 5.4348 11.1562 5.42676L11.083 5.40234C11.0571 5.392 11.0323 5.37883 11.0098 5.3623C10.9871 5.3511 10.9677 5.3341 10.9531 5.31348C10.9325 5.29897 10.9155 5.2794 10.9043 5.25684C10.8877 5.23434 10.8736 5.20954 10.8633 5.18359L10.8389 5.11035C10.8308 5.07797 10.8311 5.05358 10.8311 5.0293C10.8311 2.71377 8.60475 0.812667 5.82617 0.8125C3.0393 0.8125 0.8125 2.71367 0.8125 5.0293C0.812568 5.91482 1.13777 6.76781 1.74707 7.47461C1.77957 7.51523 1.80406 7.55605 1.82031 7.59668C1.83652 7.64537 1.84473 7.69448 1.84473 7.74316V9.53809L3.31543 8.77441C3.35596 8.75015 3.40453 8.7337 3.45312 8.72559C3.50991 8.72559 3.55875 8.72601 3.60742 8.74219L3.66504 8.75879C3.77038 8.8074 3.88392 8.85569 3.98926 8.9043C4.54164 9.13175 4.99686 9.23726 5.56543 9.2373C5.5898 9.2373 5.61496 9.24609 5.64746 9.24609L5.71973 9.27051C5.74397 9.27859 5.76872 9.29438 5.79297 9.31055C5.80922 9.3268 5.83434 9.34313 5.85059 9.35938C5.86684 9.37562 5.8913 9.40046 5.89941 9.4248C5.91547 9.44097 5.93134 9.46517 5.93945 9.48926C5.94758 9.51363 5.95574 9.53879 5.96387 9.57129C5.96395 9.59538 5.97158 9.61947 5.97168 9.64355C5.97168 9.67605 5.96387 9.70121 5.96387 9.72559C5.95578 9.74986 5.94754 9.77428 5.93945 9.80664C5.93137 9.83077 5.91552 9.84705 5.89941 9.87109C5.89131 9.89541 5.86684 9.91225 5.85059 9.93652C5.83434 9.95277 5.80922 9.9691 5.79297 9.98535C5.76868 10.0015 5.74401 10.0102 5.71973 10.0264C5.69567 10.0344 5.67152 10.0419 5.64746 10.042C5.61496 10.0501 5.5898 10.0498 5.56543 10.0498C4.87498 10.0498 4.3143 9.92042 3.68066 9.65234C3.62053 9.6294 3.56093 9.60489 3.50195 9.5791L3.51855 9.58691L2.02344 10.3594C1.98283 10.3837 1.94166 10.4001 1.90918 10.4082C1.86885 10.4243 1.82842 10.4326 1.78809 10.4326C1.74753 10.4407 1.70657 10.4404 1.66602 10.4404C1.6174 10.4323 1.57665 10.4321 1.53613 10.416C1.50363 10.4079 1.4625 10.3912 1.42188 10.375C1.38942 10.3588 1.34882 10.3427 1.31641 10.3184C1.28392 10.294 1.25124 10.2617 1.21875 10.2373L1.14551 10.1396L1.10547 10.0742C1.05751 9.97844 1.03228 9.87274 1.03223 9.76562V7.88867L1.00781 7.85645C0.398486 7.08463 0.0406723 6.16667 0 5.20801V5.0293C0 2.2343 2.6168 0 5.82617 0ZM9.07617 5.6875C9.32788 5.6877 9.53125 5.89864 9.53125 6.15039V7.53125H10.9121C10.9365 7.53125 10.9607 7.53193 10.9932 7.54004C11.0175 7.54004 11.0421 7.54755 11.0664 7.55566C11.0908 7.56379 11.1075 7.58074 11.1318 7.58887C11.156 7.60486 11.1802 7.61285 11.1963 7.62891C11.2124 7.64506 11.2367 7.6614 11.2529 7.68555C11.2692 7.7018 11.2855 7.71879 11.3018 7.74316C11.3099 7.76739 11.3269 7.78334 11.335 7.80762L11.3594 7.88086L11.3672 7.9375L11.375 7.99512C11.3747 8.24677 11.1719 8.45798 10.9121 8.45801H9.53125V9.83105C9.53125 9.86347 9.53057 9.88777 9.52246 9.91211C9.52246 9.93647 9.51496 9.96099 9.50684 9.98535C9.49873 10.0097 9.48983 10.0336 9.47363 10.0498C9.46553 10.0741 9.44979 10.099 9.43359 10.1152C9.41742 10.1395 9.40094 10.1557 9.38477 10.1719C9.36039 10.1881 9.34371 10.2045 9.31934 10.2207C9.30318 10.2368 9.27911 10.2449 9.25488 10.2529C9.23058 10.2691 9.20595 10.2773 9.18164 10.2773L9.125 10.2939H9.07617C9.04376 10.2939 9.01093 10.2942 8.97852 10.2861L8.89746 10.2617C8.86496 10.2455 8.8398 10.237 8.81543 10.2207C8.79129 10.2045 8.7673 10.1802 8.74316 10.1641C8.72691 10.1397 8.7018 10.1152 8.68555 10.0908C8.66941 10.0666 8.66164 10.0421 8.64551 10.0098L8.62109 9.92871C8.61298 9.89626 8.6123 9.8635 8.6123 9.83105V8.45801H7.23145C7.20712 8.4499 7.18279 8.44922 7.15039 8.44922L7.07715 8.4248C7.0528 8.41669 7.03607 8.40949 7.01172 8.40137C6.98876 8.38718 6.96732 8.37059 6.94727 8.35254C6.93114 8.34448 6.90687 8.31996 6.89062 8.30371C6.87438 8.28746 6.85805 8.26234 6.8418 8.24609C6.83367 8.22191 6.81672 8.19802 6.80859 8.17383C6.79803 8.15042 6.78979 8.12565 6.78418 8.10059L6.77637 8.04297L6.76855 7.99512C6.76855 7.74324 6.97957 7.53125 7.23145 7.53125H8.6123V6.15039C8.6123 6.12602 8.61297 6.10152 8.62109 6.07715C8.62109 6.05277 8.62859 6.02828 8.63672 6.00391C8.64484 5.97953 8.65367 5.95504 8.66992 5.93066C8.67805 5.90657 8.69385 5.8903 8.70996 5.86621C8.72621 5.84996 8.74254 5.83297 8.75879 5.80859C8.78311 5.79237 8.79988 5.77667 8.82422 5.76855C8.84045 5.75236 8.86435 5.74374 8.88867 5.72754L8.96191 5.70312L9.01855 5.69531H9.05957L9.07617 5.6875Z"/>
+        </svg>
+        <span>Ask Agent</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="primary-nav">
+    <button class="nav-item nav-agent-item" type="button" onclick="window.location.href='../index.html'" aria-label="打开 Agent 首页">
+      <svg class="nav-agent-static" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M12.2871 7.90567C12.5339 7.70321 12.8966 7.74075 13.0979 7.98917C13.299 8.23765 13.2623 8.60287 13.0155 8.80545L11.4071 10.126L13.0155 11.4466C13.2623 11.6492 13.2992 12.0155 13.0979 12.2639C12.8966 12.5122 12.5339 12.5489 12.2871 12.3463L10.1327 10.5786C9.99933 10.4692 9.92699 10.3118 9.92065 10.1513V10.1007C9.92706 9.94044 9.99955 9.78389 10.1327 9.67447L12.2871 7.90567Z" fill="currentColor"/>
+        <path d="M6.24023 7.78812C6.57991 7.78815 6.85539 8.06582 6.85547 8.40775V11.8256C6.85534 12.1675 6.57988 12.4441 6.24023 12.4441C5.90056 12.4441 5.62513 12.1675 5.625 11.8256V8.40775C5.62508 8.0658 5.90053 7.78812 6.24023 7.78812Z" fill="currentColor"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8202 1.12601C11.9515 0.844454 12.2868 0.722256 12.5684 0.853547L13.9955 1.51932C14.2768 1.65054 14.3988 1.98495 14.2679 2.26639L14.0295 2.77615C13.8983 3.05767 13.564 3.17981 13.2825 3.04862L12.8573 2.85086L12.2069 4.13516C15.7798 4.503 17.8108 5.83721 18 10.2359C18 16.3677 15.4919 16.5354 9 16.5354C2.50806 16.5354 4.56211e-05 16.3677 0 10.2359C0.189186 5.83721 2.22016 4.503 5.79309 4.13516L5.1427 2.85086L4.71753 3.04862C4.436 3.17981 4.10173 3.05767 3.97046 2.77615L3.73206 2.26639C3.60116 1.98495 3.72316 1.65054 4.00452 1.51932L5.43164 0.853547C5.71319 0.722256 6.04852 0.844454 6.17981 1.12601L6.41711 1.63577C6.5483 1.9173 6.42616 2.25157 6.14465 2.38284L5.75464 2.56522L6.51929 4.07364C7.28442 4.02306 8.11228 4.00662 9 4.00662C9.88772 4.00662 10.7156 4.02306 11.4807 4.07364L12.2454 2.56522L11.8553 2.38284C11.5738 2.25157 11.4517 1.9173 11.5829 1.63577L11.8202 1.12601ZM9 5.01517C8.0311 5.01517 7.15811 5.07083 6.37207 5.14481C6.02744 5.17755 5.68317 5.21536 5.33936 5.25577C4.30261 5.37764 3.63984 5.61444 3.05969 5.93033C2.50903 6.23017 2.10036 6.64435 1.81165 7.26956C1.50967 7.92354 1.19971 8.86417 1.19971 10.2359C1.19973 13.0324 1.849 13.7411 2.74988 14.2558C3.28113 14.5592 4.02668 14.8849 5.09216 15.0072C6.15397 15.1291 7.43718 15.1555 9 15.1555C10.5628 15.1555 11.846 15.1291 12.9078 15.0072C13.9733 14.8849 14.7189 14.5592 15.2501 14.2558C16.151 13.7411 16.8003 13.0324 16.8003 10.2359C16.8003 8.86414 16.4848 7.92354 16.1829 7.26956C15.8941 6.64434 15.4855 6.23017 14.9348 5.93033C14.3548 5.61453 13.6972 5.37761 12.6606 5.25577C12.3168 5.21536 11.9726 5.17755 11.6279 5.14481C10.8419 5.07083 9.9689 5.01517 9 5.01517Z" fill="currentColor"/>
+      </svg>
+      <span class="nav-agent-icon" aria-hidden="true">
+        <img class="nav-agent-eye nav-agent-eye-open" src="./纷享AI-睁眼.svg" alt="">
+        <img class="nav-agent-eye nav-agent-eye-closed" src="./纷享AI-闭眼.svg" alt="">
+      </span>
+      <span>Agent</span>
+    </button>
+    <button class="nav-item"><svg><use href="#i-message"></use></svg><span>企信</span></button>
+    <button class="nav-item"><svg><use href="#i-check"></use></svg><span>待办</span></button>
+    <button class="nav-item active" type="button" onclick="window.location.href='dashboard-home.html'"><svg><use href="#i-pie"></use></svg><span>CRM</span></button>
+    <button class="nav-item"><svg><use href="#i-briefcase"></use></svg><span>工作</span></button>
+    <button class="nav-item"><svg><use href="#i-calendar"></use></svg><span>日程</span></button>
+    <button class="nav-item"><svg><use href="#i-shield"></use></svg><span>考勤</span></button>
+    <button class="nav-item"><svg><use href="#i-book"></use></svg><span>培训助手</span></button>
+    <button class="nav-item"><svg><use href="#i-grid"></use></svg><span>更多</span></button>
+    <div class="nav-spacer"></div>
+    <button class="nav-item"><svg><use href="#i-settings"></use></svg><span>设置</span></button>
+  </nav>
+
+  <aside class="secondary-menu">
+    <h2 class="menu-title">CRM</h2>
+    <div class="menu-search"><input placeholder="搜索"><button class="add-btn"><svg><use href="#i-plus"></use></svg></button></div>
+    <button class="menu-row" data-tone="orange" type="button" onclick="window.location.href='dashboard-home.html'"><svg><use href="#i-home"></use></svg><span>首页</span></button>
+    <button class="menu-row" data-tone="blue"><svg><use href="#i-clock"></use></svg><span>最近使用</span></button>
+    <button class="menu-row" data-tone="red"><svg><use href="#i-bell"></use></svg><span>CRM提醒</span></button>
+    <button class="menu-row" data-tone="green"><svg><use href="#i-check"></use></svg><span>CRM待办</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>交付实施项目</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>项目管理</span></button>
+    <button class="menu-row" data-tone="red"><svg><use href="#i-clock"></use></svg><span>CRM信息</span></button>
+    <button class="menu-row" data-tone="blue"><svg><use href="#i-file"></use></svg><span>数据驾驶舱</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>客户及商机管理</span></button>
+    <button class="menu-row active sub" data-tone="blue"><svg><use href="#i-building"></use></svg><span>客户</span></button>
+    <button class="menu-row sub" data-tone="green"><svg><use href="#i-building"></use></svg><span>客户地址</span></button>
+    <button class="menu-row sub" data-tone="orange"><svg><use href="#i-yen"></use></svg><span>客户财务信息</span></button>
+    <button class="menu-row sub" data-tone="red"><svg><use href="#i-users"></use></svg><span>联系人</span></button>
+    <button class="menu-row sub" data-tone="green"><svg><use href="#i-target"></use></svg><span>商机</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>订单及回款管理</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>售前项目管理</span></button>
+    <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>项目损失管理</span></button>
+    <button class="menu-row" data-tone="blue"><svg><use href="#i-file"></use></svg><span>报价单</span></button>
+  </aside>
+
+  <main class="workspace">
+    <section class="list-shell" aria-label="客户列表">
+      <div class="list-layout">
+        <header class="title-area">
+          <div class="title-row">
+            <div class="title-group">
+              <span>客户</span>
+              <span class="divider"></span>
+              <button class="view-name">全部客户<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            </div>
+            <div class="title-actions">
+              <button class="btn primary">新建</button>
+              <button class="btn">智能表单</button>
+              <button class="btn">导入</button>
+              <button class="icon-btn" title="更多"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-left">
+              <button class="btn">筛选</button>
+              <div class="field-search">
+                <button>客户名称<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+                <span class="vline"></span>
+                <input id="keyword" placeholder="搜索">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </div>
+            </div>
+            <div class="filter-right">
+              <div class="view-switch" aria-label="视图切换">
+                <button class="view-btn active" title="列表视图"><svg viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></button>
+                <button class="view-btn" title="卡片视图"><svg viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/></svg></button>
+                <button class="view-btn" title="地图视图"><svg viewBox="0 0 24 24"><path d="M14.1 18.6 9 16l-6 3V5l6-3 6 3 6-3v14l-6 3z"/><path d="M9 2v14"/><path d="M15 5v14"/></svg></button>
+                <button class="view-btn" title="分屏视图"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/></svg></button>
+              </div>
+              <div class="tool-icons">
+                <button class="icon-btn" title="设置"><svg viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M2 14h4"/><path d="M10 8h4"/><path d="M18 16h4"/></svg></button>
+                <button class="icon-btn" title="刷新"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-9 9 9.8 9.8 0 0 1-6.7-2.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 9-9 9.8 9.8 0 0 1 6.7 2.7L21 8"/><path d="M16 8h5V3"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="table-area">
+          <div class="table-wrap">
+            <table>
+              <colgroup>
+                <col style="width:24px">
+                <col style="width:240px">
+                <col style="width:140px">
+                <col style="width:160px">
+                <col style="width:210px">
+                <col style="width:110px">
+                <col style="width:84px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th class="check-cell"><span class="checkbox"></span></th>
+                  <th>客户名称</th>
+                  <th>客户级别</th>
+                  <th>跟进进度</th>
+                  <th>电话</th>
+                  <th>负责人</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="customerRows"></tbody>
+            </table>
+          </div>
+          <footer class="pager">
+            <span>2/20</span>
+            <button class="page-btn" title="上一页"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+            <button class="page-btn" title="下一页"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+          </footer>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <aside class="agent-sidebar" id="askAgentSidebar" aria-label="Ask Agent 侧边栏" aria-hidden="true">
+    <div class="agent-toolbar">
+      <div class="agent-toolbar-left">
+        <button class="agent-tool-btn" type="button" aria-label="菜单">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M1.36831 2.63333C1.00012 2.63333 0.701645 2.93181 0.701645 3.3C0.701645 3.66819 1.00012 3.96666 1.36831 3.96666H14.6667C15.0349 3.96666 15.3334 3.66819 15.3334 3.3C15.3334 2.93181 15.0349 2.63333 14.6667 2.63333H1.36831Z" fill="#181C25"/>
+            <path d="M0.701645 7.96666C0.701645 7.59847 1.00012 7.3 1.36831 7.3H14.6667C15.0349 7.3 15.3334 7.59847 15.3334 7.96666C15.3334 8.33485 15.0349 8.63333 14.6667 8.63333H1.36831C1.00012 8.63333 0.701645 8.33485 0.701645 7.96666Z" fill="#181C25"/>
+            <path d="M0.701645 12.6333C0.701645 12.2651 1.00012 11.9667 1.36831 11.9667H10.3335C10.7016 11.9667 11.0001 12.2651 11.0001 12.6333C11.0001 13.0015 10.7016 13.3 10.3335 13.3H1.36831C1.00012 13.3 0.701645 13.0015 0.701645 12.6333Z" fill="#181C25"/>
+          </svg>
+        </button>
+        <button class="agent-tool-btn" id="newAskAgentSession" type="button" aria-label="新会话">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8.00008 1.69C11.9401 1.69 15.1601 4.44 15.1601 7.88C15.1601 7.91 15.1601 7.94 15.1501 7.98C15.1501 8.01 15.1401 8.04 15.1201 8.07C15.1101 8.1 15.1001 8.13 15.0801 8.16C15.0601 8.18 15.0401 8.21 15.0201 8.23C14.9901 8.26 14.9701 8.28 14.9401 8.29C14.9101 8.31 14.8801 8.33 14.8501 8.34L14.7601 8.37C14.7301 8.38 14.6901 8.38 14.6601 8.38C14.6301 8.38 14.6001 8.38 14.5601 8.37L14.4701 8.34C14.4381 8.32723 14.4078 8.31043 14.3801 8.29C14.3521 8.27616 14.328 8.25553 14.3101 8.23C14.2846 8.21204 14.2639 8.18798 14.2501 8.16C14.2297 8.13225 14.2128 8.10201 14.2001 8.07L14.1701 7.98C14.1601 7.94 14.1601 7.91 14.1601 7.88C14.1601 5.03 11.4201 2.69 8.00008 2.69C4.57008 2.69 1.83008 5.03 1.83008 7.88C1.83008 8.97 2.23008 10.02 2.98008 10.89C3.02008 10.94 3.05008 10.99 3.07008 11.04C3.09008 11.1 3.10008 11.16 3.10008 11.22V13.43L4.91008 12.49C4.96008 12.46 5.02008 12.44 5.08008 12.43C5.15008 12.43 5.21008 12.43 5.27008 12.45L5.34008 12.47C5.47008 12.53 5.61008 12.59 5.74008 12.65C6.42008 12.93 6.98008 13.06 7.68008 13.06C7.71008 13.06 7.74008 13.07 7.78008 13.07L7.87008 13.1C7.90008 13.11 7.93008 13.13 7.96008 13.15C7.98008 13.17 8.01008 13.19 8.03008 13.21C8.05008 13.23 8.08008 13.26 8.09008 13.29C8.11008 13.31 8.13008 13.34 8.14008 13.37C8.15008 13.4 8.16008 13.43 8.17008 13.47C8.17008 13.5 8.18008 13.53 8.18008 13.56C8.18008 13.6 8.17008 13.63 8.17008 13.66C8.16008 13.69 8.15008 13.72 8.14008 13.76C8.13008 13.79 8.11008 13.81 8.09008 13.84C8.08008 13.87 8.05008 13.89 8.03008 13.92C8.01008 13.94 7.98008 13.96 7.96008 13.98C7.93008 14 7.90008 14.01 7.87008 14.03C7.84008 14.04 7.81008 14.05 7.78008 14.05C7.74008 14.06 7.71008 14.06 7.68008 14.06C6.83008 14.06 6.14008 13.9 5.36008 13.57C5.28604 13.5418 5.21268 13.5118 5.14008 13.48L5.16008 13.49L3.32008 14.44C3.27008 14.47 3.22008 14.49 3.18008 14.5C3.13008 14.52 3.08008 14.53 3.03008 14.53C2.98008 14.54 2.93008 14.54 2.88008 14.54C2.82008 14.53 2.77008 14.53 2.72008 14.51C2.68008 14.5 2.63008 14.48 2.58008 14.46C2.54008 14.44 2.49008 14.42 2.45008 14.39C2.41008 14.36 2.37008 14.32 2.33008 14.29L2.24008 14.17L2.19008 14.09C2.13096 13.972 2.10014 13.8419 2.10008 13.71V11.4L2.07008 11.36C1.32008 10.41 0.880078 9.28 0.830078 8.1V7.88C0.830078 4.44 4.05008 1.69 8.00008 1.69ZM12.0001 8.69C12.3101 8.69 12.5601 8.95 12.5601 9.26V10.96H14.2601C14.2901 10.96 14.3201 10.96 14.3601 10.97C14.3901 10.97 14.4201 10.98 14.4501 10.99C14.4801 11 14.5001 11.02 14.5301 11.03C14.5601 11.05 14.5901 11.06 14.6101 11.08C14.6301 11.1 14.6601 11.12 14.6801 11.15C14.7001 11.17 14.7201 11.19 14.7401 11.22C14.7501 11.25 14.7701 11.27 14.7801 11.3L14.8101 11.39L14.8201 11.46L14.8301 11.53C14.8301 11.84 14.5801 12.1 14.2601 12.1H12.5601V13.79C12.5601 13.83 12.5601 13.86 12.5501 13.89C12.5501 13.92 12.5401 13.95 12.5301 13.98C12.5201 14.01 12.5101 14.04 12.4901 14.06C12.4801 14.09 12.4601 14.12 12.4401 14.14C12.4201 14.17 12.4001 14.19 12.3801 14.21C12.3501 14.23 12.3301 14.25 12.3001 14.27C12.2801 14.29 12.2501 14.3 12.2201 14.31C12.1901 14.33 12.1601 14.34 12.1301 14.34L12.0601 14.36H12.0001C11.9601 14.36 11.9201 14.36 11.8801 14.35L11.7801 14.32C11.7401 14.3 11.7101 14.29 11.6801 14.27C11.6501 14.25 11.6201 14.22 11.5901 14.2C11.5701 14.17 11.5401 14.14 11.5201 14.11C11.5001 14.08 11.4901 14.05 11.4701 14.01L11.4401 13.91C11.4301 13.87 11.4301 13.83 11.4301 13.79V12.1H9.73008C9.70008 12.09 9.67008 12.09 9.63008 12.09L9.54008 12.06C9.51008 12.05 9.49008 12.04 9.46008 12.03C9.43166 12.0124 9.40489 11.9924 9.38008 11.97C9.36008 11.96 9.33008 11.93 9.31008 11.91C9.29008 11.89 9.27008 11.86 9.25008 11.84C9.24008 11.81 9.22008 11.78 9.21008 11.75C9.19704 11.7211 9.18698 11.6909 9.18008 11.66L9.17008 11.59L9.16008 11.53C9.16008 11.22 9.42008 10.96 9.73008 10.96H11.4301V9.26C11.4301 9.23 11.4301 9.2 11.4401 9.17C11.4401 9.14 11.4501 9.11 11.4601 9.08C11.4701 9.05 11.4801 9.02 11.5001 8.99C11.5101 8.96 11.5301 8.94 11.5501 8.91C11.5701 8.89 11.5901 8.87 11.6101 8.84C11.6401 8.82 11.6601 8.8 11.6901 8.79C11.7101 8.77 11.7401 8.76 11.7701 8.74L11.8601 8.71L11.9301 8.7H11.9801L12.0001 8.69Z" fill="#181C25"/>
+          </svg>
+        </button>
+      </div>
+      <div class="agent-toolbar-right">
+        <button class="agent-tool-btn" type="button" aria-label="文档">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
+            <path d="M0 0H7V1H1V12.9976H11V5H12V13.9976H0V0ZM3 3.50037H7V4.50037H3V3.50037ZM3 6.50037H9V7.50037H3V6.50037ZM3 9.50037H9V10.5004H3V9.50037ZM10.1316 0.0544808C10.1096 0.0325097 10.0825 0.0163806 10.0527 0.00756047C10.0054 -0.00635117 9.95444 -0.000920121 9.9111 0.0226626C9.86776 0.0462454 9.83554 0.0860548 9.82151 0.133361L9.70446 0.528235C9.62165 0.80745 9.47033 1.06152 9.26426 1.2673C9.05819 1.47308 8.80393 1.62405 8.52462 1.70645L8.13387 1.82177C8.09535 1.83298 8.0615 1.85635 8.03737 1.88839C8.01324 1.92044 8.00013 1.95943 8 1.99955C7.99987 2.03966 8.01273 2.07874 8.03664 2.11094C8.06056 2.14315 8.09426 2.16674 8.1327 2.1782L8.53161 2.2976C8.80899 2.38065 9.06136 2.5314 9.26599 2.73626C9.47063 2.94112 9.62111 3.19366 9.70388 3.47115L9.82151 3.86719C9.83303 3.90558 9.85661 3.93923 9.88876 3.96316C9.92092 3.98708 9.95993 4 10 4C10.0401 4 10.0791 3.98708 10.1112 3.96316C10.1434 3.93923 10.167 3.90558 10.1785 3.86719L10.2961 3.47115C10.3789 3.19366 10.5294 2.94112 10.734 2.73626C10.9387 2.5314 11.191 2.38065 11.4684 2.2976L11.8667 2.1782C11.9052 2.16687 11.939 2.14338 11.963 2.11126C11.987 2.07914 12 2.0401 12 1.99998C12 1.95987 11.987 1.92083 11.963 1.88871C11.939 1.85659 11.9052 1.8331 11.8667 1.82177L11.4754 1.70645C11.1961 1.62405 10.9418 1.47308 10.7357 1.2673C10.5297 1.06152 10.3784 0.80745 10.2955 0.528235L10.1785 0.133361C10.1697 0.103567 10.1535 0.0764518 10.1316 0.0544808Z" fill="#181C25"/>
+          </svg>
+        </button>
+        <button class="agent-tool-btn" type="button" aria-label="展开">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 1H13C14.1046 1 15 1.89543 15 3V13C15 14.1046 14.1046 15 13 15H3C1.89543 15 1 14.1046 1 13V3C1 1.89543 1.89543 1 3 1ZM3 2C2.44772 2 2 2.44772 2 3V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2H3ZM7 3.5L4 3.5C3.9127 3.5 3.83062 3.52237 3.75919 3.5617C3.7456 3.56918 3.73229 3.57734 3.71929 3.58617C3.58694 3.67613 3.5 3.82791 3.5 4V7C3.5 7.27614 3.72386 7.5 4 7.5C4.27614 7.5 4.5 7.27614 4.5 7V5.20703L6.64652 7.35355C6.84178 7.54882 7.15837 7.54882 7.35363 7.35355C7.54889 7.15829 7.54889 6.84171 7.35363 6.64645L5.20718 4.5L7 4.5C7.27614 4.5 7.5 4.27614 7.5 4C7.5 3.72386 7.27614 3.5 7 3.5ZM11.9994 12.5H9C8.72386 12.5 8.5 12.2761 8.5 12C8.5 11.7239 8.72386 11.5 9 11.5H10.7928L8.64637 9.35355C8.45111 9.15829 8.45111 8.84171 8.64637 8.64645C8.84163 8.45118 9.15822 8.45118 9.35348 8.64645L11.5 10.793V9C11.5 8.72386 11.7239 8.5 12 8.5C12.2761 8.5 12.5 8.72386 12.5 9V12C12.5 12.1714 12.4138 12.3226 12.2824 12.4127C12.269 12.4219 12.2551 12.4304 12.2408 12.4383C12.1702 12.4772 12.0892 12.4995 12.003 12.5C12.002 12.5 12.001 12.5 12 12.5H11.9994Z" fill="#333333"/>
+          </svg>
+        </button>
+        <button class="agent-tool-btn" id="closeAskAgent" type="button" aria-label="关闭 Ask Agent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8.92308 8L14 13.0769L13.0769 14L8 8.92308L2.92308 14L2 13.0769L7.07692 8L2 2.92308L2.92308 2L8 7.07692L13.0769 2L14 2.92308L8.92308 8Z" fill="#181C25"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="agent-body">
+      <h2 class="agent-greeting">Hi Scott,<br>在列表页我有什么能帮你?</h2>
+      <div class="agent-prompts" aria-label="推荐问题">
+        <button class="agent-prompt" type="button">销售漏斗流失分析 <span>→</span></button>
+        <button class="agent-prompt" type="button">渠道流量和成交关联 <span>→</span></button>
+        <button class="agent-prompt" type="button">今年销售转化效率 <span>→</span></button>
+        <button class="agent-prompt" type="button">丢失交易改善优化方案 <span>→</span></button>
+      </div>
+      <div class="agent-chat-feed" id="agentChatFeed" aria-live="polite"></div>
+    </div>
+    <div class="agent-composer">
+      <div class="slash-menu" id="slashMenu"></div>
+      <div class="at-menu" id="atMenu"></div>
+      <div class="composer-shell" id="composerShell">
+        <div class="composer-card">
+          <div class="composer-editor-wrap">
+            <div id="composerEditor" class="composer-editor" contenteditable="true" spellcheck="false" aria-label="消息输入" data-placeholder="发送消息" data-empty="true"></div>
+          </div>
+          <div class="composer-toolbar">
+            <div class="toolbar-left">
+              <div class="plus-menu-anchor">
+                <button class="plus-btn" id="plusMenuBtn" type="button" aria-label="添加附件" aria-haspopup="menu" aria-expanded="false">
+                  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                    <path class="icon-stroke" d="M9 3.4v11.2M3.4 9h11.2"></path>
+                  </svg>
+                </button>
+                <div class="plus-menu" id="plusMenu" role="menu">
+                  <div class="plus-menu-panel" id="plusMenuRoot"></div>
+                  <div class="plus-submenu hidden" id="plusSubmenu"></div>
+                </div>
+                <input id="composerFileInput" class="hidden" type="file" multiple>
+              </div>
+              <div class="composer-picker-anchor">
+                <div class="composer-picker-trigger selected" id="agentPickerTrigger">
+                  <button class="composer-picker-btn" id="agentPickerBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+                    <span class="composer-picker-icon" id="agentPickerIcon" aria-hidden="true">
+                      <svg viewBox="0 0 16 16">
+                        <path class="icon-stroke" d="M3.4 4.1h9.2v8.3H3.4z"></path>
+                        <path class="icon-stroke" d="M6 1.9v2.2M10 1.9v2.2M5.4 7.6h2.1M5.4 10h4.6"></path>
+                      </svg>
+                    </span>
+                    <span class="composer-picker-label" id="agentPickerLabel">规划模式</span>
+                    <span class="composer-picker-caret" aria-hidden="true">
+                      <svg viewBox="0 0 12 12"><path class="icon-stroke" d="m3.1 4.5 2.9 3 2.9-3"></path></svg>
+                    </span>
+                  </button>
+                </div>
+                <div class="composer-picker-menu" id="agentPickerMenu" role="menu"></div>
+              </div>
+              <div class="agent-pill" id="agentPill">
+                <span style="width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;color:#566cff;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                    <rect x="2.2" y="3.4" width="11.6" height="9.2" rx="4.2" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
+                    <circle cx="5.8" cy="8" r="0.8" fill="currentColor"></circle>
+                    <circle cx="10.2" cy="8" r="0.8" fill="currentColor"></circle>
+                    <path class="icon-stroke" d="M5.2 2.3v1.3M10.8 2.3v1.3"></path>
+                  </svg>
+                </span>
+                <span class="agent-pill-label" id="agentLabel"></span>
+                <button id="clearAgentBtn" class="close-mini" type="button" aria-label="清除智能体">
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="M3 3l6 6M9 3 3 9"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="toolbar-right">
+              <button class="voice-btn" type="button" aria-label="语音">
+                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                  <rect class="icon-stroke" x="6.1" y="2.9" width="5.8" height="8.4" rx="2.9"></rect>
+                  <path class="icon-stroke" d="M4.2 8.9a4.8 4.8 0 0 0 9.6 0M9 13.7v1.9M6.6 15.6h4.8"></path>
+                </svg>
+              </button>
+              <button class="send-btn is-empty" id="sendBtn" type="button" aria-label="发送">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <g clip-path="url(#sendBtnClip)">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" fill="url(#sendBtnGradient)"></path>
+                    <path d="M22.6289 10.7615C22.7505 11.0955 22.7501 11.4571 22.642 11.7825L18.5828 24.114C18.2857 24.9797 17.3523 25.4495 16.4877 25.1751C16.0828 25.0299 15.7461 24.7459 15.5465 24.3664L13.525 20.5524C13.3399 20.2031 13.4043 19.774 13.6838 19.4945L16.8206 16.3577C17.0502 16.1263 17.0525 15.7514 16.8207 15.5092C16.5859 15.2773 16.2111 15.2749 15.9721 15.5093L12.8377 18.6438C12.5571 18.9244 12.1258 18.9881 11.7761 18.8006L7.96347 16.7569C7.16772 16.3312 6.86567 15.3306 7.30086 14.5295C7.49703 14.1534 7.83384 13.8712 8.24238 13.747L20.5607 9.70111C21.4242 9.42148 22.3567 9.8939 22.6289 10.7615Z" fill="white"></path>
+                  </g>
+                  <defs>
+                    <linearGradient id="sendBtnGradient" x1="6.66" y1="3.42" x2="27.27" y2="28.67" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#7E88FF"></stop>
+                      <stop offset="1" stop-color="#BE64FF"></stop>
+                    </linearGradient>
+                    <clipPath id="sendBtnClip"><rect width="32" height="32" fill="white"></rect></clipPath>
+                  </defs>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="bridge-toast" id="bridgeToast">已触发工作台跳转扩展位</div>
+
+  <script src="../language-switch.js"></script>
+  <script>
+    (function () {
+      var platformSwitch = document.querySelector("[data-platform-switch]");
+      if (!platformSwitch) return;
+      var platformSwitchBtn = platformSwitch.querySelector(".platform-switch-btn");
+      var platformSwitchMenu = platformSwitch.querySelector(".platform-switch-menu");
+      var closeTimer = null;
+
+      function setPlatformMenuOpen(open) {
+        clearTimeout(closeTimer);
+        platformSwitch.classList.toggle("open", open);
+        platformSwitchBtn.setAttribute("aria-expanded", String(open));
+      }
+
+      function schedulePlatformMenuClose() {
+        clearTimeout(closeTimer);
+        closeTimer = setTimeout(function () {
+          setPlatformMenuOpen(false);
+        }, 260);
+      }
+
+      function syncLanguageTabs(lang) {
+        var nextLang = lang === "en" ? "en" : "zh";
+        platformSwitch.querySelectorAll("[data-platform-lang]").forEach(function (button) {
+          var active = button.dataset.platformLang === nextLang;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-selected", String(active));
+        });
+      }
+
+      function openMobileVersion() {
+        var mobileUrl = new URL("../Mobile/index.html", window.location.href);
+        mobileUrl.searchParams.set("return", window.location.pathname + window.location.search + window.location.hash);
+        window.location.href = mobileUrl.toString();
+      }
+
+      platformSwitch.addEventListener("mouseenter", function () {
+        setPlatformMenuOpen(true);
+      });
+      platformSwitch.addEventListener("mouseleave", schedulePlatformMenuClose);
+      platformSwitch.addEventListener("focusin", function () {
+        setPlatformMenuOpen(true);
+      });
+      platformSwitch.addEventListener("focusout", schedulePlatformMenuClose);
+      platformSwitchMenu.addEventListener("click", function (event) {
+        var langButton = event.target.closest("[data-platform-lang]");
+        if (langButton) {
+          syncLanguageTabs(langButton.dataset.platformLang);
+          if (window.ShareClawLanguageSwitch) {
+            window.ShareClawLanguageSwitch.setLanguage(langButton.dataset.platformLang);
+          }
+          return;
+        }
+
+        var deviceButton = event.target.closest("[data-platform-device]");
+        if (!deviceButton) return;
+        if (deviceButton.dataset.platformDevice === "mobile") {
+          openMobileVersion();
+          return;
+        }
+        platformSwitch.querySelectorAll("[data-platform-device]").forEach(function (button) {
+          var active = button.dataset.platformDevice === "web";
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        setPlatformMenuOpen(false);
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        syncLanguageTabs(window.ShareClawLanguageSwitch ? window.ShareClawLanguageSwitch.getLanguage() : "zh");
+      });
+    })();
+  </script>
+
+  <script>
+    const customers = [
+      { name: "三门峡嘉浩咨询有限公司", level: "VIP客户", levelType: "vip", progress: 100, phone: "+86 15201123044", flag: "cn", owner: "孙婉茹", avatar: "孙", avatarType: "dark" },
+      { name: "广西思锐建筑工作室", level: "VIP客户", levelType: "vip", progress: 0, phone: "+86 15001171032", flag: "cn", owner: "吴彦琛", avatar: "吴", avatarType: "dark" },
+      { name: "芜湖百灵传播科技有限公司", level: "重要客户", levelType: "important", progress: 100, phone: "+86 13071032011", flag: "cn", owner: "李书萍", avatar: "李", avatarType: "green" },
+      { name: "商丘达斯可恩食品有限公司", level: "--", levelType: "empty", progress: 0, phone: "--", flag: "", owner: "冯思钦", avatar: "冯", avatarType: "blue", current: true },
+      { name: "台州古驰贸易有限公司", level: "一般客户", levelType: "normal", progress: 50, phone: "+27 50011171032", flag: "nl", owner: "周进", avatar: "周", avatarType: "orange" },
+      { name: "佳木斯晶鼎轩科技有限公司", level: "重要客户", levelType: "important", progress: 50, phone: "+60 15001171032", flag: "bs", owner: "冯启彬", avatar: "冯", avatarType: "green" },
+      { name: "乌兰察布钉固互动科技有限公司", level: "--", levelType: "empty", progress: 0, phone: "--", flag: "", owner: "周海", avatar: "周", avatarType: "blue" },
+      { name: "济宁金湖捷式餐饮有限公司", level: "一般客户", levelType: "normal", progress: 80, phone: "--", flag: "", owner: "李纯", avatar: "李", avatarType: "orange" },
+      { name: "城隍众智易讯科技有限公司", level: "一般客户", levelType: "normal", progress: 50, phone: "--", flag: "", owner: "冯云", avatar: "冯", avatarType: "blue" },
+      { name: "乌兰察布潭门酒店管理有限公司", level: "一般客户", levelType: "normal", progress: 50, phone: "+27 50011171032", flag: "nl", owner: "何琳", avatar: "何", avatarType: "pink" },
+      { name: "淮安格林沃德科技有限公司", level: "重要客户", levelType: "important", progress: 100, phone: "+27 50011171032", flag: "nl", owner: "吴彦潇", avatar: "吴", avatarType: "blue" },
+      { name: "青海诺维信企业管理顾问有限公司", level: "一般客户", levelType: "normal", progress: 10, phone: "+60 15001171032", flag: "bs", owner: "钱萌萌", avatar: "钱", avatarType: "dark" },
+      { name: "广西思锐建筑工作室", level: "--", levelType: "empty", progress: 0, phone: "--", flag: "", owner: "赵荧艳", avatar: "赵", avatarType: "orange" },
+      { name: "荆门格林沃德科技有限公司", level: "--", levelType: "empty", progress: 0, phone: "--", flag: "", owner: "周俊", avatar: "周", avatarType: "green" },
+      { name: "天津神州陆友科技发展", level: "重要客户", levelType: "important", progress: 30, phone: "+60 15001171032", flag: "bs", owner: "郑盈", avatar: "郑", avatarType: "orange" },
+      { name: "上海飞泰半导体有限公司", level: "--", levelType: "empty", progress: 0, phone: "--", flag: "", owner: "李世海", avatar: "李", avatarType: "dark" }
+    ];
+
+    const tbody = document.getElementById("customerRows");
+    const keyword = document.getElementById("keyword");
+
+    function renderRows(list) {
+      tbody.innerHTML = list.map((item, index) => {
+        const progressClass = item.progress === 100 ? "done" : "";
+        const level = item.level === "--" ? '<span class="muted">--</span>' : `<span class="tag ${item.levelType}">${item.level}</span>`;
+        const flag = item.flag === "cn"
+          ? `<svg class="flag-svg" viewBox="0 0 30 20" aria-label="中国国旗"><rect width="30" height="20" fill="#DE2910"/><path fill="#FFDE00" d="M5 3l.7 2.1h2.2L6.1 6.4l.7 2.1L5 7.2 3.2 8.5l.7-2.1-1.8-1.3h2.2zM11.2 2.2l.35.9.95.05-.75.55.25.95-.8-.5-.8.5.25-.95-.75-.55.95-.05zM13.4 5l.35.9.95.05-.75.55.25.95-.8-.5-.8.5.25-.95-.75-.55.95-.05zM13.1 8.3l.35.9.95.05-.75.55.25.95-.8-.5-.8.5.25-.95-.75-.55.95-.05zM10.8 10.8l.35.9.95.05-.75.55.25.95-.8-.5-.8.5.25-.95-.75-.55.95-.05z"/></svg>`
+          : `<span class="flag ${item.flag}"></span>`;
+        const phone = item.phone === "--" ? '<span class="muted">--</span>' : `<span class="phone">${flag}${item.phone}</span>`;
+        const avatarType = item.avatarType === "dark" ? "" : item.avatarType;
+        return `
+          <tr class="${item.current ? "current" : ""}" data-index="${item.originalIndex ?? index}">
+            <td class="check-cell"><span class="checkbox"></span></td>
+            <td class="name-cell">${item.name}</td>
+            <td>${level}</td>
+            <td><div class="progress-cell"><span class="progress-track"><span class="progress-fill ${progressClass}" style="width:${item.progress}%"></span></span><span>${item.progress}%</span></div></td>
+            <td>${phone}</td>
+            <td><span class="owner"><span class="owner-avatar ${avatarType}">${item.avatar}</span>${item.owner}</span></td>
+            <td><span class="row-actions"><button data-action="view">查看</button><button data-action="edit">编辑</button></span></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function openDetail(rowData) {
+      localStorage.setItem("crmAskAgentOpen", document.body.classList.contains("agent-open") ? "true" : "false");
+      if (typeof window.openDetailBridge === "function") {
+        window.openDetailBridge(rowData);
+        return;
+      }
+      window.location.href = "object-detail-overlay.html";
+    }
+
+    const customerRows = customers.map((item, index) => ({ ...item, originalIndex: index }));
+    renderRows(customerRows);
+
+    keyword.addEventListener("input", () => {
+      const value = keyword.value.trim().toLowerCase();
+      renderRows(customerRows.filter((item) => !value || `${item.name}${item.level}${item.owner}${item.phone}`.toLowerCase().includes(value)));
+    });
+
+    tbody.addEventListener("click", (event) => {
+      const row = event.target.closest("tr[data-index]");
+      if (!row) return;
+      const visibleRows = Array.from(tbody.querySelectorAll("tr"));
+      visibleRows.forEach((item) => item.classList.toggle("current", item === row));
+      openDetail(customers[Number(row.dataset.index)]);
+    });
+
+    document.querySelectorAll(".view-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".view-btn").forEach((item) => item.classList.toggle("active", item === button));
+      });
+    });
+
+    document.querySelectorAll("[data-menu-toggle]").forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const section = toggle.closest(".menu-section");
+        const icon = toggle.querySelector(".twisty");
+        if (section) {
+          const collapsed = section.classList.toggle("is-collapsed");
+          icon.classList.toggle("expanded", !collapsed);
+          return;
+        }
+        icon.classList.toggle("expanded");
+      });
+    });
+
+    function initAskAgentSidebar() {
+      var timer;
+
+      function emitBridge(payload) {
+        if (typeof window.openDashboardBridge === "function") {
+          window.openDashboardBridge(payload);
+        } else {
+          window.dispatchEvent(new CustomEvent("crm-dashboard-bridge", { detail: payload }));
+        }
+        var toast = document.getElementById("bridgeToast");
+        if (!toast) return;
+        toast.textContent = "已触发扩展位：" + (payload.title || payload.target || payload.type);
+        toast.classList.add("show");
+        clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove("show"); }, 1500);
+      }
+
+      document.addEventListener("click", function (event) {
+        var bridgeNode = event.target.closest(".agent-chat-feed [data-bridge]");
+        if (bridgeNode) {
+          emitBridge(JSON.parse(bridgeNode.getAttribute("data-bridge")));
+        }
+      });
+      var askAgentButton = document.getElementById("askAgentButton");
+      var askAgentSidebar = document.getElementById("askAgentSidebar");
+      var newAskAgentSession = document.getElementById("newAskAgentSession");
+      var closeAskAgent = document.getElementById("closeAskAgent");
+      var agentChatFeed = document.getElementById("agentChatFeed");
+      var composerShell = document.getElementById("composerShell");
+      var composerEditor = document.getElementById("composerEditor");
+      var plusMenuBtn = document.getElementById("plusMenuBtn");
+      var plusMenu = document.getElementById("plusMenu");
+      var plusMenuRoot = document.getElementById("plusMenuRoot");
+      var plusSubmenu = document.getElementById("plusSubmenu");
+      var composerFileInput = document.getElementById("composerFileInput");
+      var agentPickerTrigger = document.getElementById("agentPickerTrigger");
+      var agentPickerBtn = document.getElementById("agentPickerBtn");
+      var agentPickerLabel = document.getElementById("agentPickerLabel");
+      var agentPickerMenu = document.getElementById("agentPickerMenu");
+      var agentPill = document.getElementById("agentPill");
+      var agentLabel = document.getElementById("agentLabel");
+      var clearAgentBtn = document.getElementById("clearAgentBtn");
+      var sendBtn = document.getElementById("sendBtn");
+      var agentReplyTimer;
+      var composerState = {
+        mode: "planning",
+        activeAgent: "",
+        plusOpen: false,
+        pickerOpen: false,
+        agentSubmenuOpen: false
+      };
+
+      function getEditorText() {
+        return composerEditor.innerText.replace(/\u00a0/g, " ").trim();
+      }
+
+      function escapeHtml(value) {
+        return String(value || "").replace(/[&<>"']/g, function (char) {
+          return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char];
+        });
+      }
+
+      function getTimeLabel() {
+        var now = new Date();
+        return String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+      }
+
+      function scrollAgentChatToBottom() {
+        requestAnimationFrame(function () {
+          var body = askAgentSidebar.querySelector(".agent-body");
+          body.scrollTop = body.scrollHeight;
+        });
+      }
+
+      function renderAgentThinking() {
+        return [
+          '<div class="agent-chat-thinking-row" id="agentThinkingRow">',
+          '<div class="agent-chat-thinking">',
+          '<svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M8 2.8c0 1.8.8 3.1 2.3 4 .8.5 1.7.8 2.7.9-1 .1-1.9.4-2.7.9C8.8 9.5 8 10.8 8 12.6c0-1.8-.8-3.1-2.3-4-.8-.5-1.7-.8-2.7-.9 1-.1 1.9-.4 2.7-.9C7.2 5.9 8 4.6 8 2.8Z"></path></svg>',
+          '<span>思考中...</span>',
+          '</div>',
+          '</div>'
+        ].join("");
+      }
+
+      function renderAgentAiMeta(duration) {
+        return [
+          '<div class="agent-chat-ai-meta">',
+          '<div class="agent-chat-ai-main">',
+          '<img class="agent-chat-ai-avatar" src="../images/shareclawlogo.png" alt="ShareAgent">',
+          '<p class="agent-chat-ai-name">ShareAgent</p>',
+          '</div>',
+          '<div class="agent-chat-ai-status">',
+          '<span>' + escapeHtml(duration) + '</span>',
+          '<svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>',
+          '</div>',
+          '</div>'
+        ].join("");
+      }
+
+      function renderAgentReplyChip(label) {
+        return [
+          '<button class="agent-chat-reply-chip" type="button">',
+          '<span>' + escapeHtml(label) + '</span>',
+          '<svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>',
+          '</button>'
+        ].join("");
+      }
+
+      function renderAgentResponse(prompt) {
+        var title = prompt.indexOf("漏斗") > -1 ? "销售漏斗流失情况分析" :
+          prompt.indexOf("渠道") > -1 ? "渠道流量和成交关联分析" :
+          prompt.indexOf("转化") > -1 ? "今年销售转化效率分析" :
+          prompt.indexOf("丢失") > -1 ? "丢失交易改善优化方案" :
+          "海岳智能制造集团最近跟进情况分析";
+        return [
+          '<div class="agent-chat-ai-block">',
+          '<div class="agent-chat-ai-card">',
+          renderAgentAiMeta("已处理 1分30秒"),
+          '<p class="agent-chat-title">' + escapeHtml(title) + '</p>',
+          '<p class="agent-chat-copy">基于近 14 天的跟进数据，我为你梳理了关键推进信号，并生成了可转发的客户简报。</p>',
+          '<div class="agent-chat-section">',
+          '<p class="agent-chat-section-title">关键发现</p>',
+          '<p>整体跟进节奏偏慢，近一周高价值客户平均 4.2 天才有一次有效触达，低于建议的 2 天节奏。</p>',
+          '<p>3 个重点商机停留在“方案确认”阶段超过 10 天，其中 1 个客户最近没有新的决策人反馈。</p>',
+          '<p>客户对价格和交付周期的异议增多，说明当前推进已经从需求沟通转向成交博弈阶段。</p>',
+          '</div>',
+          '<div class="agent-chat-section">',
+          '<p class="agent-chat-section-title">下一步建议</p>',
+          '<p>今天内优先约 3 个高概率客户做 15 分钟同步，确认采购节点和最新内部意见。</p>',
+          '<p>把还停在方案确认阶段的项目补一版“价值回顾 + 差异化卖点”摘要，压缩来回澄清成本。</p>',
+          '<p>对超过 7 天没有推进的商机单独拉表，明确负责人、阻塞点和下次动作时间。</p>',
+          '</div>',
+          '<p class="agent-chat-artifact-copy">您可点击卡片查看客户详情和客户简报：</p>',
+          '<button class="agent-chat-object-card" type="button" data-bridge=\'{"type":"customer","target":"haiyue","title":"海岳智能制造集团有限公司"}\'>',
+          '<span class="agent-chat-object-icon">CRM</span>',
+          '<span class="agent-chat-object-main">',
+          '<span class="agent-chat-object-title">【客户】海岳智能制造集团有限公司</span>',
+          '<span class="agent-chat-object-meta">创建时间: 5月12日 10:20</span>',
+          '</span>',
+          '</button>',
+          '</div>',
+          '<div class="agent-chat-replies">',
+          renderAgentReplyChip("生成重点客户跟进清单"),
+          renderAgentReplyChip("列出停滞商机"),
+          renderAgentReplyChip("生成推进话术"),
+          '</div>',
+          '</div>'
+        ].join("");
+      }
+
+      function sendAgentMessage(text) {
+        var message = (text || "").trim();
+        if (!message && composerState.activeAgent) message = composerState.activeAgent;
+        if (!message) {
+          focusEditorAtEnd();
+          return;
+        }
+        closeComposerMenus();
+        clearTimeout(agentReplyTimer);
+        askAgentSidebar.classList.add("has-chat");
+        agentChatFeed.innerHTML = [
+          '<div class="agent-chat-user-row"><div class="agent-chat-user-bubble">' + escapeHtml(message) + '</div></div>',
+          '<div class="agent-chat-time">' + getTimeLabel() + '</div>',
+          renderAgentThinking()
+        ].join("");
+        composerEditor.textContent = "";
+        updateComposerState();
+        scrollAgentChatToBottom();
+        emitBridge({ type: "ask-agent", target: "send", title: message });
+        agentReplyTimer = setTimeout(function () {
+          var thinking = document.getElementById("agentThinkingRow");
+          if (thinking) thinking.remove();
+          agentChatFeed.insertAdjacentHTML("beforeend", renderAgentResponse(message));
+          scrollAgentChatToBottom();
+        }, 650);
+      }
+
+      function updateComposerState() {
+        var hasText = Boolean(getEditorText());
+        composerEditor.dataset.empty = hasText ? "false" : "true";
+        sendBtn.classList.toggle("is-empty", !hasText && !composerState.activeAgent);
+        composerShell.classList.toggle("is-focused", document.activeElement === composerEditor || composerShell.contains(document.activeElement));
+      }
+
+      function focusEditorAtEnd() {
+        composerEditor.focus();
+        var range = document.createRange();
+        range.selectNodeContents(composerEditor);
+        range.collapse(false);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        updateComposerState();
+      }
+
+      function setEditorText(text) {
+        composerEditor.textContent = text || "";
+        closeComposerMenus();
+        updateComposerState();
+        focusEditorAtEnd();
+      }
+
+      function renderPlusMenu() {
+        plusMenu.classList.toggle("open", composerState.plusOpen);
+        plusMenuBtn.setAttribute("aria-expanded", String(composerState.plusOpen));
+        if (!composerState.plusOpen) {
+          plusMenuRoot.innerHTML = "";
+          plusSubmenu.classList.add("hidden");
+          plusSubmenu.innerHTML = "";
+          return;
+        }
+        plusMenuRoot.innerHTML = [
+          '<button class="plus-menu-item" type="button" data-plus-action="upload">',
+          '<span class="plus-menu-item-main">',
+          '<span class="plus-menu-item-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M6.4 8.3 9 5.7a2 2 0 1 1 2.8 2.8L8.4 11.9a3.2 3.2 0 0 1-4.5-4.5l3.9-3.9"></path></svg></span>',
+          '<span>添加附件</span>',
+          '</span>',
+          '</button>'
+        ].join("");
+      }
+
+      function setComposerMode(mode, agentName) {
+        composerState.mode = mode;
+        composerState.activeAgent = mode === "agent" ? (agentName || composerState.activeAgent || "销售助手") : "";
+        agentPickerTrigger.classList.toggle("selected", mode !== "dialog");
+        agentPickerLabel.textContent = mode === "planning" ? "规划模式" : mode === "agent" ? composerState.activeAgent : "问答模式";
+        agentLabel.textContent = composerState.activeAgent;
+        agentPill.classList.remove("visible");
+        updateComposerState();
+      }
+
+      function renderAgentPickerMenu() {
+        agentPickerTrigger.classList.toggle("active", composerState.pickerOpen);
+        agentPickerBtn.setAttribute("aria-expanded", String(composerState.pickerOpen));
+        agentPickerMenu.classList.toggle("open", composerState.pickerOpen);
+        if (!composerState.pickerOpen) {
+          agentPickerMenu.innerHTML = "";
+          composerState.agentSubmenuOpen = false;
+          return;
+        }
+        var agents = ["销售助手", "客户洞察分析师", "渠道运营顾问"];
+        var menuMarkup = [
+          '<div class="plus-menu-panel">',
+          modeButtonMarkup("dialog", "问答模式"),
+          modeButtonMarkup("planning", "规划模式"),
+          '<button class="plus-menu-item ' + (composerState.mode === "agent" || composerState.agentSubmenuOpen ? "active" : "") + '" type="button" data-agent-view="agent">',
+          '<span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><rect class="icon-stroke" x="2.5" y="3.7" width="11" height="8.6" rx="4"></rect><circle class="icon-fill" cx="5.9" cy="8" r="0.8"></circle><circle class="icon-fill" cx="10.1" cy="8" r="0.8"></circle><path class="icon-stroke" d="M5.3 2.5v1.4M10.7 2.5v1.4"></path></svg></span><span>指定智能体模式</span></span>',
+          '<span class="plus-menu-item-end"><span class="plus-menu-item-check"></span><span class="plus-menu-item-caret"><svg viewBox="0 0 13 13" aria-hidden="true"><path class="icon-stroke" d="m4.2 3.1 4 3.4-4 3.4"></path></svg></span></span>',
+          '</button>',
+          '</div>'
+        ];
+        if (composerState.agentSubmenuOpen) {
+          menuMarkup = menuMarkup.concat([
+          '<div class="plus-submenu">',
+          '<label class="plus-submenu-search"><input id="agentPickerSearch" type="text" placeholder="搜索"><svg viewBox="0 0 12 12" aria-hidden="true"><circle class="icon-stroke" cx="5.3" cy="5.3" r="3.8"></circle><path class="icon-stroke" d="m8.6 8.6 2 2"></path></svg></label>',
+          '<div class="plus-submenu-list">',
+          agents.map(function (name) {
+            var active = composerState.mode === "agent" && composerState.activeAgent === name;
+            return '<button class="plus-submenu-option ' + (active ? "active current" : "") + '" type="button" data-agent-name="' + name + '"><span class="plus-submenu-option-label">' + name + '</span><span class="plus-submenu-option-check">' + (active ? '<svg viewBox="0 0 14 14" aria-hidden="true"><path class="icon-stroke" d="m3.4 7.3 2.1 2.1 5-5"></path></svg>' : "") + '</span></button>';
+          }).join(""),
+          '</div>',
+          '<div class="plus-submenu-footer"><button class="plus-submenu-manage" type="button">更多</button></div>',
+          '</div>'
+          ]);
+        }
+        agentPickerMenu.innerHTML = menuMarkup.join("");
+      }
+
+      function modeButtonMarkup(mode, label) {
+        var active = composerState.mode === mode;
+        var icon = mode === "dialog"
+          ? '<path class="icon-stroke" d="M3.4 4.3h9.2v6.7H6.9L4 13.6v-2.6H3.4z"></path>'
+          : '<path class="icon-stroke" d="M3.4 4.1h9.2v8.3H3.4z"></path><path class="icon-stroke" d="M6 1.9v2.2M10 1.9v2.2M5.4 7.6h2.1M5.4 10h4.6"></path>';
+        return [
+          '<button class="plus-menu-item ' + (active ? "active" : "") + '" type="button" data-mode="' + mode + '">',
+          '<span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16" aria-hidden="true">' + icon + '</svg></span><span>' + label + '</span></span>',
+          '<span class="plus-menu-item-end"><span class="plus-menu-item-check">' + (active ? '<svg viewBox="0 0 14 14"><path class="icon-stroke" d="m3.4 7.3 2.1 2.1 5-5"></path></svg>' : "") + '</span></span>',
+          '</button>'
+        ].join("");
+      }
+
+      function closeComposerMenus() {
+        composerState.plusOpen = false;
+        composerState.pickerOpen = false;
+        composerState.agentSubmenuOpen = false;
+        renderPlusMenu();
+        renderAgentPickerMenu();
+      }
+
+      function resetAskAgentSession() {
+        clearTimeout(agentReplyTimer);
+        askAgentSidebar.classList.remove("has-chat");
+        agentChatFeed.innerHTML = "";
+        composerEditor.textContent = "";
+        closeComposerMenus();
+        setComposerMode("planning");
+        updateComposerState();
+        var body = askAgentSidebar.querySelector(".agent-body");
+        body.scrollTop = 0;
+        focusEditorAtEnd();
+      }
+
+      function setAgentOpen(open, options) {
+        options = options || {};
+        localStorage.setItem("crmAskAgentOpen", open ? "true" : "false");
+        document.body.classList.toggle("agent-open", open);
+        askAgentButton.classList.toggle("is-active", open);
+        askAgentButton.setAttribute("aria-expanded", String(open));
+        askAgentSidebar.setAttribute("aria-hidden", String(!open));
+        if (open) {
+          if (!options.skipFocus) {
+            setTimeout(focusEditorAtEnd, 180);
+          }
+        } else {
+          closeComposerMenus();
+          if (!options.skipFocus) {
+            askAgentButton.focus();
+          }
+        }
+      }
+
+      askAgentButton.addEventListener("click", function () {
+        setAgentOpen(!document.body.classList.contains("agent-open"));
+      });
+
+      closeAskAgent.addEventListener("click", function () {
+        setAgentOpen(false);
+      });
+
+      newAskAgentSession.addEventListener("click", function () {
+        resetAskAgentSession();
+      });
+
+      askAgentSidebar.querySelectorAll(".agent-prompt").forEach(function (button) {
+        button.addEventListener("click", function () {
+          sendAgentMessage(button.textContent.replace("→", "").trim());
+        });
+      });
+
+      composerEditor.addEventListener("input", updateComposerState);
+      composerEditor.addEventListener("focus", updateComposerState);
+      composerEditor.addEventListener("blur", function () {
+        requestAnimationFrame(updateComposerState);
+      });
+      composerEditor.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          sendBtn.click();
+        }
+      });
+      composerEditor.addEventListener("paste", function (event) {
+        event.preventDefault();
+        document.execCommand("insertText", false, event.clipboardData.getData("text/plain"));
+        updateComposerState();
+      });
+
+      plusMenuBtn.addEventListener("click", function () {
+        composerState.plusOpen = !composerState.plusOpen;
+        composerState.pickerOpen = false;
+        renderPlusMenu();
+        renderAgentPickerMenu();
+      });
+      plusMenuRoot.addEventListener("click", function (event) {
+        if (event.target.closest("[data-plus-action='upload']")) {
+          composerFileInput.click();
+          closeComposerMenus();
+        }
+      });
+      composerFileInput.addEventListener("change", function () {
+        if (composerFileInput.files.length) {
+          emitBridge({ type: "ask-agent", target: "file-upload", title: "已选择 " + composerFileInput.files.length + " 个文件" });
+          composerFileInput.value = "";
+        }
+      });
+
+      agentPickerBtn.addEventListener("click", function () {
+        composerState.pickerOpen = !composerState.pickerOpen;
+        composerState.agentSubmenuOpen = composerState.pickerOpen && composerState.mode === "agent";
+        composerState.plusOpen = false;
+        renderPlusMenu();
+        renderAgentPickerMenu();
+      });
+      agentPickerMenu.addEventListener("click", function (event) {
+        var modeButton = event.target.closest("[data-mode]");
+        var agentViewButton = event.target.closest("[data-agent-view]");
+        var agentButton = event.target.closest("[data-agent-name]");
+        if (modeButton) {
+          setComposerMode(modeButton.dataset.mode);
+          closeComposerMenus();
+          focusEditorAtEnd();
+          return;
+        }
+        if (agentViewButton) {
+          composerState.agentSubmenuOpen = true;
+          renderAgentPickerMenu();
+          return;
+        }
+        if (agentButton) {
+          setComposerMode("agent", agentButton.dataset.agentName);
+          closeComposerMenus();
+          focusEditorAtEnd();
+        }
+      });
+      clearAgentBtn.addEventListener("click", function () {
+        setComposerMode("dialog");
+        focusEditorAtEnd();
+      });
+      sendBtn.addEventListener("click", function () {
+        sendAgentMessage(getEditorText());
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && document.body.classList.contains("agent-open")) {
+          if (composerState.plusOpen || composerState.pickerOpen) {
+            closeComposerMenus();
+            return;
+          }
+          setAgentOpen(false);
+        }
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".agent-composer")) {
+          closeComposerMenus();
+        }
+      });
+
+      setComposerMode("planning");
+      updateComposerState();
+      if (localStorage.getItem("crmAskAgentOpen") === "true") {
+        document.body.classList.add("agent-instant");
+        setAgentOpen(true, { skipFocus: true });
+        requestAnimationFrame(function () {
+          document.body.classList.remove("agent-instant");
+          document.documentElement.classList.remove("agent-persist-open");
+        });
+      }
+
+
+    }
+
+    initAskAgentSidebar();
+
+  </script>
+</body>
+</html>
