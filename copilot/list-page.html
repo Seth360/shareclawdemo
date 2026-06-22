@@ -1675,6 +1675,11 @@
 
     function openDetail(rowData) {
       localStorage.setItem("crmAskAgentOpen", document.body.classList.contains("agent-open") ? "true" : "false");
+      try {
+        localStorage.setItem("crmActiveCustomer", JSON.stringify(rowData || {}));
+      } catch (error) {
+        // Local previews may block storage; the detail page falls back to a default customer.
+      }
       if (typeof window.openDetailBridge === "function") {
         window.openDetailBridge(rowData);
         return;

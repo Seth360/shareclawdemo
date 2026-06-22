@@ -224,6 +224,35 @@ facts and selector maps belong in `SHARECLAW_UI_MEMORY.md`.
   `方案1/方案2` switcher on other pages is a separate system and was not
   touched.
 
+### 2026-06-22 - Copilot Detail Page + Data-Driven Instruction Drill-Down
+
+- Decision: in the `copilot/` surface, opening a customer detail reflects the
+  clicked row (localStorage `crmActiveCustomer` → `currentCustomer`), and the
+  Ask Agent (copilot) Q&A is about that customer. Welcome instructions and
+  their drill-down Q&A (question bubble + AI answer + 执行卡片 + follow-up
+  chips; chip click appends a sub Q&A and is consumed) are ported from the
+  product spec into the existing agent UI规范, content **deterministically
+  derived per customer** (`buildCustomerScript`, seeded by name) — business
+  logic/phrasing fixed, only text variables change. q1 速览 was removed per
+  user; current instructions are q2/q3/q4.
+- Decision: the exec card (`.agent-chat-exec`) matches `conversation.html`'s
+  `.agent-action-card` (新建·客户 card) — THIS is what the user means by
+  "ask-user-question style", NOT the purple `.ask-user-question-card`. So: flat
+  (0.5px #dee1e8, no shadow), 可执行 = purple badge pill (#f7f0ff/#7341de),
+  action button is **black** `.agent-action-btn.primary` (#181c25) in a bottom
+  footer (not inline, not purple). Session answers omit the agent avatar/name;
+  greeting shortened.
+- Implementation note: `num` derive helper must use unsigned shift `>>>`
+  (signed `>>` on uint32 ≥ 2³¹ → negative modulo → values below floor).
+- Recovery note (2026-06-22): all of the above plus the customer-threading was
+  wiped once by a "全部发布 Demo417 更新" git publish (uncommitted work), then
+  re-applied. After re-applying such uncommitted work, COMMIT/checkpoint
+  promptly so the next publish does not discard it again.
+- Do not regress: keep `crmActiveCustomer` as the single active-customer
+  source; no hardcoded customer in detail DOM or copilot answers; exec button
+  stays black in a footer; instruction/Q&A structure identical across
+  customers.
+
 ## Correction Log
 
 ### 2026-06-04 - ShareAgent Title Menu Is Shared Across Desktop Pages

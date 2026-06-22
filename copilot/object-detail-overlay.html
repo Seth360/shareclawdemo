@@ -603,6 +603,17 @@
       white-space: nowrap;
     }
     .agent-prompt:hover { background: #e9edf6; }
+    .agent-prompt-tag {
+      font-size: 11px;
+      line-height: 16px;
+      font-weight: 600;
+      color: #545861;
+      background: #ffffff;
+      border: 0.5px solid #dfe3ea;
+      padding: 1px 8px;
+      border-radius: 6px;
+    }
+    .agent-prompt-arrow { color: #9aa0ab; font-size: 11px; }
     .agent-sidebar.has-chat .agent-greeting,
     .agent-sidebar.has-chat .agent-prompts { display: none; }
     .agent-chat-feed {
@@ -827,6 +838,81 @@
       height: 12px;
       color: #8f95a2;
     }
+    .agent-chat-reply-chip[data-followup] { cursor: pointer; }
+    .agent-chat-exec {
+      margin-top: 10px;
+      border: 0.5px solid #dee1e8;
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .agent-chat-exec-head {
+      min-height: 48px;
+      padding: 12px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 0.5px solid #eef0f4;
+    }
+    .agent-chat-exec-title {
+      margin: 0;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
+      color: #242529;
+    }
+    .agent-chat-exec-tag {
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 700;
+      color: #7341de;
+      background: #f7f0ff;
+      padding: 1px 8px;
+      border-radius: 6px;
+    }
+    .agent-chat-exec-body { padding: 6px 16px; }
+    .agent-chat-exec-row {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 0.5px solid #f1f3f6;
+    }
+    .agent-chat-exec-row:first-child { border-top: 0; }
+    .agent-chat-exec-k { color: #545861; font-size: 13px; }
+    .agent-chat-exec-v { font-size: 13px; font-weight: 600; color: #242529; }
+    .agent-chat-exec-badge { font-size: 15px; font-weight: 700; text-align: right; }
+    .agent-chat-exec-badge.tone-amber { color: #e8932a; }
+    .agent-chat-exec-badge.tone-red { color: #e0492f; }
+    .agent-chat-exec-badge.tone-green { color: #1aa86b; }
+    .agent-chat-exec-note {
+      margin: 0;
+      padding: 12px 16px 0;
+      font-size: 11.5px;
+      color: #7a818c;
+      line-height: 1.6;
+    }
+    .agent-chat-exec-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+    }
+    .agent-chat-exec-btn {
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid #181c25;
+      border-radius: 8px;
+      background: #181c25;
+      color: #fff;
+      font-size: 13px;
+      line-height: 18px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .agent-chat-exec-btn:hover { background: #000; border-color: #000; }
     .slash-menu,
     .at-menu {
       position: absolute;
@@ -1352,7 +1438,7 @@
   <main class="list-page">
     <div class="list-head"><div class="title">客户 | 全部客户</div><div class="actions"><button class="btn primary">新建</button><button class="btn">导入</button><button class="btn">更多</button></div></div>
     <div class="filter"><button class="btn">筛选</button><input placeholder="客户名称 / 所属行业"></div>
-    <table><thead><tr><th>客户名称</th><th>行业</th><th>客户阶段</th><th>年度预计收入</th><th>负责人</th><th>操作</th></tr></thead><tbody><tr class="opportunity-row" id="openDetail"><td>上海云驰智能制造有限公司</td><td>智能制造</td><td>方案确认</td><td>2,860,000.00</td><td>林澈</td><td>查看</td></tr></tbody></table>
+    <table><thead><tr><th>客户名称</th><th>行业</th><th>客户阶段</th><th>年度预计收入</th><th>负责人</th><th>操作</th></tr></thead><tbody><tr class="opportunity-row" id="openDetail"><td class="js-customer-name">上海云驰智能制造有限公司</td><td>智能制造</td><td>方案确认</td><td>2,860,000.00</td><td>林澈</td><td>查看</td></tr></tbody></table>
   </main>
 
   <!-- MODULE:shell START -->
@@ -1360,7 +1446,7 @@
     <header class="detail-header">
       <div class="detail-top">
         <div>
-          <div class="object-title"><span class="type">客户</span><h1>上海云驰智能制造有限公司</h1><button class="icon-btn" title="切换详情布局"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg></button><button class="icon-btn" title="标签"><svg viewBox="0 0 24 24"><path d="M12.6 2H4a2 2 0 0 0-2 2v8.6a2 2 0 0 0 .6 1.4l7.4 7.4a2 2 0 0 0 2.8 0l8.6-8.6a2 2 0 0 0 0-2.8L14 2.6A2 2 0 0 0 12.6 2Z"/><path d="M7 7h.01"/></svg></button><button class="icon-btn" title="上一条"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><button class="icon-btn" title="下一条"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+          <div class="object-title"><span class="type">客户</span><h1 class="js-customer-name">上海云驰智能制造有限公司</h1><button class="icon-btn" title="切换详情布局"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg></button><button class="icon-btn" title="标签"><svg viewBox="0 0 24 24"><path d="M12.6 2H4a2 2 0 0 0-2 2v8.6a2 2 0 0 0 .6 1.4l7.4 7.4a2 2 0 0 0 2.8 0l8.6-8.6a2 2 0 0 0 0-2.8L14 2.6A2 2 0 0 0 12.6 2Z"/><path d="M7 7h.01"/></svg></button><button class="icon-btn" title="上一条"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><button class="icon-btn" title="下一条"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
           <div class="meta"><span class="red">推进中</span><span>|</span><span>方案确认</span><span>|</span><span>智能制造</span><span>|</span><span>年度框架客户</span></div>
           <div class="tags"><span class="tag orange">重点客户</span><span class="tag green">预算已确认</span><span class="tag blue">管理层关注</span></div>
         </div>
@@ -1375,7 +1461,7 @@
           <h2 class="card-title">关键信息</h2>
           <div class="fields">
             <div class="field"><label>年度预计收入</label><strong>2,860,000.00</strong></div>
-            <div class="field"><label>客户全称</label><strong>上海云驰智能制造有限公司</strong></div>
+            <div class="field"><label>客户全称</label><strong class="js-customer-name">上海云驰智能制造有限公司</strong></div>
             <div class="field"><label>当前阶段</label><strong>调研确认</strong></div>
             <div class="field"><label>成交概率</label><strong>72%</strong></div>
             <div class="field"><label>最近跟进</label><strong>今天 10:40</strong></div>
@@ -1461,7 +1547,7 @@
             <button><span class="circle"><svg viewBox="0 0 24 24"><path d="M18 8c0 4.5-6 10-6 10S6 12.5 6 8a6 6 0 1 1 12 0Z"/><circle cx="12" cy="8" r="2"/></svg></span><span>建外勤</span></button>
             <button><span class="circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></span><span>更多</span></button>
           </div>
-          <article class="item"><div class="dot"><svg viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div><h3>日程 来自 林澈 <span>04/29 15:20</span></h3><div class="timeline-card">确认上海云驰智能制造有限公司节奏，客户要求本周输出方案范围和实施排期。</div></article>
+          <article class="item"><div class="dot"><svg viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div><h3>日程 来自 林澈 <span>04/29 15:20</span></h3><div class="timeline-card">确认<span class="js-customer-name">上海云驰智能制造有限公司</span>节奏，客户要求本周输出方案范围和实施排期。</div></article>
           <article class="item"><div class="dot blue"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></div><h3>会议 来自 周予安 <span>04/28 10:00</span></h3><div class="timeline-card">同步方案范围、服务边界和关键验收口径，下一步补充合同条款。</div></article>
           <article class="item"><div class="dot green"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></div><h3>任务 来自 陈嘉宁 <span>04/23 09:30</span></h3><div class="timeline-card">待办：跟进节假日响应条款与报价调整，标记为临期。</div></article>
         </div>
@@ -1701,6 +1787,125 @@
   </script>
 
   <script>
+    const ACTIVE_CUSTOMER_FALLBACK = { name: "上海云驰智能制造有限公司", owner: "林澈", level: "重要客户" };
+    function getActiveCustomer() {
+      try {
+        const raw = localStorage.getItem("crmActiveCustomer");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.name) return parsed;
+        }
+      } catch (error) {
+        // Storage may be blocked in local previews; fall back to the default customer.
+      }
+      return ACTIVE_CUSTOMER_FALLBACK;
+    }
+    const currentCustomer = getActiveCustomer();
+    document.querySelectorAll(".js-customer-name").forEach((el) => {
+      el.textContent = currentCustomer.name;
+    });
+
+    function seedFromName(name) {
+      var s = 0;
+      for (var i = 0; i < (name || "").length; i++) s = (s * 31 + name.charCodeAt(i)) >>> 0;
+      return s || 7;
+    }
+
+    // Deterministic per-customer content. Business logic/phrasing is fixed;
+    // only the text variables derive from the customer record + name seed.
+    function buildCustomerScript(customer) {
+      var name = customer.name || "该客户";
+      var seed = seedFromName(name);
+      var at = function (offset, arr) { return arr[(seed + offset) % arr.length]; };
+      var num = function (offset, min, span) { return min + ((seed >>> offset) % span); };
+
+      var industry = at(0, ["复合材料制造", "智能制造装备", "精密机械", "新能源材料", "消费电子", "工业软件", "汽车零部件"]);
+      var gradeMap = { "VIP客户": "A 级战略", "重要客户": "A 级重点", "一般客户": "B 级培育" };
+      var grade = gradeMap[customer.level] || "B 级培育";
+      var deal = num(2, 80, 81);
+      var dwell = num(4, 15, 8);
+      var base = 14;
+      var riskPct = num(6, 60, 13);
+      var second = num(7, 35, 16);
+      var bid = num(8, 600, 301);
+      var sur = ["王", "赵", "陈", "李", "周", "吴", "孙", "郑", "冯", "何", "秦", "许"];
+      var given = ["敏", "磊", "洁", "强", "婷", "明", "华", "静", "涛", "琳", "峰", "娟"];
+      var person = function (i) { return sur[(seed + i * 7) % sur.length] + given[(seed + i * 13) % given.length]; };
+      var purchaser = person(1), cio = person(2), biz = person(3);
+      var nextCommit = "6/" + num(10, 18, 6);
+      var taskDue = "6/" + num(11, 16, 5);
+      var signTarget = "7/" + num(12, 25, 6);
+      var peers = ["华峰", "桐昆", "恒逸", "荣盛", "新凤鸣", "盛虹", "三房巷"];
+      var peerA = peers[seed % peers.length];
+      var peerB = peers[(seed + 3) % peers.length];
+      if (peerB === peerA) peerB = peers[(seed + 4) % peers.length];
+
+      return {
+        greeting: "这个客户我已读完，你可以让我:",
+        instructions: [
+          {
+            id: "q2", title: "诊断当前最该补什么", tag: "决策链 / BANT",
+            question: name + "当前最该补什么?",
+            answer: {
+              summary: "客户需求明确,但<b>财务审批人缺失</b>,商务谈判推不动。建议先补关键人地图,再生成给采购总监 " + purchaser + " 的引荐话术,把财务负责人拉进决策链。",
+              exec: {
+                title: "客户洞察",
+                rows: [
+                  { k: "风险", val: "财务线未进入决策链", badge: { text: riskPct + "%", tone: "amber" } },
+                  { k: "动作", val: "生成触达序列(经 " + purchaser + " 引荐财务)", action: "生成" }
+                ],
+                note: "生成后写入客户动态+商机动态,并创建补关系任务,截止 " + taskDue + "。"
+              },
+              followups: [
+                { id: "q2a", question: "给我 " + purchaser + " 的引荐话术", answer: { summary: "“" + purchaser.charAt(0) + "总,这次方案落地需要财务侧确认审批链和预算口径。能否帮忙引荐贵司财务负责人?我们可在一次会上同步两期报价拆分,减少您内部沟通成本。”", exec: { title: "引荐话术", rows: [{ k: "动作", val: "复制话术 / 发起引荐任务", action: "发送" }] } } },
+                { id: "q2b", question: "决策链还缺谁?", answer: { summary: "已覆盖:采购总监 " + purchaser + "(支持者)、CIO " + cio + "(技术决策)、业务负责人 " + biz + "(需强化)。<b>缺财务负责人 / CFO(未识别)</b>,是当前唯一断点,建议由 " + purchaser + " 引荐补入。" } }
+              ]
+            }
+          },
+          {
+            id: "q3", title: "扫描风险与情报", tag: "风险 / 情报",
+            question: "这个客户有哪些风险,先处理哪个?",
+            answer: {
+              summary: "内部识别 3 项:<b>财务审批链未确认(高)</b>、方案停留 " + dwell + " 天超基准(中)、合同价变更待法务授权(中)。外部情报:暂无负面舆情,近期有 1 条同类项目招投标动态可关注。建议优先处理财务审批链。",
+              exec: {
+                title: "风险处置",
+                rows: [
+                  { k: "最高项", val: "预算审批链未确认", badge: { text: "高", tone: "red" } },
+                  { k: "动作", val: "创建“" + taskDue + " 前补审批链”任务并指派", action: "创建" }
+                ],
+                note: "同步生成方案超期预警(" + dwell + "天 > 基准 " + base + "天)推送给经理。"
+              },
+              followups: [
+                { id: "q3a", question: "看外部招投标情报", answer: { summary: "近 30 天该客户所属集团有 1 条<b>" + industry + "产线扩建招标</b>(公开),预算约 ¥" + bid + " 万,可作为二期切入点。来源:市场情报 Agent。", exec: { title: "情报线索", rows: [{ k: "动作", val: "订阅该客户情报 / 关联到增购机会", action: "订阅" }] } } },
+                { id: "q3b", question: "这个客户信用状况?", answer: { summary: "工商正常,无司法风险与失信记录,近一年无重大负面舆情。账期建议按标准框架;<b>合同价变更条款</b>需法务单独授权后再签。" } }
+              ]
+            }
+          },
+          {
+            id: "q4", title: "识别增购机会", tag: "增购",
+            question: name + "还有哪些增购机会?",
+            answer: {
+              summary: "一期 ERP+CRM 核心 ¥" + deal + " 万在谈。该客户为 " + grade + "框架采购,<b>二期扩展(¥" + second + " 万)</b>可前置铺垫;制造业同规模客户多搭配移动拜访模块,有交叉销售空间。",
+              exec: {
+                title: "增长机会",
+                rows: [
+                  { k: "机会", val: "二期扩展 + 移动拜访模块", badge: { text: "¥" + second + "万", tone: "green" } },
+                  { k: "动作", val: "生成增购方案要点 + 关联新建商机", action: "生成" }
+                ],
+                note: "引用 " + peerA + "、" + peerB + " 同行业案例作为证据。"
+              },
+              followups: [
+                { id: "q4a", question: "同行业一般还买什么?", answer: { summary: "制造业同规模客户在 ERP+CRM 核心之外,常加购<b>移动拜访、渠道协同、回款可视化</b>模块,平均扩展客单 ¥35–50 万。" } },
+                { id: "q4b", question: "二期适合什么时候提?", answer: { summary: "建议一期签约(目标 " + signTarget + ")后、上线里程碑达成时提,赢单概率最高。可在 <b>" + nextCommit + " 实施里程碑沟通</b>时先埋点二期预算。" } }
+              ]
+            }
+          }
+        ]
+      };
+    }
+
+    const customerScript = buildCustomerScript(currentCustomer);
+
     const input = document.getElementById("recordSearch");
     const rows = Array.from(document.querySelectorAll("#recordRows tr"));
     input.addEventListener("input", () => {
@@ -1820,55 +2025,107 @@
         ].join("");
       }
 
-      function renderAgentReplyChip(label) {
+      function renderAgentReplyChip(label, followupId) {
         return [
-          '<button class="agent-chat-reply-chip" type="button">',
+          '<button class="agent-chat-reply-chip" type="button"' + (followupId ? ' data-followup="' + escapeHtml(followupId) + '"' : '') + '>',
           '<span>' + escapeHtml(label) + '</span>',
           '<svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>',
           '</button>'
         ].join("");
       }
 
-      function renderAgentResponse(prompt) {
-        var title = prompt.indexOf("漏斗") > -1 ? "销售漏斗流失情况分析" :
-          prompt.indexOf("渠道") > -1 ? "渠道流量和成交关联分析" :
-          prompt.indexOf("转化") > -1 ? "今年销售转化效率分析" :
-          prompt.indexOf("丢失") > -1 ? "丢失交易改善优化方案" :
-          "海岳智能制造集团最近跟进情况分析";
+      function renderExecCard(exec) {
+        if (!exec) return "";
+        var actions = [];
+        var rows = exec.rows.map(function (row) {
+          var tail = row.badge
+            ? '<span class="agent-chat-exec-badge tone-' + row.badge.tone + '">' + escapeHtml(row.badge.text) + '</span>'
+            : '';
+          if (row.action) actions.push(row.action);
+          return '<div class="agent-chat-exec-row"><span class="agent-chat-exec-k">' + escapeHtml(row.k) + '</span><span class="agent-chat-exec-v">' + escapeHtml(row.val) + '</span>' + tail + '</div>';
+        }).join("");
+        var footer = actions.length
+          ? '<div class="agent-chat-exec-footer">' + actions.map(function (a) {
+              return '<button class="agent-chat-exec-btn" type="button" data-exec-action="' + escapeHtml(a + " · " + exec.title) + '">' + escapeHtml(a) + '</button>';
+            }).join("") + '</div>'
+          : '';
+        return [
+          '<div class="agent-chat-exec">',
+          '<div class="agent-chat-exec-head"><p class="agent-chat-exec-title">' + escapeHtml(exec.title) + '</p><span class="agent-chat-exec-tag">可执行</span></div>',
+          '<div class="agent-chat-exec-body">' + rows + '</div>',
+          exec.note ? '<p class="agent-chat-exec-note">' + escapeHtml(exec.note) + '</p>' : '',
+          footer,
+          '</div>'
+        ].join("");
+      }
+
+      function renderAgentAnswer(answer) {
+        var replies = (answer.followups || []).map(function (f) {
+          return renderAgentReplyChip(f.question, f.id);
+        }).join("");
         return [
           '<div class="agent-chat-ai-block">',
           '<div class="agent-chat-ai-card">',
-          renderAgentAiMeta("已处理 1分30秒"),
-          '<p class="agent-chat-title">' + escapeHtml(title) + '</p>',
-          '<p class="agent-chat-copy">基于近 14 天的跟进数据，我为你梳理了关键推进信号，并生成了可转发的客户简报。</p>',
-          '<div class="agent-chat-section">',
-          '<p class="agent-chat-section-title">关键发现</p>',
-          '<p>整体跟进节奏偏慢，近一周高价值客户平均 4.2 天才有一次有效触达，低于建议的 2 天节奏。</p>',
-          '<p>3 个重点商机停留在“方案确认”阶段超过 10 天，其中 1 个客户最近没有新的决策人反馈。</p>',
-          '<p>客户对价格和交付周期的异议增多，说明当前推进已经从需求沟通转向成交博弈阶段。</p>',
+          '<p class="agent-chat-copy">' + answer.summary + '</p>',
+          renderExecCard(answer.exec),
           '</div>',
-          '<div class="agent-chat-section">',
-          '<p class="agent-chat-section-title">下一步建议</p>',
-          '<p>今天内优先约 3 个高概率客户做 15 分钟同步，确认采购节点和最新内部意见。</p>',
-          '<p>把还停在方案确认阶段的项目补一版“价值回顾 + 差异化卖点”摘要，压缩来回澄清成本。</p>',
-          '<p>对超过 7 天没有推进的商机单独拉表，明确负责人、阻塞点和下次动作时间。</p>',
-          '</div>',
-          '<p class="agent-chat-artifact-copy">您可点击卡片查看客户详情和客户简报：</p>',
-          '<button class="agent-chat-object-card" type="button" data-bridge=\'{"type":"customer","target":"haiyue","title":"海岳智能制造集团有限公司"}\'>',
-          '<span class="agent-chat-object-icon">CRM</span>',
-          '<span class="agent-chat-object-main">',
-          '<span class="agent-chat-object-title">【客户】海岳智能制造集团有限公司</span>',
-          '<span class="agent-chat-object-meta">创建时间: 5月12日 10:20</span>',
-          '</span>',
-          '</button>',
-          '</div>',
-          '<div class="agent-chat-replies">',
-          renderAgentReplyChip("生成重点客户跟进清单"),
-          renderAgentReplyChip("列出停滞商机"),
-          renderAgentReplyChip("生成推进话术"),
-          '</div>',
+          replies ? '<div class="agent-chat-replies">' + replies + '</div>' : '',
           '</div>'
         ].join("");
+      }
+
+      function findFollowup(id) {
+        for (var i = 0; i < customerScript.instructions.length; i++) {
+          var fus = customerScript.instructions[i].answer.followups || [];
+          for (var j = 0; j < fus.length; j++) {
+            if (fus[j].id === id) return fus[j];
+          }
+        }
+        return null;
+      }
+
+      // Free-text input falls back to the closest instruction answer (default: first).
+      function renderAgentResponse(prompt) {
+        var hit = customerScript.instructions.filter(function (it) {
+          return prompt.indexOf(it.title.slice(0, 2)) > -1;
+        })[0];
+        return renderAgentAnswer((hit || customerScript.instructions[0]).answer);
+      }
+
+      function pushAgentTurn(question, answer) {
+        var stale = document.getElementById("agentThinkingRow");
+        if (stale) stale.remove();
+        clearTimeout(agentReplyTimer);
+        agentChatFeed.insertAdjacentHTML("beforeend", [
+          '<div class="agent-chat-user-row"><div class="agent-chat-user-bubble">' + escapeHtml(question) + '</div></div>',
+          '<div class="agent-chat-time">' + getTimeLabel() + '</div>',
+          renderAgentThinking()
+        ].join(""));
+        scrollAgentChatToBottom();
+        agentReplyTimer = setTimeout(function () {
+          var thinking = document.getElementById("agentThinkingRow");
+          if (thinking) thinking.remove();
+          agentChatFeed.insertAdjacentHTML("beforeend", renderAgentAnswer(answer));
+          scrollAgentChatToBottom();
+        }, 650);
+      }
+
+      function startInstruction(id) {
+        var inst = customerScript.instructions.filter(function (it) { return it.id === id; })[0];
+        if (!inst) return;
+        closeComposerMenus();
+        clearTimeout(agentReplyTimer);
+        askAgentSidebar.classList.add("has-chat");
+        agentChatFeed.innerHTML = "";
+        emitBridge({ type: "ask-agent", target: "instruction", title: inst.title });
+        pushAgentTurn(inst.question, inst.answer);
+      }
+
+      function appendFollowup(followupId, chipEl) {
+        var fu = findFollowup(followupId);
+        if (!fu) return;
+        if (chipEl) chipEl.style.display = "none";
+        pushAgentTurn(fu.question, fu.answer);
       }
 
       function sendAgentMessage(text) {
@@ -2054,10 +2311,34 @@
         resetAskAgentSession();
       });
 
-      askAgentSidebar.querySelectorAll(".agent-prompt").forEach(function (button) {
-        button.addEventListener("click", function () {
-          sendAgentMessage(button.textContent.replace("→", "").trim());
+      function renderWelcome() {
+        var greetingEl = askAgentSidebar.querySelector(".agent-greeting");
+        if (greetingEl) greetingEl.innerHTML = "Hi Scott，<br>" + escapeHtml(customerScript.greeting);
+        var promptsEl = askAgentSidebar.querySelector(".agent-prompts");
+        if (!promptsEl) return;
+        promptsEl.innerHTML = customerScript.instructions.map(function (it) {
+          return '<button class="agent-prompt" type="button" data-instruction="' + escapeHtml(it.id) + '">'
+            + '<span class="agent-prompt-text">' + escapeHtml(it.title) + '</span>'
+            + '<span class="agent-prompt-tag">' + escapeHtml(it.tag) + '</span>'
+            + '<span class="agent-prompt-arrow">→</span>'
+            + '</button>';
+        }).join("");
+      }
+      renderWelcome();
+
+      var promptsContainer = askAgentSidebar.querySelector(".agent-prompts");
+      if (promptsContainer) {
+        promptsContainer.addEventListener("click", function (event) {
+          var button = event.target.closest(".agent-prompt");
+          if (button && button.dataset.instruction) startInstruction(button.dataset.instruction);
         });
+      }
+
+      agentChatFeed.addEventListener("click", function (event) {
+        var chip = event.target.closest(".agent-chat-reply-chip[data-followup]");
+        if (chip) { appendFollowup(chip.dataset.followup, chip); return; }
+        var execBtn = event.target.closest("[data-exec-action]");
+        if (execBtn) { emitBridge({ type: "ask-agent", target: "exec", title: execBtn.dataset.execAction }); }
       });
 
       composerEditor.addEventListener("input", updateComposerState);

@@ -78,6 +78,34 @@ Core shared render/navigation functions:
 | `market.html` | Agent square, skill center, automation view, created/batch/share flows, skill import flow. |
 | `docs.html` | Shared shell plus document library. Shallow semantic mapping only. |
 | `settings.html` | Shared shell plus settings pages. Shallow semantic mapping only. |
+| `copilot/list-page.html` | CRM 客户对象列表页（独立 `copilot/` 界面）。点行 `openDetail(rowData)` 写 localStorage `crmActiveCustomer` 后下钻。 |
+| `copilot/object-detail-overlay.html` | CRM 客户对象详情页 + 右侧 Ask Agent（copilot）。详情与 copilot 通过 Ask Agent 联动。 |
+
+### Copilot Surface (`copilot/`)
+
+`copilot/` 是独立于 8 主页的新版 CRM 界面，仅「客户」对象通路打通。
+
+- **客户身份契约**：`list-page.html` `openDetail(rowData)` 把客户记录写 localStorage
+  `crmActiveCustomer`；详情页脚本顶 `getActiveCustomer()` 读出 `currentCustomer`
+  （无则回退 `上海云驰智能制造有限公司`）。客户名锚点加 `.js-customer-name` 类，初始化灌入。
+- **数据驱动脚本**：`buildCustomerScript(currentCustomer)` 由名字 hash（`seedFromName`，
+  `num` 必用无符号 `>>>`）确定性派生全部变量，返回 `{greeting, instructions:[{id,title,tag,
+  question,answer}]}`；`answer={summary(含<b>),exec,followups}`。**业务逻辑固定，仅变量随客户变**。
+  当前 3 条指令：q2 诊断 / q3 风险情报 / q4 增购（**q1 速览已按用户要求删除**）。
+- **欢迎区**：`renderWelcome()` 渲染 `.agent-prompt` 胶囊（`.agent-prompt-text` + `.agent-prompt-tag`
+  白底#545861字 + 11px 箭头，无序号，Figma 5169-52026）；欢迎语精简
+  `Hi Scott，这个客户我已读完，你可以让我:`。点击 → `startInstruction(id)`。
+- **一问一答**：`startInstruction`/`appendFollowup` → `pushAgentTurn`（用户气泡 + 650ms thinking
+  → `renderAgentAnswer`）。`renderAgentAnswer` **不渲染 agent 头像/ShareAgent 名**（不调
+  `renderAgentAiMeta`），直接 `.agent-chat-copy` + `renderExecCard`。followup chip（带
+  `data-followup`）点击追加子问答并隐藏该 chip。事件用 `.agent-prompts`/`#agentChatFeed` 委托。
+- **执行卡片 `.agent-chat-exec`**：视觉对齐 `conversation.html` 的 `.agent-action-card`
+  「新建·客户」卡（**这才是用户认定的 ask-user-question 样式**）——0.5px #dee1e8 边 / 16px 圆角 /
+  无阴影；header 标题 + 可执行紫 pill（#f7f0ff/#7341de，对齐 `.agent-action-badge`）；
+  行 k(#545861)·val·徽标(amber/red/green)；note；**动作按钮在底部 `.agent-chat-exec-footer`
+  （flex-end，对齐 `.agent-action-footer`），黑色 `.agent-action-btn.primary`（#181c25 / h32 /
+  border1px#181c25 / radius8 / 13px / 白字），不是紫色，不嵌行内**。布局宽松：16px 内边距、12px 行距、
+  64px 标签列。`[data-exec-action]` → `emitBridge` toast。
 
 ## Semantic Lookup
 
