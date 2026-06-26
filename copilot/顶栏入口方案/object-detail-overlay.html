@@ -3,19 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CRM 工作台首页模板</title>
+  <title>CRM 客户详情浮层原型</title>
   <script>
     (function () {
       try {
-        if (
-          localStorage.getItem("crmAskAgentOpen") === "true" &&
-          localStorage.getItem("crmAskAgentFloating") !== "true"
-        ) {
+        if (localStorage.getItem("crmAskAgentOpen") === "true") {
           document.documentElement.classList.add("agent-persist-open");
-        }
-        var sidebarWidth = Number(localStorage.getItem("crmAskAgentSidebarWidth"));
-        if (sidebarWidth >= 320 && sidebarWidth <= 560) {
-          document.documentElement.style.setProperty("--agent-sidebar", sidebarWidth + "px");
         }
       } catch (error) {}
     })();
@@ -42,7 +35,6 @@
       --primary-nav: 64px;
       --secondary-menu: 200px;
       --agent-sidebar: 360px;
-      --gap: 12px;
     }
 
     * { box-sizing: border-box; }
@@ -59,7 +51,7 @@
     }
 
     button, input { font: inherit; }
-    button { border: 0; background: none; color: inherit; cursor: pointer; padding: 0; }
+    button { border: 0; background: none; cursor: pointer; color: inherit; padding: 0; }
     svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.9; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .hidden { display: none !important; }
     .icon-stroke { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -132,7 +124,19 @@
     .top-icons svg { width: 16px; height: 16px; }
     .avatar { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #1f2937; color: #fff; font-size: 12px; font-weight: 700; flex: 0 0 28px; }
     .ask-agent-btn {
-      display: none;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      border: 1px solid #d8dee8;
+      border-radius: 8px;
+      background: #fff;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
     }
     .ask-agent-btn:hover,
     .ask-agent-btn.is-active {
@@ -332,159 +336,223 @@
     .menu-footer svg { width: 14px; height: 14px; }
     /* ===== SHELL-BASE-END ===== */
 
-    .dashboard-page {
+    .list-page {
       position: fixed;
-      top: var(--topbar);
-      right: 12px;
-      bottom: 12px;
-      left: calc(var(--primary-nav) + var(--secondary-menu) + 11px);
+      top: calc(var(--topbar) + 14px);
+      right: 14px;
+      bottom: 14px;
+      left: calc(var(--primary-nav) + var(--secondary-menu) + 28px);
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+      opacity: .36;
+      pointer-events: none;
+      transition: right .22s ease;
+    }
+    body.drawer-closed .list-page { opacity: 1; pointer-events: auto; }
+    body.drawer-closed .drawer { display: none; }
+    .opportunity-row { cursor: pointer; }
+
+    .list-head { height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; }
+    .title { font-size: 16px; font-weight: 800; }
+    .actions { display: flex; align-items: center; gap: 8px; }
+    .btn { height: 34px; padding: 0 14px; border: 1px solid var(--line); border-radius: 8px; background: #f7f9fc; font-weight: 700; }
+    .btn.primary { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .detail-header .actions .btn { height: 28px; border-radius: 6px; }
+    .detail-header .actions .btn.primary { border-color: var(--brand); }
+    .detail-header .actions #closeDetail { width: 28px; height: 28px; flex-basis: 28px; border-color: transparent; background: transparent; }
+    .filter { display: flex; gap: 8px; padding: 0 22px 14px; border-bottom: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { height: 36px; padding: 0 10px; border-bottom: 1px solid #edf1f5; text-align: left; white-space: nowrap; }
+    th { font-weight: 800; }
+
+    .drawer {
+      position: fixed;
+      z-index: 60;
+      top: 0;
+      left: var(--primary-nav);
+      right: 0;
+      bottom: 0;
+      width: auto;
+      min-width: 0;
       overflow-y: auto;
       overflow-x: hidden;
-      background: transparent;
+      background: var(--page);
+      border-radius: 0;
+      box-shadow: 0 0 12px rgba(0, 0, 0, .15);
       transition: right .22s ease;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .dashboard-page::-webkit-scrollbar {
-      display: none;
     }
 
-    .scope-bar {
-      height: 44px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 0 14px;
-      border-radius: 8px;
-      background: #fff;
-      color: #344054;
-      font-weight: 700;
+    .detail-header { position: sticky; top: 0; z-index: 20; padding: 18px 28px 12px; border-bottom: 0; background: var(--page); }
+    .detail-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; min-width: 0; }
+    .detail-top > div:first-child { flex: 1 1 auto; min-width: 0; }
+    .detail-header .actions {
+      flex: 0 0 max-content;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      max-width: none;
     }
-    .scope-item { display: inline-flex; align-items: center; gap: 7px; }
-    .scope-item svg { width: 16px; height: 16px; }
-
-    .dashboard-grid {
-      min-height: calc(100% - 56px);
-      margin-top: 12px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 334px;
-      gap: var(--gap);
-      overflow: visible;
+    .detail-header .actions .ask-agent-btn,
+    .detail-header .actions #closeDetail { flex: 0 0 auto; }
+    .object-title { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
+    .object-title h1 {
+      min-width: 0;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
+    .type { height: 20px; padding: 0 8px; display: inline-flex; align-items: center; flex: 0 0 auto; border-radius: 5px; background: #1f9cf0; color: #fff; font-weight: 800; font-size: 13px; }
+    h1 { margin: 0; font-size: 18px; line-height: 1.35; }
+    .icon-btn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 8px; background: #f7f9fc; }
+    .object-title .icon-btn { width: 24px; height: 24px; flex-basis: 24px; border-color: #d9e0ea; border-radius: 6px; background: transparent; }
+    .object-title .icon-btn svg { width: 14px; height: 14px; }
+    .meta { margin-top: 10px; display: flex; align-items: center; gap: 9px; font-size: 15px; }
+    .red { color: #ff3d34; font-weight: 800; }
+    .tags { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { height: 26px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid currentColor; border-radius: 999px; background: #fff; font-weight: 700; font-size: 13px; }
+    .tag.orange { color: #e87500; background: #fff7ed; }
+    .tag.green { color: #4d9a28; background: #f2ffe9; }
+    .tag.blue { color: #1f8eea; background: #edf7ff; }
 
-    .left-stack, .right-stack { min-width: 0; display: flex; flex-direction: column; gap: var(--gap); overflow: visible; }
-    .panel { background: var(--panel); border-radius: 10px; overflow: hidden; }
-    .card-head { position: relative; height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; }
-    .card-title { margin: 0; font-size: 15px; line-height: 1.2; font-weight: 600; }
-    .card-action { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; color: #344054; }
-    .card-action:hover { background: var(--brand-soft); color: var(--brand); }
-    .ai-hover-action {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      width: 32px;
-      height: 32px;
-      display: grid;
-      place-items: center;
-      border: 0;
-      border-radius: 999px;
-      background: #fff;
-      color: #9b6dff;
-      font-size: 12px;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateY(-50%) scale(.94);
-      transition: transform .14s ease;
+    .detail-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 34%); gap: 12px; padding: 0 12px 24px; }
+    .left { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .card, .right { background: #fff; border-radius: 12px; }
+    .summary { padding: 0 12px 12px; }
+    .card-title { height: 52px; display: flex; align-items: center; margin: 0; font-size: 15px; line-height: 1.2; font-weight: 600; }
+    .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 54px; }
+    .field { display: grid; grid-template-columns: 112px 1fr; gap: 12px; }
+    .field label { color: var(--muted); }
+    .field strong { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .tabs { height: 54px; display: flex; align-items: flex-end; gap: 24px; padding: 0 12px; border-bottom: 1px solid var(--line); }
+    .tab { height: 54px; display: flex; align-items: center; border-bottom: 3px solid transparent; font-size: 15px; font-weight: 800; }
+    .tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+    .tab-panel { padding: 12px; }
+    .section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 15px; font-weight: 800; }
+    .toggle { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; background: #eef2f7; color: #687385; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .metric { min-height: 58px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfe; }
+    .metric span { color: var(--muted); font-size: 12px; }
+    .metric strong { display: block; margin-top: 6px; font-size: 20px; }
+    .report-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; margin-bottom: 12px; }
+    .chart { min-height: 178px; padding: 14px 16px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 600; }
+    .chart-note { color: var(--muted); font-size: 12px; font-weight: 500; }
+    .chart svg { width: 100%; height: 106px; }
+    .chart-line { fill: none; stroke: var(--brand); stroke-width: 3; }
+    .chart-area { fill: rgba(255, 128, 0, .12); stroke: none; }
+    .bar-chart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: end; height: 118px; padding-top: 8px; }
+    .bar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; color: var(--muted); font-size: 12px; }
+    .bar i { width: 28px; display: block; border-radius: 6px 6px 0 0; background: #ffe2bf; border: 1px solid #ffc67f; }
+    .bar.hot i { background: var(--brand); border-color: var(--brand); }
+    .approval { margin: 12px 0 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; overflow: hidden; }
+    .stage-card { padding: 12px; border-color: transparent; border-radius: 8px; }
+    .stage-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .stage-title { display: flex; align-items: center; gap: 8px; font-size: 15px; line-height: 24px; font-weight: 800; }
+    .stage-title span { color: var(--weak); font-size: 14px; line-height: 20px; font-weight: 400; }
+    .stage-head .btn { height: 24px; padding: 0 8px; border-color: #ffbe85; border-radius: 4px; background: #fff5e6; color: var(--brand); font-size: 12px; font-weight: 400; }
+    .stage-flow { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 0; margin-bottom: 12px; overflow: hidden; }
+    .stage-node { position: relative; height: 22px; display: flex; align-items: center; justify-content: center; gap: 4px; clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%); background: #e6eaf0; color: #545861; font-size: 12px; line-height: 18px; font-weight: 400; }
+    .stage-node:first-child { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%); }
+    .stage-node.done { background: #cdf6df; }
+    .stage-node.current { background: #49cb84; color: #fff; }
+    .stage-node.todo { background: #e6eaf0; color: #545861; }
+    .stage-dot { width: 12px; height: 12px; display: inline-grid; place-items: center; border-radius: 50%; background: #30c776; color: #fff; font-size: 10px; line-height: 1; }
+    .stage-node.current .stage-dot { background: rgba(255,255,255,.18); color: #fff; box-shadow: inset 0 0 0 4px #30c776; }
+    .stage-node.todo .stage-dot { background: #c1c5ce; color: #fff; }
+	    .stage-task-head { display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; gap: 16px; margin-bottom: 8px; }
+	    .stage-task-title { display: flex; align-items: center; gap: 4px; font-size: 14px; line-height: 18px; font-weight: 700; }
+	    .stage-help { width: 14px; height: 14px; display: inline-grid; place-items: center; color: #8c96a5; }
+	    .stage-help svg { width: 14px; height: 14px; stroke-width: 2; }
+	    .stage-tools { display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: #181c25; font-size: 12px; line-height: 18px; white-space: nowrap; }
+	    .stage-tools > span:not(.switch) { white-space: nowrap; }
+    .switch { width: 22px; height: 12px; border-radius: 16px; background: #c1c5ce; position: relative; }
+    .switch::before { content: ""; position: absolute; width: 10px; height: 10px; top: 1px; left: 1px; border-radius: 50%; background: #fff; box-shadow: 0 2px 2px rgba(0,35,11,.2); }
+    .refresh-link { width: 28px; height: 28px; display: grid; place-items: center; color: #737c8c; }
+    .stage-task { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; }
+    .task-state { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 18px; }
+    .clock-dot { width: 12px; height: 12px; display: grid; place-items: center; border-radius: 50%; background: #ff9b29; color: #fff; }
+    .clock-dot svg { width: 10px; height: 10px; }
+    .required { color: #ff3d34; font-weight: 800; }
+    .records-head { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 8px; }
+    .records-head input { width: 230px; height: 32px; border: 1px solid var(--line); border-radius: 6px; padding: 0 10px; outline: 0; }
+    tbody tr:hover { background: var(--brand-soft); }
+    .state { height: 22px; display: inline-flex; align-items: center; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .state.done { background: #e9fbf2; color: #15965b; }
+    .state.todo { background: #fff2dd; color: #d46b00; }
+    .state.risk { background: #fff0f0; color: #e5484d; }
+
+    .right { overflow: hidden; }
+    .quick { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 18px 22px 12px; background: #fff; }
+    .quick button { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 700; }
+    .side-panel > .quick { margin: -10px -18px 12px -52px; }
+    .circle { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; }
+    .timeline { position: relative; padding: 10px 18px 32px 52px; }
+    .timeline::before { content: ""; position: absolute; top: 15px; bottom: 22px; left: 30px; width: 2px; background: #e7ebf2; }
+    .timeline.has-quick::before { top: 126px; }
+    .item { position: relative; margin-bottom: 18px; }
+    .dot { position: absolute; left: -34px; top: 2px; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: #ff7190; color: #fff; font-weight: 800; }
+    .dot svg { width: 14px; height: 14px; }
+    .dot.blue { background: var(--blue); }
+    .dot.green { background: var(--green); }
+    .item h3 { margin: 0 0 8px; font-size: 15px; }
+    .item h3 span { color: #8a93a0; font-weight: 500; }
+    .timeline-card { padding: 13px 14px; border: 1px solid #e7ebf2; border-radius: 8px; line-height: 1.55; }
+    .approval-flow { position: relative; padding: 12px; }
+    .approval-flow::before { display: none; }
+    .approval-card { position: relative; width: 100%; border: 1px solid var(--brand); border-radius: 8px; background: #fff; overflow: hidden; }
+    .approval-card::after { content: "待处理"; position: absolute; top: 0; right: 0; padding: 3px 10px; background: var(--brand); color: #fff; font-size: 12px; line-height: 18px; }
+    .approval-user { display: flex; align-items: center; gap: 8px; padding: 16px 12px 12px; }
+    .approval-avatar { width: 40px; height: 40px; border-radius: 4px; background: linear-gradient(135deg, #1f2937, #748095); }
+    .approval-user strong { display: block; font-size: 14px; line-height: 20px; color: #545861; }
+    .approval-user strong span { display: inline; margin: 0 0 0 4px; color: var(--weak); font-weight: 400; font-size: 12px; }
+    .approval-user span { display: block; margin-top: 0; color: var(--weak); font-size: 12px; line-height: 18px; }
+    .approval-product { margin: 0 12px 14px; padding: 8px 12px; background: #fff8f2; font-size: 14px; line-height: 20px; }
+    .approval-product a { color: #1677ff; text-decoration: none; }
+    .approval-section-title { margin: 0 12px 8px; color: var(--weak); font-size: 14px; line-height: 20px; }
+    .approval-track { position: relative; margin: 0 12px 12px; padding-left: 24px; }
+    .approval-track::before { content: ""; position: absolute; top: 9px; bottom: 18px; left: 9px; width: 2px; background: #e4e8ef; }
+    .approval-node { position: relative; margin-bottom: 12px; }
+    .approval-node::before { content: ""; position: absolute; left: -22px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #368dff; }
+    .approval-node.done::before { background: #58cf8b; border-color: #58cf8b; }
+    .approval-node.pending::before { background: #ff9f2d; border-color: #ff9f2d; }
+    .approval-node h4 { margin: 0 0 4px; font-size: 14px; line-height: 20px; }
+    .approval-node h4 span { margin-left: 8px; color: #19a966; font-weight: 500; }
+    .approval-node.pending h4 span { color: var(--brand); }
+    .approval-reply { float: right; color: #1677ff; font-size: 13px; font-weight: 700; }
+    .approval-note { padding: 8px; border-radius: 2px; background: #f7f8fa; color: #545861; font-size: 12px; line-height: 18px; }
+    .approval-note a { color: #1677ff; text-decoration: none; }
+    .approval-more { display: flex; justify-content: flex-end; margin: 0 12px 10px; color: var(--weak); font-size: 12px; }
+    .approval-actions { min-height: 48px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: #fff; }
+    .approval-actions .muted-action { color: #9aa3af; font-weight: 700; }
+    .agent-open .list-page,
+    .agent-persist-open .list-page { right: calc(var(--agent-sidebar) + 14px); }
+    .agent-open .drawer,
+    .agent-persist-open .drawer { right: var(--agent-sidebar); }
+    .agent-open .detail-body,
+    .agent-persist-open .detail-body { grid-template-columns: minmax(0, 1fr) minmax(240px, 28%); }
+    .agent-open .detail-top,
+    .agent-persist-open .detail-top {
+      flex-wrap: nowrap;
+      gap: 12px;
     }
-    .ai-hover-action svg { width: 18px; height: 18px; stroke: none; }
-    .ai-hover-action svg path { stroke: none; }
-    .ai-hover-action:hover {
-      transform: translateY(-50%) scale(1);
+    .agent-open .detail-top > div:first-child,
+    .agent-persist-open .detail-top > div:first-child {
+      flex: 1 1 auto;
+      min-width: 0;
     }
-    .panel:hover .ai-hover-action,
-    .panel:focus-within .ai-hover-action {
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateY(-50%) scale(1);
+    .agent-open .detail-header .actions,
+    .agent-persist-open .detail-header .actions {
+      width: auto;
+      max-width: none;
+      flex: 0 0 max-content;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      gap: 6px;
     }
-
-    .brief { height: 165px; padding-bottom: 12px; }
-    .brief-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 14px; }
-    .metric { min-height: 90px; padding: 14px 13px; border-radius: 8px; cursor: pointer; }
-    .metric:nth-child(1) { background: #fff3ed; }
-    .metric:nth-child(2) { background: #fff7e5; }
-    .metric:nth-child(3) { background: #EEFDF3; }
-    .metric:hover { outline: 1px solid #ffd2a0; }
-    .metric span { display: block; color: #344054; font-size: 13px; }
-    .metric strong { display: block; margin: 8px 0 7px; font-size: 25px; line-height: 1; }
-    .metric small { color: #667085; }
-    .metric .up { color: var(--brand); font-weight: 800; }
-    .metric .green { color: var(--green); font-weight: 800; }
-
-    .brief, .funnel-card, .tool-card, .calendar-card { flex: 0 0 auto; }
-    .funnel-card { height: 260px; }
-    .chart-slot { position: relative; }
-    .funnel-area { height: 208px; padding: 0 28px 14px 38px; }
-    .chart-stage { width: 100%; height: 100%; display: block; overflow: visible; }
-    .chart-stage text { fill: #344054; stroke: none; font-size: 12px; font-weight: 400; dominant-baseline: middle; }
-    .chart-stage .chart-value { fill: #667085; font-size: 11px; }
-    .chart-stage .chart-total { fill: #17191c; font-size: 24px; font-weight: 800; }
-    .chart-stage .chart-line { stroke: #d7dee8; stroke-width: 1; fill: none; }
-    .chart-stage .chart-shape { cursor: pointer; }
-    .chart-stage .chart-shape:hover { filter: brightness(1.04); }
-    .chart-tooltip {
-      position: fixed;
-      z-index: 100;
-      min-width: 118px;
-      padding: 7px 9px;
-      border: 1px solid #e5eaf1;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, .96);
-      color: #344054;
-      box-shadow: 0 8px 22px rgba(16, 24, 40, .12);
-      font-size: 12px;
-      line-height: 1.45;
-      pointer-events: none;
-      opacity: 0;
-      transform: translate(-50%, -8px);
-      transition: opacity .12s ease;
-    }
-    .chart-tooltip.show { opacity: 1; }
-    .chart-tooltip strong { display: block; color: #17191c; font-size: 12px; }
-
-    .loss-card { flex: 1; min-height: 247px; }
-    .loss-body { height: calc(100% - 44px); position: relative; padding: 0 42px 12px; }
-
-    .tool-card { height: 165px; }
-    .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 4px 18px 18px; }
-    .tool { display: grid; justify-items: center; gap: 9px; color: #202936; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .tool-icon { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 10px; color: #fff; }
-    .tool-icon.purple { background: #8b5cf6; }
-    .tool-icon.green { background: #4bd17f; }
-    .tool-icon.yellow { background: #ffc327; }
-    .tool-icon svg { width: 26px; height: 26px; }
-
-    .calendar-card { height: 250px; }
-    .month { padding: 0 18px 12px; }
-    .month-head { height: 28px; display: flex; align-items: center; justify-content: space-between; color: #344054; font-weight: 600; }
-    .month-nav { display: flex; gap: 16px; color: #98a2b3; }
-    .calendar { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
-    .calendar th { height: 24px; color: var(--muted); font-weight: 500; }
-    .calendar td { height: 25px; text-align: center; color: #344054; }
-    .calendar .muted { color: #c3c9d2; }
-    .calendar .today span { width: 30px; height: 22px; display: inline-grid; place-items: center; border-radius: 999px; background: var(--brand); color: #fff; font-weight: 800; }
-
-    .task-card { flex: 1; min-height: 218px; }
-    .task-list { padding: 0 16px 10px; overflow: hidden; }
-    .task { min-height: 58px; padding: 9px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
-    .task:hover { background: var(--brand-soft); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 6px; }
-    .task strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
-    .task span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
-    .task em { color: var(--red); font-style: normal; margin-left: 8px; }
-
-    body:not(.agent-floating).agent-open .dashboard-page,
-    .agent-persist-open .dashboard-page { right: calc(var(--agent-sidebar) + 12px); }
-    body:not(.agent-floating).agent-open .topbar,
+    .agent-open .meta,
+    .agent-persist-open .meta { flex-wrap: wrap; row-gap: 4px; }
+    .agent-open .topbar,
     .agent-persist-open .topbar {
       right: var(--agent-sidebar);
       grid-template-columns: minmax(220px, 1fr) minmax(180px, 280px) max-content;
@@ -493,9 +561,11 @@
     .agent-open .top-icons,
     .agent-persist-open .top-icons { gap: 10px; }
     body.agent-instant .topbar,
-    body.agent-instant .dashboard-page,
+    body.agent-instant .list-page,
+    body.agent-instant .drawer,
     .agent-persist-open .topbar,
-    .agent-persist-open .dashboard-page,
+    .agent-persist-open .list-page,
+    .agent-persist-open .drawer,
     .agent-persist-open .agent-sidebar,
     body.agent-instant .agent-sidebar { transition: none !important; }
 
@@ -514,49 +584,8 @@
       transform: translateX(100%);
       transition: transform .22s ease;
     }
-    .agent-sidebar::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: -4px;
-      width: 8px;
-      cursor: ew-resize;
-      z-index: 2;
-    }
-    body.agent-floating .agent-sidebar::before { display: none; }
-    body.agent-resizing,
-    body.agent-resizing * {
-      cursor: ew-resize !important;
-      user-select: none !important;
-    }
-    body.agent-resizing .agent-sidebar { transition: none !important; }
     .agent-open .agent-sidebar,
     .agent-persist-open .agent-sidebar { transform: translateX(0); }
-    body.agent-floating.agent-open .dashboard-page { right: 0; }
-    body.agent-floating.agent-open .topbar {
-      right: 0;
-      grid-template-columns: minmax(330px, 1fr) minmax(260px, 360px) auto;
-      gap: 16px;
-    }
-    body.agent-floating.agent-open .agent-sidebar {
-      top: var(--agent-float-top, 196px);
-      left: var(--agent-float-left, calc(100vw - 464px));
-      right: auto;
-      bottom: auto;
-      width: min(440px, calc(100vw - 32px));
-      height: min(570px, calc(100vh - 32px));
-      border: 1px solid #e9edf3;
-      border-radius: 16px;
-      box-shadow: 0 18px 44px rgba(16, 24, 40, .16);
-      transform: translateX(0);
-      overflow: hidden;
-      transition: box-shadow .18s ease;
-    }
-    body.agent-floating.agent-open .agent-sidebar.is-dragging {
-      box-shadow: 0 22px 54px rgba(16, 24, 40, .2);
-      user-select: none;
-    }
     .agent-toolbar {
       height: 48px;
       display: flex;
@@ -567,8 +596,6 @@
     }
     .agent-toolbar-left,
     .agent-toolbar-right { display: flex; align-items: center; gap: 14px; }
-    body.agent-floating.agent-open .agent-toolbar { cursor: move; }
-    body.agent-floating.agent-open .agent-toolbar button { cursor: pointer; }
     .agent-tool-btn {
       width: 28px;
       height: 28px;
@@ -579,10 +606,6 @@
     }
     .agent-tool-btn:hover { background: #f2f4f8; }
     .agent-tool-btn svg { width: 16px; height: 16px; }
-    .agent-tool-btn svg.icon,
-    .agent-tool-btn svg.icon path { fill: currentColor; }
-    body.agent-floating .agent-float-open-icon { display: none; }
-    body:not(.agent-floating) .agent-float-restore-icon { display: none; }
     .agent-tool-btn > svg,
     .send-btn svg { stroke: none; }
     .agent-tool-btn > svg path,
@@ -598,20 +621,11 @@
       padding: 24px 24px 120px;
       overflow: hidden;
     }
-    body.agent-floating.agent-open .agent-body {
-      padding: 28px 28px 140px;
-    }
     .agent-sidebar.has-chat .agent-body {
       justify-content: flex-start;
       padding: 14px 16px 176px;
       overflow-y: auto;
       scroll-padding-bottom: 176px;
-    }
-    body.agent-floating.agent-open .agent-sidebar.has-chat .agent-body {
-      justify-content: flex-start;
-      padding: 14px 16px 156px;
-      overflow-y: auto;
-      scroll-padding-bottom: 156px;
     }
     .agent-greeting {
       margin: 0 0 26px;
@@ -620,10 +634,6 @@
       line-height: 1.45;
       font-weight: 800;
       letter-spacing: 0;
-    }
-    body.agent-floating.agent-open .agent-greeting {
-      font-size: 24px;
-      line-height: 1.45;
     }
     .agent-prompts {
       display: flex;
@@ -646,6 +656,17 @@
       white-space: nowrap;
     }
     .agent-prompt:hover { background: #e9edf6; }
+    .agent-prompt-tag {
+      font-size: 11px;
+      line-height: 16px;
+      font-weight: 600;
+      color: #545861;
+      background: #ffffff;
+      border: 0.5px solid #dfe3ea;
+      padding: 1px 8px;
+      border-radius: 6px;
+    }
+    .agent-prompt-arrow { color: #9aa0ab; font-size: 11px; }
     .agent-sidebar.has-chat .agent-greeting,
     .agent-sidebar.has-chat .agent-prompts { display: none; }
     .agent-chat-feed {
@@ -721,7 +742,7 @@
       margin-bottom: 14px;
     }
     .agent-chat-ai-main {
-      display: none;
+      display: flex;
       align-items: center;
       gap: 8px;
     }
@@ -870,91 +891,81 @@
       height: 12px;
       color: #8f95a2;
     }
-    .agent-analysis-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .agent-analysis-panel .agent-chat-title { margin-bottom: 5px; }
-    .agent-analysis-card {
-      padding: 10px;
-      border: 1px solid #e5e8f0;
-      border-radius: 14px;
+    .agent-chat-reply-chip[data-followup] { cursor: pointer; }
+    .agent-chat-exec {
+      margin-top: 10px;
+      border: 0.5px solid #dee1e8;
+      border-radius: 16px;
       background: #fff;
+      overflow: hidden;
     }
-    .agent-analysis-chart-source {
-      width: 100%;
-      height: 156px;
-      display: block;
-      overflow: visible;
-    }
-    .agent-analysis-chart-source .chart-stage {
-      width: 100%;
-      height: 100%;
-    }
-    .agent-analysis-section {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .agent-analysis-section-title {
-      margin: 0;
-      color: #181c25;
-      font-size: 13px;
-      line-height: 20px;
-      font-weight: 800;
-    }
-    .agent-analysis-overview {
-      margin: 0;
-      color: #5f6675;
-      font-size: 13px;
-      line-height: 20px;
-    }
-    .agent-analysis-list {
-      margin: 0;
-      padding-left: 18px;
-      color: #5f6675;
-      font-size: 13px;
-      line-height: 20px;
-      list-style: decimal;
-    }
-    .agent-analysis-list li {
-      padding-left: 4px;
-      margin-bottom: 8px;
-    }
-    .agent-analysis-list li:last-child { margin-bottom: 0; }
-    .agent-analysis-list strong {
-      color: #181c25;
-      font-weight: 800;
-    }
-    .agent-analysis-em {
-      color: #4165ff;
-      font-style: normal;
-      font-weight: 800;
-    }
-    .agent-analysis-actions {
+    .agent-chat-exec-head {
+      min-height: 48px;
+      padding: 12px 16px 8px;
       display: flex;
       align-items: center;
-      gap: 13px;
-      margin-top: 7px;
-      color: #181c25;
+      justify-content: space-between;
+      border-bottom: 0.5px solid #eef0f4;
     }
-    .agent-analysis-action {
-      width: 18px;
-      height: 18px;
-      display: inline-grid;
-      place-items: center;
-      color: inherit;
+    .agent-chat-exec-title {
+      margin: 0;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
+      color: #242529;
     }
-    .agent-analysis-action svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      stroke-width: 1.9;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    .agent-chat-exec-tag {
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 700;
+      color: #7341de;
+      background: #f7f0ff;
+      padding: 1px 8px;
+      border-radius: 6px;
     }
+    .agent-chat-exec-body { padding: 6px 16px; }
+    .agent-chat-exec-row {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 0.5px solid #f1f3f6;
+    }
+    .agent-chat-exec-row:first-child { border-top: 0; }
+    .agent-chat-exec-k { color: #545861; font-size: 13px; }
+    .agent-chat-exec-v { font-size: 13px; font-weight: 600; color: #242529; }
+    .agent-chat-exec-badge { font-size: 15px; font-weight: 700; text-align: right; }
+    .agent-chat-exec-badge.tone-amber { color: #e8932a; }
+    .agent-chat-exec-badge.tone-red { color: #e0492f; }
+    .agent-chat-exec-badge.tone-green { color: #1aa86b; }
+    .agent-chat-exec-note {
+      margin: 0;
+      padding: 12px 16px 0;
+      font-size: 11.5px;
+      color: #7a818c;
+      line-height: 1.6;
+    }
+    .agent-chat-exec-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+    }
+    .agent-chat-exec-btn {
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid #181c25;
+      border-radius: 8px;
+      background: #181c25;
+      color: #fff;
+      font-size: 13px;
+      line-height: 18px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .agent-chat-exec-btn:hover { background: #000; border-color: #000; }
     .slash-menu,
     .at-menu {
       position: absolute;
@@ -976,11 +987,6 @@
       left: 16px;
       right: 16px;
       bottom: 22px;
-    }
-    body.agent-floating.agent-open .agent-composer {
-      left: 24px;
-      right: 24px;
-      bottom: 24px;
     }
     .composer-shell {
       width: 100%;
@@ -1074,16 +1080,6 @@
     }
     .plus-btn svg,
     .voice-btn svg { color: #181c25; }
-    .agent-composer .icon-stroke {
-      fill: none;
-      stroke: currentColor;
-    }
-    .agent-composer .icon-fill,
-    .agent-composer .icon-fill *,
-    .agent-composer .composer-picker-icon svg,
-    .agent-composer .composer-picker-caret svg {
-      stroke: none;
-    }
     .plus-menu-anchor,
     .composer-picker-anchor {
       position: relative;
@@ -1245,7 +1241,7 @@
     .composer-picker-trigger {
       min-width: 0;
       height: 32px;
-      padding: 0 6px;
+      padding: 0;
       display: inline-flex;
       align-items: center;
       gap: 2px;
@@ -1259,7 +1255,7 @@
       min-width: 0;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       color: #181c25;
       flex: 1 1 auto;
     }
@@ -1347,7 +1343,7 @@
       height: 32px;
       display: block;
     }
-    .send-btn svg g > path:first-child { fill: url(#sendBtnGradient); fill-opacity: 1; }
+    .send-btn svg g > path:first-child { fill: url(#sendBtnGradientAgent); fill-opacity: 1; }
     .send-btn.is-empty svg g > path:first-child { fill: #ddc4ff; fill-opacity: 1; }
 
     .bridge-toast {
@@ -1370,148 +1366,6 @@
     }
     .bridge-toast.show { opacity: 1; transform: translateY(0); }
 
-    /* ===== Floating Bee Button ===== */
-    .floating-bee {
-      position: fixed;
-      z-index: 70;
-      top: 50%;
-      right: -14px;
-      width: 56px;
-      height: 56px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      border: 0;
-      background: none;
-      padding: 0;
-      outline: none;
-      touch-action: none;
-      user-select: none;
-      transition: right .22s ease, top .22s ease, opacity .18s ease, visibility .18s ease;
-    }
-    body.agent-open .floating-bee {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .floating-bee:hover,
-    .floating-bee:focus-visible {
-      right: -2px;
-    }
-    .floating-bee.is-dragging {
-      cursor: grabbing;
-      transition: opacity .18s ease, visibility .18s ease;
-    }
-    .floating-bee-bubble {
-      position: absolute;
-      top: 50%;
-      right: 52px;
-      z-index: 1;
-      width: max-content;
-      max-width: 160px;
-      padding: 8px 12px;
-      border: .5px solid #09f;
-      border-radius: 14px;
-      background: #fff;
-      color: #181c25;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.25;
-      white-space: nowrap;
-      box-shadow: -4px 4px 2px rgba(177, 175, 255, .05);
-      opacity: 0;
-      transform: translate(8px, -50%) scale(.96);
-      transform-origin: right center;
-      pointer-events: none;
-      transition: opacity .18s ease, transform .22s cubic-bezier(.2, .8, .2, 1);
-    }
-    .floating-bee-bubble::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: -3px;
-      z-index: 2;
-      width: 6px;
-      height: 6px;
-      border-top: .5px solid #09f;
-      border-right: .5px solid #09f;
-      background: #fff;
-      transform: translateY(-50%) rotate(45deg);
-      pointer-events: none;
-    }
-    .floating-bee-gibberish {
-      display: inline-block;
-      min-width: 148px;
-      color: #181c25;
-      line-height: 18px;
-      white-space: nowrap;
-      letter-spacing: 0;
-      text-align: left;
-    }
-    .floating-bee:hover .floating-bee-bubble,
-    .floating-bee:focus-visible .floating-bee-bubble {
-      opacity: 1;
-      transform: translate(0, -50%) scale(1);
-    }
-    .floating-bee.is-dragging .floating-bee-bubble {
-      opacity: 0;
-    }
-    .floating-bee-shell {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 44px;
-      height: 44px;
-      border: .5px solid #09f;
-      border-radius: 50%;
-      background: #fff;
-      filter: drop-shadow(-4px 4px 2px rgba(177, 175, 255, .05));
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-    .floating-bee-img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 24px;
-      height: 24px;
-      fill: none;
-      stroke: none !important;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      transition: opacity .22s ease;
-    }
-    .floating-bee-img path {
-      stroke: none !important;
-    }
-    .floating-bee .bee-tilted {
-      opacity: 1;
-      transform: translate(-50%, -50%) rotate(-30deg);
-    }
-    .floating-bee .bee-upright,
-    .floating-bee .bee-upright-closed {
-      opacity: 0;
-    }
-    .floating-bee:hover .bee-tilted,
-    .floating-bee:focus-visible .bee-tilted {
-      opacity: 0;
-    }
-    .floating-bee:hover .bee-upright,
-    .floating-bee:focus-visible .bee-upright {
-      opacity: 1;
-      animation: floatingBeeHoverFloat 1.1s ease-in-out infinite, navAgentEyeOpen 1.1s steps(1, end) infinite;
-    }
-    .floating-bee:hover .bee-upright-closed,
-    .floating-bee:focus-visible .bee-upright-closed {
-      animation: floatingBeeHoverFloat 1.1s ease-in-out infinite, navAgentEyeClosed 1.1s steps(1, end) infinite;
-    }
-    .floating-bee-upright-closed-icon {
-      display: block;
-    }
-    @keyframes floatingBeeHoverFloat {
-      0%, 100% { transform: translate(-50%, -50%); }
-      45% { transform: translate(-50%, calc(-50% - 1px)); }
-      55% { transform: translate(-50%, -50%); }
-    }
   </style>
 </head>
 <body>
@@ -1583,21 +1437,6 @@
       <svg><use href="#i-check"></use></svg>
       <svg><use href="#i-grid"></use></svg>
       <div class="avatar">李</div>
-      <button class="ask-agent-btn" id="askAgentButton" type="button" aria-controls="askAgentSidebar" aria-expanded="false">
-        <span class="ask-agent-bee" aria-hidden="true">
-          <svg class="ask-agent-eye ask-agent-eye-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <path d="M12.2871 7.90567C12.5339 7.70321 12.8966 7.74075 13.0979 7.98917C13.299 8.23765 13.2623 8.60287 13.0155 8.80545L11.4071 10.126L13.0155 11.4466C13.2623 11.6492 13.2992 12.0155 13.0979 12.2639C12.8966 12.5122 12.5339 12.5489 12.2871 12.3463L10.1327 10.5786C9.99933 10.4692 9.92699 10.3118 9.92065 10.1513V10.1007C9.92706 9.94044 9.99955 9.78389 10.1327 9.67447L12.2871 7.90567Z" fill="currentColor"/>
-            <path d="M6.24023 7.78812C6.57991 7.78815 6.85539 8.06582 6.85547 8.40775V11.8256C6.85534 12.1675 6.57988 12.4441 6.24023 12.4441C5.90056 12.4441 5.62513 12.1675 5.625 11.8256V8.40775C5.62508 8.0658 5.90053 7.78812 6.24023 7.78812Z" fill="currentColor"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8202 1.12601C11.9515 0.844454 12.2868 0.722256 12.5684 0.853547L13.9955 1.51932C14.2768 1.65054 14.3988 1.98495 14.2679 2.26639L14.0295 2.77615C13.8983 3.05767 13.564 3.17981 13.2825 3.04862L12.8573 2.85086L12.2069 4.13516C15.7798 4.503 17.8108 5.83721 18 10.2359C18 16.3677 15.4919 16.5354 9 16.5354C2.50806 16.5354 4.56211e-05 16.3677 0 10.2359C0.189186 5.83721 2.22016 4.503 5.79309 4.13516L5.1427 2.85086L4.71753 3.04862C4.436 3.17981 4.10173 3.05767 3.97046 2.77615L3.73206 2.26639C3.60116 1.98495 3.72316 1.65054 4.00452 1.51932L5.43164 0.853547C5.71319 0.722256 6.04852 0.844454 6.17981 1.12601L6.41711 1.63577C6.5483 1.9173 6.42616 2.25157 6.14465 2.38284L5.75464 2.56522L6.51929 4.07364C7.28442 4.02306 8.11228 4.00662 9 4.00662C9.88772 4.00662 10.7156 4.02306 11.4807 4.07364L12.2454 2.56522L11.8553 2.38284C11.5738 2.25157 11.4517 1.9173 11.5829 1.63577L11.8202 1.12601ZM9 5.01517C8.0311 5.01517 7.15811 5.07083 6.37207 5.14481C6.02744 5.17755 5.68317 5.21536 5.33936 5.25577C4.30261 5.37764 3.63984 5.61444 3.05969 5.93033C2.50903 6.23017 2.10036 6.64435 1.81165 7.26956C1.50967 7.92354 1.19971 8.86417 1.19971 10.2359C1.19973 13.0324 1.849 13.7411 2.74988 14.2558C3.28113 14.5592 4.02668 14.8849 5.09216 15.0072C6.15397 15.1291 7.43718 15.1555 9 15.1555C10.5628 15.1555 11.846 15.1291 12.9078 15.0072C13.9733 14.8849 14.7189 14.5592 15.2501 14.2558C16.151 13.7411 16.8003 13.0324 16.8003 10.2359C16.8003 8.86414 16.4848 7.92354 16.1829 7.26956C15.8941 6.64434 15.4855 6.23017 14.9348 5.93033C14.3548 5.61453 13.6972 5.37761 12.6606 5.25577C12.3168 5.21536 11.9726 5.17755 11.6279 5.14481C10.8419 5.07083 9.9689 5.01517 9 5.01517Z" fill="currentColor"/>
-          </svg>
-          <svg class="ask-agent-eye ask-agent-eye-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8202 1.12601C11.9515 0.844454 12.2868 0.722256 12.5684 0.853547L13.9955 1.51932C14.2768 1.65054 14.3988 1.98495 14.2679 2.26639L14.0295 2.77615C13.8983 3.05767 13.564 3.17981 13.2825 3.04862L12.8573 2.85086L12.2069 4.13516C15.7798 4.503 17.8108 5.83721 18 10.2359C18 16.3677 15.4919 16.5354 9 16.5354C2.50806 16.5354 4.56211e-05 16.3677 0 10.2359C0.189186 5.83721 2.22016 4.503 5.79309 4.13516L5.1427 2.85086L4.71753 3.04862C4.436 3.17981 4.10173 3.05767 3.97046 2.77615L3.73206 2.26639C3.60116 1.98495 3.72316 1.65054 4.00452 1.51932L5.43164 0.853547C5.71319 0.722256 6.04852 0.844454 6.17981 1.12601L6.41711 1.63577C6.5483 1.9173 6.42616 2.25157 6.14465 2.38284L5.75464 2.56522L6.51929 4.07364C7.28442 4.02306 8.11228 4.00662 9 4.00662C9.88772 4.00662 10.7156 4.02306 11.4807 4.07364L12.2454 2.56522L11.8553 2.38284C11.5738 2.25157 11.4517 1.9173 11.5829 1.63577L11.8202 1.12601ZM9 5.01517C8.0311 5.01517 7.15811 5.07083 6.37207 5.14481C6.02744 5.17755 5.68317 5.21536 5.33936 5.25577C4.30261 5.37764 3.63984 5.61444 3.05969 5.93033C2.50903 6.23017 2.10036 6.64435 1.81165 7.26956C1.50967 7.92354 1.19971 8.86417 1.19971 10.2359C1.19973 13.0324 1.849 13.7411 2.74988 14.2558C3.28113 14.5592 4.02668 14.8849 5.09216 15.0072C6.15397 15.1291 7.43718 15.1555 9 15.1555C10.5628 15.1555 11.846 15.1291 12.9078 15.0072C13.9733 14.8849 14.7189 14.5592 15.2501 14.2558C16.151 13.7411 16.8003 13.0324 16.8003 10.2359C16.8003 8.86414 16.4848 7.92354 16.1829 7.26956C15.8941 6.64434 15.4855 6.23017 14.9348 5.93033C14.3548 5.61453 13.6972 5.37761 12.6606 5.25577C12.3168 5.21536 11.9726 5.17755 11.6279 5.14481C10.8419 5.07083 9.9689 5.01517 9 5.01517Z" fill="currentColor"/>
-            <path d="M4.54429 10.0126C4.97071 9.60067 5.54906 9.36926 6.1521 9.36926C6.75514 9.36927 7.33347 9.60068 7.75988 10.0126C8.08468 10.3263 8.30107 10.7252 8.38576 11.155C8.4299 11.3789 8.24083 11.5657 8.01257 11.5657C7.7843 11.5657 7.60517 11.3765 7.53659 11.1588C7.46804 10.9412 7.34491 10.741 7.17538 10.5772C6.90399 10.3151 6.53591 10.1678 6.1521 10.1678C5.76829 10.1678 5.40019 10.315 5.1288 10.5772C4.95927 10.741 4.83613 10.9412 4.76759 11.1588C4.699 11.3765 4.51987 11.5657 4.2916 11.5657C4.06334 11.5657 3.87428 11.3789 3.91841 11.155C4.0031 10.7252 4.21949 10.3263 4.54429 10.0126Z" fill="currentColor"/>
-            <path d="M10.2446 10.0126C10.671 9.60067 11.2494 9.36926 11.8524 9.36926C12.4554 9.36926 13.0338 9.60067 13.4602 10.0126C13.785 10.3263 14.0014 10.7252 14.0861 11.155C14.1302 11.3789 13.9411 11.5657 13.7129 11.5657C13.4846 11.5657 13.3055 11.3765 13.2369 11.1588C13.1683 10.9412 13.0452 10.741 12.8757 10.5772C12.6043 10.315 12.2362 10.1678 11.8524 10.1678C11.4686 10.1678 11.1005 10.3151 10.8291 10.5772C10.6596 10.741 10.5365 10.9412 10.4679 11.1588C10.3993 11.3765 10.2202 11.5657 9.99193 11.5657C9.76366 11.5657 9.57457 11.3789 9.6187 11.155C9.70339 10.7252 9.91978 10.3263 10.2446 10.0126Z" fill="currentColor"/>
-          </svg>
-        </span>
-        <span>Agent</span>
-      </button>
     </div>
   </header>
 
@@ -1616,7 +1455,7 @@
     </button>
     <button class="nav-item"><svg><use href="#i-message"></use></svg><span>企信</span></button>
     <button class="nav-item"><svg><use href="#i-check"></use></svg><span>待办</span></button>
-    <button class="nav-item active"><svg><use href="#i-pie"></use></svg><span>CRM</span></button>
+    <button class="nav-item active" type="button" onclick="window.location.href='dashboard-home.html'"><svg><use href="#i-pie"></use></svg><span>CRM</span></button>
     <button class="nav-item"><svg><use href="#i-briefcase"></use></svg><span>工作</span></button>
     <button class="nav-item"><svg><use href="#i-calendar"></use></svg><span>日程</span></button>
     <button class="nav-item"><svg><use href="#i-shield"></use></svg><span>考勤</span></button>
@@ -1629,7 +1468,7 @@
   <aside class="secondary-menu">
     <h2 class="menu-title">CRM</h2>
     <div class="menu-search"><input placeholder="搜索"><button class="add-btn"><svg><use href="#i-plus"></use></svg></button></div>
-    <button class="menu-row active" data-tone="orange"><svg><use href="#i-home"></use></svg><span>首页</span></button>
+    <button class="menu-row" data-tone="orange" type="button" onclick="window.location.href='dashboard-home.html'"><svg><use href="#i-home"></use></svg><span>首页</span></button>
     <button class="menu-row" data-tone="blue"><svg><use href="#i-clock"></use></svg><span>最近使用</span></button>
     <button class="menu-row" data-tone="red"><svg><use href="#i-bell"></use></svg><span>CRM提醒</span></button>
     <button class="menu-row" data-tone="green"><svg><use href="#i-check"></use></svg><span>CRM待办</span></button>
@@ -1638,7 +1477,7 @@
     <button class="menu-row" data-tone="red"><svg><use href="#i-clock"></use></svg><span>CRM信息</span></button>
     <button class="menu-row" data-tone="blue"><svg><use href="#i-file"></use></svg><span>数据驾驶舱</span></button>
     <button class="menu-row"><svg><use href="#i-chevron"></use></svg><span>客户及商机管理</span></button>
-    <button class="menu-row sub" data-tone="blue" onclick="window.location.href='list-page.html'"><svg><use href="#i-building"></use></svg><span>客户</span></button>
+    <button class="menu-row active sub" data-tone="blue"><svg><use href="#i-building"></use></svg><span>客户</span></button>
     <button class="menu-row sub" data-tone="green"><svg><use href="#i-building"></use></svg><span>客户地址</span></button>
     <button class="menu-row sub" data-tone="orange"><svg><use href="#i-yen"></use></svg><span>客户财务信息</span></button>
     <button class="menu-row sub" data-tone="red"><svg><use href="#i-users"></use></svg><span>联系人</span></button>
@@ -1649,99 +1488,81 @@
     <button class="menu-row" data-tone="blue"><svg><use href="#i-file"></use></svg><span>报价单</span></button>
   </aside>
 
-  <main class="dashboard-page">
-    <section class="scope-bar">
-      <span class="scope-item"><svg><use href="#i-users"></use></svg>李菁菁</span>
-      <span class="scope-item"><svg><use href="#i-calendar"></use></svg>本月</span>
-    </section>
-
-    <section class="dashboard-grid">
-      <div class="left-stack">
-        <section class="panel brief">
-          <div class="card-head"><h1 class="card-title">销售简报</h1></div>
-          <div class="brief-grid">
-            <article class="metric" data-bridge='{"type":"metric","target":"new-customer","title":"新增客户"}'>
-              <span>新增客户</span><strong>24</strong><small><b class="up">↑ 2.1%</b> 同比上月</small>
-            </article>
-            <article class="metric" data-bridge='{"type":"metric","target":"new-contact","title":"新增联系人"}'>
-              <span>新增联系人</span><strong>10</strong><small><b class="up">↑ 1.1%</b> 同比上月</small>
-            </article>
-            <article class="metric" data-bridge='{"type":"metric","target":"new-followup","title":"新增跟进动态"}'>
-              <span>新增跟进动态</span><strong>10</strong><small><b class="green">↑ 1.5%</b> 同比上月</small>
-            </article>
-          </div>
-        </section>
-
-        <section class="panel funnel-card">
-          <div class="card-head">
-            <h2 class="card-title">销售漏斗（商机金额）</h2>
-            <button class="ai-hover-action" type="button" aria-label="AI 分析销售漏斗" title="AI 分析" data-bridge='{"type":"ai-analysis","target":"opportunity-funnel","title":"销售漏斗 AI 分析"}'>
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M10.9219 7.11618C11.1413 6.93621 11.4637 6.96958 11.6426 7.1904C11.8213 7.41127 11.7887 7.73591 11.5693 7.91598L10.1396 9.08981L11.5693 10.2636C11.7888 10.4438 11.8215 10.7693 11.6426 10.9902C11.4636 11.2109 11.1412 11.2435 10.9219 11.0634L9.00684 9.49215C8.88829 9.39483 8.82399 9.25493 8.81836 9.11227V9.06735C8.82405 8.92486 8.88849 8.78571 9.00684 8.68844L10.9219 7.11618Z" fill="currentColor"/>
-                <path d="M5.54688 7.01169C5.84881 7.01171 6.09368 7.25853 6.09375 7.56247V10.6006C6.09364 10.9045 5.84878 11.1503 5.54688 11.1504C5.24494 11.1504 5.00011 10.9045 5 10.6006V7.56247C5.00007 7.25851 5.24492 7.01169 5.54688 7.01169Z" fill="currentColor"/>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5068 1.08981C10.6235 0.83954 10.9216 0.73092 11.1719 0.847623L12.4404 1.43942C12.6905 1.55606 12.799 1.85332 12.6826 2.10348L12.4707 2.55661C12.354 2.80684 12.0569 2.91542 11.8066 2.79879L11.4287 2.62301L10.8506 3.76462C14.0265 4.09158 15.8318 5.27755 16 9.18747C16 14.638 13.7706 14.7871 8 14.7871C2.22939 14.7871 4.05521e-05 14.638 0 9.18747C0.168165 5.27755 1.97347 4.09158 5.14941 3.76462L4.57129 2.62301L4.19336 2.79879C3.94311 2.91542 3.64598 2.80684 3.5293 2.55661L3.31738 2.10348C3.20103 1.85332 3.30947 1.55606 3.55957 1.43942L4.82812 0.847623C5.07839 0.73092 5.37646 0.83954 5.49316 1.08981L5.7041 1.54294C5.82071 1.79318 5.71214 2.09031 5.46191 2.207L5.11523 2.36911L5.79492 3.70993C6.47504 3.66496 7.21092 3.65036 8 3.65036C8.78908 3.65036 9.52496 3.66496 10.2051 3.70993L10.8848 2.36911L10.5381 2.207C10.2879 2.09031 10.1793 1.79318 10.2959 1.54294L10.5068 1.08981ZM8 4.54684C7.13876 4.54684 6.36277 4.59632 5.66406 4.66208C5.35772 4.69118 5.05171 4.72479 4.74609 4.76071C3.82455 4.86904 3.23541 5.07953 2.71973 5.36032C2.23025 5.62685 1.86699 5.995 1.61035 6.55075C1.34193 7.13206 1.06641 7.96818 1.06641 9.18747C1.06643 11.6732 1.64356 12.3033 2.44434 12.7607C2.91656 13.0305 3.57927 13.32 4.52637 13.4287C5.47019 13.537 6.61082 13.5605 8 13.5605C9.38918 13.5605 10.5298 13.537 11.4736 13.4287C12.4207 13.32 13.0834 13.0305 13.5557 12.7607C14.3564 12.3033 14.9336 11.6732 14.9336 9.18747C14.9336 7.96815 14.6532 7.13206 14.3848 6.55075C14.1281 5.99499 13.7649 5.62685 13.2754 5.36032C12.7598 5.07961 12.1753 4.86901 11.2539 4.76071C10.9483 4.72479 10.6423 4.69118 10.3359 4.66208C9.63723 4.59632 8.86124 4.54684 8 4.54684Z" fill="currentColor"/>
-              </svg>
-            </button>
-          </div>
-          <div class="funnel-area chart-slot" data-chart-kind="funnel" data-bridge='{"type":"chart","target":"opportunity-funnel","title":"销售漏斗"}'></div>
-        </section>
-
-        <section class="panel loss-card">
-          <div class="card-head"><h2 class="card-title">输单原因分析</h2></div>
-          <div class="loss-body chart-slot" data-chart-kind="donut" data-bridge='{"type":"chart","target":"loss-reason","title":"输单原因分析"}'></div>
-        </section>
-      </div>
-
-      <div class="right-stack">
-        <section class="panel tool-card">
-          <div class="card-head"><h2 class="card-title">工具</h2></div>
-          <div class="tool-grid">
-            <div class="tool" data-bridge='{"type":"tool","target":"duplicate-check","title":"查重工具"}'><span class="tool-icon purple"><svg><use href="#i-search"></use></svg></span><span>查重工具</span></div>
-            <div class="tool" data-bridge='{"type":"tool","target":"import","title":"导入"}'><span class="tool-icon green"><svg><use href="#i-download"></use></svg></span><span>导入</span></div>
-            <div class="tool" data-bridge='{"type":"tool","target":"quote","title":"询价工具"}'><span class="tool-icon yellow"><svg><use href="#i-yen"></use></svg></span><span>询价工具</span></div>
-          </div>
-        </section>
-
-        <section class="panel calendar-card">
-          <div class="card-head"><h2 class="card-title">日程</h2><button class="card-action" data-bridge='{"type":"calendar","target":"new"}'><svg><use href="#i-plus"></use></svg></button></div>
-          <div class="month">
-            <div class="month-head"><span>2025年04月</span><span class="month-nav">‹ ›</span></div>
-            <table class="calendar" aria-label="2025年4月日历">
-              <thead><tr><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th></tr></thead>
-              <tbody>
-                <tr><td class="muted">31</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
-                <tr><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
-                <tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
-                <tr><td>21</td><td class="today"><span>22</span></td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
-                <tr><td>28</td><td>29</td><td>30</td><td class="muted">1</td><td class="muted">2</td><td class="muted">3</td><td class="muted">4</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="panel task-card">
-          <div class="card-head"><h2 class="card-title">任务</h2><button class="card-action" data-bridge='{"type":"task","target":"new"}'><svg><use href="#i-plus"></use></svg></button></div>
-          <div class="task-list">
-            <div class="task" data-bridge='{"type":"task","target":"solution","id":"task-001"}'><strong>互联网向导轨方案补充。</strong><span>截止时间：2025-05-06 18:00</span></div>
-            <div class="task" data-bridge='{"type":"task","target":"restore","id":"task-002"}'><strong>上线还原</strong><span>截止时间：2025-05-06 18:00</span></div>
-            <div class="task" data-bridge='{"type":"task","target":"weekly","id":"task-003"}'><strong>专项例会文档更新</strong><span>截止时间：2025-04-20 18:00 <em>已逾期2天</em></span></div>
-            <div class="task" data-bridge='{"type":"task","target":"metric","id":"task-004"}'><strong>检查指标</strong><span>截止时间：2025-04-18 18:00 <em>已逾期4天</em></span></div>
-          </div>
-        </section>
-      </div>
-    </section>
+  <main class="list-page">
+    <div class="list-head"><div class="title">客户 | 全部客户</div><div class="actions"><button class="btn primary">新建</button><button class="btn">导入</button><button class="btn">更多</button></div></div>
+    <div class="filter"><button class="btn">筛选</button><input placeholder="客户名称 / 所属行业"></div>
+    <table><thead><tr><th>客户名称</th><th>行业</th><th>客户阶段</th><th>年度预计收入</th><th>负责人</th><th>操作</th></tr></thead><tbody><tr class="opportunity-row" id="openDetail"><td class="js-customer-name">上海云驰智能制造有限公司</td><td>智能制造</td><td>方案确认</td><td>2,860,000.00</td><td>林澈</td><td>查看</td></tr></tbody></table>
   </main>
+
+  <!-- MODULE:shell START -->
+  <section class="drawer">
+    <header class="detail-header">
+      <div class="detail-top">
+        <div>
+          <div class="object-title"><span class="type">客户</span><h1 class="js-customer-name">上海云驰智能制造有限公司</h1><button class="icon-btn" title="切换详情布局"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg></button><button class="icon-btn" title="标签"><svg viewBox="0 0 24 24"><path d="M12.6 2H4a2 2 0 0 0-2 2v8.6a2 2 0 0 0 .6 1.4l7.4 7.4a2 2 0 0 0 2.8 0l8.6-8.6a2 2 0 0 0 0-2.8L14 2.6A2 2 0 0 0 12.6 2Z"/><path d="M7 7h.01"/></svg></button><button class="icon-btn" title="上一条"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><button class="icon-btn" title="下一条"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+          <div class="meta"><span class="red">推进中</span><span>|</span><span>方案确认</span><span>|</span><span>智能制造</span><span>|</span><span>年度框架客户</span></div>
+          <div class="tags"><span class="tag orange">重点客户</span><span class="tag green">预算已确认</span><span class="tag blue">管理层关注</span></div>
+        </div>
+        <div class="actions"><button class="btn primary">推进阶段</button><button class="btn">生成方案</button><button class="btn">发起流程</button><button class="ask-agent-btn" id="askAgentButton" type="button" aria-controls="askAgentSidebar" aria-expanded="false">
+          <span class="ask-agent-bee" aria-hidden="true">
+          <svg class="ask-agent-eye ask-agent-eye-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M12.2871 7.90567C12.5339 7.70321 12.8966 7.74075 13.0979 7.98917C13.299 8.23765 13.2623 8.60287 13.0155 8.80545L11.4071 10.126L13.0155 11.4466C13.2623 11.6492 13.2992 12.0155 13.0979 12.2639C12.8966 12.5122 12.5339 12.5489 12.2871 12.3463L10.1327 10.5786C9.99933 10.4692 9.92699 10.3118 9.92065 10.1513V10.1007C9.92706 9.94044 9.99955 9.78389 10.1327 9.67447L12.2871 7.90567Z" fill="currentColor"/>
+            <path d="M6.24023 7.78812C6.57991 7.78815 6.85539 8.06582 6.85547 8.40775V11.8256C6.85534 12.1675 6.57988 12.4441 6.24023 12.4441C5.90056 12.4441 5.62513 12.1675 5.625 11.8256V8.40775C5.62508 8.0658 5.90053 7.78812 6.24023 7.78812Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8202 1.12601C11.9515 0.844454 12.2868 0.722256 12.5684 0.853547L13.9955 1.51932C14.2768 1.65054 14.3988 1.98495 14.2679 2.26639L14.0295 2.77615C13.8983 3.05767 13.564 3.17981 13.2825 3.04862L12.8573 2.85086L12.2069 4.13516C15.7798 4.503 17.8108 5.83721 18 10.2359C18 16.3677 15.4919 16.5354 9 16.5354C2.50806 16.5354 4.56211e-05 16.3677 0 10.2359C0.189186 5.83721 2.22016 4.503 5.79309 4.13516L5.1427 2.85086L4.71753 3.04862C4.436 3.17981 4.10173 3.05767 3.97046 2.77615L3.73206 2.26639C3.60116 1.98495 3.72316 1.65054 4.00452 1.51932L5.43164 0.853547C5.71319 0.722256 6.04852 0.844454 6.17981 1.12601L6.41711 1.63577C6.5483 1.9173 6.42616 2.25157 6.14465 2.38284L5.75464 2.56522L6.51929 4.07364C7.28442 4.02306 8.11228 4.00662 9 4.00662C9.88772 4.00662 10.7156 4.02306 11.4807 4.07364L12.2454 2.56522L11.8553 2.38284C11.5738 2.25157 11.4517 1.9173 11.5829 1.63577L11.8202 1.12601ZM9 5.01517C8.0311 5.01517 7.15811 5.07083 6.37207 5.14481C6.02744 5.17755 5.68317 5.21536 5.33936 5.25577C4.30261 5.37764 3.63984 5.61444 3.05969 5.93033C2.50903 6.23017 2.10036 6.64435 1.81165 7.26956C1.50967 7.92354 1.19971 8.86417 1.19971 10.2359C1.19973 13.0324 1.849 13.7411 2.74988 14.2558C3.28113 14.5592 4.02668 14.8849 5.09216 15.0072C6.15397 15.1291 7.43718 15.1555 9 15.1555C10.5628 15.1555 11.846 15.1291 12.9078 15.0072C13.9733 14.8849 14.7189 14.5592 15.2501 14.2558C16.151 13.7411 16.8003 13.0324 16.8003 10.2359C16.8003 8.86414 16.4848 7.92354 16.1829 7.26956C15.8941 6.64434 15.4855 6.23017 14.9348 5.93033C14.3548 5.61453 13.6972 5.37761 12.6606 5.25577C12.3168 5.21536 11.9726 5.17755 11.6279 5.14481C10.8419 5.07083 9.9689 5.01517 9 5.01517Z" fill="currentColor"/>
+          </svg>
+          <svg class="ask-agent-eye ask-agent-eye-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8202 1.12601C11.9515 0.844454 12.2868 0.722256 12.5684 0.853547L13.9955 1.51932C14.2768 1.65054 14.3988 1.98495 14.2679 2.26639L14.0295 2.77615C13.8983 3.05767 13.564 3.17981 13.2825 3.04862L12.8573 2.85086L12.2069 4.13516C15.7798 4.503 17.8108 5.83721 18 10.2359C18 16.3677 15.4919 16.5354 9 16.5354C2.50806 16.5354 4.56211e-05 16.3677 0 10.2359C0.189186 5.83721 2.22016 4.503 5.79309 4.13516L5.1427 2.85086L4.71753 3.04862C4.436 3.17981 4.10173 3.05767 3.97046 2.77615L3.73206 2.26639C3.60116 1.98495 3.72316 1.65054 4.00452 1.51932L5.43164 0.853547C5.71319 0.722256 6.04852 0.844454 6.17981 1.12601L6.41711 1.63577C6.5483 1.9173 6.42616 2.25157 6.14465 2.38284L5.75464 2.56522L6.51929 4.07364C7.28442 4.02306 8.11228 4.00662 9 4.00662C9.88772 4.00662 10.7156 4.02306 11.4807 4.07364L12.2454 2.56522L11.8553 2.38284C11.5738 2.25157 11.4517 1.9173 11.5829 1.63577L11.8202 1.12601ZM9 5.01517C8.0311 5.01517 7.15811 5.07083 6.37207 5.14481C6.02744 5.17755 5.68317 5.21536 5.33936 5.25577C4.30261 5.37764 3.63984 5.61444 3.05969 5.93033C2.50903 6.23017 2.10036 6.64435 1.81165 7.26956C1.50967 7.92354 1.19971 8.86417 1.19971 10.2359C1.19973 13.0324 1.849 13.7411 2.74988 14.2558C3.28113 14.5592 4.02668 14.8849 5.09216 15.0072C6.15397 15.1291 7.43718 15.1555 9 15.1555C10.5628 15.1555 11.846 15.1291 12.9078 15.0072C13.9733 14.8849 14.7189 14.5592 15.2501 14.2558C16.151 13.7411 16.8003 13.0324 16.8003 10.2359C16.8003 8.86414 16.4848 7.92354 16.1829 7.26956C15.8941 6.64434 15.4855 6.23017 14.9348 5.93033C14.3548 5.61453 13.6972 5.37761 12.6606 5.25577C12.3168 5.21536 11.9726 5.17755 11.6279 5.14481C10.8419 5.07083 9.9689 5.01517 9 5.01517Z" fill="currentColor"/>
+            <path d="M4.54429 10.0126C4.97071 9.60067 5.54906 9.36926 6.1521 9.36926C6.75514 9.36927 7.33347 9.60068 7.75988 10.0126C8.08468 10.3263 8.30107 10.7252 8.38576 11.155C8.4299 11.3789 8.24083 11.5657 8.01257 11.5657C7.7843 11.5657 7.60517 11.3765 7.53659 11.1588C7.46804 10.9412 7.34491 10.741 7.17538 10.5772C6.90399 10.3151 6.53591 10.1678 6.1521 10.1678C5.76829 10.1678 5.40019 10.315 5.1288 10.5772C4.95927 10.741 4.83613 10.9412 4.76759 11.1588C4.699 11.3765 4.51987 11.5657 4.2916 11.5657C4.06334 11.5657 3.87428 11.3789 3.91841 11.155C4.0031 10.7252 4.21949 10.3263 4.54429 10.0126Z" fill="currentColor"/>
+            <path d="M10.2446 10.0126C10.671 9.60067 11.2494 9.36926 11.8524 9.36926C12.4554 9.36926 13.0338 9.60067 13.4602 10.0126C13.785 10.3263 14.0014 10.7252 14.0861 11.155C14.1302 11.3789 13.9411 11.5657 13.7129 11.5657C13.4846 11.5657 13.3055 11.3765 13.2369 11.1588C13.1683 10.9412 13.0452 10.741 12.8757 10.5772C12.6043 10.315 12.2362 10.1678 11.8524 10.1678C11.4686 10.1678 11.1005 10.3151 10.8291 10.5772C10.6596 10.741 10.5365 10.9412 10.4679 11.1588C10.3993 11.3765 10.2202 11.5657 9.99193 11.5657C9.76366 11.5657 9.57457 11.3789 9.6187 11.155C9.70339 10.7252 9.91978 10.3263 10.2446 10.0126Z" fill="currentColor"/>
+          </svg>
+        </span>
+          <span>Agent</span>
+        </button><button class="icon-btn" id="closeDetail" title="关闭详情"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+      </div>
+    </header>
+
+    <main class="detail-body">
+      <section class="left">
+        <section class="card summary">
+          <h2 class="card-title">客户概览</h2>
+          <div class="fields">
+            <div class="field"><label>客户名称</label><strong class="js-customer-name">上海云驰智能制造有限公司</strong></div>
+            <div class="field"><label>负责人</label><strong>林澈</strong></div>
+            <div class="field"><label>客户级别</label><strong>重要客户</strong></div>
+            <div class="field"><label>客户阶段</label><strong>方案确认</strong></div>
+            <div class="field"><label>所属行业</label><strong>智能制造</strong></div>
+            <div class="field"><label>年度预计收入</label><strong>2,860,000.00</strong></div>
+          </div>
+        </section>
+        <section class="card">
+          <nav class="tabs"><button class="tab active">商机阶段</button><button class="tab">跟进记录</button><button class="tab">联系人</button><button class="tab">附件</button></nav>
+          <div class="tab-panel">
+            <div class="stage-card">
+              <div class="stage-head"><div class="stage-title">客户推进路径 <span>方案确认中</span></div><button class="btn">刷新</button></div>
+              <div class="stage-flow"><span class="stage-node done"><i class="stage-dot">✓</i>线索</span><span class="stage-node done"><i class="stage-dot">✓</i>需求确认</span><span class="stage-node current"><i class="stage-dot"></i>方案确认</span><span class="stage-node todo"><i class="stage-dot"></i>商务谈判</span><span class="stage-node todo"><i class="stage-dot"></i>成交</span></div>
+              <div class="stage-task-head"><div class="stage-task-title">当前任务 <span class="required">*</span></div><div class="stage-tools"><span>自动提醒</span><span class="switch"></span></div></div>
+              <div class="stage-task"><div class="task-state"><span class="clock-dot"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2"/></svg></span>补充方案报价并同步采购负责人</div><button class="btn">完成</button></div>
+            </div>
+            <div class="records-head"><strong>关键动态</strong><input placeholder="搜索动态"></div>
+            <table><thead><tr><th>时间</th><th>事项</th><th>负责人</th><th>状态</th></tr></thead><tbody><tr><td>06-24</td><td>完成生产线改造方案沟通</td><td>林澈</td><td><span class="state done">已完成</span></td></tr><tr><td>06-26</td><td>采购部报价评审</td><td>林澈</td><td><span class="state todo">待处理</span></td></tr><tr><td>06-28</td><td>确认年度框架合同范围</td><td>王珂</td><td><span class="state risk">有风险</span></td></tr></tbody></table>
+          </div>
+        </section>
+      </section>
+      <aside class="right">
+        <div class="quick"><button><span class="circle">电</span>打电话</button><button><span class="circle">信</span>发企信</button><button><span class="circle">记</span>写记录</button><button><span class="circle">单</span>建订单</button><button><span class="circle">更</span>更多</button></div>
+        <div class="timeline has-quick">
+          <div class="item"><span class="dot blue">客</span><h3>客户画像 <span>今天</span></h3><div class="timeline-card">决策链完整，采购和生产负责人均已参与方案评审。</div></div>
+          <div class="item"><span class="dot green">进</span><h3>跟进建议 <span>明天</span></h3><div class="timeline-card">优先确认年度框架里的交付边界和售后响应 SLA。</div></div>
+          <div class="item"><span class="dot">险</span><h3>风险提醒 <span>3天内</span></h3><div class="timeline-card">预算审批仍需财务复核，建议准备分期付款备选方案。</div></div>
+        </div>
+      </aside>
+    </main>
+  </section>
+  <!-- MODULE:shell END -->
 
   <aside class="agent-sidebar" id="askAgentSidebar" aria-label="Ask Agent 侧边栏" aria-hidden="true">
     <div class="agent-toolbar">
       <div class="agent-toolbar-left">
-        <button class="agent-tool-btn" type="button" aria-label="菜单">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M1.36831 2.63333C1.00012 2.63333 0.701645 2.93181 0.701645 3.3C0.701645 3.66819 1.00012 3.96666 1.36831 3.96666H14.6667C15.0349 3.96666 15.3334 3.66819 15.3334 3.3C15.3334 2.93181 15.0349 2.63333 14.6667 2.63333H1.36831Z" fill="#181C25"/>
-            <path d="M0.701645 7.96666C0.701645 7.59847 1.00012 7.3 1.36831 7.3H14.6667C15.0349 7.3 15.3334 7.59847 15.3334 7.96666C15.3334 8.33485 15.0349 8.63333 14.6667 8.63333H1.36831C1.00012 8.63333 0.701645 8.33485 0.701645 7.96666Z" fill="#181C25"/>
-            <path d="M0.701645 12.6333C0.701645 12.2651 1.00012 11.9667 1.36831 11.9667H10.3335C10.7016 11.9667 11.0001 12.2651 11.0001 12.6333C11.0001 13.0015 10.7016 13.3 10.3335 13.3H1.36831C1.00012 13.3 0.701645 13.0015 0.701645 12.6333Z" fill="#181C25"/>
-          </svg>
-        </button>
         <button class="agent-tool-btn" id="newAskAgentSession" type="button" aria-label="新会话">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M8.00008 1.69C11.9401 1.69 15.1601 4.44 15.1601 7.88C15.1601 7.91 15.1601 7.94 15.1501 7.98C15.1501 8.01 15.1401 8.04 15.1201 8.07C15.1101 8.1 15.1001 8.13 15.0801 8.16C15.0601 8.18 15.0401 8.21 15.0201 8.23C14.9901 8.26 14.9701 8.28 14.9401 8.29C14.9101 8.31 14.8801 8.33 14.8501 8.34L14.7601 8.37C14.7301 8.38 14.6901 8.38 14.6601 8.38C14.6301 8.38 14.6001 8.38 14.5601 8.37L14.4701 8.34C14.4381 8.32723 14.4078 8.31043 14.3801 8.29C14.3521 8.27616 14.328 8.25553 14.3101 8.23C14.2846 8.21204 14.2639 8.18798 14.2501 8.16C14.2297 8.13225 14.2128 8.10201 14.2001 8.07L14.1701 7.98C14.1601 7.94 14.1601 7.91 14.1601 7.88C14.1601 5.03 11.4201 2.69 8.00008 2.69C4.57008 2.69 1.83008 5.03 1.83008 7.88C1.83008 8.97 2.23008 10.02 2.98008 10.89C3.02008 10.94 3.05008 10.99 3.07008 11.04C3.09008 11.1 3.10008 11.16 3.10008 11.22V13.43L4.91008 12.49C4.96008 12.46 5.02008 12.44 5.08008 12.43C5.15008 12.43 5.21008 12.43 5.27008 12.45L5.34008 12.47C5.47008 12.53 5.61008 12.59 5.74008 12.65C6.42008 12.93 6.98008 13.06 7.68008 13.06C7.71008 13.06 7.74008 13.07 7.78008 13.07L7.87008 13.1C7.90008 13.11 7.93008 13.13 7.96008 13.15C7.98008 13.17 8.01008 13.19 8.03008 13.21C8.05008 13.23 8.08008 13.26 8.09008 13.29C8.11008 13.31 8.13008 13.34 8.14008 13.37C8.15008 13.4 8.16008 13.43 8.17008 13.47C8.17008 13.5 8.18008 13.53 8.18008 13.56C8.18008 13.6 8.17008 13.63 8.17008 13.66C8.16008 13.69 8.15008 13.72 8.14008 13.76C8.13008 13.79 8.11008 13.81 8.09008 13.84C8.08008 13.87 8.05008 13.89 8.03008 13.92C8.01008 13.94 7.98008 13.96 7.96008 13.98C7.93008 14 7.90008 14.01 7.87008 14.03C7.84008 14.04 7.81008 14.05 7.78008 14.05C7.74008 14.06 7.71008 14.06 7.68008 14.06C6.83008 14.06 6.14008 13.9 5.36008 13.57C5.28604 13.5418 5.21268 13.5118 5.14008 13.48L5.16008 13.49L3.32008 14.44C3.27008 14.47 3.22008 14.49 3.18008 14.5C3.13008 14.52 3.08008 14.53 3.03008 14.53C2.98008 14.54 2.93008 14.54 2.88008 14.54C2.82008 14.53 2.77008 14.53 2.72008 14.51C2.68008 14.5 2.63008 14.48 2.58008 14.46C2.54008 14.44 2.49008 14.42 2.45008 14.39C2.41008 14.36 2.37008 14.32 2.33008 14.29L2.24008 14.17L2.19008 14.09C2.13096 13.972 2.10014 13.8419 2.10008 13.71V11.4L2.07008 11.36C1.32008 10.41 0.880078 9.28 0.830078 8.1V7.88C0.830078 4.44 4.05008 1.69 8.00008 1.69ZM12.0001 8.69C12.3101 8.69 12.5601 8.95 12.5601 9.26V10.96H14.2601C14.2901 10.96 14.3201 10.96 14.3601 10.97C14.3901 10.97 14.4201 10.98 14.4501 10.99C14.4801 11 14.5001 11.02 14.5301 11.03C14.5601 11.05 14.5901 11.06 14.6101 11.08C14.6301 11.1 14.6601 11.12 14.6801 11.15C14.7001 11.17 14.7201 11.19 14.7401 11.22C14.7501 11.25 14.7701 11.27 14.7801 11.3L14.8101 11.39L14.8201 11.46L14.8301 11.53C14.8301 11.84 14.5801 12.1 14.2601 12.1H12.5601V13.79C12.5601 13.83 12.5601 13.86 12.5501 13.89C12.5501 13.92 12.5401 13.95 12.5301 13.98C12.5201 14.01 12.5101 14.04 12.4901 14.06C12.4801 14.09 12.4601 14.12 12.4401 14.14C12.4201 14.17 12.4001 14.19 12.3801 14.21C12.3501 14.23 12.3301 14.25 12.3001 14.27C12.2801 14.29 12.2501 14.3 12.2201 14.31C12.1901 14.33 12.1601 14.34 12.1301 14.34L12.0601 14.36H12.0001C11.9601 14.36 11.9201 14.36 11.8801 14.35L11.7801 14.32C11.7401 14.3 11.7101 14.29 11.6801 14.27C11.6501 14.25 11.6201 14.22 11.5901 14.2C11.5701 14.17 11.5401 14.14 11.5201 14.11C11.5001 14.08 11.4901 14.05 11.4701 14.01L11.4401 13.91C11.4301 13.87 11.4301 13.83 11.4301 13.79V12.1H9.73008C9.70008 12.09 9.67008 12.09 9.63008 12.09L9.54008 12.06C9.51008 12.05 9.49008 12.04 9.46008 12.03C9.43166 12.0124 9.40489 11.9924 9.38008 11.97C9.36008 11.96 9.33008 11.93 9.31008 11.91C9.29008 11.89 9.27008 11.86 9.25008 11.84C9.24008 11.81 9.22008 11.78 9.21008 11.75C9.19704 11.7211 9.18698 11.6909 9.18008 11.66L9.17008 11.59L9.16008 11.53C9.16008 11.22 9.42008 10.96 9.73008 10.96H11.4301V9.26C11.4301 9.23 11.4301 9.2 11.4401 9.17C11.4401 9.14 11.4501 9.11 11.4601 9.08C11.4701 9.05 11.4801 9.02 11.5001 8.99C11.5101 8.96 11.5301 8.94 11.5501 8.91C11.5701 8.89 11.5901 8.87 11.6101 8.84C11.6401 8.82 11.6601 8.8 11.6901 8.79C11.7101 8.77 11.7401 8.76 11.7701 8.74L11.8601 8.71L11.9301 8.7H11.9801L12.0001 8.69Z" fill="#181C25"/>
@@ -1754,14 +1575,9 @@
             <path d="M0 0H7V1H1V12.9976H11V5H12V13.9976H0V0ZM3 3.50037H7V4.50037H3V3.50037ZM3 6.50037H9V7.50037H3V6.50037ZM3 9.50037H9V10.5004H3V9.50037ZM10.1316 0.0544808C10.1096 0.0325097 10.0825 0.0163806 10.0527 0.00756047C10.0054 -0.00635117 9.95444 -0.000920121 9.9111 0.0226626C9.86776 0.0462454 9.83554 0.0860548 9.82151 0.133361L9.70446 0.528235C9.62165 0.80745 9.47033 1.06152 9.26426 1.2673C9.05819 1.47308 8.80393 1.62405 8.52462 1.70645L8.13387 1.82177C8.09535 1.83298 8.0615 1.85635 8.03737 1.88839C8.01324 1.92044 8.00013 1.95943 8 1.99955C7.99987 2.03966 8.01273 2.07874 8.03664 2.11094C8.06056 2.14315 8.09426 2.16674 8.1327 2.1782L8.53161 2.2976C8.80899 2.38065 9.06136 2.5314 9.26599 2.73626C9.47063 2.94112 9.62111 3.19366 9.70388 3.47115L9.82151 3.86719C9.83303 3.90558 9.85661 3.93923 9.88876 3.96316C9.92092 3.98708 9.95993 4 10 4C10.0401 4 10.0791 3.98708 10.1112 3.96316C10.1434 3.93923 10.167 3.90558 10.1785 3.86719L10.2961 3.47115C10.3789 3.19366 10.5294 2.94112 10.734 2.73626C10.9387 2.5314 11.191 2.38065 11.4684 2.2976L11.8667 2.1782C11.9052 2.16687 11.939 2.14338 11.963 2.11126C11.987 2.07914 12 2.0401 12 1.99998C12 1.95987 11.987 1.92083 11.963 1.88871C11.939 1.85659 11.9052 1.8331 11.8667 1.82177L11.4754 1.70645C11.1961 1.62405 10.9418 1.47308 10.7357 1.2673C10.5297 1.06152 10.3784 0.80745 10.2955 0.528235L10.1785 0.133361C10.1697 0.103567 10.1535 0.0764518 10.1316 0.0544808Z" fill="#181C25"/>
           </svg>
         </button>
-        <button class="agent-tool-btn" id="floatAskAgent" type="button" aria-label="展开为浮窗" aria-pressed="false">
-          <svg t="1782465745775" class="agent-float-open-icon icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8919" width="200" height="200" aria-hidden="true">
-            <path d="M565.248 844.8H191.488a25.6 25.6 0 0 1-25.6-25.6V195.328a25.6 25.6 0 0 1 25.6-25.6H814.08a25.6 25.6 0 0 1 25.6 25.6v370.944a25.6 25.6 0 1 0 51.2 0V195.328a76.8 76.8 0 0 0-76.8-76.8H191.488a76.8 76.8 0 0 0-76.8 76.8V819.2a76.8 76.8 0 0 0 76.8 76.8h373.76a25.6 25.6 0 0 0 0-51.2z" p-id="8920"></path>
-            <path d="M640 640m51.2 0l153.6 0q51.2 0 51.2 51.2l0 153.6q0 51.2-51.2 51.2l-153.6 0q-51.2 0-51.2-51.2l0-153.6q0-51.2 51.2-51.2Z" p-id="8921"></path>
-          </svg>
-          <svg class="agent-float-restore-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M10.6666 4.66671C11.0348 4.66671 11.3333 4.96518 11.3333 5.33337V10.6667C11.3333 11.0349 11.0348 11.3334 10.6666 11.3334C10.2984 11.3334 9.99992 11.0349 9.99992 10.6667V5.33337C9.99992 4.96518 10.2984 4.66671 10.6666 4.66671Z" fill="#181C25"/>
-            <path d="M1.99992 1.33337H13.9999C14.3681 1.33337 14.6666 1.63185 14.6666 2.00004V14C14.6666 14.3682 14.3681 14.6667 13.9999 14.6667H1.99992C1.63173 14.6667 1.33325 14.3682 1.33325 14V2.00004C1.33325 1.63185 1.63173 1.33337 1.99992 1.33337ZM2.66659 2.66671V13.3334H13.3333V2.66671H2.66659Z" fill="#181C25"/>
+        <button class="agent-tool-btn" type="button" aria-label="展开">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 1H13C14.1046 1 15 1.89543 15 3V13C15 14.1046 14.1046 15 13 15H3C1.89543 15 1 14.1046 1 13V3C1 1.89543 1.89543 1 3 1ZM3 2C2.44772 2 2 2.44772 2 3V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2H3ZM7 3.5L4 3.5C3.9127 3.5 3.83062 3.52237 3.75919 3.5617C3.7456 3.56918 3.73229 3.57734 3.71929 3.58617C3.58694 3.67613 3.5 3.82791 3.5 4V7C3.5 7.27614 3.72386 7.5 4 7.5C4.27614 7.5 4.5 7.27614 4.5 7V5.20703L6.64652 7.35355C6.84178 7.54882 7.15837 7.54882 7.35363 7.35355C7.54889 7.15829 7.54889 6.84171 7.35363 6.64645L5.20718 4.5L7 4.5C7.27614 4.5 7.5 4.27614 7.5 4C7.5 3.72386 7.27614 3.5 7 3.5ZM11.9994 12.5H9C8.72386 12.5 8.5 12.2761 8.5 12C8.5 11.7239 8.72386 11.5 9 11.5H10.7928L8.64637 9.35355C8.45111 9.15829 8.45111 8.84171 8.64637 8.64645C8.84163 8.45118 9.15822 8.45118 9.35348 8.64645L11.5 10.793V9C11.5 8.72386 11.7239 8.5 12 8.5C12.2761 8.5 12.5 8.72386 12.5 9V12C12.5 12.1714 12.4138 12.3226 12.2824 12.4127C12.269 12.4219 12.2551 12.4304 12.2408 12.4383C12.1702 12.4772 12.0892 12.4995 12.003 12.5C12.002 12.5 12.001 12.5 12 12.5H11.9994Z" fill="#333333"/>
           </svg>
         </button>
         <button class="agent-tool-btn" id="closeAskAgent" type="button" aria-label="关闭 Ask Agent">
@@ -1772,13 +1588,8 @@
       </div>
     </div>
     <div class="agent-body">
-      <h2 class="agent-greeting">Hi Scott,<br>在报表页我有什么能帮你?</h2>
-      <div class="agent-prompts" aria-label="推荐问题">
-        <button class="agent-prompt" type="button">销售漏斗流失分析 <span>→</span></button>
-        <button class="agent-prompt" type="button">渠道流量和成交关联 <span>→</span></button>
-        <button class="agent-prompt" type="button">今年销售转化效率 <span>→</span></button>
-        <button class="agent-prompt" type="button">丢失交易改善优化方案 <span>→</span></button>
-      </div>
+      <h2 class="agent-greeting">Hi Scott,<br>在详情页我有什么能帮你?</h2>
+      <div class="agent-prompts" aria-label="推荐问题"></div>
       <div class="agent-chat-feed" id="agentChatFeed" aria-live="polite"></div>
     </div>
     <div class="agent-composer">
@@ -1792,69 +1603,25 @@
           <div class="composer-toolbar">
             <div class="toolbar-left">
               <div class="plus-menu-anchor">
-                <button class="plus-btn" id="plusMenuBtn" type="button" aria-label="添加附件" aria-haspopup="menu" aria-expanded="false">
-                  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-                    <path class="icon-fill" d="M8.25 2.75h1.5v5.5h5.5v1.5h-5.5v5.5h-1.5v-5.5h-5.5v-1.5h5.5z"></path>
-                  </svg>
-                </button>
-                <div class="plus-menu" id="plusMenu" role="menu">
-                  <div class="plus-menu-panel" id="plusMenuRoot"></div>
-                  <div class="plus-submenu hidden" id="plusSubmenu"></div>
-                </div>
+                <button class="plus-btn" id="plusMenuBtn" type="button" aria-label="添加附件" aria-haspopup="menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M9 3.4v11.2M3.4 9h11.2"></path></svg></button>
+                <div class="plus-menu" id="plusMenu" role="menu"><div class="plus-menu-panel" id="plusMenuRoot"></div><div class="plus-submenu hidden" id="plusSubmenu"></div></div>
                 <input id="composerFileInput" class="hidden" type="file" multiple>
               </div>
               <div class="composer-picker-anchor">
                 <div class="composer-picker-trigger selected" id="agentPickerTrigger">
                   <button class="composer-picker-btn" id="agentPickerBtn" type="button" aria-haspopup="menu" aria-expanded="false">
-                    <span class="composer-picker-icon" id="agentPickerIcon" aria-hidden="true">
-                      <svg viewBox="0 0 16 16">
-                        <path class="icon-fill" d="M5 1.8h1.4v1.6h3.2V1.8H11v1.6h1.1c.7 0 1.2.5 1.2 1.2v7.4c0 .7-.5 1.2-1.2 1.2H3.9c-.7 0-1.2-.5-1.2-1.2V4.6c0-.7.5-1.2 1.2-1.2H5V1.8Zm-1 4.4v5.6h8V6.2H4Zm1.2 1.4h2.4v1.2H5.2V7.6Zm0 2.3h5.4v1.2H5.2V9.9Z"></path>
-                      </svg>
-                    </span>
+                    <span class="composer-picker-icon" id="agentPickerIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path class="icon-stroke" d="M3.4 4.1h9.2v8.3H3.4z"></path><path class="icon-stroke" d="M6 1.9v2.2M10 1.9v2.2M5.4 7.6h2.1M5.4 10h4.6"></path></svg></span>
                     <span class="composer-picker-label" id="agentPickerLabel">规划模式</span>
-                    <span class="composer-picker-caret" aria-hidden="true">
-                      <svg viewBox="0 0 12 12"><path class="icon-fill" d="M2.8 4.4h6.4L6 7.8 2.8 4.4Z"></path></svg>
-                    </span>
+                    <span class="composer-picker-caret" aria-hidden="true"><svg viewBox="0 0 12 12"><path class="icon-stroke" d="m3.1 4.5 2.9 3 2.9-3"></path></svg></span>
                   </button>
                 </div>
                 <div class="composer-picker-menu" id="agentPickerMenu" role="menu"></div>
               </div>
-              <div class="agent-pill" id="agentPill">
-                <span style="width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;color:#566cff;">
-                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                    <rect x="2.2" y="3.4" width="11.6" height="9.2" rx="4.2" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
-                    <circle cx="5.8" cy="8" r="0.8" fill="currentColor"></circle>
-                    <circle cx="10.2" cy="8" r="0.8" fill="currentColor"></circle>
-                    <path class="icon-stroke" d="M5.2 2.3v1.3M10.8 2.3v1.3"></path>
-                  </svg>
-                </span>
-                <span class="agent-pill-label" id="agentLabel"></span>
-                <button id="clearAgentBtn" class="close-mini" type="button" aria-label="清除智能体">
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="M3 3l6 6M9 3 3 9"></path></svg>
-                </button>
-              </div>
+              <div class="agent-pill" id="agentPill"><span class="agent-pill-label" id="agentLabel"></span><button id="clearAgentBtn" class="close-mini" type="button" aria-label="清除智能体"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="M3 3l6 6M9 3 3 9"></path></svg></button></div>
             </div>
             <div class="toolbar-right">
-              <button class="voice-btn" type="button" aria-label="语音">
-                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-                  <path class="icon-fill" d="M9 2.4c1.5 0 2.7 1.2 2.7 2.7v3.7a2.7 2.7 0 0 1-5.4 0V5.1c0-1.5 1.2-2.7 2.7-2.7Zm5 6.3a5 5 0 0 1-4.2 4.9v1.3h2.1v1.3H6.1v-1.3h2.1v-1.3A5 5 0 0 1 4 8.7h1.4a3.6 3.6 0 0 0 7.2 0H14Z"></path>
-                </svg>
-              </button>
-              <button class="send-btn is-empty" id="sendBtn" type="button" aria-label="发送">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <g clip-path="url(#sendBtnClip)">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" fill="url(#sendBtnGradient)"></path>
-                    <path d="M22.6289 10.7615C22.7505 11.0955 22.7501 11.4571 22.642 11.7825L18.5828 24.114C18.2857 24.9797 17.3523 25.4495 16.4877 25.1751C16.0828 25.0299 15.7461 24.7459 15.5465 24.3664L13.525 20.5524C13.3399 20.2031 13.4043 19.774 13.6838 19.4945L16.8206 16.3577C17.0502 16.1263 17.0525 15.7514 16.8207 15.5092C16.5859 15.2773 16.2111 15.2749 15.9721 15.5093L12.8377 18.6438C12.5571 18.9244 12.1258 18.9881 11.7761 18.8006L7.96347 16.7569C7.16772 16.3312 6.86567 15.3306 7.30086 14.5295C7.49703 14.1534 7.83384 13.8712 8.24238 13.747L20.5607 9.70111C21.4242 9.42148 22.3567 9.8939 22.6289 10.7615Z" fill="white"></path>
-                  </g>
-                  <defs>
-                    <linearGradient id="sendBtnGradient" x1="6.66" y1="3.42" x2="27.27" y2="28.67" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="#7E88FF"></stop>
-                      <stop offset="1" stop-color="#BE64FF"></stop>
-                    </linearGradient>
-                    <clipPath id="sendBtnClip"><rect width="32" height="32" fill="white"></rect></clipPath>
-                  </defs>
-                </svg>
-              </button>
+              <button class="voice-btn" type="button" aria-label="语音"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect class="icon-stroke" x="6.1" y="2.9" width="5.8" height="8.4" rx="2.9"></rect><path class="icon-stroke" d="M4.2 8.9a4.8 4.8 0 0 0 9.6 0M9 13.7v1.9M6.6 15.6h4.8"></path></svg></button>
+              <button class="send-btn is-empty" id="sendBtn" type="button" aria-label="发送"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><g clip-path="url(#sendBtnClipAgent)"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" fill="url(#sendBtnGradientAgent)"></path><path d="M22.6289 10.7615C22.7505 11.0955 22.7501 11.4571 22.642 11.7825L18.5828 24.114C18.2857 24.9797 17.3523 25.4495 16.4877 25.1751C16.0828 25.0299 15.7461 24.7459 15.5465 24.3664L13.525 20.5524C13.3399 20.2031 13.4043 19.774 13.6838 19.4945L16.8206 16.3577C17.0502 16.1263 17.0525 15.7514 16.8207 15.5092C16.5859 15.2773 16.2111 15.2749 15.9721 15.5093L12.8377 18.6438C12.5571 18.9244 12.1258 18.9881 11.7761 18.8006L7.96347 16.7569C7.16772 16.3312 6.86567 15.3306 7.30086 14.5295C7.49703 14.1534 7.83384 13.8712 8.24238 13.747L20.5607 9.70111C21.4242 9.42148 22.3567 9.8939 22.6289 10.7615Z" fill="white"></path></g><defs><linearGradient id="sendBtnGradientAgent" x1="6.66" y1="3.42" x2="27.27" y2="28.67" gradientUnits="userSpaceOnUse"><stop stop-color="#7E88FF"></stop><stop offset="1" stop-color="#BE64FF"></stop></linearGradient><clipPath id="sendBtnClipAgent"><rect width="32" height="32" fill="white"></rect></clipPath></defs></svg></button>
             </div>
           </div>
         </div>
@@ -1862,42 +1629,7 @@
     </div>
   </aside>
 
-  <button class="floating-bee" id="floatingBee" type="button" aria-label="打开 Agent">
-    <span class="floating-bee-bubble" aria-hidden="true">
-      <span class="floating-bee-gibberish" id="floatingBeeGibberish">Hi，我是ShareAgent</span>
-    </span>
-    <span class="floating-bee-shell" aria-hidden="true"></span>
-    <svg class="floating-bee-img bee-tilted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7603 1.63375C15.9353 1.25835 16.3824 1.09542 16.7578 1.27047L18.6606 2.15817C19.0358 2.33313 19.1985 2.77902 19.0239 3.15426L18.7061 3.83395C18.531 4.2093 18.0853 4.37216 17.71 4.19723L17.1431 3.93356L16.2759 5.64596C21.0398 6.13641 23.7478 7.91536 24 13.7802C23.9999 21.956 20.6559 22.1797 12 22.1797C3.34408 22.1797 6.08281e-05 21.956 0 13.7802C0.252248 7.91536 2.96021 6.13641 7.72412 5.64596L6.85693 3.93356L6.29004 4.19723C5.91467 4.37216 5.46897 4.2093 5.29395 3.83395L4.97607 3.15426C4.80155 2.77902 4.96421 2.33313 5.33936 2.15817L7.24219 1.27047C7.61759 1.09542 8.06469 1.25835 8.23975 1.63375L8.55615 2.31344C8.73107 2.68881 8.56821 3.13451 8.19287 3.30954L7.67285 3.5527L8.69238 5.56393C9.71256 5.49649 10.8164 5.47457 12 5.47457C13.1836 5.47457 14.2874 5.49649 15.3076 5.56393L16.3271 3.5527L15.8071 3.30954C15.4318 3.13451 15.2689 2.68881 15.4438 2.31344L15.7603 1.63375ZM17.4639 10.7846C17.1955 10.4534 16.7119 10.4034 16.3828 10.6733L13.5103 13.0317C13.3327 13.1776 13.2361 13.3863 13.2275 13.6001V13.6674C13.236 13.8814 13.3324 14.0913 13.5103 14.2373L16.3828 16.5942C16.7119 16.8643 17.1954 16.8154 17.4639 16.4843C17.7323 16.153 17.6831 15.6647 17.354 15.3945L15.2095 13.6338L17.354 11.873C17.683 11.6029 17.732 11.1159 17.4639 10.7846ZM8.32031 10.5166C7.86737 10.5166 7.5001 10.8868 7.5 11.3427V15.8999C7.50017 16.3557 7.86742 16.7246 8.32031 16.7246C8.77317 16.7245 9.14045 16.3557 9.14062 15.8999V11.3427C9.14052 10.8868 8.77321 10.5166 8.32031 10.5166Z" fill="url(#floatingBeeTiltedGradient)"/>
-      <defs>
-        <linearGradient id="floatingBeeTiltedGradient" x1="10.821" y1="20.991" x2="4.543" y2="-5.203" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#7091FF"/>
-          <stop offset="1" stop-color="#BE64FF"/>
-        </linearGradient>
-      </defs>
-    </svg>
-    <svg class="floating-bee-img bee-upright" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7603 1.63375C15.9353 1.25835 16.3824 1.09542 16.7578 1.27047L18.6606 2.15817C19.0358 2.33313 19.1985 2.77902 19.0239 3.15426L18.7061 3.83395C18.531 4.2093 18.0853 4.37216 17.71 4.19723L17.1431 3.93356L16.2759 5.64596C21.0398 6.13641 23.7478 7.91536 24 13.7802C23.9999 21.956 20.6559 22.1797 12 22.1797C3.34408 22.1797 6.08281e-05 21.956 0 13.7802C0.252248 7.91536 2.96021 6.13641 7.72412 5.64596L6.85693 3.93356L6.29004 4.19723C5.91467 4.37216 5.46897 4.2093 5.29395 3.83395L4.97607 3.15426C4.80155 2.77902 4.96421 2.33313 5.33936 2.15817L7.24219 1.27047C7.61759 1.09542 8.06469 1.25835 8.23975 1.63375L8.55615 2.31344C8.73107 2.68881 8.56821 3.13451 8.19287 3.30954L7.67285 3.5527L8.69238 5.56393C9.71256 5.49649 10.8164 5.47457 12 5.47457C13.1836 5.47457 14.2874 5.49649 15.3076 5.56393L16.3271 3.5527L15.8071 3.30954C15.4318 3.13451 15.2689 2.68881 15.4438 2.31344L15.7603 1.63375ZM17.4639 10.7846C17.1955 10.4534 16.7119 10.4034 16.3828 10.6733L13.5103 13.0317C13.3327 13.1776 13.2361 13.3863 13.2275 13.6001V13.6674C13.236 13.8814 13.3324 14.0913 13.5103 14.2373L16.3828 16.5942C16.7119 16.8643 17.1954 16.8154 17.4639 16.4843C17.7323 16.153 17.6831 15.6647 17.354 15.3945L15.2095 13.6338L17.354 11.873C17.683 11.6029 17.732 11.1159 17.4639 10.7846ZM8.32031 10.5166C7.86737 10.5166 7.5001 10.8868 7.5 11.3427V15.8999C7.50017 16.3557 7.86742 16.7246 8.32031 16.7246C8.77317 16.7245 9.14045 16.3557 9.14062 15.8999V11.3427C9.14052 10.8868 8.77321 10.5166 8.32031 10.5166Z" fill="url(#floatingBeeUprightGradient)"/>
-      <defs>
-        <linearGradient id="floatingBeeUprightGradient" x1="-6.42205e-07" y1="22.1797" x2="7.66091" y2="-3.64659" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#7091FF"/>
-          <stop offset="1" stop-color="#BE64FF"/>
-        </linearGradient>
-      </defs>
-    </svg>
-    <svg class="floating-bee-img bee-upright-closed" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.24219 1.27049C7.61759 1.09543 8.06469 1.25836 8.23975 1.63377L8.55615 2.31346C8.73106 2.68882 8.56821 3.13453 8.19287 3.30955L7.67285 3.55272L8.69238 5.56395C9.71256 5.4965 10.8164 5.47459 12 5.47459C13.1836 5.47459 14.2874 5.4965 15.3076 5.56395L16.3271 3.55272L15.8071 3.30955C15.4318 3.13453 15.2689 2.68882 15.4438 2.31346L15.7603 1.63377C15.9353 1.25836 16.3824 1.09543 16.7578 1.27049L18.6606 2.15818C19.0358 2.33315 19.1985 2.77903 19.0239 3.15428L18.7061 3.83397C18.531 4.20931 18.0853 4.37217 17.71 4.19725L17.1431 3.93357L16.2759 5.64598C21.0398 6.13642 23.7478 7.91537 24 13.7803C23.9999 21.956 20.6559 22.1797 12 22.1797C3.34408 22.1797 6.31457e-05 21.956 0 13.7803C0.252248 7.91537 2.96021 6.13642 7.72412 5.64598L6.85693 3.93357L6.29004 4.19725C5.91467 4.37217 5.46898 4.20931 5.29395 3.83397L4.97607 3.15428C4.80155 2.77903 4.96421 2.33315 5.33936 2.15818L7.24219 1.27049ZM8.2028 12.4923C7.39875 12.4923 6.62761 12.8009 6.05905 13.3501C5.62599 13.7684 5.33747 14.3003 5.22455 14.8733C5.1657 15.1719 5.41779 15.4209 5.72214 15.4209C6.02649 15.4209 6.26533 15.1686 6.35678 14.8783C6.44817 14.5882 6.61236 14.3213 6.83839 14.1029C7.20025 13.7534 7.69106 13.557 8.2028 13.557C8.71454 13.557 9.20531 13.7534 9.56717 14.1029C9.79321 14.3213 9.95739 14.5882 10.0488 14.8783C10.1402 15.1686 10.3791 15.4209 10.6834 15.4209C10.9878 15.4209 11.2399 15.1719 11.181 14.8733C11.0681 14.3003 10.7796 13.7684 10.3465 13.3501C9.77796 12.8009 9.00685 12.4923 8.2028 12.4923ZM15.8032 12.4923C14.9991 12.4923 14.228 12.8009 13.6594 13.3501C13.2264 13.7684 12.9379 14.3003 12.8249 14.8733C12.7661 15.1719 13.0182 15.4209 13.3226 15.4209C13.6269 15.4209 13.8658 15.1686 13.9572 14.8783C14.0486 14.5882 14.2128 14.3213 14.4388 14.1029C14.8007 13.7534 15.2915 13.557 15.8032 13.557C16.3149 13.557 16.8057 13.7534 17.1676 14.1029C17.3936 14.3213 17.5578 14.5882 17.6492 14.8783C17.7406 15.1686 17.9795 15.4209 18.2838 15.4209C18.5882 15.4209 18.8403 15.1719 18.7814 14.8733C18.6685 14.3003 18.38 13.7684 17.9469 13.3501C17.3784 12.8009 16.6073 12.4923 15.8032 12.4923Z" fill="url(#floatingBeeUprightClosedGradient)"/>
-      <defs>
-        <linearGradient id="floatingBeeUprightClosedGradient" x1="-6.42205e-07" y1="22.1797" x2="7.66091" y2="-3.64658" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#7091FF"/>
-          <stop offset="1" stop-color="#BE64FF"/>
-        </linearGradient>
-      </defs>
-    </svg>
-  </button>
-
   <div class="bridge-toast" id="bridgeToast">已触发工作台跳转扩展位</div>
-  <div class="chart-tooltip" id="chartTooltip"></div>
 
   <script src="../language-switch.js"></script>
   <script>
@@ -1975,141 +1707,148 @@
   </script>
 
   <script>
-    (function () {
-      var timer;
-      var chartTooltip = document.getElementById("chartTooltip");
-      var chartColors = ["#2f66ff", "#8b5cf6", "#f26f7d", "#ffbd62", "#49bf79", "#58c5f8"];
-      var chartData = {
-        funnel: [
-          { name: "验证", value: 1050, label: "1,050.00万", color: "#2f66ff" },
-          { name: "演示", value: 630, label: "630.00万", color: "#8b5cf6" },
-          { name: "报价", value: 340, label: "340.00万", color: "#f26f7d" },
-          { name: "议价", value: 285, label: "285.00万", color: "#ffbd62" },
-          { name: "赢单", value: 202.99, label: "202.99万", color: "#49bf79" }
-        ],
-        loss: [
-          { name: "竞争对手抢单", value: 1, label: "1 (16.67%)", color: "#2f66ff" },
-          { name: "需求未满足", value: 2, label: "2 (33.33%)", color: "#8b5cf6" },
-          { name: "客户不想要了", value: 3, label: "3 (50.00%)", color: "#58c5f8" }
+    const ACTIVE_CUSTOMER_FALLBACK = { name: "上海云驰智能制造有限公司", owner: "林澈", level: "重要客户" };
+    function getActiveCustomer() {
+      try {
+        const raw = localStorage.getItem("crmActiveCustomer");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.name) return parsed;
+        }
+      } catch (error) {
+        // Storage may be blocked in local previews; fall back to the default customer.
+      }
+      return ACTIVE_CUSTOMER_FALLBACK;
+    }
+    const currentCustomer = getActiveCustomer();
+    document.querySelectorAll(".js-customer-name").forEach((el) => {
+      el.textContent = currentCustomer.name;
+    });
+
+    function seedFromName(name) {
+      var s = 0;
+      for (var i = 0; i < (name || "").length; i++) s = (s * 31 + name.charCodeAt(i)) >>> 0;
+      return s || 7;
+    }
+
+    // Deterministic per-customer content. Business logic/phrasing is fixed;
+    // only the text variables derive from the customer record + name seed.
+    function buildCustomerScript(customer) {
+      var name = customer.name || "该客户";
+      var seed = seedFromName(name);
+      var at = function (offset, arr) { return arr[(seed + offset) % arr.length]; };
+      var num = function (offset, min, span) { return min + ((seed >>> offset) % span); };
+
+      var industry = at(0, ["复合材料制造", "智能制造装备", "精密机械", "新能源材料", "消费电子", "工业软件", "汽车零部件"]);
+      var gradeMap = { "VIP客户": "A 级战略", "重要客户": "A 级重点", "一般客户": "B 级培育" };
+      var grade = gradeMap[customer.level] || "B 级培育";
+      var deal = num(2, 80, 81);
+      var dwell = num(4, 15, 8);
+      var base = 14;
+      var riskPct = num(6, 60, 13);
+      var second = num(7, 35, 16);
+      var bid = num(8, 600, 301);
+      var sur = ["王", "赵", "陈", "李", "周", "吴", "孙", "郑", "冯", "何", "秦", "许"];
+      var given = ["敏", "磊", "洁", "强", "婷", "明", "华", "静", "涛", "琳", "峰", "娟"];
+      var person = function (i) { return sur[(seed + i * 7) % sur.length] + given[(seed + i * 13) % given.length]; };
+      var purchaser = person(1), cio = person(2), biz = person(3);
+      var nextCommit = "6/" + num(10, 18, 6);
+      var taskDue = "6/" + num(11, 16, 5);
+      var signTarget = "7/" + num(12, 25, 6);
+      var peers = ["华峰", "桐昆", "恒逸", "荣盛", "新凤鸣", "盛虹", "三房巷"];
+      var peerA = peers[seed % peers.length];
+      var peerB = peers[(seed + 3) % peers.length];
+      if (peerB === peerA) peerB = peers[(seed + 4) % peers.length];
+
+      return {
+        greeting: "这个客户我已读完，你可以让我:",
+        instructions: [
+          {
+            id: "q2", title: "诊断当前最该补什么", tag: "决策链 / BANT",
+            question: name + "当前最该补什么?",
+            answer: {
+              summary: "客户需求明确,但<b>财务审批人缺失</b>,商务谈判推不动。建议先补关键人地图,再生成给采购总监 " + purchaser + " 的引荐话术,把财务负责人拉进决策链。",
+              exec: {
+                title: "客户洞察",
+                rows: [
+                  { k: "风险", val: "财务线未进入决策链", badge: { text: riskPct + "%", tone: "amber" } },
+                  { k: "动作", val: "生成触达序列(经 " + purchaser + " 引荐财务)", action: "生成" }
+                ],
+                note: "生成后写入客户动态+商机动态,并创建补关系任务,截止 " + taskDue + "。"
+              },
+              followups: [
+                { id: "q2a", question: "给我 " + purchaser + " 的引荐话术", answer: { summary: "“" + purchaser.charAt(0) + "总,这次方案落地需要财务侧确认审批链和预算口径。能否帮忙引荐贵司财务负责人?我们可在一次会上同步两期报价拆分,减少您内部沟通成本。”", exec: { title: "引荐话术", rows: [{ k: "动作", val: "复制话术 / 发起引荐任务", action: "发送" }] } } },
+                { id: "q2b", question: "决策链还缺谁?", answer: { summary: "已覆盖:采购总监 " + purchaser + "(支持者)、CIO " + cio + "(技术决策)、业务负责人 " + biz + "(需强化)。<b>缺财务负责人 / CFO(未识别)</b>,是当前唯一断点,建议由 " + purchaser + " 引荐补入。" } }
+              ]
+            }
+          },
+          {
+            id: "q3", title: "扫描风险与情报", tag: "风险 / 情报",
+            question: "这个客户有哪些风险,先处理哪个?",
+            answer: {
+              summary: "内部识别 3 项:<b>财务审批链未确认(高)</b>、方案停留 " + dwell + " 天超基准(中)、合同价变更待法务授权(中)。外部情报:暂无负面舆情,近期有 1 条同类项目招投标动态可关注。建议优先处理财务审批链。",
+              exec: {
+                title: "风险处置",
+                rows: [
+                  { k: "最高项", val: "预算审批链未确认", badge: { text: "高", tone: "red" } },
+                  { k: "动作", val: "创建“" + taskDue + " 前补审批链”任务并指派", action: "创建" }
+                ],
+                note: "同步生成方案超期预警(" + dwell + "天 > 基准 " + base + "天)推送给经理。"
+              },
+              followups: [
+                { id: "q3a", question: "看外部招投标情报", answer: { summary: "近 30 天该客户所属集团有 1 条<b>" + industry + "产线扩建招标</b>(公开),预算约 ¥" + bid + " 万,可作为二期切入点。来源:市场情报 Agent。", exec: { title: "情报线索", rows: [{ k: "动作", val: "订阅该客户情报 / 关联到增购机会", action: "订阅" }] } } },
+                { id: "q3b", question: "这个客户信用状况?", answer: { summary: "工商正常,无司法风险与失信记录,近一年无重大负面舆情。账期建议按标准框架;<b>合同价变更条款</b>需法务单独授权后再签。" } }
+              ]
+            }
+          },
+          {
+            id: "q4", title: "识别增购机会", tag: "增购",
+            question: name + "还有哪些增购机会?",
+            answer: {
+              summary: "一期 ERP+CRM 核心 ¥" + deal + " 万在谈。该客户为 " + grade + "框架采购,<b>二期扩展(¥" + second + " 万)</b>可前置铺垫;制造业同规模客户多搭配移动拜访模块,有交叉销售空间。",
+              exec: {
+                title: "增长机会",
+                rows: [
+                  { k: "机会", val: "二期扩展 + 移动拜访模块", badge: { text: "¥" + second + "万", tone: "green" } },
+                  { k: "动作", val: "生成增购方案要点 + 关联新建商机", action: "生成" }
+                ],
+                note: "引用 " + peerA + "、" + peerB + " 同行业案例作为证据。"
+              },
+              followups: [
+                { id: "q4a", question: "同行业一般还买什么?", answer: { summary: "制造业同规模客户在 ERP+CRM 核心之外,常加购<b>移动拜访、渠道协同、回款可视化</b>模块,平均扩展客单 ¥35–50 万。" } },
+                { id: "q4b", question: "二期适合什么时候提?", answer: { summary: "建议一期签约(目标 " + signTarget + ")后、上线里程碑达成时提,赢单概率最高。可在 <b>" + nextCommit + " 实施里程碑沟通</b>时先埋点二期预算。" } }
+              ]
+            }
+          }
         ]
       };
+    }
 
-      function svgEl(name, attrs) {
-        var node = document.createElementNS("http://www.w3.org/2000/svg", name);
-        Object.keys(attrs || {}).forEach(function (key) { node.setAttribute(key, attrs[key]); });
-        return node;
-      }
+    const customerScript = buildCustomerScript(currentCustomer);
 
-      function addText(svg, text, x, y, attrs) {
-        var node = svgEl("text", Object.assign({ x: x, y: y }, attrs || {}));
-        node.textContent = text;
-        svg.appendChild(node);
-        return node;
-      }
+    const input = document.getElementById("recordSearch");
+    const rows = Array.from(document.querySelectorAll("#recordRows tr"));
+    if (input) {
+      input.addEventListener("input", () => {
+        const keyword = input.value.trim().toLowerCase();
+        rows.forEach((row) => row.style.display = keyword && !row.textContent.toLowerCase().includes(keyword) ? "none" : "");
+      });
+    }
 
-      function showChartTip(event, item) {
-        chartTooltip.innerHTML = "<strong>" + item.name + "</strong>" + item.label;
-        chartTooltip.style.left = event.clientX + "px";
-        chartTooltip.style.top = event.clientY + "px";
-        chartTooltip.classList.add("show");
-      }
+    document.querySelectorAll("[data-side-tab]").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll("[data-side-tab]").forEach((item) => item.classList.toggle("active", item === tab));
+        document.querySelectorAll("[data-panel]").forEach((panel) => panel.hidden = panel.dataset.panel !== tab.dataset.sideTab);
+      });
+    });
 
-      function hideChartTip() {
-        chartTooltip.classList.remove("show");
-      }
+    document.getElementById("closeDetail").addEventListener("click", () => {
+      localStorage.setItem("crmAskAgentOpen", document.body.classList.contains("agent-open") ? "true" : "false");
+      window.location.href = "list-page.html";
+    });
 
-      function polar(cx, cy, r, angle) {
-        var rad = (angle - 90) * Math.PI / 180;
-        return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-      }
-
-      function arcPath(cx, cy, r, start, end) {
-        var a = polar(cx, cy, r, end);
-        var b = polar(cx, cy, r, start);
-        var large = end - start <= 180 ? 0 : 1;
-        return "M " + a.x + " " + a.y + " A " + r + " " + r + " 0 " + large + " 0 " + b.x + " " + b.y;
-      }
-
-      function renderFunnel(node) {
-        var data = chartData.funnel;
-        var svg = svgEl("svg", { class: "chart-stage", viewBox: "0 0 760 220", role: "img", "aria-label": "销售漏斗" });
-        var cx = 320;
-        var top = 22;
-        var layerH = 36;
-        var maxW = 290;
-        var widths = data.map(function (item) { return Math.max(48, maxW * Math.sqrt(item.value / data[0].value)); });
-        widths.push(32);
-        data.forEach(function (item, index) {
-          var y0 = top + index * layerH;
-          var y1 = y0 + layerH;
-          var w0 = widths[index];
-          var w1 = widths[index + 1];
-          var shape = svgEl("polygon", {
-            class: "chart-shape",
-            points: [
-              [cx - w0 / 2, y0],
-              [cx + w0 / 2, y0],
-              [cx + w1 / 2, y1],
-              [cx - w1 / 2, y1]
-            ].map(function (p) { return p.join(","); }).join(" "),
-            fill: item.color,
-            stroke: "#fff",
-            "stroke-width": "1.2"
-          });
-          shape.addEventListener("mousemove", function (event) { showChartTip(event, item); });
-          shape.addEventListener("mouseleave", hideChartTip);
-          svg.appendChild(shape);
-
-          var midY = y0 + layerH / 2;
-          var anchorX = cx + Math.max(w0, w1) / 2;
-          svg.appendChild(svgEl("path", { class: "chart-line", d: "M " + anchorX + " " + midY + " H 610" }));
-          addText(svg, item.name + "：", 624, midY, { "text-anchor": "start" });
-          addText(svg, item.label, 672, midY, { class: "chart-value", "text-anchor": "start" });
-        });
-        node.replaceChildren(svg);
-      }
-
-      function renderDonut(node) {
-        var data = chartData.loss;
-        var total = data.reduce(function (sum, item) { return sum + item.value; }, 0);
-        var svg = svgEl("svg", { class: "chart-stage", viewBox: "0 0 760 280", role: "img", "aria-label": "输单原因分析" });
-        var cx = 380;
-        var cy = 134;
-        var r = 64;
-        var stroke = 19;
-        var start = 0;
-        data.forEach(function (item) {
-          var angle = item.value / total * 360;
-          var end = start + angle;
-          var arc = svgEl("path", { class: "chart-shape", d: arcPath(cx, cy, r, start, end), stroke: item.color, "stroke-width": stroke, fill: "none" });
-          arc.addEventListener("mousemove", function (event) { showChartTip(event, item); });
-          arc.addEventListener("mouseleave", hideChartTip);
-          svg.appendChild(arc);
-          start = end;
-        });
-        svg.appendChild(svgEl("circle", { cx: cx, cy: cy, r: 48, fill: "#fff", stroke: "none" }));
-        addText(svg, "60", cx, cy - 8, { class: "chart-total", "text-anchor": "middle" });
-        addText(svg, "输单总计", cx, cy + 31, { "text-anchor": "middle", class: "chart-value", "font-size": "13" });
-
-        var labels = [
-          { item: data[0], x: 70, y: 46, line: "M 210 58 L 292 84 L 318 95" },
-          { item: data[1], x: 100, y: 238, line: "M 250 218 L 294 198 L 326 181" },
-          { item: data[2], x: 610, y: 238, line: "M 560 218 L 462 190 L 432 181" }
-        ];
-        labels.forEach(function (label) {
-          svg.appendChild(svgEl("path", { class: "chart-line", d: label.line }));
-          addText(svg, label.item.name, label.x, label.y, { "text-anchor": "start" });
-          addText(svg, label.item.label, label.x, label.y + 20, { class: "chart-value", "text-anchor": "start" });
-        });
-        node.replaceChildren(svg);
-      }
-
-      function renderCharts() {
-        document.querySelectorAll(".chart-slot").forEach(function (node) {
-          if (node.dataset.chartKind === "funnel") renderFunnel(node);
-          if (node.dataset.chartKind === "donut") renderDonut(node);
-        });
-      }
+    function initAskAgentSidebar() {
+      var timer;
 
       function emitBridge(payload) {
         if (typeof window.openDashboardBridge === "function") {
@@ -2117,33 +1856,23 @@
         } else {
           window.dispatchEvent(new CustomEvent("crm-dashboard-bridge", { detail: payload }));
         }
-        if (payload.type === "ai-analysis" && payload.target === "opportunity-funnel") {
-          openFunnelCopilotAnalysis();
-          return;
-        }
         var toast = document.getElementById("bridgeToast");
+        if (!toast) return;
         toast.textContent = "已触发扩展位：" + (payload.title || payload.target || payload.type);
         toast.classList.add("show");
         clearTimeout(timer);
         timer = setTimeout(function () { toast.classList.remove("show"); }, 1500);
       }
 
-      document.querySelectorAll("[data-bridge]").forEach(function (node) {
-        node.addEventListener("click", function () {
-          emitBridge(JSON.parse(node.getAttribute("data-bridge")));
-        });
-      });
       document.addEventListener("click", function (event) {
         var bridgeNode = event.target.closest(".agent-chat-feed [data-bridge]");
         if (bridgeNode) {
           emitBridge(JSON.parse(bridgeNode.getAttribute("data-bridge")));
         }
       });
-
       var askAgentButton = document.getElementById("askAgentButton");
       var askAgentSidebar = document.getElementById("askAgentSidebar");
       var newAskAgentSession = document.getElementById("newAskAgentSession");
-      var floatAskAgent = document.getElementById("floatAskAgent");
       var closeAskAgent = document.getElementById("closeAskAgent");
       var agentChatFeed = document.getElementById("agentChatFeed");
       var composerShell = document.getElementById("composerShell");
@@ -2162,9 +1891,6 @@
       var clearAgentBtn = document.getElementById("clearAgentBtn");
       var sendBtn = document.getElementById("sendBtn");
       var agentReplyTimer;
-      var agentFloatDragState = null;
-      var agentFloatDragThreshold = 4;
-      var agentSidebarResizeState = null;
       var composerState = {
         mode: "planning",
         activeAgent: "",
@@ -2221,147 +1947,107 @@
         ].join("");
       }
 
-      function renderAgentReplyChip(label) {
+      function renderAgentReplyChip(label, followupId) {
         return [
-          '<button class="agent-chat-reply-chip" type="button">',
+          '<button class="agent-chat-reply-chip" type="button"' + (followupId ? ' data-followup="' + escapeHtml(followupId) + '"' : '') + '>',
           '<span>' + escapeHtml(label) + '</span>',
           '<svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="m4 2.4 4 3.6-4 3.6"></path></svg>',
           '</button>'
         ].join("");
       }
 
-      function renderAgentResponse(prompt) {
-        var title = prompt.indexOf("漏斗") > -1 ? "销售漏斗流失情况分析" :
-          prompt.indexOf("渠道") > -1 ? "渠道流量和成交关联分析" :
-          prompt.indexOf("转化") > -1 ? "今年销售转化效率分析" :
-          prompt.indexOf("丢失") > -1 ? "丢失交易改善优化方案" :
-          "海岳智能制造集团最近跟进情况分析";
+      function renderExecCard(exec) {
+        if (!exec) return "";
+        var actions = [];
+        var rows = exec.rows.map(function (row) {
+          var tail = row.badge
+            ? '<span class="agent-chat-exec-badge tone-' + row.badge.tone + '">' + escapeHtml(row.badge.text) + '</span>'
+            : '';
+          if (row.action) actions.push(row.action);
+          return '<div class="agent-chat-exec-row"><span class="agent-chat-exec-k">' + escapeHtml(row.k) + '</span><span class="agent-chat-exec-v">' + escapeHtml(row.val) + '</span>' + tail + '</div>';
+        }).join("");
+        var footer = actions.length
+          ? '<div class="agent-chat-exec-footer">' + actions.map(function (a) {
+              return '<button class="agent-chat-exec-btn" type="button" data-exec-action="' + escapeHtml(a + " · " + exec.title) + '">' + escapeHtml(a) + '</button>';
+            }).join("") + '</div>'
+          : '';
+        return [
+          '<div class="agent-chat-exec">',
+          '<div class="agent-chat-exec-head"><p class="agent-chat-exec-title">' + escapeHtml(exec.title) + '</p><span class="agent-chat-exec-tag">可执行</span></div>',
+          '<div class="agent-chat-exec-body">' + rows + '</div>',
+          exec.note ? '<p class="agent-chat-exec-note">' + escapeHtml(exec.note) + '</p>' : '',
+          footer,
+          '</div>'
+        ].join("");
+      }
+
+      function renderAgentAnswer(answer) {
+        var replies = (answer.followups || []).map(function (f) {
+          return renderAgentReplyChip(f.question, f.id);
+        }).join("");
         return [
           '<div class="agent-chat-ai-block">',
           '<div class="agent-chat-ai-card">',
-          renderAgentAiMeta("已处理 1分30秒"),
-          '<p class="agent-chat-title">' + escapeHtml(title) + '</p>',
-          '<p class="agent-chat-copy">基于近 14 天的跟进数据，我为你梳理了关键推进信号，并生成了可转发的客户简报。</p>',
-          '<div class="agent-chat-section">',
-          '<p class="agent-chat-section-title">关键发现</p>',
-          '<p>整体跟进节奏偏慢，近一周高价值客户平均 4.2 天才有一次有效触达，低于建议的 2 天节奏。</p>',
-          '<p>3 个重点商机停留在“方案确认”阶段超过 10 天，其中 1 个客户最近没有新的决策人反馈。</p>',
-          '<p>客户对价格和交付周期的异议增多，说明当前推进已经从需求沟通转向成交博弈阶段。</p>',
+          '<p class="agent-chat-copy">' + answer.summary + '</p>',
+          renderExecCard(answer.exec),
           '</div>',
-          '<div class="agent-chat-section">',
-          '<p class="agent-chat-section-title">下一步建议</p>',
-          '<p>今天内优先约 3 个高概率客户做 15 分钟同步，确认采购节点和最新内部意见。</p>',
-          '<p>把还停在方案确认阶段的项目补一版“价值回顾 + 差异化卖点”摘要，压缩来回澄清成本。</p>',
-          '<p>对超过 7 天没有推进的商机单独拉表，明确负责人、阻塞点和下次动作时间。</p>',
-          '</div>',
-          '<p class="agent-chat-artifact-copy">您可点击卡片查看客户详情和客户简报：</p>',
-          '<button class="agent-chat-object-card" type="button" data-bridge=\'{"type":"customer","target":"haiyue","title":"海岳智能制造集团有限公司"}\'>',
-          '<span class="agent-chat-object-icon">CRM</span>',
-          '<span class="agent-chat-object-main">',
-          '<span class="agent-chat-object-title">【客户】海岳智能制造集团有限公司</span>',
-          '<span class="agent-chat-object-meta">创建时间: 5月12日 10:20</span>',
-          '</span>',
-          '</button>',
-          '</div>',
-          '<div class="agent-chat-replies">',
-          renderAgentReplyChip("生成重点客户跟进清单"),
-          renderAgentReplyChip("列出停滞商机"),
-          renderAgentReplyChip("生成推进话术"),
-          '</div>',
+          replies ? '<div class="agent-chat-replies">' + replies + '</div>' : '',
           '</div>'
         ].join("");
       }
 
-      function renderFunnelAnalysisPanel() {
-        return [
-          '<div class="agent-chat-ai-block">',
-          '<div class="agent-chat-ai-card agent-analysis-panel">',
-          '<div class="agent-analysis-card">',
-          '<div class="agent-analysis-chart-source" id="agentFunnelChartClone" role="img" aria-label="销售漏斗阶段金额"></div>',
-          '</div>',
-          '<div class="agent-analysis-section">',
-          '<p class="agent-analysis-section-title">数据概览</p>',
-          '<p class="agent-analysis-overview">本图为销售漏斗，按商机金额展示从验证到赢单的五个阶段。金额从验证 1,050万 逐级收窄至赢单 203万，整体转化率约 19%。各环节转化率：验证→演示 60%、演示→报价 54%、报价→议价 84%、议价→赢单 71%。</p>',
-          '</div>',
-          '<div class="agent-analysis-section">',
-          '<p class="agent-analysis-section-title">关键洞察</p>',
-          '<ol class="agent-analysis-list">',
-          '<li><strong>损耗集中在中前段：</strong><span>验证、演示两段合计流失近 700万，占总损耗的 82%，是金额下滑的主因。</span></li>',
-          '<li><strong>后段成单稳定：</strong><span>进入报价后转化率均超 70%，说明一旦推进到报价，赢单确定性较高。</span></li>',
-          '</ol>',
-          '</div>',
-          '<div class="agent-analysis-section">',
-          '<p class="agent-analysis-section-title">问题诊断</p>',
-          '<ol class="agent-analysis-list">',
-          '<li><strong>演示→报价为最大单点流失：</strong><span>金额从 630万 跌至 340万，流失 46%。可能源于方案匹配度不足或报价响应慢。</span></li>',
-          '<li><strong>早期商机质量偏低：</strong><span>验证→演示即流失 40%，反映线索筛选或需求确认环节把关不够。</span></li>',
-          '</ol>',
-          '</div>',
-          '<div class="agent-analysis-section">',
-          '<p class="agent-analysis-section-title">行动建议</p>',
-          '<ol class="agent-analysis-list">',
-          '<li><strong>优先攻坚演示环节：</strong><span>复盘演示未推进的商机，沉淀标准化方案与报价话术，缩短报价响应周期。</span></li>',
-          '<li><strong>前置商机质量管控：</strong><span>在验证阶段强化线索评分与需求确认，减少低质商机进入漏斗。</span></li>',
-          '</ol>',
-          '</div>',
-          '<div class="agent-analysis-actions" aria-label="分析操作">',
-          '<button class="agent-analysis-action" type="button" aria-label="重新生成"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M14.5 8.9A5.5 5.5 0 1 1 12.8 5"></path><path class="icon-stroke" d="M14.4 3.8v3.6h-3.5"></path></svg></button>',
-          '<button class="agent-analysis-action" type="button" aria-label="复制"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M5.6 5.6h8v8h-8z"></path><path class="icon-stroke" d="M4.4 4.4h8"></path></svg></button>',
-          '<button class="agent-analysis-action" type="button" aria-label="赞"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7.3 15.1h6.2c.9 0 1.6-.7 1.6-1.6V8.1c0-.9-.7-1.6-1.6-1.6h-3l.4-2.3a1.7 1.7 0 0 0-3.3-.8L6.7 6.5H4.3v8.6h3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path><path class="icon-stroke" d="M4.3 6.5H2.8v8.6h1.5"></path></svg></button>',
-          '<button class="agent-analysis-action" type="button" aria-label="踩"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M10.7 15.1H4.5c-.9 0-1.6-.7-1.6-1.6V8.1c0-.9.7-1.6 1.6-1.6h3L7.1 4.2a1.7 1.7 0 0 1 3.3-.8l.9 3.1h2.4v8.6h-3Z"></path><path class="icon-stroke" d="M13.7 6.5h1.5v8.6h-1.5"></path></svg></button>',
-          '<button class="agent-analysis-action" type="button" aria-label="更多"><svg viewBox="0 0 18 18" aria-hidden="true"><circle class="icon-fill" cx="4.2" cy="9" r="1.2"></circle><circle class="icon-fill" cx="9" cy="9" r="1.2"></circle><circle class="icon-fill" cx="13.8" cy="9" r="1.2"></circle></svg></button>',
-          '</div>',
-          '</div>',
-          '<div class="agent-chat-replies">',
-          renderAgentReplyChip("帮我找出演示到报价流失的商机"),
-          renderAgentReplyChip("生成本周高优先级推进清单"),
-          renderAgentReplyChip("给报价阶段客户写推进话术"),
-          '</div>',
-          '</div>'
-        ].join("");
-      }
-
-      function syncFunnelAnalysisChart() {
-        var target = document.getElementById("agentFunnelChartClone");
-        if (!target) return;
-        var source = document.querySelector(".funnel-card .funnel-area .chart-stage");
-        if (!source) return;
-        var clone = source.cloneNode(true);
-        clone.setAttribute("viewBox", "150 0 455 220");
-        clone.querySelectorAll(".chart-line").forEach(function (line) {
-          line.setAttribute("d", line.getAttribute("d").replace(/H\s*610/, "H 488"));
-        });
-        clone.querySelectorAll("text").forEach(function (text) {
-          if (text.classList.contains("chart-value")) {
-            text.setAttribute("x", "548");
-          } else {
-            text.setAttribute("x", "502");
+      function findFollowup(id) {
+        for (var i = 0; i < customerScript.instructions.length; i++) {
+          var fus = customerScript.instructions[i].answer.followups || [];
+          for (var j = 0; j < fus.length; j++) {
+            if (fus[j].id === id) return fus[j];
           }
-        });
-        target.replaceChildren(clone);
+        }
+        return null;
       }
 
-      function openFunnelCopilotAnalysis() {
+      // Free-text input falls back to the closest instruction answer (default: first).
+      function renderAgentResponse(prompt) {
+        var hit = customerScript.instructions.filter(function (it) {
+          return prompt.indexOf(it.title.slice(0, 2)) > -1;
+        })[0];
+        return renderAgentAnswer((hit || customerScript.instructions[0]).answer);
+      }
+
+      function pushAgentTurn(question, answer) {
+        var stale = document.getElementById("agentThinkingRow");
+        if (stale) stale.remove();
         clearTimeout(agentReplyTimer);
-        setAgentOpen(true, { skipFocus: true });
-        closeComposerMenus();
-        askAgentSidebar.classList.add("has-chat");
-        agentChatFeed.innerHTML = [
-          '<div class="agent-chat-user-row"><div class="agent-chat-user-bubble">智能洞察</div></div>',
+        agentChatFeed.insertAdjacentHTML("beforeend", [
+          '<div class="agent-chat-user-row"><div class="agent-chat-user-bubble">' + escapeHtml(question) + '</div></div>',
           '<div class="agent-chat-time">' + getTimeLabel() + '</div>',
           renderAgentThinking()
-        ].join("");
-        composerEditor.textContent = "";
-        updateComposerState();
+        ].join(""));
         scrollAgentChatToBottom();
         agentReplyTimer = setTimeout(function () {
           var thinking = document.getElementById("agentThinkingRow");
           if (thinking) thinking.remove();
-          agentChatFeed.insertAdjacentHTML("beforeend", renderFunnelAnalysisPanel());
-          syncFunnelAnalysisChart();
+          agentChatFeed.insertAdjacentHTML("beforeend", renderAgentAnswer(answer));
           scrollAgentChatToBottom();
-        }, 1000);
-        setTimeout(focusEditorAtEnd, 180);
+        }, 650);
+      }
+
+      function startInstruction(id) {
+        var inst = customerScript.instructions.filter(function (it) { return it.id === id; })[0];
+        if (!inst) return;
+        closeComposerMenus();
+        clearTimeout(agentReplyTimer);
+        askAgentSidebar.classList.add("has-chat");
+        agentChatFeed.innerHTML = "";
+        emitBridge({ type: "ask-agent", target: "instruction", title: inst.title });
+        pushAgentTurn(inst.question, inst.answer);
+      }
+
+      function appendFollowup(followupId, chipEl) {
+        var fu = findFollowup(followupId);
+        if (!fu) return;
+        if (chipEl) chipEl.style.display = "none";
+        pushAgentTurn(fu.question, fu.answer);
       }
 
       function sendAgentMessage(text) {
@@ -2486,7 +2172,7 @@
         var active = composerState.mode === mode;
         var icon = mode === "dialog"
           ? '<path class="icon-stroke" d="M3.4 4.3h9.2v6.7H6.9L4 13.6v-2.6H3.4z"></path>'
-          : '<path class="icon-fill" d="M5 1.8h1.4v1.6h3.2V1.8H11v1.6h1.1c.7 0 1.2.5 1.2 1.2v7.4c0 .7-.5 1.2-1.2 1.2H3.9c-.7 0-1.2-.5-1.2-1.2V4.6c0-.7.5-1.2 1.2-1.2H5V1.8Zm-1 4.4v5.6h8V6.2H4Zm1.2 1.4h2.4v1.2H5.2V7.6Zm0 2.3h5.4v1.2H5.2V9.9Z"></path>';
+          : '<path class="icon-stroke" d="M3.4 4.1h9.2v8.3H3.4z"></path><path class="icon-stroke" d="M6 1.9v2.2M10 1.9v2.2M5.4 7.6h2.1M5.4 10h4.6"></path>';
         return [
           '<button class="plus-menu-item ' + (active ? "active" : "") + '" type="button" data-mode="' + mode + '">',
           '<span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16" aria-hidden="true">' + icon + '</svg></span><span>' + label + '</span></span>',
@@ -2516,80 +2202,21 @@
         focusEditorAtEnd();
       }
 
-      function clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value));
-      }
-
-      function clampAgentSidebarWidth(width) {
-        return clamp(width, 320, Math.min(560, window.innerWidth - 320));
-      }
-
-      function setAgentSidebarWidth(width) {
-        var next = clampAgentSidebarWidth(width);
-        document.documentElement.style.setProperty("--agent-sidebar", next + "px");
-        localStorage.setItem("crmAskAgentSidebarWidth", String(next));
-      }
-
-      function clampAgentFloatPosition(left, top) {
-        var rect = askAgentSidebar.getBoundingClientRect();
-        var margin = 16;
-        var maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
-        var maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
-        return {
-          left: clamp(left, margin, maxLeft),
-          top: clamp(top, margin, maxTop)
-        };
-      }
-
-      function setAgentFloatPosition(left, top) {
-        var next = clampAgentFloatPosition(left, top);
-        askAgentSidebar.style.setProperty("--agent-float-left", next.left + "px");
-        askAgentSidebar.style.setProperty("--agent-float-top", next.top + "px");
-      }
-
-      function placeAgentFloatDefault() {
-        requestAnimationFrame(function () {
-          var rect = askAgentSidebar.getBoundingClientRect();
-          var left = window.innerWidth - rect.width - 24;
-          var top = window.innerHeight - rect.height - 48;
-          setAgentFloatPosition(left, top);
-        });
-      }
-
-      function setAgentFloating(floating) {
-        localStorage.setItem("crmAskAgentFloating", floating ? "true" : "false");
-        document.body.classList.toggle("agent-floating", floating);
-        if (floatAskAgent) {
-          floatAskAgent.setAttribute("aria-pressed", String(floating));
-          floatAskAgent.setAttribute("aria-label", floating ? "恢复侧边栏" : "展开为浮窗");
-        }
-        if (floating && document.body.classList.contains("agent-open")) {
-          placeAgentFloatDefault();
-        } else {
-          askAgentSidebar.style.removeProperty("--agent-float-left");
-          askAgentSidebar.style.removeProperty("--agent-float-top");
-        }
-      }
-
       function setAgentOpen(open, options) {
         options = options || {};
         localStorage.setItem("crmAskAgentOpen", open ? "true" : "false");
-        if (!open) localStorage.setItem("crmAskAgentFloating", "false");
         document.body.classList.toggle("agent-open", open);
         askAgentButton.classList.toggle("is-active", open);
         askAgentButton.setAttribute("aria-expanded", String(open));
         askAgentSidebar.setAttribute("aria-hidden", String(!open));
         if (open) {
-          if (document.body.classList.contains("agent-floating")) placeAgentFloatDefault();
           if (!options.skipFocus) {
             setTimeout(focusEditorAtEnd, 180);
           }
         } else {
           closeComposerMenus();
-          setAgentFloating(false);
           if (!options.skipFocus) {
-            var floatingBeeButton = document.getElementById("floatingBee");
-            (floatingBeeButton || askAgentButton).focus();
+            askAgentButton.focus();
           }
         }
       }
@@ -2602,93 +2229,38 @@
         setAgentOpen(false);
       });
 
-      if (floatAskAgent) {
-        floatAskAgent.addEventListener("click", function () {
-          if (!document.body.classList.contains("agent-open")) {
-            setAgentOpen(true, { skipFocus: true });
-          }
-          setAgentFloating(!document.body.classList.contains("agent-floating"));
-        });
-      }
-
       newAskAgentSession.addEventListener("click", function () {
         resetAskAgentSession();
       });
 
-      askAgentSidebar.querySelector(".agent-toolbar").addEventListener("pointerdown", function (event) {
-        if (!document.body.classList.contains("agent-floating") || event.button !== 0) return;
-        if (event.target.closest("button")) return;
-        var rect = askAgentSidebar.getBoundingClientRect();
-        agentFloatDragState = {
-          pointerId: event.pointerId,
-          startX: event.clientX,
-          startY: event.clientY,
-          left: rect.left,
-          top: rect.top,
-          moved: false
-        };
-        askAgentSidebar.setPointerCapture(event.pointerId);
-        askAgentSidebar.classList.add("is-dragging");
-      });
+      function renderWelcome() {
+        var greetingEl = askAgentSidebar.querySelector(".agent-greeting");
+        if (greetingEl) greetingEl.innerHTML = "Hi Scott，<br>" + escapeHtml(customerScript.greeting);
+        var promptsEl = askAgentSidebar.querySelector(".agent-prompts");
+        if (!promptsEl) return;
+        promptsEl.innerHTML = customerScript.instructions.map(function (it) {
+          return '<button class="agent-prompt" type="button" data-instruction="' + escapeHtml(it.id) + '">'
+            + '<span class="agent-prompt-text">' + escapeHtml(it.title) + '</span>'
+            + '<span class="agent-prompt-tag">' + escapeHtml(it.tag) + '</span>'
+            + '<span class="agent-prompt-arrow">→</span>'
+            + '</button>';
+        }).join("");
+      }
+      renderWelcome();
 
-      askAgentSidebar.addEventListener("pointerdown", function (event) {
-        if (document.body.classList.contains("agent-floating") || event.button !== 0) return;
-        var rect = askAgentSidebar.getBoundingClientRect();
-        if (event.clientX > rect.left + 10) return;
-        agentSidebarResizeState = {
-          pointerId: event.pointerId,
-          startX: event.clientX,
-          startWidth: rect.width
-        };
-        askAgentSidebar.setPointerCapture(event.pointerId);
-        document.body.classList.add("agent-resizing");
-        event.preventDefault();
-      });
-
-      askAgentSidebar.addEventListener("pointermove", function (event) {
-        if (agentSidebarResizeState && event.pointerId === agentSidebarResizeState.pointerId) {
-          var resizeDx = event.clientX - agentSidebarResizeState.startX;
-          setAgentSidebarWidth(agentSidebarResizeState.startWidth - resizeDx);
-          return;
-        }
-        if (!agentFloatDragState || event.pointerId !== agentFloatDragState.pointerId) return;
-        var dx = event.clientX - agentFloatDragState.startX;
-        var dy = event.clientY - agentFloatDragState.startY;
-        if (Math.hypot(dx, dy) > agentFloatDragThreshold) agentFloatDragState.moved = true;
-        if (!agentFloatDragState.moved) return;
-        setAgentFloatPosition(agentFloatDragState.left + dx, agentFloatDragState.top + dy);
-      });
-
-      function stopAgentFloatDrag(event) {
-        if (agentSidebarResizeState && event.pointerId === agentSidebarResizeState.pointerId) {
-          document.body.classList.remove("agent-resizing");
-          try { askAgentSidebar.releasePointerCapture(event.pointerId); } catch (error) {}
-          agentSidebarResizeState = null;
-          return;
-        }
-        if (!agentFloatDragState || event.pointerId !== agentFloatDragState.pointerId) return;
-        askAgentSidebar.classList.remove("is-dragging");
-        try { askAgentSidebar.releasePointerCapture(event.pointerId); } catch (error) {}
-        agentFloatDragState = null;
+      var promptsContainer = askAgentSidebar.querySelector(".agent-prompts");
+      if (promptsContainer) {
+        promptsContainer.addEventListener("click", function (event) {
+          var button = event.target.closest(".agent-prompt");
+          if (button && button.dataset.instruction) startInstruction(button.dataset.instruction);
+        });
       }
 
-      askAgentSidebar.addEventListener("pointerup", stopAgentFloatDrag);
-      askAgentSidebar.addEventListener("pointercancel", stopAgentFloatDrag);
-      window.addEventListener("resize", function () {
-        if (!document.body.classList.contains("agent-floating")) return;
-        var rect = askAgentSidebar.getBoundingClientRect();
-        setAgentFloatPosition(rect.left, rect.top);
-      });
-
-      askAgentSidebar.querySelectorAll(".agent-prompt").forEach(function (button) {
-        button.addEventListener("click", function () {
-          sendAgentMessage(button.textContent.replace("→", "").trim());
-        });
-      });
       agentChatFeed.addEventListener("click", function (event) {
-        var quickReply = event.target.closest(".agent-chat-reply-chip");
-        if (!quickReply) return;
-        sendAgentMessage(quickReply.textContent.trim());
+        var chip = event.target.closest(".agent-chat-reply-chip[data-followup]");
+        if (chip) { appendFollowup(chip.dataset.followup, chip); return; }
+        var execBtn = event.target.closest("[data-exec-action]");
+        if (execBtn) { emitBridge({ type: "ask-agent", target: "exec", title: execBtn.dataset.execAction }); }
       });
 
       composerEditor.addEventListener("input", updateComposerState);
@@ -2783,9 +2355,6 @@
       updateComposerState();
       if (localStorage.getItem("crmAskAgentOpen") === "true") {
         document.body.classList.add("agent-instant");
-        if (localStorage.getItem("crmAskAgentFloating") === "true") {
-          setAgentFloating(true);
-        }
         setAgentOpen(true, { skipFocus: true });
         requestAnimationFrame(function () {
           document.body.classList.remove("agent-instant");
@@ -2793,132 +2362,14 @@
         });
       }
 
-      renderCharts();
 
-      // Floating bee button → open Agent sidebar
-      var floatingBee = document.getElementById("floatingBee");
-      if (floatingBee) {
-        var floatingBeeGibberish = document.getElementById("floatingBeeGibberish");
-        var floatingBeePhrases = ["Hi，我是ShareAgent", "有什么我可以帮你？"];
-        var floatingBeePhraseIndex = 0;
-        var floatingBeeGibberishTimer = null;
-        var floatingBeeGibberishFrame = null;
-        var beeDragState = null;
-        var beeDragThreshold = 4;
+    }
 
-        function randomGibberishChar(char) {
-          if (!char.trim()) return char;
-          if (/[，？、。,.!?]/.test(char)) return char;
-          var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&";
-          return chars[Math.floor(Math.random() * chars.length)];
-        }
+    initAskAgentSidebar();
 
-        function scrambleFloatingBeeText(nextText) {
-          if (!floatingBeeGibberish) return;
-          window.clearInterval(floatingBeeGibberishFrame);
-          var frame = 0;
-          var totalFrames = 18;
-          var targetChars = Array.from(nextText);
-          floatingBeeGibberishFrame = window.setInterval(function () {
-            var settled = Math.floor(frame / 2);
-            floatingBeeGibberish.textContent = targetChars.map(function (char, index) {
-              return index < settled ? char : randomGibberishChar(char);
-            }).join("");
-            frame += 1;
-            if (frame > totalFrames) {
-              window.clearInterval(floatingBeeGibberishFrame);
-              floatingBeeGibberishFrame = null;
-              floatingBeeGibberish.textContent = nextText;
-            }
-          }, 34);
-        }
-
-        function switchFloatingBeeText() {
-          floatingBeePhraseIndex = (floatingBeePhraseIndex + 1) % floatingBeePhrases.length;
-          scrambleFloatingBeeText(floatingBeePhrases[floatingBeePhraseIndex]);
-        }
-
-        function startFloatingBeeGibberish() {
-          if (floatingBeeGibberishTimer) return;
-          floatingBeePhraseIndex = 0;
-          if (floatingBeeGibberish) floatingBeeGibberish.textContent = floatingBeePhrases[floatingBeePhraseIndex];
-          floatingBeeGibberishTimer = window.setInterval(switchFloatingBeeText, 2100);
-        }
-
-        function stopFloatingBeeGibberish() {
-          window.clearInterval(floatingBeeGibberishTimer);
-          window.clearInterval(floatingBeeGibberishFrame);
-          floatingBeeGibberishTimer = null;
-          floatingBeeGibberishFrame = null;
-          if (floatingBeeGibberish) floatingBeeGibberish.textContent = floatingBeePhrases[floatingBeePhraseIndex];
-        }
-
-        if (floatingBeeGibberish) floatingBeeGibberish.textContent = floatingBeePhrases[floatingBeePhraseIndex];
-        floatingBee.addEventListener("mouseenter", startFloatingBeeGibberish);
-        floatingBee.addEventListener("focus", startFloatingBeeGibberish);
-        floatingBee.addEventListener("mouseleave", stopFloatingBeeGibberish);
-        floatingBee.addEventListener("blur", stopFloatingBeeGibberish);
-
-        function clampBeeTop(value) {
-          var half = floatingBee.offsetHeight / 2;
-          return Math.max(half, Math.min(window.innerHeight - half, value));
-        }
-
-        function setFloatingBeeAt(clientX, clientY) {
-          floatingBee.style.left = clientX - beeDragState.offsetX + "px";
-          floatingBee.style.right = "auto";
-          floatingBee.style.top = clampBeeTop(clientY - beeDragState.offsetY + floatingBee.offsetHeight / 2) + "px";
-        }
-
-        function dockFloatingBee(clientY) {
-          floatingBee.style.left = "auto";
-          floatingBee.style.removeProperty("right");
-          floatingBee.style.top = clampBeeTop(clientY) + "px";
-        }
-
-        floatingBee.addEventListener("pointerdown", function (event) {
-          if (event.button !== 0) return;
-          var rect = floatingBee.getBoundingClientRect();
-          beeDragState = {
-            pointerId: event.pointerId,
-            startX: event.clientX,
-            startY: event.clientY,
-            offsetX: event.clientX - rect.left,
-            offsetY: event.clientY - rect.top,
-            moved: false
-          };
-          floatingBee.setPointerCapture(event.pointerId);
-          floatingBee.classList.add("is-dragging");
-        });
-
-        floatingBee.addEventListener("pointermove", function (event) {
-          if (!beeDragState || event.pointerId !== beeDragState.pointerId) return;
-          var dx = event.clientX - beeDragState.startX;
-          var dy = event.clientY - beeDragState.startY;
-          if (Math.hypot(dx, dy) > beeDragThreshold) beeDragState.moved = true;
-          if (!beeDragState.moved) return;
-          setFloatingBeeAt(event.clientX, event.clientY);
-        });
-
-        floatingBee.addEventListener("pointerup", function (event) {
-          if (!beeDragState || event.pointerId !== beeDragState.pointerId) return;
-          var moved = beeDragState.moved;
-          var releaseY = moved ? event.clientY - beeDragState.offsetY + floatingBee.offsetHeight / 2 : floatingBee.getBoundingClientRect().top + floatingBee.offsetHeight / 2;
-          dockFloatingBee(releaseY);
-          floatingBee.classList.remove("is-dragging");
-          try { floatingBee.releasePointerCapture(event.pointerId); } catch (error) {}
-          beeDragState = null;
-          if (!moved) setAgentOpen(true);
-        });
-
-        floatingBee.addEventListener("pointercancel", function (event) {
-          if (!beeDragState || event.pointerId !== beeDragState.pointerId) return;
-          dockFloatingBee(floatingBee.getBoundingClientRect().top + floatingBee.offsetHeight / 2);
-          floatingBee.classList.remove("is-dragging");
-          beeDragState = null;
-        });
-      }
-    })();
+    document.getElementById("openDetail").addEventListener("click", () => {
+      document.body.classList.remove("drawer-closed");
+    });
   </script>
 </body>
 </html>

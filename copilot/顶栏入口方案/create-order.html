@@ -8,15 +8,8 @@
     <script>
       (function () {
         try {
-          if (
-            localStorage.getItem("crmAskAgentOpen") === "true" &&
-            localStorage.getItem("crmAskAgentFloating") !== "true"
-          ) {
+          if (localStorage.getItem("crmAskAgentOpen") === "true") {
             document.documentElement.classList.add("agent-persist-open");
-          }
-          var sidebarWidth = Number(localStorage.getItem("crmAskAgentSidebarWidth"));
-          if (sidebarWidth >= 320 && sidebarWidth <= 560) {
-            document.documentElement.style.setProperty("--agent-sidebar", sidebarWidth + "px");
           }
         } catch (error) {}
       })();
@@ -9360,9 +9353,9 @@ button {
   transform: translateY(-70%) rotate(45deg);
 }
 
-.service-form-proto.service-ai-customer-form.agent-open:not(.agent-floating),
+.service-form-proto.service-ai-customer-form.agent-open,
 .agent-persist-open .service-form-proto.service-ai-customer-form {
-  padding-right: var(--agent-sidebar, 360px);
+  padding-right: 360px;
   transition: padding-right .22s ease;
 }
 
@@ -9449,7 +9442,7 @@ button {
   top: 0;
   right: 0;
   bottom: 0;
-  width: var(--agent-sidebar, 360px);
+  width: 360px;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -9459,54 +9452,9 @@ button {
   transition: transform .22s ease;
 }
 
-.service-form-proto .agent-sidebar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -4px;
-  width: 8px;
-  cursor: ew-resize;
-  z-index: 2;
-}
-
-.service-form-proto.agent-floating .agent-sidebar::before {
-  display: none;
-}
-
-.service-form-proto.agent-resizing,
-.service-form-proto.agent-resizing * {
-  cursor: ew-resize !important;
-  user-select: none !important;
-}
-
-.service-form-proto.agent-resizing .agent-sidebar {
-  transition: none !important;
-}
-
-.service-form-proto.agent-open:not(.agent-floating) .agent-sidebar,
+.service-form-proto.agent-open .agent-sidebar,
 .agent-persist-open .service-form-proto .agent-sidebar {
   transform: translateX(0);
-}
-
-.service-form-proto.agent-floating.agent-open .agent-sidebar {
-  top: var(--agent-float-top, 196px);
-  left: var(--agent-float-left, calc(100vw - 464px));
-  right: auto;
-  bottom: auto;
-  width: min(440px, calc(100vw - 32px));
-  height: min(570px, calc(100vh - 32px));
-  border: 1px solid #e9edf3;
-  border-radius: 16px;
-  box-shadow: 0 18px 44px rgba(16, 24, 40, .16);
-  transform: translateX(0);
-  overflow: hidden;
-  transition: box-shadow .18s ease;
-}
-
-.service-form-proto.agent-floating.agent-open .agent-sidebar.is-dragging {
-  box-shadow: 0 22px 54px rgba(16, 24, 40, .2);
-  user-select: none;
 }
 
 .agent-persist-open .service-form-proto .agent-sidebar,
@@ -9528,14 +9476,6 @@ button {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-
-.service-form-proto.agent-floating.agent-open .agent-toolbar {
-  cursor: move;
-}
-
-.service-form-proto.agent-floating.agent-open .agent-toolbar button {
-  cursor: pointer;
 }
 
 .service-form-proto .agent-tool-btn {
@@ -9561,11 +9501,6 @@ button {
   height: 16px;
 }
 
-.service-form-proto .agent-tool-btn svg.icon,
-.service-form-proto .agent-tool-btn svg.icon path {
-  fill: currentColor;
-}
-
 .service-form-proto .agent-body {
   flex: 1;
   display: flex;
@@ -9581,17 +9516,6 @@ button {
   overflow-y: auto;
   padding: 14px 16px 176px;
   scroll-padding-bottom: 176px;
-}
-
-.service-form-proto.agent-floating.agent-open .agent-body {
-  padding: 28px 28px 140px;
-}
-
-.service-form-proto.agent-floating.agent-open .agent-sidebar.has-chat .agent-body {
-  justify-content: flex-start;
-  overflow-y: auto;
-  padding: 14px 16px 156px;
-  scroll-padding-bottom: 156px;
 }
 
 .service-form-proto .agent-greeting {
@@ -9713,7 +9637,7 @@ button {
 }
 
 .service-form-proto .agent-chat-ai-main {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 8px;
 }
@@ -9861,12 +9785,6 @@ button {
   left: 16px;
 }
 
-.service-form-proto.agent-floating.agent-open .agent-composer {
-  left: 24px;
-  right: 24px;
-  bottom: 24px;
-}
-
 .service-form-proto .composer-shell {
   width: 100%;
   min-height: 116px;
@@ -9946,27 +9864,15 @@ button {
 
 .service-form-proto .plus-btn,
 .service-form-proto .voice-btn {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
 }
 
 .service-form-proto .plus-btn svg,
 .service-form-proto .voice-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: #181c25;
-}
-
-.service-form-proto .agent-composer .icon-stroke {
-  fill: none;
-  stroke: currentColor;
-}
-.service-form-proto .agent-composer .icon-fill,
-.service-form-proto .agent-composer .icon-fill *,
-.service-form-proto .agent-composer .composer-picker-icon svg,
-.service-form-proto .agent-composer .composer-picker-caret svg {
-  fill: currentColor;
-  stroke: none;
 }
 
 .service-form-proto .send-btn {
@@ -10065,26 +9971,26 @@ button {
 .service-form-proto .plus-menu-item-check,
 .service-form-proto .composer-picker-icon,
 .service-form-proto .composer-picker-caret {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 18px;
+  flex: 0 0 16px;
 }
 
 .service-form-proto .composer-picker-icon svg,
 .service-form-proto .plus-menu-item-icon svg,
 .service-form-proto .plus-menu-item-caret svg,
 .service-form-proto .plus-menu-item-check svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .service-form-proto .composer-picker-caret svg,
 .service-form-proto .close-mini svg {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 
 .service-form-proto .plus-submenu-search {
@@ -10126,7 +10032,7 @@ button {
 .service-form-proto .composer-picker-trigger {
   min-width: 0;
   height: 32px;
-  padding: 0 6px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -10149,7 +10055,7 @@ button {
   min-width: 0;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   border: 0;
   background: transparent;
   color: #181c25;
@@ -10211,34 +10117,6 @@ button {
 
 .service-form-proto .icon-fill {
   fill: currentColor;
-}
-
-.service-form-proto .agent-composer .plus-btn,
-.service-form-proto .agent-composer .voice-btn {
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
-  min-height: 22px;
-  padding: 0;
-  font-size: 0;
-  line-height: 1;
-}
-
-.service-form-proto .agent-composer .plus-btn svg,
-.service-form-proto .agent-composer .voice-btn svg {
-  width: 18px !important;
-  height: 18px !important;
-  min-width: 18px;
-  min-height: 18px;
-  display: block;
-  color: #181c25;
-  overflow: visible;
-}
-
-.service-form-proto .agent-composer .plus-btn .icon-fill,
-.service-form-proto .agent-composer .voice-btn .icon-fill {
-  fill: currentColor;
-  stroke: none;
 }
 
 .service-form-proto .service-form-anchor,
@@ -20677,10 +20555,6 @@ Vue.component("page-service-form-proto", {
       ],
       askAgentOpen: this.getPersistedAskAgentOpen(),
       askAgentHasChat: false,
-      askAgentFloating: this.getPersistedAskAgentFloating(),
-      askAgentFloatDragState: null,
-      askAgentFloatDragThreshold: 4,
-      askAgentSidebarResizeState: null,
       askAgentChatHtml: "",
       askAgentReplyTimer: null,
       autofillTimers: [],
@@ -20710,7 +20584,6 @@ Vue.component("page-service-form-proto", {
     if (this.askAgentOpen) {
       this.$el.classList.add("agent-instant");
       this.$nextTick(() => {
-        if (this.askAgentFloating) this.placeAskAgentFloatDefault();
         document.documentElement.classList.remove("agent-persist-open");
         requestAnimationFrame(() => {
           this.$el.classList.remove("agent-instant");
@@ -20729,18 +20602,6 @@ Vue.component("page-service-form-proto", {
     persistAskAgentOpen(open) {
       try {
         localStorage.setItem("crmAskAgentOpen", open ? "true" : "false");
-      } catch (error) {}
-    },
-    getPersistedAskAgentFloating() {
-      try {
-        return localStorage.getItem("crmAskAgentFloating") === "true";
-      } catch (error) {
-        return false;
-      }
-    },
-    persistAskAgentFloating(floating) {
-      try {
-        localStorage.setItem("crmAskAgentFloating", floating ? "true" : "false");
       } catch (error) {}
     },
     getRandomItem(list) {
@@ -20839,141 +20700,13 @@ Vue.component("page-service-form-proto", {
     toggleAskAgent() {
       this.setAskAgentOpen(!this.askAgentOpen);
     },
-    clamp(value, min, max) {
-      return Math.max(min, Math.min(max, value));
-    },
-    clampAskAgentSidebarWidth(width) {
-      return this.clamp(width, 320, Math.min(560, window.innerWidth - 320));
-    },
-    setAskAgentSidebarWidth(width) {
-      const next = this.clampAskAgentSidebarWidth(width);
-      document.documentElement.style.setProperty("--agent-sidebar", next + "px");
-      try {
-        localStorage.setItem("crmAskAgentSidebarWidth", String(next));
-      } catch (error) {}
-    },
-    clampAskAgentFloatPosition(left, top) {
-      const sidebar = this.$el.querySelector(".agent-sidebar");
-      if (!sidebar) return { left, top };
-      const rect = sidebar.getBoundingClientRect();
-      const margin = 16;
-      const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
-      const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
-      return {
-        left: this.clamp(left, margin, maxLeft),
-        top: this.clamp(top, margin, maxTop),
-      };
-    },
-    setAskAgentFloatPosition(left, top) {
-      const sidebar = this.$el.querySelector(".agent-sidebar");
-      if (!sidebar) return;
-      const next = this.clampAskAgentFloatPosition(left, top);
-      sidebar.style.setProperty("--agent-float-left", next.left + "px");
-      sidebar.style.setProperty("--agent-float-top", next.top + "px");
-    },
-    placeAskAgentFloatDefault() {
-      requestAnimationFrame(() => {
-        const sidebar = this.$el.querySelector(".agent-sidebar");
-        if (!sidebar) return;
-        const rect = sidebar.getBoundingClientRect();
-        this.setAskAgentFloatPosition(window.innerWidth - rect.width - 24, window.innerHeight - rect.height - 48);
-      });
-    },
-    setAskAgentFloating(floating) {
-      this.askAgentFloating = floating;
-      this.persistAskAgentFloating(floating);
-      this.$nextTick(() => {
-        const sidebar = this.$el.querySelector(".agent-sidebar");
-        if (!sidebar) return;
-        if (floating && this.askAgentOpen) {
-          this.placeAskAgentFloatDefault();
-        } else {
-          sidebar.style.removeProperty("--agent-float-left");
-          sidebar.style.removeProperty("--agent-float-top");
-        }
-      });
-    },
-    toggleAskAgentFloating() {
-      if (!this.askAgentOpen) this.setAskAgentOpen(true);
-      this.setAskAgentFloating(!this.askAgentFloating);
-    },
-    handleAgentToolbarPointerDown(event) {
-      if (!this.askAgentFloating || event.button !== 0 || event.target.closest("button")) return;
-      const sidebar = this.$el.querySelector(".agent-sidebar");
-      if (!sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      this.askAgentFloatDragState = {
-        pointerId: event.pointerId,
-        startX: event.clientX,
-        startY: event.clientY,
-        left: rect.left,
-        top: rect.top,
-        moved: false,
-      };
-      sidebar.setPointerCapture(event.pointerId);
-      sidebar.classList.add("is-dragging");
-    },
-    handleAgentFloatPointerMove(event) {
-      const resizeState = this.askAgentSidebarResizeState;
-      if (resizeState && event.pointerId === resizeState.pointerId) {
-        const dx = event.clientX - resizeState.startX;
-        this.setAskAgentSidebarWidth(resizeState.startWidth - dx);
-        return;
-      }
-      const state = this.askAgentFloatDragState;
-      if (!state || event.pointerId !== state.pointerId) return;
-      const dx = event.clientX - state.startX;
-      const dy = event.clientY - state.startY;
-      if (Math.hypot(dx, dy) > this.askAgentFloatDragThreshold) state.moved = true;
-      if (!state.moved) return;
-      this.setAskAgentFloatPosition(state.left + dx, state.top + dy);
-    },
-    stopAgentFloatDrag(event) {
-      const resizeState = this.askAgentSidebarResizeState;
-      if (resizeState && event.pointerId === resizeState.pointerId) {
-        const sidebar = this.$el.querySelector(".agent-sidebar");
-        this.$el.classList.remove("agent-resizing");
-        if (sidebar) {
-          try { sidebar.releasePointerCapture(event.pointerId); } catch (error) {}
-        }
-        this.askAgentSidebarResizeState = null;
-        return;
-      }
-      const state = this.askAgentFloatDragState;
-      if (!state || event.pointerId !== state.pointerId) return;
-      const sidebar = this.$el.querySelector(".agent-sidebar");
-      if (sidebar) {
-        sidebar.classList.remove("is-dragging");
-        try { sidebar.releasePointerCapture(event.pointerId); } catch (error) {}
-      }
-      this.askAgentFloatDragState = null;
-    },
-    handleAgentSidebarPointerDown(event) {
-      if (this.askAgentFloating || event.button !== 0) return;
-      const sidebar = this.$el.querySelector(".agent-sidebar");
-      if (!sidebar) return;
-      const rect = sidebar.getBoundingClientRect();
-      if (event.clientX > rect.left + 10) return;
-      this.askAgentSidebarResizeState = {
-        pointerId: event.pointerId,
-        startX: event.clientX,
-        startWidth: rect.width,
-      };
-      sidebar.setPointerCapture(event.pointerId);
-      this.$el.classList.add("agent-resizing");
-      event.preventDefault();
-    },
     setAskAgentOpen(open) {
       this.askAgentOpen = open;
-      if (!open) this.setAskAgentFloating(false);
       this.persistAskAgentOpen(open);
       this.plusMenuOpen = false;
       this.pickerOpen = false;
       this.$nextTick(() => {
-        if (open) {
-          if (this.askAgentFloating) this.placeAskAgentFloatDefault();
-          this.focusComposer();
-        }
+        if (open) this.focusComposer();
       });
     },
     resetAskAgentSession() {
@@ -21095,7 +20828,7 @@ Vue.component("page-service-form-proto", {
     },
   },
   template: `
-    <section class="service-form-proto service-form-no-summary service-ai-customer-form" :class="['service-form-cols-' + formColumnCount, 'service-density-' + rowDensity, { 'agent-open': askAgentOpen, 'agent-floating': askAgentFloating }]">
+    <section class="service-form-proto service-form-no-summary service-ai-customer-form" :class="['service-form-cols-' + formColumnCount, 'service-density-' + rowDensity, { 'agent-open': askAgentOpen }]">
         <header class="service-form-head">
           <h2>新建 客户</h2>
           <div class="service-form-actions">
@@ -21158,8 +20891,8 @@ Vue.component("page-service-form-proto", {
             </section>
           </main>
         </div>
-        <aside class="agent-sidebar" id="askAgentSidebar" aria-label="Ask Agent 侧边栏" :aria-hidden="String(!askAgentOpen)" :class="{ 'has-chat': askAgentHasChat }" @pointerdown="handleAgentSidebarPointerDown" @pointermove="handleAgentFloatPointerMove" @pointerup="stopAgentFloatDrag" @pointercancel="stopAgentFloatDrag">
-          <div class="agent-toolbar" @pointerdown="handleAgentToolbarPointerDown">
+        <aside class="agent-sidebar" id="askAgentSidebar" aria-label="Ask Agent 侧边栏" :aria-hidden="String(!askAgentOpen)" :class="{ 'has-chat': askAgentHasChat }">
+          <div class="agent-toolbar">
             <div class="agent-toolbar-left">
               <button class="agent-tool-btn" type="button" aria-label="菜单">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -21180,14 +20913,9 @@ Vue.component("page-service-form-proto", {
                   <path d="M0 0H7V1H1V12.9976H11V5H12V13.9976H0V0ZM3 3.50037H7V4.50037H3V3.50037ZM3 6.50037H9V7.50037H3V6.50037ZM3 9.50037H9V10.5004H3V9.50037ZM10.1316 0.0544808C10.1096 0.0325097 10.0825 0.0163806 10.0527 0.00756047C10.0054 -0.00635117 9.95444 -0.000920121 9.9111 0.0226626C9.86776 0.0462454 9.83554 0.0860548 9.82151 0.133361L9.70446 0.528235C9.62165 0.80745 9.47033 1.06152 9.26426 1.2673C9.05819 1.47308 8.80393 1.62405 8.52462 1.70645L8.13387 1.82177C8.09535 1.83298 8.0615 1.85635 8.03737 1.88839C8.01324 1.92044 8.00013 1.95943 8 1.99955C7.99987 2.03966 8.01273 2.07874 8.03664 2.11094C8.06056 2.14315 8.09426 2.16674 8.1327 2.1782L8.53161 2.2976C8.80899 2.38065 9.06136 2.5314 9.26599 2.73626C9.47063 2.94112 9.62111 3.19366 9.70388 3.47115L9.82151 3.86719C9.83303 3.90558 9.85661 3.93923 9.88876 3.96316C9.92092 3.98708 9.95993 4 10 4C10.0401 4 10.0791 3.98708 10.1112 3.96316C10.1434 3.93923 10.167 3.90558 10.1785 3.86719L10.2961 3.47115C10.3789 3.19366 10.5294 2.94112 10.734 2.73626C10.9387 2.5314 11.191 2.38065 11.4684 2.2976L11.8667 2.1782C11.9052 2.16687 11.939 2.14338 11.963 2.11126C11.987 2.07914 12 2.0401 12 1.99998C12 1.95987 11.987 1.92083 11.963 1.88871C11.939 1.85659 11.9052 1.8331 11.8667 1.82177L11.4754 1.70645C11.1961 1.62405 10.9418 1.47308 10.7357 1.2673C10.5297 1.06152 10.3784 0.80745 10.2955 0.528235L10.1785 0.133361C10.1697 0.103567 10.1535 0.0764518 10.1316 0.0544808Z" fill="#181C25"/>
                 </svg>
               </button>
-              <button class="agent-tool-btn" type="button" :aria-label="askAgentFloating ? '恢复侧边栏' : '展开为浮窗'" :aria-pressed="String(askAgentFloating)" @click="toggleAskAgentFloating">
-                <svg v-if="!askAgentFloating" t="1782465745775" class="agent-float-open-icon icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8919" width="200" height="200" aria-hidden="true">
-                  <path d="M565.248 844.8H191.488a25.6 25.6 0 0 1-25.6-25.6V195.328a25.6 25.6 0 0 1 25.6-25.6H814.08a25.6 25.6 0 0 1 25.6 25.6v370.944a25.6 25.6 0 1 0 51.2 0V195.328a76.8 76.8 0 0 0-76.8-76.8H191.488a76.8 76.8 0 0 0-76.8 76.8V819.2a76.8 76.8 0 0 0 76.8 76.8h373.76a25.6 25.6 0 0 0 0-51.2z" p-id="8920"></path>
-                  <path d="M640 640m51.2 0l153.6 0q51.2 0 51.2 51.2l0 153.6q0 51.2-51.2 51.2l-153.6 0q-51.2 0-51.2-51.2l0-153.6q0-51.2 51.2-51.2Z" p-id="8921"></path>
-                </svg>
-                <svg v-else class="agent-float-restore-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M10.6666 4.66671C11.0348 4.66671 11.3333 4.96518 11.3333 5.33337V10.6667C11.3333 11.0349 11.0348 11.3334 10.6666 11.3334C10.2984 11.3334 9.99992 11.0349 9.99992 10.6667V5.33337C9.99992 4.96518 10.2984 4.66671 10.6666 4.66671Z" fill="#181C25"/>
-                  <path d="M1.99992 1.33337H13.9999C14.3681 1.33337 14.6666 1.63185 14.6666 2.00004V14C14.6666 14.3682 14.3681 14.6667 13.9999 14.6667H1.99992C1.63173 14.6667 1.33325 14.3682 1.33325 14V2.00004C1.33325 1.63185 1.63173 1.33337 1.99992 1.33337ZM2.66659 2.66671V13.3334H13.3333V2.66671H2.66659Z" fill="#181C25"/>
+              <button class="agent-tool-btn" type="button" aria-label="展开">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M3 1H13C14.1046 1 15 1.89543 15 3V13C15 14.1046 14.1046 15 13 15H3C1.89543 15 1 14.1046 1 13V3C1 1.89543 1.89543 1 3 1ZM3 2C2.44772 2 2 2.44772 2 3V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2H3ZM7 3.5L4 3.5C3.9127 3.5 3.83062 3.52237 3.75919 3.5617C3.7456 3.56918 3.73229 3.57734 3.71929 3.58617C3.58694 3.67613 3.5 3.82791 3.5 4V7C3.5 7.27614 3.72386 7.5 4 7.5C4.27614 7.5 4.5 7.27614 4.5 7V5.20703L6.64652 7.35355C6.84178 7.54882 7.15837 7.54882 7.35363 7.35355C7.54889 7.15829 7.54889 6.84171 7.35363 6.64645L5.20718 4.5L7 4.5C7.27614 4.5 7.5 4.27614 7.5 4C7.5 3.72386 7.27614 3.5 7 3.5ZM11.9994 12.5H9C8.72386 12.5 8.5 12.2761 8.5 12C8.5 11.7239 8.72386 11.5 9 11.5H10.7928L8.64637 9.35355C8.45111 9.15829 8.45111 8.84171 8.64637 8.64645C8.84163 8.45118 9.15822 8.45118 9.35348 8.64645L11.5 10.793V9C11.5 8.72386 11.7239 8.5 12 8.5C12.2761 8.5 12.5 8.72386 12.5 9V12C12.5 12.1714 12.4138 12.3226 12.2824 12.4127C12.269 12.4219 12.2551 12.4304 12.2408 12.4383C12.1702 12.4772 12.0892 12.4995 12.003 12.5C12.002 12.5 12.001 12.5 12 12.5H11.9994Z" fill="#333333"/>
                 </svg>
               </button>
               <button class="agent-tool-btn" type="button" aria-label="关闭 Ask Agent" @click="setAskAgentOpen(false)">
@@ -21213,7 +20941,7 @@ Vue.component("page-service-form-proto", {
                 <div class="composer-toolbar">
                   <div class="toolbar-left">
                     <div class="plus-menu-anchor">
-                      <button class="plus-btn" type="button" aria-label="添加附件" :aria-expanded="String(plusMenuOpen)" @click="togglePlusMenu"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path class="icon-fill" d="M8.25 2.75h1.5v5.5h5.5v1.5h-5.5v5.5h-1.5v-5.5h-5.5v-1.5h5.5z"/></svg></button>
+                      <button class="plus-btn" type="button" aria-label="添加附件" :aria-expanded="String(plusMenuOpen)" @click="togglePlusMenu"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path class="icon-stroke" d="M9 3.4v11.2M3.4 9h11.2"/></svg></button>
                       <div class="plus-menu" :class="{ open: plusMenuOpen }" role="menu">
                         <div class="plus-menu-panel"><button class="plus-menu-item" type="button" @click="triggerComposerUpload"><span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="icon-stroke" d="M6.4 8.3 9 5.7a2 2 0 1 1 2.8 2.8L8.4 11.9a3.2 3.2 0 0 1-4.5-4.5l3.9-3.9"/></svg></span><span>添加附件</span></span></button></div>
                       </div>
@@ -21222,15 +20950,15 @@ Vue.component("page-service-form-proto", {
                     <div class="composer-picker-anchor">
                       <div class="composer-picker-trigger selected" :class="{ active: pickerOpen }">
                         <button class="composer-picker-btn" type="button" aria-haspopup="menu" :aria-expanded="String(pickerOpen)" @click="togglePicker">
-                          <span class="composer-picker-icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path class="icon-fill" d="M5 1.8h1.4v1.6h3.2V1.8H11v1.6h1.1c.7 0 1.2.5 1.2 1.2v7.4c0 .7-.5 1.2-1.2 1.2H3.9c-.7 0-1.2-.5-1.2-1.2V4.6c0-.7.5-1.2 1.2-1.2H5V1.8Zm-1 4.4v5.6h8V6.2H4Zm1.2 1.4h2.4v1.2H5.2V7.6Zm0 2.3h5.4v1.2H5.2V9.9Z"></path></svg></span>
+                          <span class="composer-picker-icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path class="icon-stroke" d="M3.4 4.1h9.2v8.3H3.4z"></path><path class="icon-stroke" d="M6 1.9v2.2M10 1.9v2.2M5.4 7.6h2.1M5.4 10h4.6"></path></svg></span>
                           <span class="composer-picker-label">{{ pickerLabel }}</span>
-                          <span class="composer-picker-caret" aria-hidden="true"><svg viewBox="0 0 12 12"><path class="icon-fill" d="M2.8 4.4h6.4L6 7.8 2.8 4.4Z"/></svg></span>
+                          <span class="composer-picker-caret" aria-hidden="true"><svg viewBox="0 0 12 12"><path class="icon-stroke" d="m3.1 4.5 2.9 3 2.9-3"/></svg></span>
                         </button>
                       </div>
                       <div class="composer-picker-menu" :class="{ open: pickerOpen }" role="menu">
                         <div class="plus-menu-panel">
                           <button class="plus-menu-item" :class="{ active: composerMode === 'dialog' }" type="button" @click="setComposerMode('dialog')"><span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16"><path class="icon-stroke" d="M3.4 4.3h9.2v6.7H6.9L4 13.6v-2.6H3.4z"/></svg></span><span>问答模式</span></span></button>
-                          <button class="plus-menu-item" :class="{ active: composerMode === 'planning' }" type="button" @click="setComposerMode('planning')"><span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16"><path class="icon-fill" d="M5 1.8h1.4v1.6h3.2V1.8H11v1.6h1.1c.7 0 1.2.5 1.2 1.2v7.4c0 .7-.5 1.2-1.2 1.2H3.9c-.7 0-1.2-.5-1.2-1.2V4.6c0-.7.5-1.2 1.2-1.2H5V1.8Zm-1 4.4v5.6h8V6.2H4Zm1.2 1.4h2.4v1.2H5.2V7.6Zm0 2.3h5.4v1.2H5.2V9.9Z"></path></svg></span><span>规划模式</span></span></button>
+                          <button class="plus-menu-item" :class="{ active: composerMode === 'planning' }" type="button" @click="setComposerMode('planning')"><span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16"><path class="icon-stroke" d="M3.4 4.1h9.2v8.3H3.4z"></path><path class="icon-stroke" d="M6 1.9v2.2M10 1.9v2.2M5.4 7.6h2.1M5.4 10h4.6"></path></svg></span><span>规划模式</span></span></button>
                           <button class="plus-menu-item" :class="{ active: composerMode === 'agent' }" type="button" @click="setComposerMode('agent')"><span class="plus-menu-item-main"><span class="plus-menu-item-icon"><svg viewBox="0 0 16 16"><rect class="icon-stroke" x="2.5" y="3.7" width="11" height="8.6" rx="4"></rect><circle class="icon-fill" cx="5.9" cy="8" r="0.8"></circle><circle class="icon-fill" cx="10.1" cy="8" r="0.8"></circle><path class="icon-stroke" d="M5.3 2.5v1.4M10.7 2.5v1.4"></path></svg></span><span>指定智能体模式</span></span></button>
                         </div>
                       </div>
@@ -21238,7 +20966,7 @@ Vue.component("page-service-form-proto", {
                     <div class="agent-pill" :class="{ visible: composerMode === 'agent' }"><span class="agent-pill-label">销售助手</span><button class="close-mini" type="button" aria-label="清除智能体" @click="setComposerMode('dialog')"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="icon-stroke" d="M3 3l6 6M9 3 3 9"/></svg></button></div>
                   </div>
                   <div class="toolbar-right">
-                    <button class="voice-btn" type="button" aria-label="语音"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path class="icon-fill" d="M9 2.4c1.5 0 2.7 1.2 2.7 2.7v3.7a2.7 2.7 0 0 1-5.4 0V5.1c0-1.5 1.2-2.7 2.7-2.7Zm5 6.3a5 5 0 0 1-4.2 4.9v1.3h2.1v1.3H6.1v-1.3h2.1v-1.3A5 5 0 0 1 4 8.7h1.4a3.6 3.6 0 0 0 7.2 0H14Z"></path></svg></button>
+                    <button class="voice-btn" type="button" aria-label="语音"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect class="icon-stroke" x="6.1" y="2.9" width="5.8" height="8.4" rx="2.9"/><path class="icon-stroke" d="M4.2 8.9a4.8 4.8 0 0 0 9.6 0M9 13.7v1.9M6.6 15.6h4.8"/></svg></button>
                     <button class="send-btn" :class="{ 'is-empty': !composerText.trim() }" type="button" aria-label="发送" @click="sendAskAgentMessage(composerText)">
                       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
                         <g clip-path="url(#sendBtnClipCreateOrder)">
