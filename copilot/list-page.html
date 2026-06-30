@@ -43,6 +43,7 @@
       --primary-nav: 64px;
       --secondary-menu: 200px;
       --agent-sidebar: 360px;
+      --agent-detail-panel: 560px;
     }
 
     * { box-sizing: border-box; }
@@ -451,12 +452,14 @@
     .page-btn svg { width: 12px; height: 12px; }
     body:not(.agent-floating).agent-open .workspace,
     .agent-persist-open .workspace { right: calc(var(--agent-sidebar) + 12px); }
+    body:not(.agent-floating).agent-open.agent-detail-open .workspace { right: calc(var(--agent-sidebar) + var(--agent-detail-panel) + 12px); }
     body:not(.agent-floating).agent-open .topbar,
     .agent-persist-open .topbar {
       right: var(--agent-sidebar);
       grid-template-columns: minmax(220px, 1fr) minmax(180px, 280px) max-content;
       gap: 10px;
     }
+    body:not(.agent-floating).agent-open.agent-detail-open .topbar { right: calc(var(--agent-sidebar) + var(--agent-detail-panel)); }
     .agent-open .top-icons,
     .agent-persist-open .top-icons { gap: 10px; }
     body.agent-instant .topbar,
@@ -500,6 +503,7 @@
     body.agent-resizing .agent-sidebar { transition: none !important; }
     .agent-open .agent-sidebar,
     .agent-persist-open .agent-sidebar { transform: translateX(0); }
+    body:not(.agent-floating).agent-open.agent-detail-open .agent-sidebar { right: var(--agent-detail-panel); }
     body.agent-floating.agent-open .workspace { right: 0; }
     body.agent-floating.agent-open .topbar {
       right: 0;
@@ -523,6 +527,234 @@
     body.agent-floating.agent-open .agent-sidebar.is-dragging {
       box-shadow: 0 22px 54px rgba(16, 24, 40, .2);
       user-select: none;
+    }
+    .agent-detail-drawer {
+      position: fixed;
+      z-index: 59;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: var(--agent-detail-panel);
+      display: flex;
+      flex-direction: column;
+      background: var(--page);
+      border-left: 1px solid #e5e8ee;
+      box-shadow: -18px 0 36px rgba(16, 24, 40, .08);
+      transform: translateX(100%);
+      transition: transform .22s ease;
+    }
+    body.agent-detail-open .agent-detail-drawer { transform: translateX(0); }
+    .agent-detail-header {
+      flex: 0 0 auto;
+      padding: 18px 20px 14px;
+      background: var(--page);
+    }
+    .agent-detail-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .agent-detail-object-title {
+      min-width: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .agent-detail-type {
+      height: 20px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+      border-radius: 5px;
+      background: #1f9cf0;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .agent-detail-object-title h2 {
+      margin: 0;
+      min-width: 0;
+      color: #181c25;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .agent-detail-close {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 28px;
+      border-radius: 6px;
+      color: #181c25;
+    }
+    .agent-detail-close:hover { background: #e8ebf1; }
+    .agent-detail-close svg { width: 16px; height: 16px; }
+    .agent-detail-meta {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #545861;
+      font-size: 13px;
+      line-height: 20px;
+      flex-wrap: wrap;
+    }
+    .agent-detail-state { color: #ff3d34; font-weight: 800; }
+    .agent-detail-tags {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .agent-detail-tag {
+      height: 24px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .agent-detail-tag.orange { color: #e87500; background: #fff7ed; }
+    .agent-detail-tag.green { color: #4d9a28; background: #f2ffe9; }
+    .agent-detail-tag.blue { color: #1f8eea; background: #edf7ff; }
+    .agent-detail-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .agent-detail-actions .btn { height: 28px; border-radius: 6px; }
+    .agent-detail-body {
+      flex: 1;
+      min-height: 0;
+      padding: 0 12px 18px;
+      overflow-y: auto;
+    }
+    .agent-detail-card {
+      margin-bottom: 12px;
+      padding: 14px 16px 16px;
+      border-radius: 12px;
+      background: #fff;
+    }
+    .agent-detail-card h3 {
+      margin: 0 0 14px;
+      color: #181c25;
+      font-size: 15px;
+      line-height: 20px;
+      font-weight: 700;
+    }
+    .agent-detail-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 20px;
+    }
+    .agent-detail-field {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 10px;
+      color: #181c25;
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .agent-detail-field label { color: #545861; }
+    .agent-detail-field strong {
+      min-width: 0;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .agent-stage-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(84px, 1fr));
+      overflow: hidden;
+      margin: 2px 0 14px;
+    }
+    .agent-stage-node {
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%);
+      background: #e6eaf0;
+      color: #545861;
+      font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
+    }
+    .agent-stage-node:first-child { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%); }
+    .agent-stage-node.done { background: #cdf6df; color: #181c25; }
+    .agent-stage-node.current { background: #49cb84; color: #fff; font-weight: 700; }
+    .agent-detail-task {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid #e7ebf2;
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+    .agent-detail-task span { color: #545861; line-height: 20px; }
+    .agent-detail-timeline {
+      position: relative;
+      padding: 2px 0 2px 36px;
+    }
+    .agent-detail-timeline::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      bottom: 12px;
+      left: 12px;
+      width: 2px;
+      background: #e7ebf2;
+    }
+    .agent-detail-event {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .agent-detail-dot {
+      position: absolute;
+      left: -36px;
+      top: 0;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #ff7190;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .agent-detail-dot.blue { background: #2087ff; }
+    .agent-detail-dot.green { background: #20b970; }
+    .agent-detail-event h4 {
+      margin: 0 0 8px;
+      color: #181c25;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .agent-detail-event h4 span {
+      margin-left: 6px;
+      color: #8a93a0;
+      font-weight: 500;
+    }
+    .agent-detail-event-card {
+      padding: 12px;
+      border: 1px solid #e7ebf2;
+      border-radius: 8px;
+      line-height: 20px;
+      background: #fff;
     }
     .agent-toolbar {
       height: 48px;
@@ -782,6 +1014,12 @@
       border: 1px solid #e3e8f1;
       border-radius: 12px;
       background: #fff;
+    }
+    .agent-chat-object-card:hover,
+    .agent-chat-object-card.is-active {
+      border-color: #258cff;
+      background: #edf5ff;
+      box-shadow: 0 0 0 1px #258cff inset;
     }
     .agent-chat-object-icon {
       width: 40px;
@@ -1542,6 +1780,86 @@
     </section>
   </main>
 
+  <aside class="agent-detail-drawer" id="agentDetailDrawer" aria-label="客户详情页" aria-hidden="true">
+    <header class="agent-detail-header">
+      <div class="agent-detail-title-row">
+        <div class="agent-detail-object-title">
+          <span class="agent-detail-type">客户</span>
+          <h2 id="agentDetailName">海岳智能制造集团有限公司</h2>
+        </div>
+        <button class="agent-detail-close" id="closeAgentDetail" type="button" aria-label="关闭客户详情">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="agent-detail-meta">
+        <span class="agent-detail-state">推进中</span>
+        <span>|</span>
+        <span>方案确认</span>
+        <span>|</span>
+        <span>智能制造</span>
+        <span>|</span>
+        <span>年度框架客户</span>
+      </div>
+      <div class="agent-detail-tags">
+        <span class="agent-detail-tag orange">重点客户</span>
+        <span class="agent-detail-tag green">预算已确认</span>
+        <span class="agent-detail-tag blue">管理层关注</span>
+      </div>
+      <div class="agent-detail-actions">
+        <button class="btn primary" type="button">推进阶段</button>
+        <button class="btn" type="button">生成方案</button>
+        <button class="btn" type="button">发起流程</button>
+      </div>
+    </header>
+    <div class="agent-detail-body">
+      <section class="agent-detail-card">
+        <h3>客户概览</h3>
+        <div class="agent-detail-fields">
+          <div class="agent-detail-field"><label>客户名称</label><strong id="agentDetailFieldName">海岳智能制造集团有限公司</strong></div>
+          <div class="agent-detail-field"><label>负责人</label><strong id="agentDetailOwner">刘志强</strong></div>
+          <div class="agent-detail-field"><label>客户级别</label><strong id="agentDetailLevel">重要客户</strong></div>
+          <div class="agent-detail-field"><label>客户阶段</label><strong>方案确认</strong></div>
+          <div class="agent-detail-field"><label>所属行业</label><strong>智能制造</strong></div>
+          <div class="agent-detail-field"><label>预计收入</label><strong>2,860,000.00</strong></div>
+        </div>
+      </section>
+      <section class="agent-detail-card">
+        <h3>客户推进路径</h3>
+        <div class="agent-stage-flow" aria-label="客户推进路径">
+          <span class="agent-stage-node done">线索</span>
+          <span class="agent-stage-node done">需求确认</span>
+          <span class="agent-stage-node current">方案确认</span>
+          <span class="agent-stage-node">商务谈判</span>
+          <span class="agent-stage-node">成交</span>
+        </div>
+        <div class="agent-detail-task">
+          <span>当前任务：补充方案报价并同步采购负责人</span>
+          <button class="btn" type="button">完成</button>
+        </div>
+      </section>
+      <section class="agent-detail-card">
+        <h3>关键动态</h3>
+        <div class="agent-detail-timeline">
+          <article class="agent-detail-event">
+            <span class="agent-detail-dot blue">客</span>
+            <h4>客户画像 <span>今天</span></h4>
+            <div class="agent-detail-event-card">决策链完整，采购和生产负责人均已参与方案评审。</div>
+          </article>
+          <article class="agent-detail-event">
+            <span class="agent-detail-dot green">进</span>
+            <h4>跟进建议 <span>明天</span></h4>
+            <div class="agent-detail-event-card">优先确认年度框架里的交付边界和售后响应 SLA。</div>
+          </article>
+          <article class="agent-detail-event">
+            <span class="agent-detail-dot">险</span>
+            <h4>风险提醒 <span>3天内</span></h4>
+            <div class="agent-detail-event-card">预算审批仍需财务复核，建议准备分期付款备选方案。</div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </aside>
+
   <aside class="agent-sidebar" id="askAgentSidebar" aria-label="Ask Agent 侧边栏" aria-hidden="true">
     <div class="agent-toolbar">
       <div class="agent-toolbar-left">
@@ -1895,6 +2213,14 @@
         var bridgeNode = event.target.closest(".agent-chat-feed [data-bridge]");
         if (bridgeNode) {
           var payload = JSON.parse(bridgeNode.getAttribute("data-bridge"));
+          if (payload.type === "customer" && payload.target === "haiyue") {
+            openAgentDetailDrawer(payload);
+            document.querySelectorAll(".agent-chat-object-card.is-active").forEach(function (node) {
+              node.classList.remove("is-active");
+            });
+            bridgeNode.classList.add("is-active");
+            return;
+          }
           if (payload.type === "scenario" && payload.target === "save-filter") {
             payload.toast = "已保存为周期监控场景";
             bridgeNode.textContent = "已保存";
@@ -1906,6 +2232,12 @@
       });
       var askAgentButton = document.getElementById("askAgentButton");
       var askAgentSidebar = document.getElementById("askAgentSidebar");
+      var agentDetailDrawer = document.getElementById("agentDetailDrawer");
+      var closeAgentDetail = document.getElementById("closeAgentDetail");
+      var agentDetailName = document.getElementById("agentDetailName");
+      var agentDetailFieldName = document.getElementById("agentDetailFieldName");
+      var agentDetailOwner = document.getElementById("agentDetailOwner");
+      var agentDetailLevel = document.getElementById("agentDetailLevel");
       var newAskAgentSession = document.getElementById("newAskAgentSession");
       var floatAskAgent = document.getElementById("floatAskAgent");
       var closeAskAgent = document.getElementById("closeAskAgent");
@@ -1945,6 +2277,53 @@
       function escapeHtml(value) {
         return String(value || "").replace(/[&<>"']/g, function (char) {
           return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char];
+        });
+      }
+
+      function getHaiyueCustomerData() {
+        return {
+          name: "海岳智能制造集团有限公司",
+          level: "重要客户",
+          levelType: "important",
+          progress: 78,
+          phone: "+86 13802190477",
+          flag: "cn",
+          owner: "刘志强",
+          avatar: "刘",
+          avatarType: "blue",
+          current: true
+        };
+      }
+
+      function setAgentDetailCustomer(customer) {
+        var next = customer || getHaiyueCustomerData();
+        agentDetailName.textContent = next.name || "海岳智能制造集团有限公司";
+        agentDetailFieldName.textContent = next.name || "海岳智能制造集团有限公司";
+        agentDetailOwner.textContent = next.owner || "刘志强";
+        agentDetailLevel.textContent = next.level && next.level !== "--" ? next.level : "重要客户";
+        try {
+          localStorage.setItem("crmActiveCustomer", JSON.stringify(next));
+        } catch (error) {}
+      }
+
+      function openAgentDetailDrawer(payload) {
+        var customer = getHaiyueCustomerData();
+        if (payload && payload.title) customer.name = payload.title;
+        setAgentDetailCustomer(customer);
+        if (document.body.classList.contains("agent-floating")) {
+          setAgentFloating(false);
+        }
+        setAgentOpen(true, { skipFocus: true });
+        document.body.classList.add("agent-detail-open");
+        agentDetailDrawer.setAttribute("aria-hidden", "false");
+        emitBridge({ type: "customer", target: "haiyue-detail", title: customer.name, toast: "已打开客户详情" });
+      }
+
+      function closeAgentDetailDrawer() {
+        document.body.classList.remove("agent-detail-open");
+        agentDetailDrawer.setAttribute("aria-hidden", "true");
+        document.querySelectorAll(".agent-chat-object-card.is-active").forEach(function (node) {
+          node.classList.remove("is-active");
         });
       }
 
@@ -2276,7 +2655,10 @@
       function setAgentOpen(open, options) {
         options = options || {};
         localStorage.setItem("crmAskAgentOpen", open ? "true" : "false");
-        if (!open) localStorage.setItem("crmAskAgentFloating", "false");
+        if (!open) {
+          localStorage.setItem("crmAskAgentFloating", "false");
+          closeAgentDetailDrawer();
+        }
         document.body.classList.toggle("agent-open", open);
         askAgentButton.classList.toggle("is-active", open);
         askAgentButton.setAttribute("aria-expanded", String(open));
@@ -2301,6 +2683,10 @@
 
       closeAskAgent.addEventListener("click", function () {
         setAgentOpen(false);
+      });
+
+      closeAgentDetail.addEventListener("click", function () {
+        closeAgentDetailDrawer();
       });
 
       if (floatAskAgent) {
@@ -2465,6 +2851,10 @@
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && document.body.classList.contains("agent-open")) {
+          if (document.body.classList.contains("agent-detail-open")) {
+            closeAgentDetailDrawer();
+            return;
+          }
           if (composerState.plusOpen || composerState.pickerOpen) {
             closeComposerMenus();
             return;
