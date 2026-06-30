@@ -43,7 +43,8 @@
       --primary-nav: 64px;
       --secondary-menu: 200px;
       --agent-sidebar: 360px;
-      --agent-detail-panel: 560px;
+      --agent-overlay-left: 20vw;
+      --agent-detail-panel: calc(100vw - var(--agent-overlay-left) - var(--agent-sidebar));
     }
 
     * { box-sizing: border-box; }
@@ -452,14 +453,18 @@
     .page-btn svg { width: 12px; height: 12px; }
     body:not(.agent-floating).agent-open .workspace,
     .agent-persist-open .workspace { right: calc(var(--agent-sidebar) + 12px); }
-    body:not(.agent-floating).agent-open.agent-detail-open .workspace { right: calc(var(--agent-sidebar) + var(--agent-detail-panel) + 12px); }
+    body:not(.agent-floating).agent-open.agent-detail-open .workspace { right: 12px; }
     body:not(.agent-floating).agent-open .topbar,
     .agent-persist-open .topbar {
       right: var(--agent-sidebar);
       grid-template-columns: minmax(220px, 1fr) minmax(180px, 280px) max-content;
       gap: 10px;
     }
-    body:not(.agent-floating).agent-open.agent-detail-open .topbar { right: calc(var(--agent-sidebar) + var(--agent-detail-panel)); }
+    body:not(.agent-floating).agent-open.agent-detail-open .topbar {
+      right: 0;
+      grid-template-columns: minmax(330px, 1fr) minmax(260px, 360px) auto;
+      gap: 16px;
+    }
     .agent-open .top-icons,
     .agent-persist-open .top-icons { gap: 10px; }
     body.agent-instant .topbar,
@@ -503,7 +508,10 @@
     body.agent-resizing .agent-sidebar { transition: none !important; }
     .agent-open .agent-sidebar,
     .agent-persist-open .agent-sidebar { transform: translateX(0); }
-    body:not(.agent-floating).agent-open.agent-detail-open .agent-sidebar { right: var(--agent-detail-panel); }
+    body:not(.agent-floating).agent-open.agent-detail-open .agent-sidebar {
+      left: var(--agent-overlay-left);
+      right: auto;
+    }
     body.agent-floating.agent-open .workspace { right: 0; }
     body.agent-floating.agent-open .topbar {
       right: 0;
@@ -534,7 +542,8 @@
       top: 0;
       right: 0;
       bottom: 0;
-      width: var(--agent-detail-panel);
+      left: calc(var(--agent-overlay-left) + var(--agent-sidebar));
+      width: auto;
       display: flex;
       flex-direction: column;
       background: var(--page);
